@@ -1,0 +1,480 @@
+
+
+#mainDiv {
+	width:95%;/*android*/
+	margin:0 auto;
+	font-family: arial;
+	font-size: 14px;
+}
+#headerDiv {
+	margin-bottom: 2px;
+    float: left;
+    width: 100%;
+	height: 80px;
+	background: #f2f2f2 none repeat scroll 0 0;
+}
+
+#headerDiv img {
+	float:left;
+	padding: 4px 10px;
+	cursor: pointer;
+	position: relative;
+	top: -10px;
+}
+
+#topNavigation {
+    float: left;
+    margin-left: 10%;
+    width: 50%;
+	margin-top: 20px;
+}
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+ul li {
+    /*float: left;*/
+	cursor: pointer;
+    padding: 13px;
+}
+
+#topNavigation ul li {
+
+}
+
+#workingTime  {
+
+}
+
+#workingTime ul  {
+	float:left;
+	margin-top:-5px;
+}
+
+#workingTime #ulst, #workingTime #uldash, #workingTime #ulet {
+	margin-top:-7px;
+}
+
+#workingTime ul li span  {
+
+}
+
+#workingTime input[type="radio"] {
+	margin:0;
+}
+
+#topNavigation ul li a {
+	text-decoration: none;
+}
+
+#bottomNavigation {
+    float: left;
+    margin-top: 10px;
+    width: 100%;
+}
+
+#bottomNavigation span {
+	padding: 0 1%;
+	cursor: pointer;
+}
+
+#bottomNavigation span:first-child{
+	padding-left: 19%;
+}
+
+#leftNavigation {
+    float: left;
+    width: 18%;
+}
+
+#leftNavigation ul li {
+	width:88%;
+}
+
+.mainContent {
+    /*float: left;
+    min-height: 500px;
+    width: 82%;*/
+}
+
+.mainContent1 {
+    float: left;
+    min-height: 500px;
+    width: 100%;
+}
+
+#tbl1 td {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #f2f2f2;
+    border-collapse: collapse;
+    padding: 1px;
+}
+
+#footerDiv {
+    float: left;
+    padding: 5px;
+    text-align: center;
+    width: 100%;
+	background: #f2f2f2 none repeat scroll 0 0;
+}
+
+.active_tab {
+	color: #ff0000;
+}
+
+#q1 .form-group {
+
+}
+
+#q1 .form-group input {
+	width:17%;/*android*/
+}
+
+#q1 ul li {
+	margin: 0;
+	/*padding: 0;*/
+}
+
+.sort-icon {
+    font-size: 9px;
+    margin-left: 5px;
+}
+
+th {
+	cursor:pointer;
+}
+
+.clstxt2{
+	width: 195px;/*android*/
+}
+
+.clstxt1{
+	width: 174px;
+}
+
+.input-width{
+    width: 250px;
+}
+.clsspace2{
+	margin-left: 7px;
+}
+
+.clsloginborder{
+	border: 2px solid #c2c2c2; /*android*/
+	margin: 11px 0; 
+	padding: 20px;
+	width: 60%;
+	float:left;
+}
+
+#divSP .table {
+	width:19%;
+}
+
+.clswidth1 {
+	width:22%;/*android*/
+}
+
+.clswidth2 {
+	width:19%;/*android*/
+}
+
+#tblcontactus  {
+	width:98%;/*android*/
+}
+
+#tblaboutus  {
+	width:98%;/*android*/
+}
+
+.clstextarea {
+	width:50%;
+}
+
+/*Start css of create Appointment - pranav */
+.red1 {
+    border: solid 1px red;
+	padding: 2px;
+}
+
+.green1 {
+    border: solid 1px green;
+	padding: 2px;
+}
+
+.red2 {
+    border: solid 1px red;
+}
+
+.green2 {
+    border: solid 1px green;
+}
+
+.red3 {
+    border: solid 1px red;
+	padding: 2px;
+}
+
+.green3 {
+    border: solid 1px green;
+	padding: 2px;
+}
+
+
+#patientAddressId {
+    width: 12.5em;
+    height: 4em;
+}
+
+#patientStateId {
+    width: 13em;
+}
+
+#patientCityId {
+    width: 13em;
+}
+
+#patientCountryId {
+    width: 13em;
+}
+
+#patientBirthDateId {
+    width: 12.5em;
+}
+
+#quickAppointmentPatientCityId{
+
+}
+
+.active1 {
+	color:#ff0000;
+}
+
+#callmeSearchId {
+    float: right;
+}
+
+#spInfo table tr td {
+	padding: 3px 0;
+}
+
+#workingTime1 table tr td {
+	border:1px solid #c2c2c2;
+}
+
+.clsfleft{float:left;}
+
+#advSrcBox1 { 
+    background-color: #e4e4e4;
+    border-radius: 5px;
+    /*box-shadow: 0 10px 17px -1px rgba(0, 0, 0, 0.43);*/
+    margin: 10px;
+    padding: 10px;
+    /*width: 745px;
+	float:left;*/
+}
+
+
+/*End css of create Appointment - pranav */
+
+code {
+	padding: 0;
+    font-size: 100%;
+    background-color: transparent !important;
+    color: #000000;
+}
+
+#custInfo table tr td:first-child {
+	/*text-align:right;
+	font-weight:bold;*/
+}
+.separator {
+	border-right: 1px solid #000000;
+	margin: 0 5px;
+	height: 23px;
+	width: 0;
+	display: inline-block;
+	position: relative;
+	top: 8px;
+}
+.callmeField {
+	width: 100px !important;
+}
+.callmeField2 {
+	width: 90px !important;
+}
+
+.callmeFieldMobile {
+    width: 100px !important;
+    display: inline-block !important;
+}
+
+.statusFieldMobile {
+    width: 160px !important;
+    display: inline-block !important;
+}
+
+.spAptListingCategory{
+    padding: 5px;
+    margin: 5px 0;
+    background-color: #808080;
+    color: #FFFFFF;
+}
+
+.row-footer {
+    background-color: #AfAfAf;
+    margin: 0px auto;
+    padding: 20px 0px 20px 0px;
+}
+
+.navbar-inverse {
+    background: #000000;
+}
+
+.removeCarousel {
+    position: fixed;
+    right: 10px;
+    top: 60px;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.zoomer {
+    display: inline-block;
+    position: fixed;
+    right: 70px;
+    top: 60px;
+    z-index: 100;
+}
+
+.navMenu {
+    position: absolute;
+    z-index: 100;
+    background-color: #2B5681;
+    padding: 0;
+    min-height: 0px;
+    overflow: auto;
+
+    -webkit-box-shadow: 10px 0px 11px -1px rgba(97,93,97,1);
+    -moz-box-shadow: 10px 0px 11px -1px rgba(97,93,97,1);
+    box-shadow: 10px 0px 11px -1px rgba(97,93,97,1);
+}
+
+.imageSlideModalContainer {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #FFFFFF;
+    z-index: 2000;
+    overflow: auto;
+    padding: 10px;
+}
+
+.closeZoomerIcon {
+    position: fixed;
+    top: 0;
+    right: 15px;
+    font-size: 24px;
+    background-color: #FFFFFF !important;
+    border-radius: 50%;
+}
+
+.aptSelectionInput {
+	width : 100%;
+}
+
+.srcField {
+	width: 152px;
+	display: inline-block;
+	/*margin-left: 20px;*/
+	/*text-align: right;*/
+}
+
+.srcFieldLabel {
+    text-align: left;
+}
+
+.search-cust-title {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.table-layout {
+    table-layout: fixed;
+}
+
+/***Admin portal***/
+
+.dropdown-multiselect button {
+     width: 250px;
+     text-align: left;
+}
+
+.dropdown-multiselect button span {
+    float: right;
+    top: 5px;
+    position: relative;
+}
+
+.topMarginBtn {
+     margin-top: 20px;
+}
+
+code {
+	padding: 0;
+    font-size: 100%;
+    background-color: transparent !important;
+    color: #000000;
+    border: 0px !important;
+}
+
+.btn-block1 {
+    width: 250px;
+    display: block;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.datePickerBtn {
+    width: 250px;
+}
+
+.show-mobile {
+    display:block;
+}
+.hide-mobile {
+    display: none;
+}
+.mobile-add-area {
+    margin: 8px 10px 10px 14px;
+    display: inline-block !important;
+}
+
+.zone-label {
+    display: inline-block;
+    width: 100px;
+}
+
+.leftSideAlignment {
+    min-width:100px;
+}
+
+.wrkingHrsTable {
+    float: right;
+    height: 528px !important;
+    overflow-y: auto;
+}
+
+.menu-info {
+    padding: 0 0 0 15px;
+    line-height: 20px;
+    font-size: 12px;
+    opacity: 0.6;
+    min-width: 100px;
+    display: inline-block;
+}

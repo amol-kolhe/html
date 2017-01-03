@@ -1,0 +1,29 @@
+<div id="q1" class="mainContent2" ng-controller="AdminCtrl" ng-init="">
+    <div style="padding:10px;">
+        <div class="row">
+            <div class="btn-group col-xs-12">
+                <button class="btn btn-block1" style="margin-top: 10px;" ng-class="spManagementSelectedTab == 'Add Edit Service Provider' ? 'btn-primary' : 'btn-default'"
+                        data-ng-click="showSpManagementWebPage('Add Edit Service Provider')">Manage Service Provider</button>
+                <button class="btn btn-block1" style="margin-top: 10px;" ng-class="spManagementSelectedTab == 'Set Working Hours' ? 'btn-primary' : 'btn-default'"
+                        data-ng-click="showSpManagementWebPage('Set Working Hours'); resetAddSpWrkHrsWebPage();">Set Working Hours</button>
+                <button class="btn btn-block1" style="margin-top: 10px;" ng-class="spManagementSelectedTab == 'Mark Leaves' ? 'btn-primary' : 'btn-default'"
+                        data-ng-click="showSpManagementWebPage('Mark Leaves'); resetMarkSpLeavesWebPage();">Mark Leaves</button>
+            </div>
+        </div>
+        <div class="alert alert-info" style="margin-top: 15px;">
+            <span ng-show="spManagementSelectedTab == 'Add Edit Service Provider'">Add new service provider or edit existing service provider.</span>
+            <span ng-show="spManagementSelectedTab == 'Set Working Hours'">Set Working Hours for particular service provider.</span>
+            <span ng-show="spManagementSelectedTab == 'Mark Leaves'">Mark leaves for particular service provider.</span>
+        </div>
+
+        <div class="subContainer1" id="spManagementContainer1" data-ng-if="spManagementSelectedTab == 'Add Edit Service Provider'">
+            <div ng-include="'addNewSp.html'"></div>
+        </div>
+        <div class="subContainer1" id="spManagementContainer2" data-ng-if="spManagementSelectedTab == 'Set Working Hours'">
+            <div ng-include="'addSpWorkingHrs.html'"></div>
+        </div>
+        <div class="subContainer1" id="spManagementContainer3" data-ng-if="spManagementSelectedTab == 'Mark Leaves'">
+            <div ng-include="'markSpLeaves.html'"></div>
+        </div>
+    </div>
+</div>

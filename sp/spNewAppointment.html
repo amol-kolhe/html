@@ -1,0 +1,157 @@
+<div id="q1" class="mainContent">
+    <div style="padding:10px;">
+        <form name="spNewAppointmentForm.spFormForCust" novalidate>
+            <div style="padding: 10px;" data-ng-hide="spNewApptForCustErrorMsg">
+                <div id="divSP" style="min-height: 275px; position:relative;">
+                    <table border="0" width="100%">
+                        <tr>
+                            <th colspan="2">Service Provider Appointment Slots</th>
+                        </tr>
+                        <tr><td colspan="2">&nbsp;</td></tr>
+                        <tr>
+                            <td>
+                                Selected date is: <em>{{obj.dt | date:'fullDate' }}</em>
+                            </td>
+                        </tr>
+                        <tr></tr>
+                        <tr></tr>
+                        <tr>
+                            <td>
+                                <div style="display:inline-block; min-height:290px;">
+                                    <datepicker id="datetimepicker3" date-disabled="disabled(date, mode)" ng-change="callSpInfo()" ng-model="obj.dt" min-date="minDate" max-date="maxDate" show-weeks="false" class="well well-sm" custom-class="getDayClass(date, mode)"></datepicker>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span style="color:#ff0000;" ng-show="wtUndefined" ng-model="wtUndefined">{{wtUndefinedErrorMsg}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div ng-show="spInfo" id="spInfo">
+                                    <table width="100%">
+                                        <tr>
+                                            <td class="clswidth1" align="right" style="vertical-align:top">Your free appointment slots :</td>
+                                            <td  align="right">
+                                                <div id="workingTime" style="padding-left:3px">
+                                                    <table width="100%">
+                                                        <tr>
+                                                            <td width="11%" style="vertical-align:top">
+                                                                <ul style="width:22%;">
+                                                                    <li style="white-space: nowrap;" ng-repeat="aptstarttime in aptStartTime track by $index">
+                                                                        <input type="radio" ng-model="spNewAppointment.aptstarttime" name="group1" value="{{aptstarttime}}">
+                                                                    </li>
+                                                                </ul>
+
+                                                                <ul style="width:78%;" id="ulst">
+                                                                    <li style="white-space: nowrap;" ng-repeat="aptslot in aptSlotTimeFrom track by $index">
+                                                                        <span>{{aptslot}}</span>
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                                                            <td width="2%">
+                                                                <ul id="uldash">
+                                                                    <li style="white-space: nowrap;" ng-repeat="dash in spaceDash track by $index">
+                                                                        <span>{{dash}}</span>
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                                                            <td width="10%" style="vertical-align:top">
+                                                                <ul id="ulet">
+                                                                    <li style="white-space: nowrap;" ng-repeat="aptslot1 in aptSlotTimeTo track by $index">
+                                                                        <span>{{aptslot1}}</span>
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                                                            <td width="44%">&nbsp;</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div style="padding: 10px;" data-ng-hide="spNewApptForCustErrorMsg">
+                <div style="min-height: 275px;">
+                    <table border="0" width="100%">
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <td align="right" style="vertical-align:top" class="clswidth2"> Appointment Address : </td>
+                            <td>
+                                <textarea maxlength="150" class="clstextarea clsspace2" ng-trim="false" rows="5" 1cols="80" name="patientAppointmentAddress"
+                                         data-ng-model="spNewAppointment.appointmentAddress"
+                                         data-ng-class="{red3: spNewAppointmentForm.spFormForCust.patientAppointmentAddress.$invalid && spNewAppointmentForm.spFormForCust.patientAppointmentAddress.$dirty, green3: spNewAppointmentForm.spFormForCust.patientAppointmentAddress.$valid && spNewAppointmentForm.spFormForCust.patientAppointmentAddress.$dirty}"
+                                         title="Enter Appointment Address"
+                                         placeholder="Enter Appointment Address"
+                                         data-ng-required="true" >
+                                </textarea>
+                                <span>{{150 - spNewAppointment.appointmentAddress.length}} left</span>
+                                <span style="color:red" data-ng-show="spNewAppointmentForm.spFormForCust.patientAppointmentAddress.$dirty && spNewAppointmentForm.spFormForCust.patientAppointmentAddress.$invalid">
+                                        <span data-ng-show="spNewAppointmentForm.spFormForCust.patientAppointmentAddress.$error.required">&nbsp;&nbsp;&nbsp;&nbsp; Appointment Address is required.</span>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <td align="right" style="vertical-align:top" class="clswidth2"> Customer Comment : </td>
+                            <td>
+                                &nbsp;&nbsp;<textarea maxlength="50" class="clstextarea" ng-trim="false" rows="3" 1cols="80" name="patientComment"
+                                                      data-ng-model="spNewAppointment.comment"
+                                                      data-ng-class="{red3: spNewAppointmentForm.spFormForCust.patientComment.$invalid && spNewAppointmentForm.spFormForCust.patientComment.$dirty, green3: spNewAppointmentForm.spFormForCust.patientComment.$valid && spNewAppointmentForm.spFormForCust.patientComment.$dirty}"
+                                                      title="Enter customer comment"
+                                                      placeholder="Enter customer comment"
+                                                      data-ng-required="false" >
+								</textarea>
+                                <span>{{50 - spNewAppointment.comment.length}} left</span>
+								<span style="color:red" data-ng-show="spNewAppointmentForm.spFormForCust.patientComment.$dirty && spNewAppointmentForm.spFormForCust.patientComment.$invalid">
+										<span data-ng-show="spNewAppointmentForm.spFormForCust.patientComment.$error.required">&nbsp;&nbsp;&nbsp;&nbsp; Comment is required.</span>
+								</span>
+                                <div id="errormsg" style="color:red;"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <button style="float:right" type="submit" ng-disabled="(!(spNewAppointment.appointmentAddress) || !(spNewAppointment.aptstarttime))" ng-click="aptSubmit();"> Confirm </button>
+                </div>
+            </div>
+
+            <div ng-show="spNewApptForCustErrorMsg" id="spNewApptForCustErrorMsg" style="padding: 10px;">
+                <div style="min-height: 275px;">
+                    <table border="0" width="100%">
+                        <tr>
+                            <td>
+                                <div ng-model="spNewApptForCustErrorMsg" style="color:red; text-align:center;"> {{spNewApptForCustErrorMsg}}</div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div ng-show="aptConfirmMsg" id="aptConfirmMsg" style="padding: 10px;">
+                <div style="min-height: 275px;">
+                    <table border="0" width="100%">
+                        <tr>
+                            <td>
+                                <div ng-model="frm.submit" style="color:green; text-align:center;"> Thank you for confirming appointment. Appointment reference number is {{frm.submit}}. </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

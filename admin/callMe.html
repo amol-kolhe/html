@@ -1,0 +1,213 @@
+<div id="q1" class="1mainContent">
+	<div ng-controller="AdminCtrl" >
+        <script type="text/ng-template" id="newAptComments">
+            <form name="commentsForm" data-ng-submit="confirm('OK')">
+                <div style="margin:10px; padding:10px">
+                    <div>
+                        <span>Please provide some comments</span>
+                    </div>
+                    <div>
+                        <textarea cols="30" rows="3" ng-model="enquiry.Comments"></textarea>
+                    </div>
+                    <div style="margin-top:10px; padding:10px;">
+                        <button class="ngdialog-button ngdialog-button-primary">Ok</button>
+                        <button class="ngdialog-button ngdialog-button-secondary">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </script>
+		<script type="text/ng-template" id="firstDialogId">
+			<form name="callMeform1.AppointmentTime" data-ng-submit="confirm('OK')">
+				<table style="width:100%">
+					<tr>
+						<td colspan="2">
+							<h4>Add call me back time</h4>
+						</td>
+					</tr>
+					<tr>
+						<td style="cursor:pointer;">
+							<!--<input type="text" name="appDt" data-ng-model="appDt" datepicker="">-->
+							<!--<datepicker1 id="datetimepicker6">-->
+							<datepicker1>
+							</datepicker1>&nbsp;&nbsp;
+							<!--<input type="text"
+								   ng-model="appointmentTime"
+								   name="appointmentTime"
+								   value = "{{appointmentTime}}"
+								   title="Appoinment Time"
+								   datepicker1=""
+							/>-->
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">&nbsp;</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<button type="submit"
+									class="ngdialog-button ngdialog-button-primary">
+								Save
+							</button>
+							<button type="button"
+									class="ngdialog-button ngdialog-button-secondary"
+									data-ng-click="closeThisDialog('Cancel')">
+								Cancel
+							</button>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</script>
+		<form name = "callMeform.patientDetailsForm" data-ng-init="allPendingCallsClicked = false; initCallMeAdminList();" data-ng-submit = "" novalidate>
+			<div class="bs-component">
+				<form class="form-inline">
+					<div class="form-group" ng-show="!isThisMobileDevice()" style="position:relative;">
+                        <button class=" btn btn-primary btn-sm" ng-click="allPendingCallsClicked = true; callMeAdminList()">All Pending Calls</button>
+                        <span class="separator"></span>
+						From Date: <input type="text"
+									ng-model="patientDetailsForAdmin.fromDate"
+									name = "fromDate"
+									id="datetimepicker4"
+									value = "{{patientDetailsForAdmin.fromDate}}"
+									title="From Date" class="callmeField2 datetimepicker2 form-control"
+								   />
+						To Date:   <input type="text"
+									ng-model="patientDetailsForAdmin.tillDate"
+									name="tillDate"
+									id="datetimepicker5"
+									value = "{{patientDetailsForAdmin.tillDate}}"
+									title="Till Date" class="callmeField2 datetimepicker2 form-control"
+								   />
+						<button style="cursor:pointer;"
+						data-ng-click="allPendingCallsClicked = false; callMeAdminList()" 
+						class="btn btn-primary btn-sm">Find</button>
+
+                        <span class="separator"></span>
+						<select  name="moveTo" class="form-control statusField"
+						 data-ng-change="moveToRecords({{callMeList}})"
+						 data-ng-options="option for option in listOfMoveToOptions"
+						 data-ng-model = "patientDetailsForAdmin.moveTo"
+						 title = "Change status to">
+						 	<option value=''> Change Status To </option>
+						</select>
+						<input type="text"
+						ng-model="search"
+						id = "callmeSearchId"
+						placeholder="Filter"
+						title="Search records"
+						ng-init="search='Yet To Call'"
+						class="callmeField form-control"
+						/>
+					</div>
+                    <div class="form-group" ng-show="isThisMobileDevice()" style="position:relative;">
+                        <div class="col-xs-12 col-sm-2" style="padding:0">
+                            <button class=" btn btn-primary btn-sm" ng-click="allPendingCallsClicked = true; callMeAdminList()">All Pending Calls</button>
+                        </div>
+                        <div class="col-xs-12 col-sm-10" style="padding:0">
+                            From: <input type="text"
+                                ng-model="patientDetailsForAdmin.fromDate"
+                                name = "fromDate"
+                                id="datetimepicker4"
+                                value = "{{patientDetailsForAdmin.fromDate}}"
+                                title="From Date" class="callmeFieldMobile datetimepicker2 form-control"/>
+                            To: <input type="text"
+                                ng-model="patientDetailsForAdmin.tillDate"
+                                name="tillDate"
+                                id="datetimepicker5"
+                                value = "{{patientDetailsForAdmin.tillDate}}"
+                                title="Till Date" class="callmeFieldMobile datetimepicker2 form-control"/>
+                            <button data-ng-click="allPendingCallsClicked = false; callMeAdminList()" class="btn btn-primary btn-sm">
+                                Find
+                            </button>
+                        </div>
+                        <div class="col-xs-12" style="padding:0">
+                            <select  name="moveTo" class="form-control statusFieldMobile" 
+                             data-ng-change="moveToRecords({{callMeList}})"
+                             data-ng-options="option for option in listOfMoveToOptions"
+                             data-ng-model = "patientDetailsForAdmin.moveTo"
+                             title = "Change status to">
+                            <option value=''> Change Status To </option>
+                            </select>
+                            <input type="text"
+	                           ng-model="search"
+	                           id = "callmeSearchId"
+	                           placeholder="Filter"
+	                           title="Search records"
+	                           ng-init="search='Yet To Call'"
+	                           class="callmeField form-control"
+	                            />
+                        </div>
+                    </div>
+				</form>
+				<div>
+					<span style = "color: green" data-ng-if = "!errorMsg && !callMeList">
+						No records available.
+					</span>
+					<span style = "color: red" data-ng-if = "errorMsg">
+						{{errorMsg}}
+					</span>
+				</div>
+				<div style="clear:both"></div>
+				<div data-ng-if="callMeList" id="divCallmeList" class="table table-responsive">
+					<table class="table table-striped table-hover table-condensed">
+					<thead>
+						<tr>
+							<th>&nbsp;</th>
+							<th ng-click="sort('callmebacktm')"><span class="clsfleft">Time</span>
+								<span class="glyphicon sort-icon" ng-show="sortKey=='callmebacktm'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+							</th>
+							<th ng-click="sort('refno')"><span class="clsfleft">Ref. No.</span>
+								<span class="glyphicon sort-icon" ng-show="sortKey=='refno'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+							</th>
+							<th ng-click="sort('custname')"><span class="clsfleft">Name</span>
+								<span class="glyphicon sort-icon" ng-show="sortKey=='custname'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+							</th>
+							<th ng-click="sort('customercity')"><span class="clsfleft">City</span>
+								<span class="glyphicon sort-icon" ng-show="sortKey=='customercity'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+							</th>
+							<th ng-click="sort('contactno')" style="min-width:14%"><span class="clsfleft">Contact No.</span>
+								<span class="glyphicon sort-icon" ng-show="sortKey=='contactno'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+							</th>
+							<th ng-click="sort('customeremail')"><span class="clsfleft">Email</span>
+								<span class="glyphicon sort-icon" ng-show="sortKey=='customeremail'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+							</th>
+							<th ng-click="sort('type')"><span class="clsfleft">Status</span>
+								<span class="glyphicon sort-icon" ng-show="sortKey=='type'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+							</th>							
+						</tr>
+					</thead>
+					<tbody>
+						<tr dir-paginate="patient in callMeList|orderBy:sortKey:reverse|filter:search|itemsPerPage:10"
+							pagination-id="callMeListId">
+							<td><input type="radio" ng-click="callMeSelected(patient)" name="patientRecords" data-ng-model="patient.boolVal"></td>
+							<td>{{patient.callmebacktm * 1000 | date:'yyyy-MM-dd hh:mm a'}}</td>
+							<td><a href="#" title="Click to fill appointment details" data-ng-click="custdetailsForAdmin(patient.id, patient.refno, patient.custname, patient.customercity, patient.contactno, patient.customeremail)">{{patient.refno}}</a></td>
+							<td>{{patient.custname}}</td>
+							<td>{{patient.customercity}}</td>
+							<td><a ng-href="tel:{{patient.contactno}}">{{patient.contactno}}</a></td>
+							<td><a ng-href="mailto:{{patient.customeremail}}">{{patient.customeremail}}</a></td>
+							<td>
+							    <span data-ng-if = "patient.type == 'yet_to_call'"> Yet To Call </span>
+								<span data-ng-if = "patient.type == 'scheduled'"> Scheduled </span>
+								<span data-ng-if = "patient.type == 'call_me_back'"> Call Me Back </span>
+								<span data-ng-if = "patient.type == 'do_not_disturb'"> Do Not Disturb </span>
+								<span data-ng-if = "patient.type == 'enquiry'"> Enquiry </span>
+								<span data-ng-if = "patient.type == 'junk'"> Junk </span>
+							</td>
+                            <td style="display:none">
+                                {{patient.sdate}}
+                            </td>
+						</tr>
+					</tbody>
+				</table> 
+					<dir-pagination-controls
+						max-size="5"
+						pagination-id="callMeListId"
+						direction-links="true"
+						boundary-links="true" >
+					</dir-pagination-controls>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

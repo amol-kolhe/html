@@ -1,0 +1,298 @@
+<div>
+    <div id="aptListing">
+        <div id="aptReadonly">
+            <div class="headBar">
+                <span>Appointment Details</span>
+                <!-- <span style="float:right;" ng-hide="custNewAppointment.appointment.state == 'Cancelled' || custNewAppointment.appointment.state == 'Completed'">
+                    <span title="Edit Appointment" class="clickable glyphicon glyphicon-pencil" style="margin-right:5px;" onclick="slideDown('#aptEditable')"></span>
+                    <span title="Cancel Appointment" class="clickable glyphicon glyphicon-trash" ng-click="cancelAppointment(custNewAppointment.appointment._id)"></span>
+                </span> -->
+            </div>
+            <div class="bodyContainer">
+                <div class="halfContainer">
+                    <span class="itemLabel">Ref. No. </span>:
+                    <span ng-bind="custNewAppointment.appointment.refno"></span>
+                </div>
+                <div class="halfContainer">
+                    <span class="itemLabel">Date </span>:
+                    <span ng-bind="custNewAppointment.appointment.starttime * 1000 | date:'yyyy-MM-dd hh:mm a'"></span>
+                </div>
+                <div class="halfContainer">
+                    <span class="itemLabel">State </span>:
+                    <span ng-bind="custNewAppointment.appointment.state"></span>
+                </div>
+                <div class="halfContainer">
+                    <span class="itemLabel">Problem </span>:
+                    <span ng-bind="custNewAppointment.customer.problem"></span>
+                </div>
+                <!--<div class="halfContainer">
+                    <span class="itemLabel">Service </span>:
+                    <span ng-bind="custNewAppointment.appointment.service"></span>
+                </div>-->
+                <div class="halfContainer">
+                    <span class="itemLabel">Area </span>:
+                    <span ng-bind="custNewAppointment.appointment.zone"></span>
+                </div>
+                <div class="halfContainer">
+                    <span class="itemLabel">Cost </span>:
+                    <!--<span ng-bind="custNewAppointment.appointment.cost"></span>-->
+                    <span> {{custNewAppointment.appointment.cost | currency:"&#8377;"}} </span>
+                    <!--<span ng-bind="custNewAppointment.appointment.currency"></span>-->
+                </div>
+                <div class="halfContainer">
+                    <span class="itemLabel">Pincode </span>:
+                    <span ng-bind="custNewAppointment.customer.pincode"></span>
+                </div>
+                <div class="halfContainer">
+                    <span class="itemLabel"> Paid </span>:
+                    <span> {{costPaid | currency:"&#8377;"}} </span>
+                </div>
+                <div>
+                    <div class="halfContainer" style="vertical-align: top;">
+                        <span class="itemLabel">Address </span>:
+                        <pre ng-show="custNewAppointment.appointment.usecustomeraddress == false">
+                            {{custNewAppointment.appointment.address}}
+                        </pre>
+                        <pre ng-show="custNewAppointment.appointment.usecustomeraddress == true">
+                            {{custNewAppointment.customer.address}}
+                        </pre>
+                    </div>
+                    <div class="halfContainer" style="vertical-align: top;">
+                        <span class="itemLabel">Comment </span>:
+                        <pre>
+                            {{custNewAppointment.appointment.comments}}
+                        </pre>
+                    </div>
+                </div>
+                <div id="aptEditable" style="display:none;">
+                    <div class="headBar">
+                        <span>Edit Appointment</span>
+                    </div>
+                    <div class="bodyContainer">
+                        <div class="halfContainer">
+                            <div>
+                                <span class="itemLabel">Pincode </span>:
+                                <select class="clstxt2" name="patientPincode"
+                                        ng-model = "editAptModel.pincode"
+                                        data-ng-class = "{red2: adminNewAppointmentForm.adminSignInForCust.patientPincode.$invalid && adminNewAppointmentForm.adminSignInForCust.patientPincode.$dirty, green2: adminNewAppointmentForm.adminSignInForCust.patientPincode.$valid && adminNewAppointmentForm.adminSignInForCust.patientPincode.$dirty}"
+                                        title = "Select customer pincode"
+                                        ng-options="pincode.pin as pincode.pin for pincode in custPinLocalities"
+                                        ng-change="filterArea(editAptModel.pincode); getSpInfo(editAptModel.zone, editAptModel.service, editAptModel.pincode)"
+                                        data-ng-required = "true">
+                                    <1option value="">Select customer pincode</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span class="itemLabel">Area </span>:
+                                <select class="clstxt2 " name="patientZone" id="f1"
+                                        data-ng-model = "editAptModel.zone"
+                                        data-ng-class = "{red2: adminNewAppointmentForm.adminSignInForCust.patientZone.$invalid && adminNewAppointmentForm.adminSignInForCust.patientZone.$dirty, green2: adminNewAppointmentForm.adminSignInForCust.patientZone.$valid && adminNewAppointmentForm.adminSignInForCust.patientZone.$dirty}"
+                                        title = "Select customer Area"
+                                        ng-options="zone.zoneid as zone.zonename for zone in custZones"
+                                        ng-change="filterPin(editAptModel.zone); getSpInfo(editAptModel.zone, editAptModel.service, editAptModel.pincode)"
+                                        data-ng-required = "true">
+                                    <1option value="">Select customer Area</option>
+                                </select>
+                            </div>
+                            <div style="position:relative;">
+                                <span class="itemLabel">New date </span>:
+                                <input type="text" class="" placeholder="Select Date" id="datetimepicker3" ng-model="editAptModel.date" style="margin-right: 10px;width: 174px;"/>
+                                <span ng-bind="editAptModel.slot"></span>
+                                <span style="color:#ff0000; display:block; margin-left: 80px;" ng-show="wtUndefined" ng-model="wtUndefined">{{wtUndefinedErrorMsg}}</span>
+                                <div ng-show="spInfo" id="spInfo">
+                                    <table width="100%">
+                                        <tr>
+                                            <td class="itemLabel" align="right" style="vertical-align:top">Slots </td>
+                                            <td align="right">
+                                                <div id="workingTime">
+                                                    <table width="100%">
+                                                        <tr>
+                                                            <td style="vertical-align:top;width: 100px;">
+                                                                <!--<div style="float: left; width: 20%; padding-left: 4px;">
+                                                                    <div style="padding: 1px 0;" ng-repeat="aptstarttime in aptStartTime track by $index">
+                                                                        <input type="radio" ng-model="custNewAppointment.aptstarttime" name="group1" value="{{aptstarttime}}">
+                                                                    </div>
+                                                                </div>-->
+                                                                <ul style="width:25px;">
+                                                                    <li style="white-space: nowrap;" ng-repeat="aptstarttime in aptStartTime track by $index">
+                                                                        <input type="radio" ng-model="custNewAppointment.aptstarttime" name="group1" value="{{aptstarttime}}">
+                                                                    </li>
+                                                                </ul>
+
+                                                                <ul style="width: 50%;">
+                                                                    <li style="white-space: nowrap;" ng-repeat="aptslot in aptSlotTimeFrom track by $index">
+                                                                        <!-- <div ng-repeat="d in df track by $index"> -->
+                                                                        <!-- <input type="radio" ng-model="custNewAppointment.d" name="group1" value="{{d}}">&nbsp; -->
+                                                                        <!-- </div> -->
+
+                                                                        {{aptslot}}
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                                                            <td>
+                                                                <ul style="width:20px;">
+                                                                    <li style="white-space: nowrap;" ng-repeat="dash in spaceDash track by $index">{{dash}}</li>
+                                                                </ul>
+                                                            </td>
+                                                            <td style="vertical-align:top">
+                                                                <ul>
+                                                                    <li style="white-space: nowrap;" ng-repeat="aptslot1 in aptSlotTimeTo track by $index">{{aptslot1}}</li>
+                                                                </ul>
+                                                            </td>
+                                                            <td>&nbsp;</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div style="vertical-align: top;">
+                                <span class="itemLabel" style="vertical-align: top;">Address </span>:
+                                <span>
+                                    <input type="checkbox" id="edtAddSame" ng-model="editAptModel.usecustomeraddress"/> <label for="edtAddSame" >Same as customer address</label>
+                                </span>
+                                <span ng-hide="editAptModel.usecustomeraddress">
+                                    <textarea maxlength="150" class="clstxt2" ng-trim="false" rows="5" 1cols="80" style="margin-left: 80px;" name="patientResidenceAddress"
+                                        data-ng-model="editAptModel.aptaddress"
+                                        data-ng-class="{red3: adminNewAppointmentForm.adminSignInForCust.patientResidenceAddress.$invalid && adminNewAppointmentForm.adminSignInForCust.patientResidenceAddress.$dirty, green3: adminNewAppointmentForm.adminSignInForCust.patientResidenceAddress.$valid && adminNewAppointmentForm.adminSignInForCust.patientResidenceAddress.$dirty}"
+                                        title="Enter Customer Residence Address"
+                                        placeholder="Enter Appointment Address"
+                                        data-ng-required="true" >
+                                    </textarea>
+                                    <span>{{150 - editAptModel.aptaddress.length}} left</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="halfContainer" style="vertical-align:top;">
+                            <div>
+                                <span class="itemLabel">Service </span>:
+                                <select class="clstxt2 " name="patientService" id="f2"
+                                        data-ng-model = "editAptModel.service"
+                                        data-ng-class = "{red2: adminNewAppointmentForm.adminSignInForCust.patientService.$invalid && adminNewAppointmentForm.adminSignInForCust.patientService.$dirty, green2: adminNewAppointmentForm.adminSignInForCust.patientService.$valid && adminNewAppointmentForm.adminSignInForCust.patientService.$dirty}"
+                                        title = "Select service"
+                                        ng-options="service.id as service.servicename for service in servicesList"
+                                        ng-change="getSpInfo(editAptModel.zone, editAptModel.service, editAptModel.pincode)"
+                                        data-ng-required = "true">
+                                    <1option value="">Select service</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span class="itemLabel">Problem </span>:
+                                <select ng-model="editAptModel.problem" name="patientProblem"
+                                        class="clstxt2 "
+                                        data-ng-class = "{red2: adminNewAppointmentForm.adminSignInForCust.patientProblem.$invalid && adminNewAppointmentForm.adminSignInForCust.patientProblem.$dirty, green2: adminNewAppointmentForm.adminSignInForCust.patientProblem.$valid && adminNewAppointmentForm.adminSignInForCust.patientProblem.$dirty}"
+                                        title = "Select customer Problem"
+                                        ng-options="Problem.id as Problem.name for Problem in custProblems">
+                                    <option value="">Select customer Problem</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span class="itemLabel">Rating </span>:
+                            <span class="editRating">
+                                <span ng-class="editAptModel.rating >= 1 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'" ng-click="editAptModel.rating = 1"></span>
+                                <span ng-class="editAptModel.rating >= 2 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'" ng-click="editAptModel.rating = 2"></span>
+                                <span ng-class="editAptModel.rating >= 3 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'" ng-click="editAptModel.rating = 3"></span>
+                                <span ng-class="editAptModel.rating >= 4 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'" ng-click="editAptModel.rating = 4"></span>
+                                <span ng-class="editAptModel.rating >= 5 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'" ng-click="editAptModel.rating = 5"></span>
+                            </span>
+                            </div>
+                            <div style="vertical-align: top;">
+                                <span class="itemLabel" style="vertical-align: top;">Comment </span>:
+                            <textarea maxlength="50" class="clstxt2" ng-trim="false" rows="5" 1cols="80" name="patientComment"
+                                      data-ng-model="editAptModel.comments"
+                                      data-ng-class="{red3: adminNewAppointmentForm.adminSignInForCust.patientComment.$invalid && adminNewAppointmentForm.adminSignInForCust.patientComment.$dirty, green3: adminNewAppointmentForm.adminSignInForCust.patientComment.$valid && adminNewAppointmentForm.adminSignInForCust.patientComment.$dirty}"
+                                      title="Enter customer comment"
+                                      placeholder="Enter customer comment"
+                                      data-ng-required="true" >
+                            </textarea>
+                                <span>{{50 - editAptModel.comments.length}} left</span>
+                            </div>
+                        </div>
+                        <div class="footerBar">
+                            <button class="btn btn-default btn-sm" ng-click="resetEditAptModel()" ng-disabled="isEditSaveBtnDisabled()">Reset</button>
+                            <span style="float:right">
+                                <button  ng-click="cancelEditApt()" class="btn btn-default btn-sm">Cancel</button>
+                                <button  onclick="slideUp('#aptEditable')" ng-click="saveEditedApt()" class="btn btn-primary btn-sm"
+                                        ng-disabled="isEditSaveBtnDisabled()">Save</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="custReadonly" class="halfContainer">
+        <div class="headBar">
+            <span>Customer Details</span>
+        </div>
+        <div class="bodyContainer">
+            <div>
+                <span class="itemLabel">ID </span>:
+                <span ng-bind="custNewAppointment.customer.healyoscustid"></span>
+            </div>
+            <div>
+                <span class="itemLabel">Name </span>:
+                <span ng-bind="custNewAppointment.customer.name"></span>
+            </div>
+            <div>
+                <span class="itemLabel">Contact </span>:
+                <span ng-bind="custNewAppointment.customer.phone"></span>
+            </div>
+            <div>
+                <span class="itemLabel">Email </span>:
+                <span ng-bind="custNewAppointment.customer.email"></span>
+            </div>
+            <div>
+                <span class="itemLabel">Gender </span>:
+                <span ng-bind="custNewAppointment.customer.gender"></span>
+            </div>
+            <div>
+                <span class="itemLabel">Location </span>:
+                <span ng-bind="custNewAppointment.customer.city"></span>,
+                <span ng-bind="custNewAppointment.customer.state"></span>,
+                <span ng-bind="custNewAppointment.customer.country"></span>
+            </div>
+            <div>
+                <span class="itemLabel">Address </span>:
+                <pre>
+                    {{custNewAppointment.customer.address}}
+                </pre>
+            </div>
+        </div>
+    </div>
+    <div class="halfContainer" style="vertical-align: top;">
+        <div id="spReadonly">
+            <div class="headBar">
+                <span>Service Provider Details</span>
+            </div>
+            <div class="bodyContainer">
+                <div>
+                    <span class="itemLabel">ID </span>:
+                    <span ng-bind="custNewAppointment.sp.healyosspid"></span>
+                </div>
+                <div>
+                    <span class="itemLabel">Name </span>:
+                    <span ng-bind="custNewAppointment.sp.name"></span>
+                </div>
+                <div>
+                    <span class="itemLabel">Contact </span>:
+                    <span ng-bind="custNewAppointment.sp.phonemobile"></span>
+                </div>
+                <div>
+                    <span class="itemLabel">Email </span>:
+                    <span ng-bind="custNewAppointment.sp.email"></span>
+                </div>
+            </div>
+        </div>
+        <div ng-show="custNewAppointment.appointment.state == 'Completed'">
+            <div class="headBar">
+                <span>Payment Details</span>
+            </div>
+            <div class="bodyContainer">
+                {{custNewAppointment.payment.curr}} {{custNewAppointment.payment.amnt}} paid by {{custNewAppointment.payment.type}}
+            </div>
+        </div>
+    </div>
+</div>

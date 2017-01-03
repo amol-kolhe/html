@@ -1,0 +1,538 @@
+<div id="q1" class="1mainContent" ng-controller="AdminCtrl" data-ng-init="initCache()">
+    <div style="padding:10px;">
+        <form name="adminNewAppointmentForm.adminSignInForCust" data-ng-init="initCustCities(); adminNewAppointmentCust.zone=''; initAdminNewAppt()" data-ng-submit="" novalidate>
+            <div ng-show="custDetails" id="custDetails">
+                <div>
+                    <div class= "table-hover new-appointment-table">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h4>Customer Details</h4>
+                            </div>
+                        </div>
+
+                        <div class="row row-align">
+                            <div class="col-xs-12 col-sm-3 appointment-label">Problem</div>
+                            <div class="col-xs-12 col-sm-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <select ng-model="adminNewAppointmentCust.Problem" name="patientProblem"
+                                class="input-width clstxt2 form-control"
+                                data-ng-class = "{red2: adminNewAppointmentForm.adminSignInForCust.patientProblem.$invalid && adminNewAppointmentForm.adminSignInForCust.patientProblem.$dirty}"
+                                title = "Select customer problem"
+								data-ng-required = "true"
+                                ng-options="Problem as Problem for Problem in customerProblem">
+                                <option value="">Select customer problem</option>
+                                </select>
+								<span style="color:red" data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientProblem.$dirty && adminNewAppointmentForm.adminSignInForCust.patientProblem.$invalid">
+									<span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientProblem.$error.required">Problem is required.</span>
+								</span>
+                            </div>
+                        </div>
+
+                        <div class="row row-align">
+                            <div class="col-xs-12 col-sm-3 appointment-label">City</div>
+                            <div class="col-xs-12 col-sm-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <div class="clsfleft" data-ng-if="users1.disableFlag" style="height: 30px;">
+                                    <span data-ng-init="custPin(users1.city)">{{users1.cityname}}</span>
+                                </div>
+                                <div class="clsfleft" data-ng-if="!users1.disableFlag">
+                                    <select ng-model="users1.city" name="patientCity"
+                                     class="input-width clstxt2 form-control"
+                                     id = "quickAppointmentPatientCityId2"
+                                     data-ng-class = "{red2: adminNewAppointmentForm.adminSignInForCust.patientCity.$invalid && adminNewAppointmentForm.adminSignInForCust.patientCity.$dirty}"
+                                     title = "Select customer city"
+                                     data-ng-change="custPin(users1.city)"
+                                     ng-options="city.id as city.name for city in custCities1"
+                                     data-ng-required = "true"
+                                     data-ng-disabled = "users1.disableFlag">
+                                        <option value="">Select customer city</option>
+                                    </select>
+									<span style="color:red" data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientCity.$dirty && adminNewAppointmentForm.adminSignInForCust.patientCity.$invalid">
+										<span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientCity.$error.required">City is required.</span>
+									</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-align">
+                            <div class="col-xs-12 col-sm-3 appointment-label">Name</div>
+                            <div class="col-xs-12 col-sm-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input class="input-width clstxt2 form-control" type="text"
+                                name="patientName"
+                                data-ng-model = "users1.name"
+                                data-ng-pattern = "/^[a-zA-Z\s]*$/"
+                                data-ng-class = "{red1: adminNewAppointmentForm.adminSignInForCust.patientName.$invalid && adminNewAppointmentForm.adminSignInForCust.patientName.$dirty}"
+                                title = "Enter customer name"
+                                placeholder = "Enter customer name"
+                                data-ng-required = "true"
+                                data-ng-show = "!users1.disableFlag"
+                                />
+                                <span class="input-width clstxt2" data-ng-show = "users1.disableFlag">{{users1.name}}</span>
+
+								<span style="color:red" data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientName.$dirty && adminNewAppointmentForm.adminSignInForCust.patientName.$invalid">
+									<span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientName.$error.required"> Name is required. </span>
+									<span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientName.$error.pattern"> Invalid name. </span>
+								</span>
+                            </div>
+                        </div>
+						
+						<div class="row row-align">
+							<div class="col-xs-12 col-sm-3 appointment-label">Gender</div>
+							<div class="col-xs-12 col-sm-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+								<select class="input-width clstxt2 form-control" name="patientGender"
+									data-ng-model = "adminNewAppointmentCust.gender"
+										data-ng-class = "{red2: adminNewAppointmentForm.adminSignInForCust.patientGender.$invalid && adminNewAppointmentForm.adminSignInForCust.patientGender.$dirty}"
+										title = "Select customer gender"
+										ng-options="gender.id as gender.name for gender in custGender"
+										data-ng-required = "true">
+									<option value="">Select customer gender</option>
+								</select>
+								<span style = "color:red" data-ng-show = "adminNewAppointmentForm.adminSignInForCust.patientGender.$dirty && adminNewAppointmentForm.adminSignInForCust.patientGender.$invalid">
+									<span data-ng-show = "adminNewAppointmentForm.adminSignInForCust.patientGender.$error.required"> Gender is required. </span>
+								</span>
+							</div>
+						</div>
+                        <div class="row row-align">
+                            <div class="col-xs-12 col-sm-3 appointment-label">Contact number</div>
+                            <div  class="col-xs-12 col-sm-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input class="input-width clstxt2 form-control" type="text"
+                                name="patientPhoneNumber"
+                                maxlength="12"
+                                data-ng-model = "users1.contactNo"
+                                data-ng-pattern = "/^\d*$/"
+                                data-ng-class = "{red1: adminNewAppointmentForm.adminSignInForCust.patientPhoneNumber.$invalid && adminNewAppointmentForm.adminSignInForCust.patientPhoneNumber.$dirty}"
+                                title = "Enter customer contact number"
+                                placeholder = "Enter customer contact number"
+                                data-ng-required = "true"
+                                data-ng-show = "!users1.disableFlag"
+                                    />
+                                <span class="input-width clstxt2" data-ng-show = "users1.disableFlag">
+                                <a ng-href="tel:{{users1.contactNo}}">{{users1.contactNo}}</a>
+                                </span>
+								<span style="color:red" data-ng-show = "adminNewAppointmentForm.adminSignInForCust.patientPhoneNumber.$dirty && adminNewAppointmentForm.adminSignInForCust.patientPhoneNumber.$invalid">
+									<span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientPhoneNumber.$error.pattern"> Invalid contact number. </span>
+									<span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientPhoneNumber.$error.required">Contact number is required.</span>
+								</span>
+                            </div>
+                        </div>
+                        <div class="row row-align" >
+                            <div class="col-xs-12 col-sm-3 appointment-label">Email address</div>
+                            <div class="col-xs-12 col-sm-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input class="input-width clstxt2 form-control" type="text"
+                                name="patientEmail"
+                                data-ng-model = "users1.email"
+                                data-ng-pattern = "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+                                data-ng-class = "{red1: adminNewAppointmentForm.adminSignInForCust.patientEmail.$invalid && adminNewAppointmentForm.adminSignInForCust.patientEmail.$dirty && visitedAdminNewAppointmentCustEmail}"
+                                title = "Enter customer email address"
+                                placeholder = "Enter customer email address"
+                                data-ng-blur = "visitedAdminNewAppointmentCustEmail = true"
+                                data-ng-focus = "visitedAdminNewAppointmentCustEmail = false"
+                                data-ng-required = "true"/>
+								<span style = "color:red" data-ng-show = "adminNewAppointmentForm.adminSignInForCust.patientEmail.$dirty && adminNewAppointmentForm.adminSignInForCust.patientEmail.$invalid && visitedAdminNewAppointmentCustEmail">
+									<span data-ng-show = "adminNewAppointmentForm.adminSignInForCust.patientEmail.$error.required"> Email address is required. </span>
+									<span data-ng-show = "adminNewAppointmentForm.adminSignInForCust.patientEmail.$error.pattern"> Invalid email address. </span>
+								</span>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 5px;margin-top: 5px;">
+                            <div class="col-xs-12 col-sm-3 appointment-label">Location</div>
+                            <div class="col-xs-12 col-sm-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <select class="ac-select"
+                                    id="lCombo"
+                                    ac-model="selectedLocation"
+                                    ac-refresh = acRefresh
+                                    ac-options="l.val for l in getAllLocations()"
+                                    ac-settings="{ allowClear: true, maxWidth: '250px', itemsInView: 20, loadOnCreate: false, comboMode: false, loadOnOpen: true, minWidth: '250px', height: '23px' }"
+                                    ac-change="locationSelected(value)">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 5px;">
+                            <div class="col-xs-12 col-sm-12"><span style="color:{{clscolor}};" ng-show="custRecordEnqMsg">{{custRecordEnqMsg1}}</span></div>
+                        </div>
+
+                    </div>
+                </div>
+                <div style="float: right;">
+                    <button ng-click="showNext('serviceProvider'); getMonthlyAppointmentAvailabilityCheck(adminNewAppointmentCust.pincode, adminNewAppointmentCust.zone)"
+                            class="btn btn-default"
+                            type="button"
+                            ng-disabled="!(!!users1.city && !!users1.name && !!users1.contactNo && !!users1.email && !!adminNewAppointmentCust.pincode && !!adminNewAppointmentCust.Problem && !!adminNewAppointmentCust.gender)">
+                        Next </button>
+                    <input style="margin:0; float:right" type="button" value="Record Enquiry"
+                           class="btn btn-primary"
+                           ng-disabled="!(!!users1.city && !!users1.name && !!users1.contactNo)"
+                           ng-click="aptRecordEnquiry()" />&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+            </div>
+
+            <div ng:show="serviceProvider" id="serviceProvider" style="padding: 10px;">
+                <div id="divSP" style="min-height: 275px; position:relative;">
+                    <table border="0" width="100%">
+                        <tr>
+                            <td>
+                                <label class="selectsp">
+                                    <input type="checkbox" 
+                                        name="selectsp" 
+                                        ng-model="adminNewAppointmentCust.selectSp"
+                                        ng-change="selectSpChanged(adminNewAppointmentCust.selectSp)">
+                                    Let me choose the physio manually
+                                </label>
+                            </td>
+                        </tr>
+                        <tr ng-if="adminNewAppointmentCust.selectSp == true">
+                            <td>
+                                <div style="padding-bottom: 10px;" class="row-align">
+                                    <div class="row">
+                                        <div class="col-sm-3 col-xs-12">
+                                            <label>Physiotherapist Name</label></div>
+                                        <div class="col-sm-9 col-xs-12">
+                                            <span class="colonSeparatorRight hidden-xs">:</span>
+                                            <select ng-model="spNewAppointment.spNames"
+                                                    name="spNames"
+                                                    class="input-width clstxt2 form-control"
+                                                    id = "spNamesListId"
+                                                    title = "Select service provider"
+                                                    data-ng-change="adminNewAppointmentCust.aptstarttime = ''; setChangedSpId();"
+                                                    ng-options="sp._id as sp.name for sp in spNamesArr"
+                                                    data-ng-required = "adminNewAppointmentCust.selectSp">
+                                                <option value="">Select service provider</option>
+                                            </select>
+                                            <span style="color:red" data-ng-show="adminNewAppointmentForm.adminSignInForCust.spNames.$dirty && adminNewAppointmentForm.adminSignInForCust.spNames.$invalid">
+                                                <span data-ng-show="adminNewAppointmentForm.adminSignInForCust.spNames.$error.required">Service provider is required.</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Select Appointment Time Slot</th>
+                        </tr>
+                        <tr><td colspan="2">&nbsp;</td></tr>
+                        <!-- <tr>
+                            <td class="clswidth1" align="right">Select service :</td>
+                            <td>
+                                <select class="clstxt2" name="patientService" id="f2"
+                                data-ng-model = "adminNewAppointmentCust.service"
+                                data-ng-class = "{red2: adminNewAppointmentForm.adminSignInForCust.patientService.$invalid && adminNewAppointmentForm.adminSignInForCust.patientService.$dirty, green2: adminNewAppointmentForm.adminSignInForCust.patientService.$valid && adminNewAppointmentForm.adminSignInForCust.patientService.$dirty}"
+                                title = "Select service"
+                                ng-options="service.id as service.servicename for service in servicesList"
+								ng-change="fnServiceChange()"
+                                data-ng-required = "true">
+                                <option value="">Select service</option>
+                            </select>
+								<span style = "color:red" data-ng-show = "adminNewAppointmentForm.adminSignInForCust.patientService.$dirty && adminNewAppointmentForm.adminSignInForCust.patientService.$invalid">
+									<span data-ng-show = "adminNewAppointmentForm.adminSignInForCust.patientService.$error.required">Service is required.</span>
+								</span>
+                            </td>
+                        </tr> -->
+
+                        <!--<tr>
+                            <td class="clswidth1" align="right">Select Date :</td>
+                            <td>
+                                <input type="text" class="clsspace2" placeholder="Select Date" id="datetimepicker3" />
+                                <!-- <input type="button" value="click" ng-click="getSpInfo(adminNewAppointmentCust.zone.zoneid, adminNewAppointmentCust.service.id, adminNewAppointmentCust.pincode.pin);" />
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff0000;" ng-show="wtUndefined" ng-model="wtUndefined">{{wtUndefinedErrorMsg}}</span>
+                            </td>
+                        </tr> -->
+                        <tr></tr>
+                        <tr></tr>
+                        <tr>
+                            <td>
+                                <div style="display:inline-block;">
+                                    <datepicker id="datetimepicker3" date-disabled="disabled(date, mode)" ng-change="callSpInfo(spNewAppointment.spNames)" ng-model="obj.dt" min-date="minDate" max-date="maxDate" show-weeks="false" class="well well-sm" custom-class="getDayClass(date, mode)"></datepicker>
+                                </div>
+                            </td>
+                        </tr>
+                        <!--<tr>
+                            <td style="font-weight:bold">
+                                Selected date is: <em>{{obj.dt | date:'fullDate' }}</em>
+                            </td>
+                        </tr>-->
+                        <tr>
+                            <td>
+                                <span style="color:#ff0000;" ng-show="wtUndefined" ng-model="wtUndefined">{{wtUndefinedErrorMsg}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div ng-show="spInfo" id="spInfo">
+                                    <table width="100%">
+                                        <tr>
+                                            <td class="clswidth1" align="left" style="vertical-align:top">
+                                                Appointment Slots on <em style="font-weight:bold">{{obj.dt | date:'fullDate' }}</em> are:
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">
+                                                <div id="workingTime" style="padding-left:3px">
+                                                    <table width="100%">
+                                                        <tr>
+                                                            <td width="11%" style="vertical-align:top">
+																<ul style="width:22%;">
+																	<li style="white-space: nowrap; line-height: 24px;" ng-repeat="aptstarttime in aptStartTime track by $index">
+																		<input type="radio" ng-model="adminNewAppointmentCust.aptstarttime" name="group1" value="{{aptstarttime}}">
+																	</li>
+																</ul>
+
+                                                                <ul style="width:78%;" id="ulst">
+                                                                    <li style="white-space: nowrap; line-height: 24px;" ng-repeat="aptslot in aptSlotTimeFrom track by $index">
+                                                                        <span>{{aptslot}}</span>
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                                                            <!--<td width="2%">
+                                                                <ul id="uldash">
+                                                                    <li style="white-space: nowrap;" ng-repeat="dash in spaceDash track by $index">
+																		<span>{{dash}}</span>
+																	</li>
+                                                                </ul>
+                                                            </td>
+                                                            <td width="10%" style="vertical-align:top">
+                                                                <ul id="ulet">
+                                                                    <li style="white-space: nowrap;" ng-repeat="aptslot1 in aptSlotTimeTo track by $index">
+																		<span>{{aptslot1}}</span>
+																	</li>
+                                                                </ul>
+                                                            </td>-->
+                                                            <td width="44%">&nbsp;</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <button style="float:left" ng-click="showBack('custDetails')" type="button" class="btn btn-default"> Back </button>
+                    <button style="float:right" ng-click="showNext('custAddress')" type="button" class="btn btn-default" ng-disabled="(!(!!adminNewAppointmentCust.aptstarttime)) || isSpNotSet()"> Next </button>
+                </div>
+            </div>
+
+            <div ng:show="custAddress" id="custAddress" style="padding: 10px;">
+                <div style="min-height: 275px;">
+                    <table border="0" width="100%">
+                        <tr>
+                            <th colspan="2">Customer Address</th>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <td align="right" style="vertical-align:top"> Appointment Address : </td>
+                            <td>
+                                <textarea maxlength="150"
+                                    class="clsspace2 form-control"
+                                    ng-trim="false" rows="5" 1cols="80"
+                                    name="patientResidenceAddress"
+                                    style="width: 100%; max-width: 300px;"
+                                    data-ng-model="adminNewAppointmentCust.residenceAddress"
+                                    data-ng-class="{red3: adminNewAppointmentForm.adminSignInForCust.patientResidenceAddress.$invalid && adminNewAppointmentForm.adminSignInForCust.patientResidenceAddress.$dirty}"
+                                    title="Enter Appointment Address"
+                                    placeholder="Enter Appointment Address"
+                                    data-ng-required="true" >
+								</textarea>
+                                <br><span>{{150 - adminNewAppointmentCust.residenceAddress.length}} left</span>
+                                <br><span style="color:red" data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientResidenceAddress.$dirty && adminNewAppointmentForm.adminSignInForCust.patientResidenceAddress.$invalid">
+                                    <span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientResidenceAddress.$error.required">&nbsp;&nbsp;&nbsp;&nbsp; Appointment Address is required.</span>
+								</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" style="vertical-align:top">Location :</td>
+                            <td>
+                                <span class="clsspace2">
+                                    {{locationDetails.localities}},&nbsp;
+                                    {{readCache("cityName", users1.city)}},&nbsp;
+                                    {{readCache("state", users1.city)}},&nbsp;
+                                    <span>India</span>.&nbsp;
+                                    {{adminNewAppointmentCust.pincode}}.
+                                </span>
+                            </td>
+                        </tr>
+					    <tr style="display:none">
+							<td>&nbsp;</td>
+							<td align="left" style="vertical-align:top">
+								&nbsp;&nbsp;<input type="checkbox" name="vehicle" id="checkboxAddress" data-ng-model="adminNewAppointmentCust.check"> Do you want appointment on residence address?
+							</td>
+						</tr>
+						
+						<tr style="display:none">
+							<td colspan="2" align="left">
+								<div ng:show="divAptAddress" id="divAptAddress">
+									<table width="100%">
+										<tr>
+											<td align="right" style="vertical-align:top"> Appointment Address : </td>
+											<td>
+												<textarea maxlength="150" class="clsspace2 form-control" ng-trim="false" rows="5" 1cols="80" name="patientAppointmentAddress"
+														  data-ng-model="adminNewAppointmentCust.appointmentAddress"
+														  data-ng-class="{red3: adminNewAppointmentForm.adminSignInForCust.patientAppointmentAddress.$invalid && adminNewAppointmentForm.adminSignInForCust.patientAppointmentAddress.$dirty}"
+														  title="Enter Customer Appointment Address"
+                                                          style="width: 100%; max-width: 300px;"
+														  placeholder="Enter Customer Appointment Address"
+														  data-ng-required="true" >
+												</textarea>
+												<br><span>{{150 - adminNewAppointmentCust.appointmentAddress.length}} left</span>
+                                                <br><span style="color:red" data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientAppointmentAddress.$dirty && adminNewAppointmentForm.adminSignInForCust.patientAppointmentAddress.$invalid">
+														<span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientAppointmentAddress.$error.required">Appointment Address is required.</span>
+												</span>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</td>
+						</tr>
+						
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <td align="right" style="vertical-align:top"> Customer Comment : </td>
+                            <td>
+                                <textarea maxlength="150" class="clsspace2 form-control" ng-trim="false" rows="3" 1cols="80" name="patientComment"
+                                    data-ng-model="adminNewAppointmentCust.comment"
+                                    data-ng-class="{red3: adminNewAppointmentForm.adminSignInForCust.patientComment.$invalid && adminNewAppointmentForm.adminSignInForCust.patientComment.$dirty}"
+                                    title="Enter customer comment"
+                                    style="width: 100%; max-width: 300px;"
+                                    placeholder="Enter customer comment"
+                                    data-ng-required="false" >
+								</textarea>
+                                <br><span>{{150 - adminNewAppointmentCust.comment.length}} left</span>
+                                <br><span style="color:red" data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientComment.$dirty && adminNewAppointmentForm.adminSignInForCust.patientComment.$invalid">
+                                    <span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientComment.$error.required">&nbsp;&nbsp;&nbsp;&nbsp; Comment is required.</span>
+								</span>								
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+
+                        <tr>
+                            <td align="right"> Appointment Charges: &nbsp;</td>
+                            <td>
+                                {{originalCost}} {{currency}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+
+                        
+                        <tr>
+                            <td align="right"> Additional Charges : &nbsp;</td>
+                            <td>
+                                <input class="input-width clstxt2 form-control" style="width:308px; display: inline;" type="number" name="addcharges" data-ng-model="adminNewAppointmentCust.addcharges" data-ng-blur="visitedAddcharges=true" title="Enter additional charges" placeholder="Enter additional charges" data-ng-required="false" max="500" data-ng-class="{red1: adminNewAppointmentForm.adminSignInForCust.addcharges.$invalid && adminNewAppointmentForm.adminSignInForCust.addcharges.$dirty && visitedAddcharges}"/> 
+                               
+                                
+                            </td>
+</tr>
+                       
+
+                        <tr><td align="right"></td>
+                        <td>
+                            <span data-ng-show="adminNewAppointmentForm.adminSignInForCust.addcharges.$invalid && adminNewAppointmentForm.adminSignInForCust.addcharges.$dirty && visitedAddcharges" style="color:red">Additional charges can not  exceed 500</span>
+                            </td>
+                            
+                        </tr>
+                         <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                         <tr>
+                            <td align="right"> Additional Charges Description: &nbsp;</td>
+                            <td>
+                                <input class="input-width clstxt2 form-control" style="width:308px; display: inline;" type="text" name="addchargedesc" data-ng-model="adminNewAppointmentCust.addchargedesc"  title="Enter additional charges description" placeholder="Enter additional charges description" data-ng-required="false" > 
+                               
+                                
+                            </td>
+</tr>
+                       
+
+                        
+                         <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                        
+                        
+                        <tr>
+                            <td align="right"> Promocode : &nbsp;</td>
+                            <td>
+                                <input class="input-width clstxt2 form-control"
+                                       style="width:308px; display: inline;"
+                                       type="text"
+                                       name="promocode"
+                                       data-ng-model = "adminNewAppointmentCust.promocode"
+                                       data-ng-class = "{red1: adminNewAppointmentForm.adminSignInForCust.promocode.$invalid && adminNewAppointmentForm.adminSignInForCust.promocode.$dirty && visitedPromocode}"
+                                       title = "Enter promotional code"
+                                       placeholder = "Enter promotional code (optional)"
+                                       data-ng-blur = "visitedPromocode = true"
+                                       data-ng-focus = "visitedPromocode = false"
+                                       data-ng-required = "false"
+                                />
+                                &nbsp;&nbsp;
+                                <button type="button" class="btn btn-primary" ng-click="applyPromocode();"> Apply </button>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td>
+                                <span style = "color:red" data-ng-show = "adminNewAppointmentForm.adminSignInForCust.promocode.$dirty && adminNewAppointmentForm.adminSignInForCust.promocode.$invalid && visitedPromocode">
+									<span data-ng-show = "adminNewAppointmentForm.adminSignInForCust.promocode.$error.pattern"> Invalid promocode. </span>
+								</span>
+                                <span style = "color:green" data-ng-show = "promoSuccess">
+                                    {{promoSuccess}}
+								</span>
+                                <span style = "color:red" data-ng-show = "promoError">
+                                    {{promoError}}
+								</span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">&nbsp;</td>
+                        </tr>
+                    </table>
+                    <div id="errormsg" style="color:red;"></div>
+                </div>                
+
+                <div>
+                    <button style="float:left" ng-click="showBack('serviceProvider')" type="button" class="btn btn-default"> Back </button>
+					<button data-ng-if="residenceAddressFlag" style="float:right" type="submit" class="btn btn-primary" ng-disabled="!(!!adminNewAppointmentCust.residenceAddress) || adminNewAppointmentForm.adminSignInForCust.addcharges.$invalid" ng-click="aptSubmit();"> Confirm </button>
+					<button data-ng-if="!residenceAddressFlag" style="float:right" type="submit" class="btn btn-primary" ng-disabled="!(!!adminNewAppointmentCust.residenceAddress && adminNewAppointmentCust.appointmentAddress) || adminNewAppointmentForm.adminSignInForCust.addcharges.$invalid" ng-click="aptSubmit();"> Confirm </button>
+                </div>
+            </div>
+
+            <div ng:show="aptConfirmMsg" id="aptConfirmMsg" style="padding: 10px;">
+                <div style="min-height: 275px;">
+                    <table border="0" width="100%">
+                        <tr>
+                            <td>
+                                <div ng-model="frm.submit" style="color:green; text-align:center;"> Thank you for confirming appointment. Appointment reference number is {{frm.submit}}. </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

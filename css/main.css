@@ -1,0 +1,618 @@
+#mainDiv {
+	width:70%;
+	margin:0 auto;
+	font-family: arial;
+	font-size: 14px;
+}
+#headerDiv {
+	/*margin-bottom: 2px;*/
+    float: left;
+    width: 100%;
+	height: 80px;
+}
+
+#headerDiv img {
+	float:left;
+	padding: 4px 10px;
+	cursor: pointer;
+	position: relative;
+    top: -5px;
+}
+
+#topNavigation {
+    float: left;
+    margin-left: 10%;
+    width: 50%;
+	margin-top: 20px;
+}
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+ul li {
+    /*float: left;*/
+	cursor: pointer;
+    /*padding: 13px;*/
+    padding: 7px;
+}
+
+#topNavigation ul li {
+
+}
+
+#workingTime  {
+
+}
+
+#workingTime ul  {
+	float:left;
+	margin-top:-5px;
+}
+
+#workingTime #ulst, #workingTime #uldash, #workingTime #ulet {
+	margin-top:-7px;
+}
+
+#workingTime ul li span  {
+
+}
+
+#workingTime input[type="radio"] {
+	margin:0;
+}
+
+#topNavigation ul li a {
+	text-decoration: none;
+}
+
+#bottomNavigation {
+    float: left;
+    margin-top: 10px;
+    width: 100%;
+}
+
+#bottomNavigation span {
+	padding: 0 1%;
+	cursor: pointer;
+}
+
+#bottomNavigation span:first-child{
+	padding-left: 19%;
+}
+
+#leftNavigation {
+    float: left;
+    width: 18%;
+}
+
+#leftNavigation ul li {
+	width:88%;
+}
+
+.mainContent {
+    /*float: left;
+    min-height: 500px;
+    width: 82%;*/
+}
+
+.mainContent1 {
+    float: left;
+    min-height: 500px;
+    width: 100%;
+}
+
+#tbl1 td {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #f2f2f2;
+    border-collapse: collapse;
+    padding: 1px;
+}
+
+#footerDiv {
+    float: left;
+    padding: 5px;
+    text-align: center;
+    width: 100%;
+}
+
+#q1 .form-group {
+
+}
+
+#q1 .form-group input {
+	width:12%;
+}
+
+#q1 ul li {
+	margin: 0;
+	/*padding: 0;*/
+}
+
+.sort-icon {
+    font-size: 9px;
+    margin-left: 5px;
+}
+
+th {
+	cursor:pointer;
+}
+
+.clstxt2{
+	width: 250px;
+}
+
+.clstxt1{
+	width: 174px;
+}
+
+.clsspace2{
+	margin-left: 7px;
+}
+
+.clsloginborder{
+	border: 1px solid #c2c2c2; 
+	margin: 11px 0; 
+	padding: 20px;
+	float:left;
+}
+
+#divSP .table {
+	width:19%;
+}
+
+.clswidth1 {
+	width:20%;
+}
+
+.clswidth2 {
+	width:17%;
+}
+
+#tblcontactus  {
+	width:99%;
+}
+
+#tblaboutus  {
+	width:99%;
+}
+
+.clstextarea {
+	width:50%;
+}
+
+/*Start css of create Appointment - pranav */
+.red1 {
+    border: solid 1px red;
+	padding: 2px;
+}
+
+.green1 {
+    border: solid 1px green;
+	padding: 2px;
+}
+
+.red2 {
+    border: solid 1px red;
+}
+
+.green2 {
+    border: solid 1px green;
+}
+
+.red3 {
+    border: solid 1px red;
+	padding: 2px;
+}
+
+.green3 {
+    border: solid 1px green;
+	padding: 2px;
+}
+
+
+#patientAddressId {
+    width: 12.5em;
+    height: 4em;
+}
+
+#patientStateId {
+    width: 13em;
+}
+
+#patientCityId {
+    width: 13em;
+}
+
+#patientCountryId {
+    width: 13em;
+}
+
+#patientBirthDateId {
+    width: 12.5em;
+}
+
+#quickAppointmentPatientCityId{
+
+}
+
+.active1 {
+	color:#ff0000;
+}
+
+#callmeSearchId {
+    float: right;
+}
+
+#spInfo table tr td {
+	padding: 3px 0;
+}
+
+#workingTime1 table tr td {
+	border:1px solid #c2c2c2;
+}
+
+.clsfleft{float:left;}
+
+#advSrcBox1 { 
+    background-color: #e4e4e4;
+    border-radius: 5px;
+    /*box-shadow: 0 10px 17px -1px rgba(0, 0, 0, 0.43);*/
+    margin: 10px;
+    padding: 10px;
+    /*width: 745px;
+	float:left;*/
+}
+
+
+/*End css of create Appointment - pranav */
+
+code {
+	padding: 0;
+    font-size: 100%;
+    background-color: transparent !important;
+    color: #000000;
+    border: 0px !important;
+}
+
+#custInfo label {
+	font-weight: bold;
+	padding:4px 0;
+	margin-bottom: 0;
+}
+
+.dropdown {
+	height: 26px;
+}
+
+/* Custom css for patient registration */
+.margin-top-10{
+    margin-top: 10px;
+}
+.margin-top-5{
+    margin-top: 5px;
+}
+.margin-bottom-10{
+    margin-bottom: 10px;
+}
+.margin-bottom-5{
+    margin-bottom: 5px;
+}
+.registerlink{
+    cursor:pointer;
+    padding-right:10px;
+    text-decoration:none; 
+    padding-left:10px;
+}
+.patientregistercontent a.registerlink:first-child{
+    padding-left: 0px;
+}
+.activelink{
+    color:#ff0000 !important;
+}
+.clsregisterborder{
+	border: 1px solid #c2c2c2; 
+	margin: 11px 0; 
+	padding: 20px;
+	width: 100%;
+	float:left;
+}
+.registerselectbox{
+    width: 13em;
+}
+
+.separator {
+	border-right: 1px solid #000000;
+	margin: 0 5px;
+	height: 23px;
+	width: 0;
+	display: inline-block;
+	position: relative;
+	top: 8px;
+}
+/* End Custom css for patient registration */
+
+
+/* Beginning Service Provider tasks */
+
+.spAptListingCategory{
+    padding: 5px;
+    margin: 5px 0;
+    background-color: #808080;
+    color: #FFFFFF;
+}
+
+.navbar-healyos {
+    background-color: #000000;
+    border-color: #E7E7E7;
+}
+
+.row-footer{
+    background-color: #AfAfAf;
+    margin:0px auto;
+    padding: 20px 0px 20px 0px;
+}
+
+.navbar-inverse {
+         background: #000000;
+}
+
+.navbar-inverse .navbar-nav > .active > a,
+    .navbar-inverse .navbar-nav > .active > a:hover,
+    .navbar-inverse .navbar-nav > .active > a:focus {
+            color: #fff;
+            background: #1A237E;
+    }
+
+.navbar-inverse .navbar-nav > .open > a,
+     .navbar-inverse .navbar-nav > .open > a:hover,
+      .navbar-inverse .navbar-nav > .open > a:focus {
+              color: #fff;
+              background: #1A237E;
+      }
+
+.navbar-inverse .navbar-nav .open .dropdown-menu> li> a,
+    .navbar-inverse .navbar-nav .open .dropdown-menu {
+            background-color: #303F9F;
+            color:#eeeeee;
+    }
+
+.navbar-inverse .navbar-nav .open .dropdown-menu> li> a:hover {
+        color:#000000;
+}
+
+.inlineBlockDiv {
+    display: inline-block;
+    width: inherit;
+}
+
+.removeCarousel {
+    position: fixed;
+    right: 10px;
+    top: 90px;
+    cursor: pointer;
+    z-index: 100;
+    font-size: 20px;
+}
+
+.zoomer {
+    display: inline-block;
+    position: fixed;
+    right: 70px;
+    top: 90px;
+    z-index: 100;
+}
+
+.navMenu {
+    /*background-color: #2B5681;*/
+    padding: 0;
+    min-height: 0px;
+}
+
+.imageSlideModalContainer {
+    width: 100%;
+    height: calc(100% - 120px);
+    position: fixed;
+    background-color: #FFFFFF;
+    z-index: 100;
+    top: 65px;
+    left: 0;
+    overflow: auto;
+    padding: 10px;
+}
+
+.closeZoomerIcon {
+    position: fixed;
+    top: 70px;
+    right: 15px;
+    font-size: 24px;
+    background-color: #FFFFFF !important;
+    border-radius: 50%;
+}
+
+.aptSelectionInput {
+	width : 147px;
+}
+
+.srcField {
+	width: 152px;
+	display: inline-block;
+	/*margin-left: 20px;*/
+	text-align: right;
+}
+
+.srcFieldLabel {
+	text-align: left;
+}
+
+.search-cust-title {
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 10px !important;
+}
+
+/***Admin portal***/
+
+.dropdown-multiselect button {
+     width: 250px;
+     text-align: left;
+}
+
+.dropdown-multiselect button span {
+    position: absolute;
+    right: 5px;
+    bottom: 15px;
+}
+
+.topMarginBtn {
+    margin-top: 20px;
+}
+
+/* begin: jQuery UI Datepicker moving pixels fix */
+table.ui-datepicker-calendar {
+    border-collapse: separate;
+}
+
+.ui-datepicker-calendar td {
+    border: 1px solid transparent;
+}
+/* end: jQuery UI Datepicker moving pixels fix */
+
+/* begin: jQuery UI Datepicker emphasis on selected dates */
+.ui-datepicker .ui-datepicker-calendar .ui-state-highlight a {
+	background: #743620 none; /* a color that fits the widget theme */
+	color: white; /* a color that is readeable with the color above */
+}
+/* end: jQuery UI Datepicker emphasis on selected dates */
+
+.session-timeout-container {
+    position: fixed;
+    z-index: 9999;
+    width: 100% !important;
+    top: 64px !important;
+    right: 0 !important;
+    text-align: center;
+}
+
+.session-timeout-message {
+    display: inline-block;
+    color: #D71F27;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #D71F27;
+    border-radius: 6px;
+    box-shadow: 1px 1px 17px -2px #D71F27;
+}
+
+.datePickerBtn {
+    width: 250px;
+}
+
+div.ac-select-popup {
+    z-index: 500 !important;
+}
+/**********promocode********/
+select.disctype-select {
+    background-color: #fff;
+    height: 34px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+}
+input.form-control.disctype-input {
+    width: 50px;
+    padding: 5px;
+    display: inline-block;
+}
+.promo-row-text {
+    vertical-align: middle !important;
+}
+
+/*
+    To fix issue for chrome browser: Chrome changes the background colour to a pale yellow colour.
+*/
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+
+/* ***********ZONE MANAGEMENT********************/
+.zone-minus {
+    line-height: 1;
+    margin-top: 11px;
+    margin-left: -20px;
+}
+.localities-display {
+    max-height: 60px;
+    overflow: auto;
+    display: block;
+}
+.localities-display::-webkit-scrollbar-thumb {
+    background-color: #C3C2C2;
+    border-radius: 10px;
+}
+.localities-display::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background-color: #f2f2f2;
+}
+span.glyphicon.glyphicon-pencil.clickable {
+    padding: 5px 6px;
+}
+.createZone {
+    border: 1px solid #999;
+    margin-left: 1px;
+    background: #f2f2f2;
+    width: 98%;
+    margin-top: 16px;
+    padding: 8px;
+    border-radius: 6px;
+}
+.pin-area-group {
+    max-height: 180px;
+    overflow: auto;
+}
+span.glyphicon.glyphicon-plus-sign {
+    float: right;
+    margin-right: 23px;
+}
+.location-info select {
+    height: 26px;
+    background: transparent;
+    border-radius: 3px;
+}
+
+.show-mobile {
+    display: none;
+}
+
+.zone-label {
+    font-weight: bold;
+}
+
+.leftSideAlignment {
+    padding-left: 20px;
+    min-width:120px;
+}
+
+.wrkingHrsTable {
+    float: right;
+    height: 528px !important;
+    overflow-y: auto;
+}
+
+label.selectsp {
+    margin-bottom: 15px;
+    font-weight: normal;
+}
+
+.menu-info {
+    padding: 0 0 0 15px;
+    line-height: 20px;
+    font-size: 12px;
+    opacity: 0.6;
+    min-width: 100px;
+    display: inline-block;
+}

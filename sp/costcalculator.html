@@ -1,0 +1,119 @@
+<div ng-controller="CostCalculatorCtrl as costCalculator" ng-init=" costCalculator.methods.init()">
+	<div class="row col-xs-12">
+        <h4>Cost Calculator</h4>
+        <h5 style="color: #989898;">Calculate the cost for the appointment(s)</h5>
+    </div>
+    <div class="row row-align">
+        <div class="col-xs-12 col-sm-5 col-md-4 appointment-label">City</div>
+        <div class="col-xs-12 col-sm-7 col-md-8">
+            <span class="colonSeparatorRight hidden-xs">:</span>
+            <span>Pune</span>
+        </div>
+    </div>
+    <div class="row row-align">
+        <div class="col-xs-12 col-sm-5 col-md-4 appointment-label">Service</div>
+        <div class="col-xs-12 col-sm-7 col-md-8">
+            <span class="colonSeparatorRight hidden-xs">:</span>
+            <span style="text-transform: capitalize;">{{costCalculator.models.service.name}}</span>
+        </div>
+    </div>
+    <div class="row row-align">
+        <div class="col-xs-12 col-sm-5 col-md-4 appointment-label">Please select No. of appointments</div>
+        <div class="col-xs-12 col-sm-7 col-md-8">
+            <span class="colonSeparatorRight hidden-xs">:</span>
+            <input type="number" min="1" max="90" step="1" value="1" 
+            	style="width: 250px;" 
+            	class="form-control"
+            	ng-blur="costCalculator.methods.verifyNoofappt()"
+            	ng-model="costCalculator.models.calculator.noofappt" />            
+        </div>
+    </div>
+    <div class="row row-align">
+        <div class="col-xs-12 col-sm-5 col-md-4 appointment-label">Please select Promo Code (if any)</div>
+        <div class="col-xs-12 col-sm-7 col-md-8">
+            <span class="colonSeparatorRight hidden-xs">:</span>
+            <div class="dropdown" style="height: 40px;">
+			  	<button class="btn btn-default dropdown-toggle" 
+			  		type="button" 
+			  		id="dropdownPromocode" 
+			  		style="min-width: 250px" 
+			  		data-toggle="dropdown" 
+			  		aria-haspopup="true" 
+			  		aria-expanded="true">
+			  		<div class="pull-left">
+				    	<span>{{costCalculator.models.calculator.promo}}</span>
+			    	</div>
+			    	<div class="pull-right">
+				    	<span class="caret"></span>
+			    	</div>
+			  	</button>
+			  	<ul class="dropdown-menu" aria-labelledby="dropdownPromocode" style="min-width: 400px; max-height: 350px; overflow: auto;">
+				    <li style="padding: 0" 
+				    	ng-repeat="promo in costCalculator.models.promocodes"
+				    	ng-click="$parent.costCalculator.models.calculator.promo = promo.promocode"
+				    	ng-class="{active: costCalculator.models.calculator.promo == promo.promocode}">
+				    	<a href="#">
+				    		<span style="min-width: 130px; display: inline-block;">{{promo.promocode}}</span>
+				    		<span>
+						    	<span class="menu-info">
+						    		<span>Discount: </span>				    		
+						    		<span ng-if="promo.disctype == 1">
+						    			<span>{{promo.discount}}</span>%	
+						    		</span>
+						    		<span ng-if="promo.disctype == 2">
+						    			&#8377;<span>{{promo.discount}}</span>
+					    			</span>
+						    	</span>
+						    	<span class="menu-info">
+						    		<span>No. of appts: </span>
+						    		<span>{{promo.noofappt}}</span>
+						    	</span>
+					    	</span>
+				    	</a>
+			    	</li>
+			    	<li role="separator" class="divider" style="padding: 0; cursor: default;"
+			    		ng-if="costCalculator.models.calculator.promo != 'Select Promocode'"></li>
+			    	<li style="padding: 0"
+			    		ng-if="costCalculator.models.calculator.promo != 'Select Promocode'"
+			    		ng-click="costCalculator.models.calculator.promo = 'Select Promocode'">
+			    		<a href="#">Unselect Promo Code</a>
+		    		</li>
+			  	</ul>
+			</div>
+        </div>
+    </div>
+
+    <div ng-if="costCalculator.models.response.error" style="margin-top: 15px;">
+    	<div class="alert alert-danger" role="alert">
+    		<span>{{costCalculator.models.response.error}}</span>
+    	</div>
+    </div>
+
+    <div ng-if="costCalculator.models.response.showResponse">
+	    <div class="headBar">
+	    	<span>Cost Distribution</span>
+	    </div>
+	    <div class="bodyContainer">
+	    	<div>
+	    		<div>
+	    			<div>Net Total Cost &#8377; {{costCalculator.models.response.netTotalCharges}}</div>
+	    		</div>
+	    		<div>
+	    			<div>Discounted cost per appointment &#8377; {{costCalculator.models.response.perApptCharges}}</div>
+	    			<div style="color: #989898;">Original cost per appointment &#8377; {{costCalculator.models.response.originalChargePerAppt}}</div >
+	    		</div>
+	    		<div ng-if="costCalculator.models.response.status.statusCode == '2164391937'"
+	    			style="margin-top: 15px;">
+	    			<div class="alert alert-warning" role="alert">
+	    				{{costCalculator.models.response.status.message}}
+	    			</div>
+	    		</div>
+	    	</div>
+	    </div>
+    </div>
+
+    <div class="footerBar" style="margin-top: 20px;">
+    	<button class="btn btn-primary"
+    		ng-click="costCalculator.methods.calculateCost()">Calculate</button>
+    </div>
+</div>

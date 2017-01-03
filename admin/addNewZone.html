@@ -1,0 +1,118 @@
+<div style="padding:10px;">
+    <form name="zoneMgmtForm.adminFormForNewZone" data-ng-init="initCache();" data-ng-submit="" novalidate>
+        <div>
+            <div class= "table-hover new-appointment-table">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4>New Zone Details</h4>
+                    </div>
+                </div>
+
+                <div class="row row-align">
+                    <div class="col-xs-12 col-sm-3 appointment-label">
+                        Zone Name<span style="color: red;">*</span>
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        <span class="colonSeparatorRight hidden-xs">:</span>
+                        <input class="input-width clstxt2 form-control"
+                               type="text"
+                               name="zoneName"
+                               data-ng-model = "zoneDetails.zoneName"
+                               data-ng-pattern = "/^[a-zA-Z\s]*$/"
+                               data-ng-class = "{red1: zoneMgmtForm.adminFormForNewZone.zoneName.$invalid && zoneMgmtForm.adminFormForNewZone.zoneName.$dirty}"
+                               title = "Enter name"
+                               placeholder = "Enter name"
+                               data-ng-required = "true"
+                                />
+                        <span style="color:red" data-ng-show="zoneMgmtForm.adminFormForNewZone.zoneName.$dirty && zoneMgmtForm.adminFormForNewZone.zoneName.$invalid">
+                            <span data-ng-show="zoneMgmtForm.adminFormForNewZone.zoneName.$error.required"> Name is required. </span>
+                            <span data-ng-show="zoneMgmtForm.adminFormForNewZone.zoneName.$error.pattern"> Invalid name. </span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row row-align">
+                    <div class="col-xs-12 col-sm-3 appointment-label">
+                        Country<span style="color: red;">*</span>
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        <span class = "colonSeparatorRight hidden-xs">:</span>
+                        {{zoneCountry.name}}
+                        <!--<select class = "input-width clstxt2 form-control"
+                                name = "zoneCountry"
+                                data-ng-model = "zoneDetails.zoneCountry"
+                                data-ng-class = "{red1: zoneMgmtForm.adminFormForNewZone.zoneCountry.$invalid && zoneMgmtForm.adminFormForNewZone.zoneCountry.$dirty}"
+                                title = "Select country"
+                                data-ng-options="country.id as country.name for country in zoneCountry"
+                                data-ng-required = "true">
+                            <option value="">Select country</option>
+                        </select>
+                        <span style = "color:red" data-ng-show = "zoneMgmtForm.adminFormForNewZone.zoneCountry.$dirty && zoneMgmtForm.adminFormForNewZone.zoneCountry.$invalid">
+                            <span data-ng-show = "zoneMgmtForm.adminFormForNewZone.zoneCountry.$error.required"> Country is required. </span>
+                        </span>-->
+                    </div>
+                </div>
+
+                <div class="row row-align">
+                    <div class="col-xs-12 col-sm-3 appointment-label">
+                        State<span style="color: red;">*</span>
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        <span class = "colonSeparatorRight hidden-xs">:</span>
+                        {{zoneState.name}}
+                        <!--<select class = "input-width clstxt2 form-control"
+                                name = "zoneState"
+                                data-ng-model = "zoneDetails.zoneState"
+                                data-ng-class = "{red1: zoneMgmtForm.adminFormForNewZone.zoneState.$invalid && zoneMgmtForm.adminFormForNewZone.zoneState.$dirty}"
+                                title = "Select state"
+                                data-ng-options="state.id as state.name for state in zoneState"
+                                data-ng-required = "true">
+                            <option value="">Select state</option>
+                        </select>
+                        <span style = "color:red" data-ng-show = "zoneMgmtForm.adminFormForNewZone.zoneState.$dirty && zoneMgmtForm.adminFormForNewZone.zoneState.$invalid">
+                            <span data-ng-show = "zoneMgmtForm.adminFormForNewZone.zoneState.$error.required"> State is required. </span>
+                        </span>-->
+                    </div>
+                </div>
+
+                <div class="row row-align">
+                    <div class="col-xs-12 col-sm-3 appointment-label">
+                        City<span style="color: red;">*</span>
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        <span class = "colonSeparatorRight hidden-xs">:</span>
+                        {{zoneCity.name}}
+                        <!--<select class = "input-width clstxt2 form-control"
+                                name = "zoneCity"
+                                data-ng-model = "zoneDetails.zoneCity"
+                                data-ng-class = "{red1: zoneMgmtForm.adminFormForNewZone.zoneCity.$invalid && zoneMgmtForm.adminFormForNewZone.zoneCity.$dirty}"
+                                title = "Select city"
+                                data-ng-options="city.id as city.name for city in zoneCity"
+                                data-ng-required = "true">
+                            <option value="">Select city</option>
+                        </select>
+                        <span style = "color:red" data-ng-show = "zoneMgmtForm.adminFormForNewZone.zoneCity.$dirty && zoneMgmtForm.adminFormForNewZone.zoneCity.$invalid">
+                            <span data-ng-show = "zoneMgmtForm.adminFormForNewZone.zoneCity.$error.required"> City is required. </span>
+                        </span>-->
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-offset-8 topMarginBtn">
+                    <button type="button" class="btn btn-default" data-ng-disabled="zoneMgmtForm.adminFormForNewZone.$pristine" data-ng-click="resetAddNewZoneForm();"> Clear </button>
+                    <button type="submit" class="btn btn-primary" data-ng-disabled="zoneMgmtForm.adminFormForNewZone.$invalid" data-ng-click=""> Insert Record </button>
+                </div>
+            </div>
+        </div>
+        <!--<div data-ng-show="spAddedSuccess" id="spAddedSuccess" style="padding: 10px;">
+            <div style="min-height: 275px;">
+                <table border="0" width="100%">
+                    <tr>
+                        <td>
+                            <span style="color:green; text-align:center;"> New service provider added successfully.</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>-->
+    </form>
+</div>

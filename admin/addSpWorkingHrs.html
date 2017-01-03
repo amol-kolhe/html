@@ -1,0 +1,179 @@
+<div style="padding:10px;">
+    <form name="addSpWrkHrsForm.adminFormForSp" data-ng-init="initDatePicker(); getSps('addSpWrkHrs');" data-ng-submit="" novalidate>
+        <div>
+            <div class= "table-hover new-appointment-table">
+                <div class="row row-align">
+                    <div class="col-xs-12 col-sm-3 appointment-label">
+                        PHYSIO LOCATION <span style="color: red;">*</span>
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        <span class = "colonSeparatorRight hidden-xs">:</span>
+                        PUNE
+                    </div>
+                </div>
+
+                <div class="row row-align">
+                    <div class="col-xs-12 col-sm-3 appointment-label">
+                        PHYSIO NAME <span style="color: red;">*</span>
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        <span class = "colonSeparatorRight hidden-xs">:</span>
+                        <select ng-model="SpWrkHrs.spNamesId"
+                                name="spNamesId"
+                                class="input-width clstxt2 form-control"
+                                id = "spNamesListId"
+                                data-ng-class = "{red3: addSpWrkHrsForm.adminFormForSp.spNamesId.$invalid && addSpWrkHrsForm.adminFormForSp.spNamesId.$dirty, green3: addSpWrkHrsForm.adminFormForSp.spNamesId.$valid && addSpWrkHrsForm.adminFormForSp.spNamesId.$dirty}"
+                                title = "Select service provider"
+                                data-ng-change="resetDatePicker9(); spChangeAddSpWrkHoursResetValues(SpWrkHrs.spNamesId);"
+                                ng-options="sp._id as sp.name for sp in spNamesArr"
+                                data-ng-required = "true">
+                            <option value="">Select service provider</option>
+                        </select>
+                        <span style="color:red" data-ng-show="addSpWrkHrsForm.adminFormForSp.spNamesId.$dirty && addSpWrkHrsForm.adminFormForSp.spNamesId.$invalid">
+                            <span data-ng-show="addSpWrkHrsForm.adminFormForSp.spNamesId.$error.required">Service provider is required.</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 15px; min-height: 425px;">
+                    <div data-ng-show="showWTime" class="table-responsive col-sm-5 wrkingHrsTable">
+                        <table class="table-striped table-hover table-condensed">
+                            <thead>
+                            <tr>
+                                <th colspan="3" style="text-align:center;">
+                                    Registered Working Hours
+                                </th>
+                            </tr>
+                            <tr>
+                                <th ng-click="sort3('sp_workDate')"><span class="clsfleft"> Date </span>
+                                    <span class="glyphicon sort-icon" ng-show="sortingKey=='sp_workDate'" ng-class="{'glyphicon-chevron-up':sortingReverse,'glyphicon-chevron-down':!sortingReverse}"></span>
+                                </th>
+                                <th ng-click="sort3('sp_zoneName')"><span class="clsfleft"> Zone Current Work Time</span>
+                                    <span class="glyphicon sort-icon" ng-show="sortingKey=='sp_zoneName'" ng-class="{'glyphicon-chevron-up':sortingReverse,'glyphicon-chevron-down':!sortingReverse}"></span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="rec in dispArrWTime|orderBy:sortingKey:sortingReverse|filter:search|itemsPerPage:table1ItemsPerPage"
+                                    pagination-id="arrWTimeId">
+                                    <td>{{rec.sp_workDate}}</td>
+                                    <td colspan="2">
+                                        <ul>
+                                            <li ng-repeat="zoneInfo in rec.sp_zoneSpecificWtimeDetail track by $index">
+                                                <span><i>{{zoneInfo.sp_zoneName}}</i></span>
+                                                <!--<span>{{zoneInfo.sp_zwtime}}</span>-->
+                                                <div ng-repeat="time in zoneInfo.sp_zwtime track by $index">
+                                                    <span><b>{{time.st}}</b></span>
+                                                    -
+                                                    <span><b>{{time.et}}</b></span>
+                                                </div>
+                                                <br />
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <dir-pagination-controls
+                            max-size="5"
+                            pagination-id="arrWTimeId"
+                            direction-links="true"
+                            boundary-links="true" >
+                        </dir-pagination-controls>
+                    </div>
+                    <div style="float: right;" data-ng-show="!(showWTime) && (SpWrkHrs.spNamesId)" class="table-responsive col-sm-5">
+                        <table class="table-striped table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th colspan="2" style="text-align:center;">
+                                        Registered Working Hours
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">
+                                        <span style="color: green; text-align:center;">
+                                            No working hours set for current month.
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-3 appointment-label">
+                        MONTH <span style="color: red;">*</span>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <span class = "colonSeparatorRight hidden-xs">:</span>
+                        <span style="color: red;" class="clickable" data-ng-click="scrollDiv('noteId1');">#</span>
+                        <div id = "datetimepicker9" style="line-height: 41px;"></div>
+                        <span style="color:red" id="dateErrorFlagId" data-ng-show="dateErrorFlag">
+                            <span>Please select atleast one date</span>
+                        </span>
+
+                        <div style="display: none;">
+                            <input type="text" id="datePicker9Value" class="form-group topMarginBtn input-width clstxt2 form-control" data-ng-readonly="true" />
+                        </div>
+
+                        <div class="form-group topMarginBtn">
+                            <button type="button" class="btn-block btn btn-default datePickerBtn" data-ng-disabled="" data-ng-click="resetDatePicker9();" style="margin-top: 8px;"> Reset Calendar </button>
+                            <button type="button" class="btn-block btn btn-primary datePickerBtn" data-ng-disabled="" data-ng-click="deSelectAllWrkDates();" style="margin-top: 8px;"> De-select All Dates </button>
+                            <button type="button" class="btn-block btn btn-danger datePickerBtn" data-ng-disabled="checkClearWTimeButton();"  data-ng-click="clearSpWorkHours();" style="margin-top: 8px;"> Clear Current Work Time </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row row-align">
+                    <div class="col-xs-12 col-sm-9" id="workingTime">
+                        <div class="appointment-label">
+                            SELECT WORKING SLOTS FOR SELECTED DATES <span style="color: red;">*</span>
+                        </div>
+
+                        <table>
+                            <tr style="line-height: 24px;" ng-repeat="wrkHrSlot in wrkHrsAllSlots track by $index">
+                                <td class="leftSideAlignment">
+                                    <input type="checkbox"
+                                           ng-model="wrkHrSlot.selected"
+                                           data-ng-click="checkBoxSelected(wrkHrSlot, $index);"
+                                           />
+                                    <span>{{wrkHrSlot.label}}</span>
+                                </td>
+                                <td>
+                                    <table colspan="2" style="border: 0;" data-ng-show="wrkHrSlot.selected">
+                                        <tr class="imgContainer">
+                                            <td style="padding: 5px;" ng-repeat="zone in wrkHrSlot.selectZoneIds track by $index">
+                                                <div class="ellipsisZoneName">
+                                                    {{zone.sp_zonename}}
+                                                <span style="margin-left: 5px;" data-ng-click="removeZone(zone, $index);">
+                                                    <span class="glyphicon glyphicon-remove" style="cursor : pointer;"></span>
+                                                </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                        <span style="color:red" data-ng-show="wrkHrErrorSlot">
+                            <span>Please select atleast one working time slot.</span>
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="form-group col-lg-offset-4 topMarginBtn">
+                    <button type="button" class="btn btn-default" data-ng-disabled="(addSpWrkHrsForm.adminFormForSp.$pristine)" data-ng-click="resetAddSpWrkHrsForm();"> Reset </button>
+                    <button type="button" class="btn btn-primary" data-ng-disabled="checkSpWrkHrsButton();" data-ng-click="addSpWorkHours();"> Set Working Hours </button>
+                </div>
+
+                <div class="row row-align" id="noteId1">
+                    <div class="col-xs-12">
+                        <span style="color: red;">Note: #- Schedule will be affected for selected month and dates only.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

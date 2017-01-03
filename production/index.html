@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	    <meta name="description" content="Get physiotherapy treatment at home by expert physiotherapists. Healyos help patients to regain from back pain, neck pain, knee pain, etc. Book your session online." />
+	    <!-- Mozilla Firefox specific favicon implementation -->
+	    <link rel="shortcut icon" href="/web/images/customer_portal/favicon.ico" >
+	    <!-- Internet Explorer specific favicon implementation -->
+		<link rel="icon" type="/image/ico"  href="/web/images/customer_portal/favicon.ico" >
+	    <title>Healyos | Physiotherapy Services at Home, Pune</title>
+
+	    <base href="/">
+	    
+	    <link href="./css/bootstrap.min.css" async rel="stylesheet">
+	    <link href="./css/bootstrap-social.css" async rel="stylesheet">
+	    <link href="./css/bootstrap-theme.min.css" async rel="stylesheet">
+	    <link href="./css/font-awesome.min.css" async rel="stylesheet">
+
+	    <link rel="stylesheet" type="text/css" href="./css/customerPortal/styles.css" defer>
+    	<link type="text/css" rel="stylesheet" href="./css/rcarousel.css" async />
+
+    	<script src="https://maps.google.com/maps/api/js?sensor=true" defer></script>
+
+    	<!-- Facebook Pixel Code -->
+    	<script>
+    	!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    	n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    	n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    	t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    	document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+    	fbq('init', '1044104449017352');
+    	fbq('track', "PageView");</script>
+    	<noscript><img height="1" width="1" style="display:none"
+    	src="https://www.facebook.com/tr?id=1044104449017352&ev=PageView&noscript=1"
+    	/></noscript>
+    	<!-- End Facebook Pixel Code -->
+
+    	<!-- Google Analytics Code -->
+    	<script>
+    	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    	  ga('create', 'UA-78371430-1', 'auto');
+    	  ga('send', 'pageview');
+
+    	</script>
+    	<!-- End of Google Analytics Code -->
+    	
+    	<script type="application/ld+json">
+    	{ 	"@context" : "http://schema.org",
+	    	"@type" : "Organization",
+	    	"name" : "Healyos",
+	    	"url" : "https://www.healyos.com",
+	    	"logo" : "",
+	    	"sameAs" : [ "https://www.facebook.com/healyos/",
+	    	"https://www.linkedin.com/company/healyos"]
+    	}
+    	</script>
+    	<script type="application/ld+json">
+    	{ 	"@context" : "http://schema.org",
+	    	"@type" : "WebSite",
+	    	"name" : "Healyos",
+	    	"url" : "https://www.healyos.com"
+    	}
+    	</script>
+    	<!--Start of Tawk.to Script-->
+    	<script type="text/javascript">
+	    	var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+	    	(function(){
+		    	var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+		    	s1.async=true;
+		    	s1.src='https://embed.tawk.to/57ac43d0b5503a687d7c591b/default';
+		    	s1.charset='UTF-8';
+		    	s1.setAttribute('crossorigin','*');
+		    	s0.parentNode.insertBefore(s1,s0);
+	    	})();
+    	</script>
+    	<!--End of Tawk.to Script-->
+	</head>
+	<body ng-app = "custPortalApp" ng-controller="custPortalController as cpc">
+		<div class="loading-dialog" data-loading></div>
+		<!-- pure drawer menu -->
+		<div id="arrow">
+			<img src="./images/customer_portal/down_arrow.png">
+		</div>
+		<div class="pure-container" data-effect="pure-effect-slide"> 
+	        <input type="checkbox" id="pure-toggle-left" class="pure-toggle" data-toggle="left"> 
+	        <label class="pure-toggle-label" for="pure-toggle-left" data-toggle-label="left">
+	            <span class="pure-toggle-icon"></span> 
+	        </label> 
+	        <div class="pure-drawer" data-position="left">
+	            <div class="row collapse">
+	                <div class="large-12 columns">
+	                    <ul class="nav-primary">
+	                        <li>
+	                        	<a ui-sref="homepages.aboutsancheti" ng-click="cpc.closeDrawerMenu()">ABOUT SANCHETI</a>
+                        	</li>
+	                        <li>
+	                        	<a ui-sref="homepages.faq" ng-click="cpc.closeDrawerMenu()">FAQs</a>
+                        	</li>
+	                        <li>
+	                        	<a ui-sref="homepages.aboutus" ng-click="cpc.closeDrawerMenu()">ABOUT US</a>
+                        	</li>
+	                        <!-- <li>
+	                        	<a href="/blog" ng-click="cpc.closeDrawerMenu();" onclick="window.location.href='/blog'">BLOG</a>
+                        	</li> -->
+	                    </ul>
+	                </div>
+	            </div>
+	        </div> 
+	        <div class="pure-pusher-container"> 
+	            <div class="pure-pusher">
+	            	<div ui-view autoscroll='true'></div>	            	
+	            </div>	            
+	        </div> 
+	        <label class="pure-overlay" for="pure-toggle-left" data-overlay="left"></label>
+	    </div>
+
+	    <!-- Promo Section -->
+	    <!-- <div id="promoTrigger">
+	    	<span>P</span><br>
+	    	<span>R</span><br>
+	    	<span>O</span><br>
+	    	<span>M</span><br>
+	    	<span>O</span>
+	    </div>
+	    <div id="promoBox" style="display: none;">
+	    	<div class="overlay">
+	    		<div class="promo thumbnail">
+	    			<span class="hider" title="Hide Promo!">X</span>
+	    			<img alt="Promotion" src="./images/customer_portal/discount.jpg" width="100%" />
+	    		</div>
+	    	</div>
+	    </div> -->
+
+	    <script type="text/javascript" src="./js/customerPortal/jquery.min.js" defer></script>
+
+	    <!-- Include all compiled plugins (below), or include individual files as needed -->
+	    <script type="text/javascript" src="./js/bootstrap.min.js" defer></script>
+		<script type="text/javascript" src="./js/angular.min.js" type="text/javascript" defer></script>
+		<script type="text/javascript" src="./js/angular-ui-router.min.js" defer></script>
+		<script type="text/javascript" src="./js/angular-sanitize.min.js" defer></script>
+		<script type="text/javascript" src="./js/angular-touch.min.js" defer></script>
+		<script type="text/javascript" src="./js/angular-animate.min.js" defer></script>
+	    <script type="text/javascript" src="./js/acute.select.js" defer></script>
+		<script type="text/javascript" src="./js/angular-cookies.min.js" defer></script>
+		<script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" defer></script>
+		<script type="text/javascript" src="./production/scripts.min.js" defer></script>
+
+    	<!-- Google Code for Remarketing Tag -->
+
+    	<script type="text/javascript">
+
+    	/* <![CDATA[ */
+    		var google_conversion_id = 881129817;
+    		var google_custom_params = window.google_tag_params;
+    		var google_remarketing_only = true;
+    	/* ]]> */
+
+    	</script>
+
+    	<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script>
+
+    	<noscript>
+    		<div style="display:inline;">
+    			<img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/881129817/?value=0&amp;guid=ON&amp;script=0"/>
+    		</div>
+    	</noscript>
+    	
+	</body>
+</html>

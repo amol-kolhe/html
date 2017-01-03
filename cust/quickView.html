@@ -1,0 +1,32 @@
+<div id="q1" class="mainContent" ng-controller="CustCtrl">
+	<div style="padding:10px;">
+		<!-- <div ng-click="x2()" style="border:1px solid #c2c2c2; width:20px; cursor:pointer;"><<</div> -->
+		<!--<div>Quick View</div>
+		<div>Date : 17 Aug 2015</div>-->
+		
+			<table class="table 1table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>Ref. No.</th>
+						<th>Scheduled On</th>
+						<th>SP Name</th>
+						<th>City</th>
+						<th>Zone</th>
+						<th>Service</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in custAppointmentList">
+						<td>{{item.refNo}}</td>
+						<td>{{item.scheduledon}}</td>
+						<td>{{item.spname}}</td>
+						<td>{{item.city}}</td>
+						<td>{{item.zone}}</td>
+						<td>{{item.service}}</td>
+						<td>{{item.status}}</td>
+					</tr>
+				</tbody>
+			</table>
+	</div>
+</div>

@@ -1,0 +1,185 @@
+<div class="mainContent2" ng-controller="AdminCtrl" ng-init="getPromoCodes()">
+	<div style="padding:10px;">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="table-responsive" style="overflow-x:auto">
+					<table class="table table-striped table-hover table-condensed">
+						<thead>
+						<tr>
+							<th class="text-center" ng-click="sortPromoCode('createdon')"><span class="1clsfleft">Created On</span>
+								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='createdon'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="sortPromoCode('promocode')"><span class="1clsfleft">Promo Code</span>
+								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='promocode'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="sortPromoCode('promodesc')"><span class="1clsfleft">Promo Description</span>
+								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='promodesc'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="sortPromoCode('validfrom')"><span class="1clsfleft">Valid From</span>
+								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='validfrom'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="sortPromoCode('validtill')"><span class="1clsfleft">Valid Till</span>
+								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='validtill'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="sortPromoCode('active')"><span class="1clsfleft">Is Active?</span>
+								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='active'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="sortPromoCode('discount')"><span class="1clsfleft">Discount <span style="color: red;" class="clickable" data-ng-show="(arrPromoCode.length > 0)" data-ng-click="scrollDiv('discountedCostNote');">#</span></span>
+								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='discount'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="sortPromoCode('noofappt')">
+								<span class="1clsfleft">No. of appts 
+									<span style="color: red;" class="clickable" data-ng-show="(arrPromoCode.length > 0)" data-ng-click="scrollDiv('discountedCostNote');">##</span>
+									<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='noofappt'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+								</span>
+							</th>
+							<th class="text-center" class="text-center">
+								<span title="Add new promocode" class="clickable glyphicon glyphicon-plus" data-ng-click="addNewPromoCode();"></span>
+							</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr dir-paginate="rec in arrPromoCode|orderBy:promoCodeSortKey:promoCodeReverse|filter:search|itemsPerPage:10"
+							pagination-id="arrPromoCodeId">
+							<td style="min-width:105px" class="promo-row-text">
+							   <span ng-if="rec.createdon != ''">{{rec.createdon * 1000 | date:'yyyy-MM-dd hh:mm a'}}</span>
+							</td>
+							<td style="min-width:155px" class="promo-row-text">
+								<span ng-show = "rec.action != 'edit'" style="word-break: break-word;">{{rec.promocode}}</span>
+								<div>
+									<div ng-if="rec.promoNameError == true" style="color: red; font-size: 10px;">Enter valid Name</div>
+								</div>
+								<input type="text"
+								   class="form-control"
+								   name="promoCustName"
+								   ng-model="rec.promocode"
+								   ng-show="rec.action == 'edit'"
+								   maxlength="20" 
+								   required
+								/>
+							</td>
+							<td style="min-width:210px" class="promo-row-text">
+								<span ng-show = "rec.action != 'edit'" style="word-break: break-word;">{{rec.promodesc}}</span>
+								<div>
+									<div ng-if="rec.promodescError == true" style="color: red; font-size: 10px;">Enter valid Promo Description</div>
+								</div>
+								<textarea class="form-control"
+								   	name="promodesc"
+								   	ng-model="rec.promodesc"
+								   	ng-show="rec.action == 'edit'"
+								   	required>									   		
+							   	</textarea>
+							</td>
+							<td style="min-width:100px" class="promo-row-text">
+								<span ng-show = "rec.action != 'edit'">{{rec.validFromReadonly | date:'dd-MM-yyyy hh:mm a'}}</span>
+								<div>
+									<div ng-if="rec.validFromError == true" style="color: red; font-size: 10px;">Select Date</div>
+								</div>
+								<div class="dropdown form-group" ng-show="rec.action == 'edit'">
+								  <a class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target="#" href="#">
+									<div class="input-group date">
+									  <input type="text" class="form-control" data-ng-model="rec.validfrom">
+									</div>
+								  </a>
+								  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+									<datetimepicker data-ng-model="rec.validfrom" data-datetimepicker-config="{ dropdownSelector: '#dropdown1'}" data-before-render="beforeRenderStartDate($view, $dates, $leftDate, $upDate, $rightDate, rec)"/>
+								  </ul>
+								</div>
+							</td>
+							<td style="min-width:90px" class="promo-row-text">
+								<span ng-show = "rec.action != 'edit'">{{rec.validTillReadonly | date:'dd-MM-yyyy hh:mm a'}}</span>
+								<div>
+								<div ng-if="rec.validTillError == true" style="color: red; font-size: 10px;">Select Date</div>
+								</div>
+								<div class="dropdown form-group" ng-show="rec.action == 'edit'">
+								  <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
+									<div class="input-group date">
+									  <input type="text" class="form-control" data-ng-model="rec.validtill">
+									</div>
+								  </a>
+								  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+									<datetimepicker data-ng-model="rec.validtill" data-datetimepicker-config="{ dropdownSelector: '#dropdown2'}" data-before-render="beforeRenderEndDate($view, $dates, $leftDate, $upDate, $rightDate, rec)"/>
+								  </ul>
+								</div>
+							</td>
+							<td style="min-width:100px; vertical-align: middle;" class="promo-text text-center" class="promo-row-text">
+								<span ng-show = "rec.action != 'edit'">
+									<span ng-if="rec.active">YES</span>
+									<span ng-if="!rec.active">NO</span>
+								</span>
+								<span ng-show = "rec.action == 'edit'">
+									<input type="checkbox"
+								   		ng-model="rec.active" />
+							   	</span>
+							</td>
+							<td style="min-width:110px" class="promo-row-text text-center">
+								<span ng-show = "rec.action != 'edit'">{{rec.discount| number:2}}
+									<span ng-if="rec.disctype == '1'"> %</span>
+									<span ng-if="rec.disctype == '2'"> &#8377;</span>
+								</span>
+								<div>
+									<span ng-if="rec.discountError == true || rec.discTypeError == true" style="color: red; font-size: 10px;">Enter Discount & Discount Type</span>
+								</div>
+								<input type="text"
+								   class="form-control disctype-input"
+								   ng-model="rec.discount"
+								   ng-show="rec.action == 'edit'"
+								   required
+								/>
+
+								<select name="singleselect" ng-model="rec.disctype" class="disctype-select" ng-show="rec.action == 'edit'" ng-required="true">
+									<option value="1">%</option>
+									<option value="2">&#8377;</option>
+								</select>
+							</td>
+							<td style="min-width:130px" class="promo-row-text text-center">
+								<span ng-show = "rec.action != 'edit'">{{rec.noofappt}}</span>
+								<div>
+									<span ng-if="rec.noofapptRequired == true || rec.noofapptRequired == true" style="color: red; font-size: 10px;">Valid number of appointments expected</span>
+								</div>
+								<input type="number" min="1" max="90" step="1" value="1" 
+									style="width: 50px; padding: 0 5px; display: inline-block;"
+									class="form-control"
+									ng-show="rec.action == 'edit'"
+									ng-model="rec.noofappt"
+									ng-required="true" />
+							</td>
+							<td style="min-width:80px" class="promo-row-text text-center">
+								<span class="glyphicon glyphicon-pencil clickable" 
+									style="color: blue;" title="Edit this record" 
+									ng-click="rec.action = 'edit'; editPromoCode(rec, $index)" data-ng-hide="rec.action == 'edit'"></span>
+								<span class="glyphicon glyphicon-ok clickable" 
+									style="color: green; padding: 5px 6px;" title="Save this record" ng-click="rec.action = 'save'; savePromoCodeRecord(rec, $index);" data-ng-show="rec.action == 'edit'"></span>
+								<span class="glyphicon glyphicon-trash clickable" 
+									style="color: red;" title="Delete this record" 
+									ng-click="rec.action = 'delete'; removePromoCodeRecord(rec, $index);" data-ng-hide="rec.action == 'edit'"></span>
+								<span class="glyphicon glyphicon-remove clickable" 
+									style="color: red;" title="Cancel" 
+									ng-click="rec.action = 'cancel'; cancelPromoCodeEdit(rec, $index)" data-ng-show="rec.action == 'edit'"></span>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<dir-pagination-controls
+					max-size="5"
+					pagination-id="arrPromoCodeId"
+					direction-links="true"
+					boundary-links="true" >
+				</dir-pagination-controls>
+				<div class="alert alert-danger" 
+					ng-if="promocodeResponse.promocodeValid == 'invalid'"
+					id="promoErrorBox">
+					<span>{{promocodeResponse.promocodeErrorMessage}}</span>
+				</div>
+				<div data-ng-show="(arrPromoCode.length > 0)" class="row row-align" id="discountedCostNote">
+					<div class="col-xs-12" style="line-height: 20px;">
+						<span style="color: red;">Note: #- Value entered stands for discount either in rupees (&#8377;) or in percent (&#37;) over the original cost.</span>
+						<br>
+						<span style="color: red;">##- The promo code will be applicable to the given number of appointments only.</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

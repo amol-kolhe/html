@@ -1,0 +1,84 @@
+<div class="faq-content">
+	<div class="faq-heading">Frequently Asked Questions</div>
+	<div class="faq-text">
+		<!-- <accordion>
+			<accordion-group heading="{{i.title}}" ng-repeat="i in cpc.groups" is-open="group.open">
+		      	<accordion-heading>{{i.title}}</accordion-heading>
+		      		<div ng-bind-html = "i.content"></div>
+		    </accordion-group>
+		</accordion> -->
+		<div class="accordion_container">
+			<div>
+				<div class="accordion_head" ng-click="cpc.toggleFaq($event)">
+					<span class="plusminus">+</span>
+					<span class="accordian-title">Do I need a doctor's referral to see a Physiotherapist?</span>
+				</div>
+				<div class="accordion_body" style="display: none;"> 
+					<p>You don't require a referral to see a Physiotherapist. HealYos Physiotherapists undergo intensive training, as per current international best practice, so that we have the necessary skills to examine, diagnose, treat and advise our patients with no previous input, or referral from a doctor.</p>
+					<p>If, upon examination, your condition needs the intervention of another medical practioner, we will inform you accordingly.</p>
+					<p>In case, your doctor has recommended Physiotherapy to you, we can work closely with your doctor, to optimise your care.</p>
+				</div>
+			</div>
+
+			<div>
+				<div class="accordion_head" ng-click="cpc.toggleFaq($event)">
+					<span class="plusminus">+</span>
+					<span class="accordian-title">How will Physiotherapy help me ?</span>
+				</div>
+				<div class="accordion_body" style="display: none;"> 
+					<p>Do any of the following apply to you?
+					<ul>
+						<li>You are suffering from pain in your neck, back, knee, shoulder, ankle or some other joint, muscle or ligament.</li>
+						<li>The pain is chronic, or has come about recently. It is a result of an injury, your lifestyle or an age related degenerative condition.</li>
+						<li>You recently had an orthopedic surgery.</li>
+						</ul>
+					If any of the above describe your condition, you might benefit from Physiotherapy. To know more about what Physiotherapy is, <a ng-click="cpc.scrolltodiv(physiotherapy)">click here</a>
+					</p> 
+				</div>
+			</div>
+
+			<div>
+				<div class="accordion_head" ng-click="cpc.toggleFaq($event)">
+					<span class="plusminus">+</span>
+					<span class="accordian-title">How much will each Physiotherapy session cost?</span>
+				</div>
+				<div class="accordion_body" style="display: none;"> 
+					<p>Each Physiotherapy session is currently priced at Rs. 499. You might be eligible for a special price, if you have received a promo code or you have a condition that requires you to have more than 10 sessions or 30 sessions. Please call our Customer Care at <a href="tel:020-65802802">020-65802802</a> to know more about these long term Physiotherapy packages.</p>
+				</div>
+			</div>
+			<div class="faq-hide-mobile-view">
+			<div>
+				<div class="accordion_head" ng-click="cpc.toggleFaq($event)">
+					<span class="plusminus">+</span>
+					<span class="accordian-title">What will be the time taken for each Physiotherapy session?</span>
+				</div>
+				<div class="accordion_body" style="display: none;"> 
+					<p>The initial assessment session, usually lasts between 45 mins to an hour. Thereafter, depending on the treatment regimen decided by your Physio, treatment sessions will be for a minimum of 30 minutes, but usually average between 40 to 50  minutes.<p>
+				</div>
+			</div>
+
+			<div>
+				<div class="accordion_head" ng-click="cpc.toggleFaq($event)">
+					<span class="plusminus">+</span>
+					<span class="accordian-title">Can I choose my Physiotherapist ?</span>
+				</div>
+				<div class="accordion_body" style="display: none;"> 
+					<p>All our Physiotherapists are handpicked after an intense screenig process and trained rigorously. For your initial assessment visit, we assign a qualified Physio expert to you. Based on the assessment of your condition, we match your treatment requirement with an appropriate Physiotherapist, who might sometimes be the same person as your assessment Physiotherapist.</p>
+				</div>
+			</div>
+			</div>
+			<!--< div ng-repeat="i in cpc.groups|limitTo:5">
+				<div class="accordion_head" ng-click="cpc.toggleFaq($event)">
+					<span class="plusminus">+</span>
+					<span class="accordian-title" ng-bind-html="i.title"></span>
+				</div>
+				<div class="accordion_body" style="display: none;"> 
+					<p ng-bind-html = "i.content"></p> 
+				</div>
+			</div> -->			
+		</div>
+	</div>	
+	<div class="faq-redirect home-redirecting-buttons">
+		<button type="button" ng-click="cpc.redirectToFaq()">have more questions?</button>
+	</div>
+</div> <!-- faq-container -->

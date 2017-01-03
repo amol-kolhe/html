@@ -1,0 +1,12 @@
+<form name = "spInfoBarForm.spInfo" ng-controller="SpCtrl" data-ng-init="initSpInfo();" data-ng-submit = "" novalidate>
+	<div>
+		<span>
+            <span class="glyphicon glyphicon-align-justify btn"
+				  title="Toggle navigation panel" id="navToggler" ng-click="toggleLeftNavigation()"></span>
+            <span class="btn" style="cursor: default; padding-left: 0;">Logged In: {{spName ? spName : spEmail}}</span>
+        </span>
+		<span class="btn pull-right">
+			<a data-ng-click="logoutSp()">Logout</a>
+		</span>
+	</div>
+</form>

@@ -1,0 +1,265 @@
+<div ng-controller="AdminCtrl" class="1mainContent ng-scope" data-ng-init="initCache(); initCustCities(); initLocalities();">
+    <div class="1subContainer" data-ng-show="!isEditAptMode && currentOpenView == 'Listing'">
+        <div>
+            <form class="form-inline" data-ng-init="initAppointments()">
+                <div ng-show="!isThisMobileDevice()">
+                    <div class="form-group" style="position:relative;">
+                        From Date: <input type="text"
+                            ng-model="appointmentCriteria.fromDate"
+                            name = "fromDate"
+                            id="aptFromDate"
+                            value = "{{appointmentCriteria.fromDate}}"
+                            title="From Date"
+                            class="dateTimePicker aptSelectionInput form-control"/>
+                        To Date:   <input type="text"
+                            ng-model="appointmentCriteria.tillDate"
+                            name="tillDate"
+                            id="aptTillDate"
+                            value = "{{appointmentCriteria.tillDate}}"
+                            title="Till Date"
+                            class="dateTimePicker aptSelectionInput form-control"/>
+                        <button style="cursor:pointer;"
+                                data-ng-click="searchAppointments(false)"
+                                class="btn btn-primary btn-sm">
+                            Find Appointments
+                        </button>
+                        <button class="glyphicon glyphicon-search advSrcIcon btn btn-primary" title="Advanced Search"
+                                data-ng-click="toggleAdvSrcBox()"  style="height: 30px;"></button>
+                        </div>
+                        <input type="text"
+                            ng-model="search"
+                            id = "callmeSearchId"
+                            placeholder="Filter"
+                            title="Search records"
+                            class="aptSearchBox form-control"/>
+                </div>
+                <div ng-show="isThisMobileDevice()">
+                    <div class="form-group" style="position:relative;">
+                        <div class="col-xs-12 col-sm-6">
+                            <span class="col-xs-4 noPadding">
+                                From Date:
+                            </span>
+                            <span class="col-xs-8 noPadding">
+                                <input type="text"
+                                    ng-model="appointmentCriteria.fromDate"
+                                    name = "fromDate"
+                                    id="aptFromDate"
+                                    value = "{{appointmentCriteria.fromDate}}"
+                                    title="From Date"
+                                    class="dateTimePicker aptSelectionInput form-control"/>
+                            </span>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <span class="col-xs-4 noPadding">
+                                To Date:
+                            </span>
+                            <span class="col-xs-8 noPadding">
+                                <input type="text"
+                                    ng-model="appointmentCriteria.tillDate"
+                                    name="tillDate"
+                                    id="aptTillDate"
+                                    value = "{{appointmentCriteria.tillDate}}"
+                                    title="Till Date"
+                                    class="dateTimePicker aptSelectionInput form-control"/>
+                            </span>
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            <button style="cursor:pointer; margin-top: 5px;"
+                                data-ng-click="searchAppointments(false)"
+                                class="btn btn-primary btn-sm">
+                                Find Appointments
+                            </button>
+                            <button class="glyphicon glyphicon-search advSrcIcon btn btn-primary"
+                                    title="Advanced Search"
+                                    data-ng-click="toggleAdvSrcBox()"
+                                    style="height: 30px; margin-top: 5px;"></button>
+                            <input type="text"
+                                ng-model="search"
+                                id = "callmeSearchId"
+                                placeholder="Filter"
+                                title="Search records"
+                                class="aptSearchBox form-control"/>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+        <div class="aptSrcCriteria">
+            {{aptSrcCriteria}}
+        </div>
+        <div id="advSrcBox" style="display:none">
+            <label>Advanced Search</label>
+            <form name="advSrcForm">
+                <div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <span class="srcField">Customer ID : </span>
+                            <input type="text"
+                                   class="clstxt1 form-control"
+                                   id="firstFocus"
+                                   ng-model = "appointmentCriteria.custid"
+                                   style="display:inline-block"/>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <span class="srcField">Service Provider ID : </span>
+                            <input type="text"
+                                   class="clstxt1 form-control"
+                                   ng-model = "appointmentCriteria.spid"
+                                   style="display:inline-block"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <span class="srcField">Customer email : </span>
+                            <input type="text"
+                                   class="clstxt1 form-control"
+                                   style="display:inline-block"
+                                   ng-model = "appointmentCriteria.custemail" />
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <span class="srcField">Service Provider email : </span>
+                            <input type="text"
+                                   class="clstxt1 form-control"
+                                   style="display:inline-block"
+                                   ng-model = "appointmentCriteria.spemail" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <span class="srcField">Customer Phone : </span>
+                            <input type="text"
+                                   class="clstxt1 form-control"
+                                   style="display:inline-block"
+                                   ng-model = "appointmentCriteria.custph" />
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <span class="srcField">Service Provider name : </span>
+                            <input type="text"
+                                   class="clstxt1 form-control"
+                                   style="display:inline-block"
+                                   ng-model = "appointmentCriteria.spname" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div>
+                <span>
+                    <button class="btn btn-default btn-sm" data-ng-click="clearSearchCriteria()"
+                            ng-disabled="appointmentCriteria.zoneId=='' && appointmentCriteria.serviceId=='' && appointmentCriteria.custemail=='' && appointmentCriteria.custid=='' && appointmentCriteria.spemail=='' && appointmentCriteria.spname=='' && appointmentCriteria.spid=='' && appointmentCriteria.custph==''">Reset</button>
+                </span>
+                <span class="rightSection">
+                    <button class="btn btn-primary btn-sm" data-ng-click="searchAppointments(true);toggleAdvSrcBox()"
+                            ng-disabled="appointmentCriteria.zoneId=='' && appointmentCriteria.serviceId=='' && appointmentCriteria.custemail=='' && appointmentCriteria.custid=='' && appointmentCriteria.spemail=='' && appointmentCriteria.spname=='' && appointmentCriteria.spid=='' && appointmentCriteria.custph==''">Search</button>
+                    <button class="btn btn-default btn-sm" data-ng-click="toggleAdvSrcBox()">Cancel</button>
+                </span>
+            </div>
+        </div>
+        <div style="clear:both"></div>
+        <div data-ng-if = "appointmentsList" class="appointmentsTable table-responsive">
+            <table class="table table-striped table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th ng-click="sort('start')">Date
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='start'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('ref')">Ref No
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='ref'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('zone')">Area
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='zone'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('spname')" nowrap>Service Provider
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='spname'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('patient')">Customer
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='patient'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('state')">State
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='state'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('rating')">Rating
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='rating'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('payment')">Payment
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='payment'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('gender')" style="display:none;">Gender
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='gender'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('service')" style="display:none;">Service
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='service'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('sdate')" style="display:none;">SDate
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='service'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr dir-paginate="apt in appointmentsList|orderBy:sortKey:reverse|filter:search|itemsPerPage:10"
+                        pagination-id="appointmentsListId">
+                        <td style="">{{apt.start * 1000 | date:'yyyy-MM-dd hh:mm a'}}</td>
+                        <td style="">
+                            <code><a href="#" ng-click="editAppointment(apt)" title="Show Appointment Details">{{apt.ref}}</a></code>
+                        </td>
+                        <td style="">{{apt.zone}}</td>
+                        <td style="">{{apt.spname}}</td>
+                        <td style=""><a href="#" ng-click="fnFetchCust(apt);" title="Show Customer Details">{{apt.patient}}</a></td>
+                        <td style="">{{apt.state}}</td>
+                        <td style="" nowrap>
+                            <span ng-class="apt.rating >= 1 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'"></span>
+                            <span ng-class="apt.rating >= 2 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'"></span>
+                            <span ng-class="apt.rating >= 3 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'"></span>
+                            <span ng-class="apt.rating >= 4 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'"></span>
+                            <span ng-class="apt.rating >= 5 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'"></span>
+                        </td>
+                        <td style="">{{apt.payment}}</td>
+                        <td style="display:none;">{{apt.gender}}</td>
+                        <td style="display:none;">{{apt.service}}</td>
+                        <td style="display:none;">{{apt.sdate}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <dir-pagination-controls
+                max-size="5"
+                pagination-id="appointmentsListId"
+                direction-links="true"
+                boundary-links="true" >
+            </dir-pagination-controls>
+        </div>
+        <div style = "color: green; margin-top: 10px;" data-ng-if = "!aptErrorMsg && !appointmentsList">
+            No appointments scheduled.
+        </div>
+        <div style = "color: red; margin-top: 10px;" data-ng-if = "aptErrorMsg">
+            {{aptErrorMsg}}
+        </div>
+    </div>
+    <div class="subContainer1" id="editAptContainer" data-ng-if="isEditAptMode">
+        <div ng-if="currentOpenView != 'showCustomer'">
+            <a href="#" ng-click="hideEditAptMode(); resetSelectedLocation()">Appointments</a>&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> <span>Ref. No. </span><span data-ng-bind="editAptId" style="font-family: arial;"></span>
+        </div>
+        <div ng-if="currentOpenView == 'showCustomer'">
+            <a href="#" ng-click="hideCustomerMode(); hideEditAptMode(); resetSelectedLocation()">Appointments</a>&nbsp;<span class="glyphicon glyphicon-chevron-right"></span>
+            <a href="#" ng-click="hideEditAptMode(); resetSelectedLocation()"><span>Customer id. </span><span data-ng-bind="custReadList.healyoscustid" style="font-family: arial;"></span></a>
+            <span class="glyphicon glyphicon-chevron-right"></span> <span>Ref. No. </span><span data-ng-bind="editAptId" style="font-family: arial;"></span>
+        </div>
+        <div ng-include="'editAppointment.html'"></div>
+    </div>
+    <div class="subContainer1" id="customerContainer" data-ng-if="currentOpenView == 'showCustomer' && !isEditAptMode">
+        <div>
+            <a href="#" ng-click="hideCustomerMode();">Appointments</a>&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> <span>Customer id. </span><span data-ng-bind="custReadList.healyoscustid" style="font-family: arial;"></span>
+        </div>
+        <div ng-include="'customers.html'"></div>
+    </div>
+    <div class="subContainer1" id="followupApptContainer" data-ng-if="currentOpenView == 'NEW_APPOINTMENT'">
+        <div>
+            <a href="#" ng-click="hideCustomerMode();">Appointments</a>
+            &nbsp;<span class="glyphicon glyphicon-chevron-right"></span>
+            <a href="#" ng-click="hideFollowupAppt(); fnFetchCust({'_id' : obj.custid})"><span>Customer id. </span><span data-ng-bind="custReadList.healyoscustid" style="font-family: arial;"></span></a>
+            &nbsp;<span class="glyphicon glyphicon-chevron-right"></span>
+            <span>Followup Appointment</span>
+        </div>
+        <div ng-include="'followupAppointment.html'"></div>
+    </div>
+</div>

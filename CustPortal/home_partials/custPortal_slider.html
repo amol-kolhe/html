@@ -1,0 +1,70 @@
+<div id="myCarousel" class="carousel slide home-slider" data-ride="carousel">
+	<!-- Indicators -->
+	<ol class="carousel-indicators">
+		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+		<li data-target="#myCarousel" data-slide-to="1"></li>
+	</ol>
+
+	<!-- Wrapper for slides -->
+	<div class="carousel-inner large-screen-slider" ng-if="cpc.viewPort == 'extraLarge'" role="listbox">
+		<!-- slides in ng-repeat -->
+		<div ng-class = "img.classes" ng-repeat = "img in cpc.sliderImagesForExtraLargeScreens">
+			<img ng-src="{{img.imgUrl}}" width="100%" />
+			<div class="carousel-caption slider-headtext container">
+				<div class="slider-heading"><p>{{img.heading1}}</p></div>
+				<div class="slider-heading"><p>{{img.heading2}}</p></div>
+				<!-- <p class="slider-subtext">{{img.subtext}}</p> -->
+				<p class="slider-subtext" ng-bind-html = "img.subtext"></p> 
+			</div>
+		</div>
+	</div>
+
+	<div class="carousel-inner desktop-slider" ng-if="cpc.viewPort == 'Desktop'" role="listbox">
+		<!-- slides in ng-repeat -->
+		<div ng-class = "img.classes" ng-repeat = "img in cpc.sliderImagesForLargeScreens">
+			<img ng-src="{{img.imgUrl}}" width="100%" />
+			<div class="carousel-caption slider-headtext container">
+				<div class="slider-heading"><p>{{img.heading1}}</p></div>
+				<div class="slider-heading"><p>{{img.heading2}}</p></div>
+				<!-- <p class="slider-subtext">{{img.subtext}}</p> -->
+				<p class="slider-subtext" ng-bind-html = "img.subtext"></p>
+			</div>
+		</div>
+	</div>
+
+	<div class="carousel-inner tablet-slider" ng-if="cpc.viewPort == 'Tablet'" role="listbox">
+		<!-- slides in ng-repeat -->
+		<div ng-class = "img.classes" ng-repeat = "img in cpc.sliderImagesForTabletScreens">
+			<img ng-src="{{img.imgUrl}}" width="100%" />
+			<div class="carousel-caption slider-headtext">
+				<div class="slider-heading"><p>{{img.heading1}}</p></div>
+				<div class="slider-heading"><p>{{img.heading2}}</p></div>
+				<!-- <p class="slider-subtext">{{img.subtext}}</p> -->
+				<p class="slider-subtext" ng-bind-html = "img.subtext"></p>
+			</div>
+		</div>
+	</div>
+
+	<div class="carousel-inner mobile-slider" ng-if="cpc.viewPort == 'Mobile'" role="listbox">
+		<!-- slides in ng-repeat -->
+		<div ng-class = "img.classes" ng-repeat = "img in cpc.sliderImagesForSmallScreens">
+			<img ng-src="{{img.imgUrl}}" width="100%" />
+			<div class="carousel-caption slider-headtext">
+				<div class="slider-heading"><p>{{img.heading1}}</p></div>
+				<div class="slider-heading"><p>{{img.heading2}}</p></div>
+				<!-- <p class="slider-subtext">{{img.subtext}}</p> -->
+				<p class="slider-subtext" ng-bind-html = "img.subtext"></p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Left and right controls -->
+	<!--  <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+	<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+	<span class="sr-only">Previous</span>
+	</a>
+	<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+	<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+	<span class="sr-only">Next</span>
+	</a> -->
+</div>

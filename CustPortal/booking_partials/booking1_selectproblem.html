@@ -1,0 +1,50 @@
+<div class="select-problem-inner-container">
+
+	<div class="row">
+		<div class="col-xs-12 col-sm-6 select-problem-left-section">
+			<div class="select-problem-left-section-heading">Tell us your problem:</div>
+			<div class="select-problem-left-section-text">
+				<p>Click on the image to let our physiotherapist know your problem area, or describe your condition in the text box below.</p>
+			</div>
+		</div>
+
+		<div class="col-xs-12 col-sm-6 select-problem-right-section">
+			<svg width="315" height="540" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
+				<image xlink:href="./images/customer_portal/body_992.png" x="50" y="0" width="180" height="530"/>
+
+				<image xlink:href="./images/customer_portal/circle.png" id="neck" value="neck pain" x="100" y="60" width="34" height="34" ng-click="bookingCtrl.svgMethod.problemSelected($event)" />
+				<text x="31" y="80" fill="#262626">Neck</text>
+
+				<image xlink:href="./images/customer_portal/circle.png" id="shoulder" value="shoulder pain" x="185" y="88" width="34" height="34" ng-click="bookingCtrl.svgMethod.problemSelected($event)" />
+				<text x="230" y="105" fill="#262626">Shoulder</text>
+				
+				<image xlink:href="./images/customer_portal/circle.png" id="elbow" value="elbow pain" x="198" y="162" width="34" height="34" ng-click="bookingCtrl.svgMethod.problemSelected($event)" />
+				<text x="240" y="185" fill="#262626">Elbow</text>
+
+				<image xlink:href="./images/customer_portal/circle.png" id="wrist" value="wrist and hand pain" x="212" y="242" width="34" height="34" ng-click="bookingCtrl.svgMethod.problemSelected($event)" />
+				<text x="250" y="265" fill="#262626">Wrist</text>
+
+				<image xlink:href="./images/customer_portal/circle.png" id="back" value="backache" x="116" y="202" width="34" height="34" ng-click="bookingCtrl.svgMethod.problemSelected($event)" />
+				<text x="58" y="225" fill="#262626">Back</text>
+
+				<image xlink:href="./images/customer_portal/circle.png" id="hip" value="hip pain" x="75" y="252" width="34" height="34" ng-click="bookingCtrl.svgMethod.problemSelected($event)" />
+				<text x="33" y="275" fill="#262626">Hip</text>
+
+				<image xlink:href="./images/customer_portal/circle.png" id="knee" value="knee pain" x="88" y="372" width="34" height="34" ng-click="bookingCtrl.svgMethod.problemSelected($event)" />
+				<text x="31" y="385" fill="#262626">Knee</text>
+
+				<image xlink:href="./images/customer_portal/circle.png" id="foot" value="ankle and foot problems" x="78" y="497" width="34" height="34" ng-click="bookingCtrl.svgMethod.problemSelected($event)" />
+				<text x="30" y="515" fill="#262626">Foot</text>
+
+				<image xlink:href="./images/customer_portal/circle.png" id="ankle" value="ankle and foot problems" x="160" y="472" width="34" height="34" ng-click="bookingCtrl.svgMethod.problemSelected($event)" />
+				<text x="200" y="500" fill="#262626">Ankle</text>
+			</svg>
+			<div class="other-problem">
+				<input type="text" name="otherproblem" value="{{bookingCtrl.model.otherProblem}}" ng-model= "bookingCtrl.model.otherProblem" ng-blur = "bookingCtrl.method.checkOtherProblem()" placeholder="Any Other Problem"></input>
+			</div>
+		</div>
+	</div> <!--  row end -->
+	<div class="select-problem-continue home-redirecting-buttons">
+		<button type="button" ng-click="bookingCtrl.method.navigateToBooking2()">CONTINUE</button>
+	</div>
+</div>

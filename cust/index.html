@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Healyos pdt.</title>
+	
+	<script src="../js/angular.min.js"></script>
+	<script src="../js/jquery-1.9.1.js"></script>
+	<script src="../js/utils/common.js" type="text/javascript"></script>
+	<script src="../js/utils/utility.js" type="text/javascript"></script>
+	<script src="../js/app.js"></script>
+	<script src="../js/general.js"></script>
+	<script src="../js/moment.js"></script>
+	<script src="../js/services/custApiService.js" type="text/javascript"></script>
+    <script src="../js/lib/angular-facebook.js" type="text/javascript"></script>
+	<script src="../js/cust.js"></script>
+
+	<script src="../js/angular-cookies.js"></script>
+	<script src="../js/angular-cookies.min.js"></script>
+	<script src="../js/angular-cookies.min.js.map"></script>
+
+	<script src="../js/callMeTimeDir.js"></script>
+	
+	<script src="../js/ngDialog.js"></script>
+	<script src="../js/ngDialog.min.js"></script>
+	<link rel="stylesheet" href="../css/ngDialog.css" />
+	<link rel="stylesheet" href="../css/ngDialog-theme-default.css" />
+	<link rel="stylesheet" href="../css/ngDialog-theme-plain.css" />
+	<link rel="stylesheet" href="../css/ngDialog-custom-width.css" />
+	<link rel="stylesheet" type="text/css" href="../css/datetimepicker.css" />
+
+	<script src="../js/dirPagination.js"></script>
+
+	<script src="../js/moment-with-locales.js"></script>
+	<script src="../js/bootstrap-datetimepicker.js"></script>
+	
+    <!-- <script src="../js/ui-bootstrap-tpls-0.12.0.js"></script> -->
+	<script src="../js/ui-bootstrap-tpls-0.13.4.js" type="text/javascript"></script>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/bootstrap-datetimepicker.css" rel="stylesheet" />
+	
+	<link rel="stylesheet" type="text/css" href="../css/main.css" id="cssLink" />
+ 	<link rel="stylesheet" type="text/css" href="../css/override.css" />   
+	<link rel="stylesheet" type="text/css" href="../css/appointment.css" />
+
+	<script type="text/javascript" src="../js/lodash.js"></script>
+	<script type="text/javascript" src="../js/angularjs-dropdown-multiselect.js"></script>
+	<script type="text/javascript" src="../js/datetimepicker.js"></script>
+	<script type="text/javascript" src="../js/datetimepicker.templates.js"></script>
+
+	<script type="text/javascript" src="../js/acute.select.js"></script>
+	<link href="../css/acute.select.css" rel="stylesheet" />
+
+	<script>
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+			controlCss = "../css/android.css";
+			document.getElementById("cssLink").setAttribute("href", controlCss);
+		}
+    </script>
+</head>
+<body ng-app="myApp">
+    <div class="loading-dialog" data-loading></div>
+	<div id="mainDiv" ng-controller="TabsCtrl">
+		<div ng-include="'header.html'"></div>
+        
+		<ng-include src="pageSource2"></ng-include>
+		<ng-include src="pageSource1"></ng-include>
+		
+		<ng-include src="pageSource"></ng-include>
+
+		<div ng-include="'footer.html'"></div>
+	</div>
+
+</body>
+</html> 

@@ -1,0 +1,19 @@
+		<div id="headerDiv">
+			<img src="../images/logo2.png" alt="company logo" /><!-- <span style="float:left;">Healyos pdt.</span> -->
+			<div id="topNavigation">
+				<ul>
+					<li data-ng-if="!userTabsFlg" ng-repeat="tab in tabs1" ng-click="onClickHeaderTab(tab)" ng-class="{active_tab:isActiveTab(tab.title)}">{{tab.title}}</li>
+                    <li data-ng-if="userTabsFlg" ng-repeat="tab in usertabs" ng-click="onClickHeaderTab(tab)" ng-class="{active_tab:isActiveTab(tab.title)}">{{tab.title}}</li>
+				</ul>
+				<!-- <div style="1border:1px solid red; float: right; line-height: 30px;">
+					<span style="1border:1px solid red; padding: 10px; cursor:pointer;" ng-repeat="tab in tabs2" 1ng-click="onClickTab1(tab)" 1ng-class="{active_tab:isActiveTab(tab.title)}">{{tab.title}}</span>
+				</div> -->
+			</div>
+			<!-- <div id="bottomNavigation">
+				<span>Admin Name</span>
+				<span>Notifications</span>
+				<span>Settings</span>
+				<span>SignOut</span>
+			</div> -->
+			<br />
+		</div>

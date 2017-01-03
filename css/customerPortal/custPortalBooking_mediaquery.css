@@ -1,0 +1,110 @@
+/* Portrait phones and smaller */
+@media (max-width: 480px) {
+	/*header section*/
+	.booking1-header-timeslot select { width: 130px; }
+}
+
+/* Common media query or small and extra small */
+@media (max-width: 767px) {
+	/* header section */
+	.booking1-callme { display: inline-block; }
+	.booking1-desktop-logo { display: none; }
+	.booking1-mobile-logo { display: inline-block; width: 112px; margin-top: 4px; }
+	.booking1-navigation { background: none; padding: 0px; }
+	.booking1-up-section { /*background: rgba(255, 255, 255, 0.7);*/ background: linear-gradient(135deg, #F7D5C7 0%,#D6D3D3 100%); padding: 10px 20px 13px 20px; }
+	.booking1-down-section { /*background: rgba(255, 255, 255, 0.3);*/ background: linear-gradient(135deg, #F9E5DD 0%,#D4E0E0 100%);}
+	.booking1-header-date { padding-top: 12px; margin-top: 0px; border-left: 1px solid #FFF !important; border-right: 1px solid #FFF !important; }
+	.booking1-header-locations { padding-top: 14px; }
+	.booking1-header-timeslot { padding-top: 15px; }
+	.booking1-subsection { border:0; height: 60px; }
+	.callme-input-result-success-booking, .callme-input-result-error-booking { top: 120px !important; }
+	.floating-price-container { margin-top: 0px; }
+
+	/* select a problem section */
+	.select-problem-left-section { padding: 10px;}
+	.select-problem-right-section { padding-left: 25px; }
+	.select-problem-inner-container { padding-top: 120px; padding-bottom: 20px; }
+	.other-problem {position: relative; display: block; /*padding-left: 10px;*/ margin-top: 0px; }
+	.other-problem input { width: 100%; }
+	.select-problem-continue { margin: 25px 0px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; position: relative;}
+	.select-problem-continue button { width: 100%; padding: 0; }
+
+	/* whats included section */
+	.included-session-inner-container { padding: 35px 10px; }
+	.included-session-text-left { border-right: 0; border-bottom: 1px solid #C7C6C6; padding: 10px 10px 15px 10px; }
+	.included-session-heading { margin-bottom: 10px; }
+	.included-session-text-right { padding-left: 10px; margin-top: 15px; }
+	.ready-to-book-contact-subsection2, .ready-to-book-contact-subsection3 { display: none; }
+
+	/* Request a call back */
+	.booking-callme-desktop { display: none; }
+	.booking-callme-mobile { display: block; }
+
+	/* customer information */
+	.cust-info-form-subsection { border-right: 0; border-bottom: 1px solid #fff; }
+	.cust-info-form-subsection:last-child { border-bottom: 0; }
+	.location-input { width: 80%; }
+	.custinfo-buttons { width: initial; margin: 0; }
+	button.form-button-left { margin-right: 15px; }
+	.cust-info-form-location { width: 75%; }
+	.locate-me-text { display: none; }
+	button.form-button-right { width: 50%; }
+	.booking-confirmation-content { width: 90%; }
+	.booking-confirmation-col-center-logo img { padding-bottom: 20px; }
+
+	/* Booking confirmation Page */
+	.booking-confirmation-col {	border-left: 0;	}
+	.booking-confirmation-col-center-logo { text-align: center; }
+	.booking-confirmation-col-right, .booking-confirmation-col-left { text-align: left; }
+	.booking-confirmation-thankyou button { width: 80%; }
+	.booking-confirmation-col-center { text-align: center; }
+}
+
+/* Landscape phones and portrait tablets */
+@media (min-width: 481px) and (max-width: 767px) {
+	.booking1-header-timeslot select { width: 150px; }
+}
+
+/* Portrait tablets and small desktops */
+@media (min-width: 768px) and (max-width: 991px) {
+	/* header section */
+	.booking1-desktop-logo { display: none; }
+	.booking1-mobile-logo { display: inline-block; width: 112px; margin-top: 4px;}
+	.booking1-callme { display: none; }
+	.booking1-header-timeslot select { width: 160px; }
+	.booking1-header-timeslot { padding-top: 1px; }
+
+	/* select a problem section */
+	.select-problem-left-section { padding: 50px 10px 50px 24px; }
+	.other-problem { padding-left: 30px; }
+	.other-problem input { width: 330px; }
+
+	/* Request a call back */
+	.booking-callme-desktop { display: block; }
+	.booking-callme-mobile { display: none; }
+
+	/* customer information */
+	.cust-info-form-location { width: 80%; }
+	.custinfo-buttons { margin: 0; }
+	button.form-button-left { margin-right: 15px; }
+}
+
+/* Landscape tablets and medium desktops */
+@media (min-width: 992px) and (max-width: 1199px) {
+	/* header section */
+	.booking1-desktop-logo { margin-top: -2px; height: 35px; width: 130px; }
+
+	/* Request a call back */
+	.booking-callme-desktop { display: block; }
+	.booking-callme-mobile { display: none; }
+}
+
+/* Large desktops and laptops */
+@media (min-width: 1200px) {
+	/* Request a call back */
+	.booking-callme-desktop { display: block; }
+	.booking-callme-mobile { display: none; }
+}
+
+
+

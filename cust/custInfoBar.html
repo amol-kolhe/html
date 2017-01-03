@@ -1,0 +1,12 @@
+<form name = "custInfoBarForm.custInfo" ng-controller="CustCtrl" data-ng-init="initCustInfo();" data-ng-submit = "" novalidate>
+	<div style="float: left; width: 100%">
+		<span style="float: left">
+            <span style="cursor:pointer; margin-right:5px;" class="glyphicon glyphicon-align-justify"
+				  title="Toggle navigation panel" id="navToggler" ng-click="toggleNav()"></span>
+            <span>Logged In: {{custName ? custName :custEmail}}</span>
+        </span>
+		<span style="float: right;">
+			<a data-ng-click="logoutCust()"  style="text-decoration: none; color: #0000ff; cursor: pointer;">Logout</a>
+		</span>
+	</div>
+</form>

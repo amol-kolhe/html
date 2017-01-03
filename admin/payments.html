@@ -1,0 +1,196 @@
+<div ng-controller="AdminCtrl" class="mainContent ng-scope" data-ng-init="initCache()">
+    <div class="subContainer">
+        <div>
+            <form name="aptPaymentForm" data-ng-init="initRefNo()" id="aptPaymentForm">
+                <span>Appointment refno.</span>
+                <input type="text"
+                       placeholder="Reference No."
+                       name="aptRefPayment"
+                       id="aptRefPayment"
+                       ng-model="adminAptPayment.refno"
+                       class="form-control"
+                       style="display:inline-block; width: auto;">
+                <button class="btn btn-primary btn-sm" type="submit" id="fetchDetailsButton"
+                        ng-click="fetchAppointment(adminAptPayment.refno)" ng-disabled="adminAptPayment.refno==''">Fetch Details</button>
+            </form>
+        </div>
+        <div id="aptListing" ng-show="fetched.Appointment">
+            <div id="aptReadonly">
+                <div class="headBar">
+                    <span>Appointment Details</span>
+                </div>
+                <div class="bodyContainer">
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4">Ref. No. <span class="colonSeparator">:</span></span>
+                                <span class ="col-xs-8" ng-bind="adminNewAppointmentCust.appointment.refno"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4">Date <span class="colonSeparator">:</span></span>
+                                <span class ="col-xs-8" ng-bind="adminNewAppointmentCust.appointment.starttime * 1000 | date:'yyyy-MM-dd hh:mm a'"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4">State <span class="colonSeparator">:</span></span>
+                                <span class ="col-xs-8" ng-bind="adminNewAppointmentCust.appointment.state"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4">Problem <span class="colonSeparator">:</span></span>
+                                <span class ="col-xs-8" ng-bind="adminNewAppointmentCust.customer.problem"></span>
+                            </div>
+                        </div>
+                    </div>                    
+                    <!--<div class="halfContainer">
+                        <span class="itemLabel">Service </span>:
+                        <span ng-bind="adminNewAppointmentCust.appointment.service"></span>
+                    </div>-->
+                    <!--<div class="halfContainer">
+                        <span class="itemLabel">Area </span>:
+                        <span ng-bind="adminNewAppointmentCust.appointment.zone"></span>
+                    </div>-->
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4">Location <span class="colonSeparator">:</span></span>
+                                <span class="col-xs-8">
+                                    {{adminNewAppointmentCust.appointment.locality}},&nbsp;
+                                    {{adminNewAppointmentCust.appointment.city}},&nbsp;
+                                    {{adminNewAppointmentCust.appointment.statename}},&nbsp;
+                                    {{adminNewAppointmentCust.appointment.country}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4">Cost <span class="colonSeparator">:</span></span>
+                                <span class="col-xs-8" ng-bind="adminNewAppointmentCust.appointment.cost | currency:'&#8377;'"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4">Pincode <span class="colonSeparator">:</span></span>
+                                <span class="col-xs-8" ng-bind="adminNewAppointmentCust.customer.pincode"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4"> Paid <span class="colonSeparator">:</span></span>
+                                <span class="col-xs-8"> {{costPaid | currency:"&#8377;"}} </span>
+                            </div> 
+                        </div>
+                    </div>
+                    
+
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="row middleRowContent" style="vertical-align: top;">
+                                <span class="itemLabel2 col-xs-4">Address <span class="colonSeparator">:</span></span>
+                                <div class="col-xs-8" ng-show="adminNewAppointmentCust.appointment.usecustomeraddress == false">
+                                    <pre ng-show="adminNewAppointmentCust.appointment.usecustomeraddress == false">
+                                        {{adminNewAppointmentCust.appointment.address}}
+                                    </pre>
+                                </div>
+                                <div class="col-xs-8" ng-show="adminNewAppointmentCust.appointment.usecustomeraddress == true">
+                                    <pre ng-show="adminNewAppointmentCust.appointment.usecustomeraddress == true">
+                                        {{adminNewAppointmentCust.customer.address}}
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="row middleRowContent" style="vertical-align: top;">
+                                <span class="itemLabel2 col-xs-4">Comment <span class="colonSeparator">:</span></span>
+                                <div class="col-xs-8">
+                                    <pre>
+                                        {{adminNewAppointmentCust.appointment.comments}}
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div ng-show="adminNewAppointmentCust.appointment.state == 'Cancelled'">
+                <div style = "color: red; margin-top: 10px;">The fetched appointment is cancelled. Hence you cannot proceed with the payment.</div>
+            </div>
+            <!--<div id="paymentSection" ng-hide="adminNewAppointmentCust.appointment.state == 'Cancelled' || adminNewAppointmentCust.appointment.state == 'Completed'">-->
+            <div id="paymentSection" ng-hide="adminNewAppointmentCust.appointment.state == 'Cancelled'">
+                <div class="headBar">
+                    <span>Payment Section</span>
+                </div>
+                <div class="bodyContainer">
+                    <!--<div ng-hide="adminNewAppointmentCust.appointment.state == 'Completed'">-->
+                    <div ng-hide="adminNewAppointmentCust.appointment.state == 'Cancelled'">
+                        <p>Please submit the payment details for the selected appointment: {{adminAptPayment.refno}}</p>
+                        <form name="aptPayment.paymentForm">
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4 col-sm-3">Mode <span class="colonSeparator">:</span></span>
+                                <div class="col-xs-8 col-sm-6">
+                                    <select ng-model="aptPayment.type" 
+                                    ng-options="mode as mode for mode in paymentModes"
+                                    class="form-control"
+                                    style="width:100%;">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4 col-sm-3">Amount <span class="colonSeparator">:</span></span>
+
+                                <div class="col-xs-8 col-sm-6">
+                                    <div class="row">
+                                        <div class="col-xs-5" style="padding-right: 5px;">
+                                            <select ng-model="aptPayment.currency"
+                                            ng-options="currency as currency for currency in currencies"
+                                            class="form-control">
+                                            </select>
+                                        </div>
+
+                                        <div class="col-xs-7" style="padding-left: 5px;">
+                                            <input type="text" 
+                                            ng-model="aptPayment.amnt" 
+                                            class="clstxt3 form-control" 
+                                            ng-required="true" 
+                                            ng-pattern="/(^\d*$)/" 
+                                            name="pytAmnt" 
+                                            style="width:100%;" />
+                                            
+                                            <span style = "color: red; margin-left: 5px;" 
+                                            ng-show="aptPayment.paymentForm.pytAmnt.$dirty && aptPayment.paymentForm.pytAmnt.$invalid && aptPayment.paymentForm.pytAmnt.$error.pattern">
+                                            Invalid amount entered
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <button class="btn btn-primary btn-sm" ng-disabled="aptPayment.paymentForm.$invalid" ng-click="submitAptPayment()">Update Payment</button>
+                                <button class="btn btn-default btn-sm" ng-click="cancelAptPayment()">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!--<div ng-show="adminNewAppointmentCust.appointment.state == 'Completed'">
+                        {{adminNewAppointmentCust.payment.curr}} {{adminNewAppointmentCust.payment.amnt}} paid by {{adminNewAppointmentCust.payment.type}}
+                    </div>-->
+                </div>
+            </div>
+        </div>
+        <div style = "color: red; margin-top: 10px;" data-ng-if = "fetchAptErrorMsg">
+            {{fetchAptErrorMsg}}
+        </div>
+    </div>
+</div>

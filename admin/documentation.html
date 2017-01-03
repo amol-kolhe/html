@@ -1,0 +1,1082 @@
+<div ng-show="adminNewAppointmentCust.isEnabledRootApptDocumentation == true">
+    <div class="documentRO">
+        <div ng-show="showCarousel == true"
+             class="imageSlideModalContainer" id="imageSlideModalContainer1"
+             ng-init="initImageViewer()">
+            <div class="container" id="imageContainer1">
+                    <span class="glyphicon glyphicon-remove-circle clickable scaleImgIcon closeZoomerIcon"
+                          title="Close" ng-click="resetZoom(); showCarousel = false;"></span>
+                <div style="width:100%; height:100%; transform-origin: top left;"
+                     id="largeImageContainer1">
+                    <img ng-src="{{largeImage}}" width="100%" draggable="false">
+                </div>
+            </div>
+        </div>
+        <div class="headBar">
+            <span>First Appointment Documentation</span>
+        </div>
+        <div class="bodyContainer" style="padding: 10px;">
+            <div>
+                <span>Appointment Type: </span>
+                <span style="text-transform: capitalize; font-weight: bold;">{{adminNewAppointmentCust.rootApptDocumentRO.type}}</span>
+            </div>
+            <div class="firstTimeDoc" ng-show="adminNewAppointmentCust.rootApptDocumentRO.type == 'first'">
+                <div class="subHeadBar">
+                    <span>History</span>
+                    <span class="glyphicon glyphicon-align-justify pull-right clickable" onclick="toggleContainer('historyRO1')"></span>
+                </div>
+                <div class="subBodyContainer collapse historyRO1" id="historyRO1">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Patient History <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.rootApptDocumentRO.history"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Pain Evaluation</span>
+                    <span class="glyphicon glyphicon-align-justify pull-right clickable" onclick="toggleContainer('painEvalRO1')"></span>
+                </div>
+                <div class="subBodyContainer collapse painEvalRO1" id="painEvalRO1">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Type and nature of pain <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.painevaluation.type" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Area <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.painevaluation.area" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>VAS <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.painevaluation.vas"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Aggravating factors <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.painevaluation.aggrevatingfactors" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Relieving factors <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.painevaluation.relievingfactors" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Any diurnal variation <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.painevaluation.diurnalvariation" ></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Assessment</span>
+                    <span class="glyphicon glyphicon-align-justify pull-right clickable" onclick="toggleContainer('assessmentRO1')"></span>
+                </div>
+                <div class="subBodyContainer collapse assessmentRO1" id="assessmentRO1">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Vitals (normal), GCS (if needed) <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.assessment.vitals" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Posture <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.assessment.posture" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Gait <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.assessment.gait" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Local observation <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.assessment.localobservation" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Passive ROM <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.assessment.passiveorm" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Active ROM <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.assessment.activeorm" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>MMT <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.assessment.mmt" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Palpation <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.assessment.palpation" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Tightness <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.assessment.tightness" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Special Tests <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.assessment.specialtests" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>In Neuro Cases include: Walking or other aid, Spasticity, Tone <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.assessment.spasticity" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Investigations <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                            </div>
+                        </div>
+                        <div class="row hidden"></div> <!-- Adding empty tr for bg-color adjustment -->
+                        <div class="row">
+                            <table colspan="2" style="border: 0">
+                                <tr class="imgContainer">
+                                    <td class="imageBlock"
+                                        ng-repeat="img in adminNewAppointmentCust.rootApptDocumentRO.assessment.investigations  track by $index">
+                                        <img ng-src="{{img.hpath}}" ng-click="$parent.largeImage = img.hpath; $parent.showCarousel = true;"/>
+                                        <div class="ellipsis">
+                                            <span title="{{img.fname}}">{{img.fname}}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Diagnosis <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.rootApptDocumentRO.assessment.diagnosis" ></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Outcome Measures</span>
+                    <span class="glyphicon glyphicon-align-justify pull-right clickable" onclick="toggleContainer('omRO1')"></span>
+                </div>
+                <div class="subBodyContainer collapse omRO1" id="omRO1">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Outcome Measures <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.rootApptDocumentRO.outcomemeasures"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Goal Setting and patient education</span>
+                    <span class="glyphicon glyphicon-align-justify pull-right clickable" onclick="toggleContainer('goalRO1')"></span>
+                </div>
+                <div class="subBodyContainer collapse goalRO1" id="goalRO1">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Short-term Goals <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.rootApptDocumentRO.goalsettings.shorttermgoals"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Long-term Goals <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.rootApptDocumentRO.goalsettings.longtermgoals"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Treatment</span>
+                    <span class="glyphicon glyphicon-align-justify pull-right clickable" onclick="toggleContainer('treatmentRO1')"></span>
+                </div>
+                <div class="subBodyContainer collapse treatmentRO1" id="treatmentRO1">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Dosages for all exercises/ modalities <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.rootApptDocumentRO.treatment.dosages"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Progression proposed <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.rootApptDocumentRO.treatment.proposedprogression"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>HEP and lifestyle modifications <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.rootApptDocumentRO.treatment.lifestylechanges"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Number of sessions recommended with frequency <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.rootApptDocumentRO.treatment.nosessionswithfrequency"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="follDoc" ng-show="adminNewAppointmentCust.rootApptDocumentRO.type == 'followup'">
+                <div class="subHeadBar">
+                    <span>Notes</span>
+                </div>
+                <div class="subBodyContainer">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Assessment <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.rootApptDocumentRO.assessment.followup"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Any new complaints <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.rootApptDocumentRO.newcomplaints"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Treatment administered <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.rootApptDocumentRO.treatment.followuptreatment"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Outcome Measure Score <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.rootApptDocumentRO.outcomemeasurescore"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-show="show.DocumentRO == true">
+    <div class="documentRO" ng-show="adminNewAppointmentCust.hasDocument == true">
+        <div ng-show="showCarousel == true"
+             class="imageSlideModalContainer" id="imageSlideModalContainer"
+             ng-init="initImageViewer()">
+            <div class="container" id="imageContainer">
+                    <span class="glyphicon glyphicon-remove-circle clickable scaleImgIcon closeZoomerIcon"
+                          title="Close" ng-click="resetZoom(); showCarousel = false;"></span>
+                <div style="width:100%; height:100%; transform-origin: top left;"
+                     id="largeImageContainer">
+                    <img ng-src="{{largeImage}}" width="100%" draggable="false">
+                </div>
+            </div>
+        </div>
+        <div class="headBar">
+            <span>Appointment Documentation</span>
+        </div>
+        <div class="bodyContainer" style="padding: 10px;">
+            <div>
+                <span>Appointment Type: </span>
+                <span style="text-transform: capitalize; font-weight: bold;">{{adminNewAppointmentCust.documentRO.type}}</span>
+            </div>
+            <div class="firstTimeDoc" ng-show="adminNewAppointmentCust.documentRO.type == 'first'">
+                <div class="subHeadBar">
+                    <span>History</span>
+                    <span class="glyphicon glyphicon-align-justify pull-right clickable" onclick="toggleContainer('historyRO')"></span>
+                </div>
+                <div class="subBodyContainer collapse historyRO" id="historyRO">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Patient History <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.documentRO.history"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Pain Evaluation</span>
+                    <span class="glyphicon glyphicon-align-justify pull-right clickable" onclick="toggleContainer('painEvalRO')"></span>
+                </div>
+                <div class="subBodyContainer collapse painEvalRO" id="painEvalRO">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Type and nature of pain <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.painevaluation.type" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Area <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.painevaluation.area" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>VAS <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.painevaluation.vas"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Aggravating factors <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.painevaluation.aggrevatingfactors" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Relieving factors <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.painevaluation.relievingfactors" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Any diurnal variation <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.painevaluation.diurnalvariation" ></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Assessment</span>
+                    <span class="glyphicon glyphicon-align-justify pull-right clickable" onclick="toggleContainer('assessmentRO')"></span>
+                </div>
+                <div class="subBodyContainer collapse assessmentRO" id="assessmentRO">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Vitals (normal), GCS (if needed) <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.assessment.vitals" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Posture <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.assessment.posture" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Gait <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.assessment.gait" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Local observation <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.assessment.localobservation" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Passive ROM <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.assessment.passiveorm" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Active ROM <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.assessment.activeorm" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>MMT <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.assessment.mmt" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Palpation <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.assessment.palpation" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Tightness <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.assessment.tightness" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Special Tests <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.assessment.specialtests" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>In Neuro Cases include: Walking or other aid, Spasticity, Tone <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.assessment.spasticity" ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Investigations <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                            </div>
+                        </div>
+                        <div class="row hidden"></div> <!-- Adding empty tr for bg-color adjustment -->
+                        <div class="row">
+                            <table colspan="2" style="border: 0">
+                                <tr class="imgContainer">
+                                    <td class="imageBlock"
+                                        ng-repeat="img in adminNewAppointmentCust.documentRO.assessment.investigations  track by $index">
+                                        <img ng-src="{{img.hpath}}" ng-click="$parent.largeImage = img.hpath; $parent.showCarousel = true;"/>
+                                        <div class="ellipsis">
+                                            <span title="{{img.fname}}">{{img.fname}}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Diagnosis <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <span ng-bind="adminNewAppointmentCust.documentRO.assessment.diagnosis" ></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Outcome Measures</span>
+                    <span class="glyphicon glyphicon-align-justify pull-right clickable" onclick="toggleContainer('omRO')"></span>
+                </div>
+                <div class="subBodyContainer collapse omRO" id="omRO">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Outcome Measures <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.documentRO.outcomemeasures"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Goal Setting and patient education</span>
+                    <span class="glyphicon glyphicon-align-justify pull-right clickable" onclick="toggleContainer('goalRO')"></span>
+                </div>
+                <div class="subBodyContainer collapse goalRO" id="goalRO">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Short-term Goals <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.documentRO.goalsettings.shorttermgoals"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Long-term Goals <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.documentRO.goalsettings.longtermgoals"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Treatment</span>
+                    <span class="glyphicon glyphicon-align-justify pull-right clickable" onclick="toggleContainer('treatmentRO')"></span>
+                </div>
+                <div class="subBodyContainer collapse treatmentRO" id="treatmentRO">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Dosages for all exercises/ modalities <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.documentRO.treatment.dosages"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Progression proposed <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.documentRO.treatment.proposedprogression"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>HEP and lifestyle modifications <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.documentRO.treatment.lifestylechanges"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Number of sessions recommended with frequency <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.documentRO.treatment.nosessionswithfrequency"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="follDoc" ng-show="adminNewAppointmentCust.documentRO.type == 'followup'">
+                <div class="subHeadBar">
+                    <span>Notes</span>
+                </div>
+                <div class="subBodyContainer">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Assessment <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.documentRO.assessment.followup"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Any new complaints <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.documentRO.newcomplaints"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Treatment administered <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.documentRO.treatment.followuptreatment"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Outcome Measure Score <span class="colonSeparator hidden-xs">:</span></span>
+                            </div>
+                            <div class="col-xs-11 col-xs-offset-1 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-sm-8 col-lg-9">
+                                <pre ng-bind="adminNewAppointmentCust.documentRO.outcomemeasurescore"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--</div>-->
+</div>
+
+<!-- Editable Documentation Section Begins -->
+<div ng-hide="show.DocumentRO == true">
+    <div id="aptDocumentation" style="display:none;" class="aptDocumentation">
+        <div class="headBar">
+            <span>Appointment Documentation</span>
+        </div>
+        <div class="bodyContainer">
+            <div class="documentationType" ng-init="initDocumentation()">
+                <div class="row">
+                    <span class="col-xs-12 col-sm-6 col-md-5 col-lg-4">Please select the Appointment type: </span>
+                        <span class="col-xs-12 col-sm-6 col-md-7 col-lg-8">
+                            <label class="radio-inline"><input type="radio"  value="first" ng-model="adminNewAppointmentCust.appointment.document.type"> First</label>
+                            <label class="radio-inline"><input type="radio"  value="followup" ng-model="adminNewAppointmentCust.appointment.document.type"> Followup</label>
+                        </span>
+                </div>
+            </div>
+            <div class="firstTimeDoc" ng-show="adminNewAppointmentCust.appointment.document.type == 'first'">
+                <div class="subHeadBar">
+                    <span>History</span>
+                </div>
+                <div class="subBodyContainer">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Patient History</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <textarea class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.history" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Pain Evaluation</span>
+                </div>
+                <div class="subBodyContainer">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Type and nature of pain</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.type" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Area</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.area" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>VAS</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <select class="form-control"  ng-model="adminNewAppointmentCust.appointment.document.painevaluation.vas" style="width: 174px;"
+                                        ng-options="val for val in [0,1,2,3,4,5,6,7,8,9,10]"></select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Aggravating factors</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.aggrevatingfactors" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Relieving factors</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.relievingfactors" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Any diurnal variation</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.diurnalvariation" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Assessment</span>
+                </div>
+                <div class="subBodyContainer">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Vitals (normal), GCS (if needed)</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.vitals" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Posture</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.posture" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Gait</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.gait" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Local observation</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.localobservation" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Passive ROM</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.passiveorm" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Active ROM</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.activeorm" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>MMT</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.mmt" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Palpation</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.palpation" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Tightness</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.tightness" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Special Tests</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.specialtests" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Walking or other aid, Spasticity, Tone</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.spasticity" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Investigations</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="file" accept="image/*" multiple onchange="angular.element(this).scope().imagesSelected(this)"/>
+                                <div class="imgContainer">
+                                    <div class="" ng-repeat="img in adminNewAppointmentCust.appointment.document.assessment.investigations  track by $index">
+                                        <span class="glyphicon glyphicon-file"></span>
+                                        <span ng-class="{imgRemoved : img.action=='delete'}">{{img.fname}}</span>
+                                        <span ng-hide="img.action=='delete'" class="glyphicon glyphicon-trash clickable" title="Remove this file" ng-click="img.action='delete'"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Diagnosis</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <input type="text" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.diagnosis" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Outcome Measures</span>
+                </div>
+                <div class="subBodyContainer">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Outcome Measures</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <textarea class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.outcomemeasures" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Goal Setting and patient education</span>
+                </div>
+                <div class="subBodyContainer">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Short-term Goals</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <textarea class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.goalsettings.shorttermgoals" ></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Long-term Goals</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <textarea class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.goalsettings.longtermgoals" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subHeadBar">
+                    <span>Treatment</span>
+                </div>
+                <div class="subBodyContainer">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Dosages for all exercises/modalities</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <textarea class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.treatment.dosages" ></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Progression proposed</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <textarea class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.treatment.proposedprogression" ></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>HEP and lifestyle modifications</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <textarea class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.treatment.lifestylechanges" ></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Number of sessions recommended with frequency</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <textarea class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.treatment.nosessionswithfrequency" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="follDoc" ng-show="adminNewAppointmentCust.appointment.document.type == 'followup'">
+                <div class="subHeadBar">
+                    <span>Notes</span>
+                </div>
+                <div class="subBodyContainer">
+                    <div class="table table-striped">
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Assessment</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <textarea class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.assessment.followup" ></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Any new complaints</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <textarea class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.newcomplaints" ></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Treatment administered</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <textarea class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.treatment.followuptreatment" ></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                <span>Outcome Measure Score</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-lg-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <textarea class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.outcomemeasurescore" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footerBar" style="text-align: right; padding: 5px;">
+                <button  onclick="hideDocumentation()" ng-click="scrollDiv('editAptContainer'); show.DocumentRO = true;" class="btn btn-default btn-sm">Cancel</button>
+                <button  onclick="hideDocumentation()" ng-click="saveEditedDocumentation(); scrollDiv('editAptContainer'); show.DocumentRO = true;" class="btn btn-primary btn-sm"
+                         ng-disabled="adminNewAppointmentCust.appointment.document.type != 'first' && adminNewAppointmentCust.appointment.document.type != 'followup'">Save</button>
+                <button  ng-click="emailLifeStyleInfo()" class="btn btn-default btn-sm" data-ng-show="adminNewAppointmentCust.appointment.document.type == 'first'"
+                         data-ng-disabled="(adminNewAppointmentCust.appointment.document.type != 'first') ||
+                                      (!adminNewAppointmentCust.appointment.document.goalsettings.shorttermgoals &&
+                                      !adminNewAppointmentCust.appointment.document.goalsettings.longtermgoals &&
+                                      !adminNewAppointmentCust.appointment.document.treatment.dosages &&
+                                      !adminNewAppointmentCust.appointment.document.treatment.proposedprogression &&
+                                      !adminNewAppointmentCust.appointment.document.treatment.lifestylechanges &&
+                                      !adminNewAppointmentCust.appointment.document.treatment.nosessionswithfrequency)">Email Lifestyle Info</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+<nav class="navbar booking1-navigation navbar-fixed-top" id="menu-height">
+	<div class="container">
+		<div class="navbar-header row">
+			<div class="col-xs-12 col-sm-3 booking1-up-section">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				  <!-- <span class="icon-bar"></span>
+				  <span class="icon-bar"></span>
+				  <span class="icon-bar"></span> -->
+				 <!--  <img src="../images/customer_portal/hamburger.png"> -->
+				  <span style="width: 35px; display: block;"></span>
+				</button>
+				<!-- <a ui-sref="home"> -->
+					<span class="booking1-desktop-logo" ng-click = "bookingCtrl.method.navigateToHome()"></span>
+					<img src="./images/healyos_logo_new.png" class="booking1-mobile-logo" ng-click = "bookingCtrl.method.navigateToHome()">
+				<!-- </a> -->
+				<span class="booking1-callme">
+					<a href="tel:02065802802"><img src="./images/customer_portal/call.png" /></a>
+				</span>
+			</div>
+			<div class="col-xs-12 col-sm-9 booking1-down-section">                
+				<div class="row">
+					<div class="col-xs-3 col-sm-5 booking1-header-locations booking1-subsection">
+						<select class="ac-select"
+				            id="l2Combo"
+				            ac-model="bookingCtrl.model.selectedLocation"
+				            ac-refresh = bookingCtrl.model.acRefresh
+				            ac-options="l.val for l in bookingCtrl.method.getAllLocations()"
+				            ac-settings="{ allowClear: true, maxWidth: '250px', itemsInView: 20, loadOnCreate: true, comboMode: false, loadOnOpen: false, minWidth: '250px', height: '23px' }"
+				            ac-change="bookingCtrl.method.locationSelected(value)"
+				            ac-key="pin">
+				        </select>
+					</div>
+					<div class="col-xs-5 col-sm-3 booking1-header-date booking1-subsection">
+						<div class="input-group date">
+				            <input type="text" id = "booking1-dt"
+				            name = "booking1FromDate"
+				            date-disabled="bookingCtrl.disabled(date, mode)"
+				            title="From Date" 
+				            class="callmeField2 datetimepicker2 form-control" />
+				            <span class="input-group-addon">
+				            <label for="booking1-dt">
+				            	<img src="./images/customer_portal/down_arrow.png" />
+				            </label>				                
+				            </span>
+				        </div>
+					</div>
+					<div class="col-xs-2 col-sm-3 booking1-header-timeslot booking1-subsection">
+					<select ng-change="bookingCtrl.method.changeTimeSlot()" ng-model="bookingCtrl.model.timeslot" ng-options = "time.starttime for time in bookingCtrl.model.timeslotArray">
+						<option value="">Select Time</option>
+					</select>
+						<!-- <select name="singleSelect" ng-model="bookingCtrl.model.timeslot" ng-change="bookingCtrl.method.checktimeslot()">
+				            <option value="">Select Time</option>
+				            <option ng-repeat="time in bookingCtrl.model.timeslotArray" value="{{time.starttime}}">{{time.starttime}}</option>
+				        </select> -->
+					</div>
+				</div>
+			</div>                    
+		</div>
+		<div class="floating-price-container">
+			<div class="floating-price-input">Rs. {{bookingCtrl.model.apptCost|number:2}}</div>
+		</div>
+		<!-- <div class="navbar-collapse collapse submenus">
+			<ul class="nav navbar-nav">
+			  <li class="active"><a href="#">{{cpc.navMenuItems.home}}</a></li>
+			  <li><a href="#about">{{cpc.navMenuItems.about}}</a></li>
+			  <li><a href="#contact">{{cpc.navMenuItems.contact}}</a></li>
+			</ul>
+			<div class="navbar-header navbar-right"></div>
+		</div> -->
+	</div>
+</nav>
+
+
+<div class="callme-input-result-error-booking" ng-if="bookingCtrl.flags.bookingErrorContainer">
+    <div class="callme-error-message-booking">{{bookingCtrl.model.bookingErrorMessageContainer}}</div>
+</div>

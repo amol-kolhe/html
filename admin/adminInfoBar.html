@@ -1,0 +1,12 @@
+<form name = "adminInfoBarForm.adminInfo" ng-controller="AdminCtrl" data-ng-init="initAdminInfo();" data-ng-submit = "" novalidate>
+	<div>
+		<span>
+            <span class="glyphicon glyphicon-align-justify btn"
+                  title="Toggle navigation panel" id="navToggler" ng-click="toggleLeftNavigation()"></span>
+            <span class="btn" style="cursor: default; padding-left: 0;">Administrator: {{adminName ? adminName :adminEmail}}</span>
+        </span>
+		<span class="btn pull-right">
+			<a data-ng-click="logoutAdmin()">Logout</a>
+		</span>
+	</div>
+</form>

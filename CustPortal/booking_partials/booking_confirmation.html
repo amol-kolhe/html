@@ -1,0 +1,82 @@
+<div class="booking-confirmation-main-container">
+	<div class="row booking-confirmation-content">
+		<div class="col-xs-12  booking-confirmation-heading">Thank You!</div>
+		<div class="col-xs-12  booking-confirmation-subtext">
+			<p>Your appointment with the Healyos Physio Expert is confirmed!</p>
+			<p>You are on your way to Healing Yourself!</p>
+		</div>
+		<div class="col-xs-12">
+			<div class="row booking-confirmation-row booking-row-top">
+				<div class="col-xs-12 col-sm-4 booking-confirmation-col booking-confirmation-col-left">Customer Name</div>
+				<div class="col-xs-12 col-sm-8 booking-confirmation-col booking-confirmation-col-right">{{bookingConfirmCtrl.model.confirmObj.custName}}</div>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<div class="row booking-confirmation-row">
+				<div class="col-xs-12 col-sm-4 booking-confirmation-col booking-confirmation-col-left">Address</div>
+				<div class="col-xs-12 col-sm-8 booking-confirmation-col booking-confirmation-col-right">{{bookingConfirmCtrl.model.confirmObj.address}}</div>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<div class="row booking-confirmation-row">
+				<div class="col-xs-12 col-sm-4 booking-confirmation-col booking-confirmation-col-left">Date</div>
+				<div class="col-xs-12 col-sm-8 booking-confirmation-col booking-confirmation-col-right">{{bookingConfirmCtrl.model.confirmObj.startdate}}</div>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<div class="row booking-confirmation-row">
+				<div class="col-xs-12 col-sm-4 booking-confirmation-col booking-confirmation-col-left">Time</div>
+				<div class="col-xs-12 col-sm-8 booking-confirmation-col booking-confirmation-col-right">{{bookingConfirmCtrl.model.confirmObj.time}}</div>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<div class="row booking-confirmation-row">
+				<div class="col-xs-12 col-sm-4 booking-confirmation-col booking-confirmation-col-left">Name of therapist</div>
+				<div class="col-xs-12 col-sm-8 booking-confirmation-col booking-confirmation-col-right">{{bookingConfirmCtrl.model.confirmObj.spname}}</div>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<div class="row booking-confirmation-row ">
+				<div class="col-xs-12 col-sm-4 booking-confirmation-col booking-confirmation-col-left">Price</div>
+				<div class="col-xs-12 col-sm-8 booking-confirmation-col booking-confirmation-col-right">{{bookingConfirmCtrl.model.confirmObj.price}}</div>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<div class="row booking-confirmation-row booking-row-bottom">
+				<div class="col-xs-12 col-sm-2 booking-confirmation-col booking-confirmation-col-center-logo">
+					<!-- <i class="fa fa-user-md"></i> -->
+					<img src="./images/customer_portal/Healyos_circular_logo.png" />
+				</div>
+				<div class="col-xs-12 col-sm-10 booking-confirmation-col booking-confirmation-col-center">
+					<p>Have questions about your session ? Check out our <a ui-sref="homepages.faq">FAQs</a>.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- <div class="booking-confirmation-thankyou home-redirecting-buttons">
+		<button type="button" ng-click="bookingConfirmCtrl.method.redirectToHome()">Thank You</button>
+	</div> -->
+	<!-- <div class="table-responsive">
+		<table class="table booking-confirmation-content">
+			<tbody>
+				<tr>
+					<td>Location:</td>
+					<td>{{bookingConfirmCtrl.model.confirmObj.locality}}</td>
+				</tr>
+				<tr>
+					<td>Date:</td>
+					<td>{{bookingConfirmCtrl.model.confirmObj.startdate}}</td>
+				</tr>
+				<tr>
+					<td>Time:</td>
+					<td>{{bookingConfirmCtrl.model.confirmObj.time}}</td>
+				</tr>
+				<tr>
+					<td>Price:</td>
+					<td>{{bookingConfirmCtrl.model.confirmObj.price}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div> -->
+</div>

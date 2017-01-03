@@ -1,0 +1,240 @@
+/* *********Terms of Service & Privacy policy********** */
+.terms-of-service-main-container {
+    padding-top: 80px;
+}
+
+.privacy-policy-main-container {
+    padding: 20px;
+}
+
+.terms-of-service-page-heading, .associated-services-heading, .privacy-policy-heading {
+	font-size: 2.5em;
+    font-family: "Montserrat-UltraLight", sans-serif;
+    margin-bottom: 15px;
+}
+
+.terms-of-service-page-heading, .privacy-policy-heading {
+	margin-top: 20px;
+}
+
+.associated-services-heading {
+	text-transform: uppercase;
+	margin-top: 45px;
+}
+
+.terms-of-service-content, .associated-services-content{
+	font-family: "Neuton-Regular", sans-serif;
+    font-size: 1em;
+    color: #58595b;
+}
+
+.privacy-policy-main-content, .privacy-policy-main-content ul li {
+    font-family: "Neuton-Regular", sans-serif;
+    font-size: 16px;
+    color: #58595b;
+}
+
+.associated-services-content {
+    margin-bottom: 40px;
+}
+
+
+/* **********Contact Us****************** */
+.inner-page-contactus-banner-image {
+	background-image: url('../../images/customer_portal/Back_footer_1200.png');
+    min-height: 393px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: left;
+}
+
+.inner-page-abtsancheti-banner-image {
+    background-image: url('../../images/customer_portal/aboutsancheti_1200.png');
+    min-height: 438px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: left;
+    margin-top: 67px;
+}
+
+.inner-page-banner-heading, .inner-page-abtsancheti-banner-heading {
+    color: #fff;
+	position: absolute;
+    margin-top: -205px;
+    margin-left: 50px;
+    font-size: 2.5em;
+    font-family: "Montserrat-UltraLight", sans-serif;
+}
+
+.contactus-main-container {
+    padding-top: 10px;
+    margin-bottom: 40px;
+}
+
+.contactus-section {
+    margin-top: 30px;
+}
+
+.contactus-section p{
+    margin: 0;
+}
+
+.contactus-section-heading {
+    font-size: 2.5em;
+    font-family: "Montserrat-UltraLight", sans-serif;
+}
+
+.contactus-section-address, .contactus-section-office-hrs {
+    font-family: "Neuton-Regular", sans-serif;
+    font-size: 1.125em;
+    color: #58595b;
+}
+.contactus-section-phone {
+    font-family: "Neuton-Regular", sans-serif;
+    font-size: 1.5em;
+    color: #58595b;
+}
+
+.contactus-section-email a {
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #FC8F7A;
+    font-size: 1.125em;
+}
+
+.contactus-section-comment textarea {
+    width: 70%;
+    height: 120px;
+    padding: 10px;
+}
+
+.contactus-submit button {
+    width: 17%;
+    padding: 0;
+}
+
+/**************Our Physio Experts*************/
+.innerpage-physio-main-container {
+	margin-top: 20px;
+}
+
+.innerpage-physio-main-container p {
+	font-family: "Neuton-Regular", sans-serif;
+    font-size: 1em;
+    color: #58595b;
+}
+
+.innerpage-physio-content {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.innerpage-physio-section-heading {
+	font-size: 2.5em;
+    font-family: "Montserrat-UltraLight", sans-serif;
+}
+
+.innerpage-physio-section-subheading {
+	font-family: "Montserrat-Regular", sans-serif;
+	font-size: 1.125em;
+    color: #262626;
+    margin-bottom: 12px;
+}
+
+.innerpage-physio-section {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.innerpage-physio-section:last-child {
+	border-bottom: 0;
+}
+
+.innerpage-physio-image-left img {
+    width: 100%;
+}
+
+/********About Sancheti***************/
+.about-sancheti-main-container {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.about-sancheti-content {
+    padding: 10px;
+}
+
+.about-sancheti-content  p {
+    font-family: "Neuton-Regular", sans-serif;
+    font-size: 1em;
+    color: #58595b;
+}
+
+/*********FAQ**********************/
+.inner-page-faq-container {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.inner-page-faq-content {
+    padding: 10px;
+}
+.plusminus1 {
+    font-size: 30px;
+    font-weight: bold;
+    width: 20px;
+    display: inline-block;
+}
+.accordion1_head {
+    color: #262626;
+    cursor: pointer;
+    padding: 2px 11px;
+    border-bottom: 1px solid #ADABAB;
+}
+
+.accordian1-title {
+    position: relative;
+    top: -5px;
+    font-family: "Neuton-Regular", sans-serif;
+    font-size: 1em;
+    color: #58595b;
+}
+.accordion1_body p {
+    padding: 5px 5px 5px 35px;
+    margin: 0px;
+    font-family: "Neuton-Regular", sans-serif;
+    font-size: 1em;
+    color: #58595b;
+}
+.accordion1_body ul li {
+    font-family: "Neuton-Regular", sans-serif;
+    font-size: 1em;
+    color: #58595b;
+    list-style-position: inside;
+}
+
+/*********Work With Us**********************/
+
+.workwithus-main-container {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.workwithus-main-content {
+    padding: 10px;
+}
+
+.workwithus-section2-content {
+    margin-top: 30px;
+}
+
+.workwithus-heading {
+    font-size: 2.5em;
+    font-family: "Montserrat-UltraLight", sans-serif;
+}
+
+.workwithus-text p {
+    font-family: "Neuton-Regular", sans-serif;
+    font-size: 1em;
+    color: #58595b;
+}

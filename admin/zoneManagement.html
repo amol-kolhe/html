@@ -1,0 +1,180 @@
+<div id="q1" class="mainContent2" ng-controller="AdminCtrl" ng-init="initCache(); zoneMgmt.getAllZones();">
+    <div class="row location-info" style="padding: 10px;">
+        <div class="col-xs-12 col-sm-3">
+            <span class="zone-label">Country : </span>
+            <select class = "input-width"
+                    name = "zoneCountry"
+                    data-ng-model = "zoneCountrySelected"
+                    title = "Select country"
+                    data-ng-options="country.id as country.name for country in zoneCountry"
+                    data-ng-required = "true">
+            </select>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <span class="zone-label">State : </span>
+            <select class = "input-width"
+                    name = "zoneState"
+                    data-ng-model = "zoneStateSelected"
+                    title = "Select state"
+                    data-ng-options="state.id as state.name for state in zoneState"
+                    data-ng-required = "true">
+            </select>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <span class="zone-label">City : </span>
+            <select class = "input-width"
+                    name = "zoneCity"
+                    data-ng-model = "zoneCitySelected"
+                    title = "Select city"
+                    data-ng-options="city.id as city.name for city in zoneCity"
+                    data-ng-required = "true">
+            </select>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <button class="btn btn-primary btn-sm" type="button" ng-click="zoneMgmt.addNewZone('addnew')">Add Zone <span title="Add new Zone" class="clickable glyphicon glyphicon-plus"></span></button>
+        </div>
+    </div> <!-- row end -->
+
+    <!-- create new zone section -->
+    <div class="createZone" ng-if="zoneMgmt.addNewZoneSection == true || zoneMgmt.editZoneSection == true">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 hide-mobile">
+                <label>Zone Name</label>
+            </div>
+            <div class="col-xs-12 col-sm-7 pin-area-group hide-mobile">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-5">
+                        <label>Pincode</label>
+                   </div>
+                   <div class="col-xs-12 col-sm-6">
+                        <label>Area Name</label>
+                        <span class="glyphicon glyphicon-plus-sign " ng-click = "zoneMgmt.addPinAndArea(zoneMgmt.temppojo)"></span>                 
+                   </div>
+                </div>            
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="show-mobile">
+                    <label>Zone Name</label>
+                </div>
+                <input type="text" 
+                class="form-control"
+                name="zoneName"
+                ng-model="zoneMgmt.temppojo.zonename"
+                value="{{zoneMgmt.temppojo.zonename}}" 
+                placeholder="Zone Name" 
+                required />
+                <div ng-if="zoneMgmt.temppojo.isZoneNameError == true" style="color: red; font-size: 10px;">Enter valid Zone Name
+                </div>
+            </div>
+
+            <span class="glyphicon glyphicon-plus-sign show-mobile mobile-add-area" ng-click = "zoneMgmt.addPinAndArea(zoneMgmt.temppojo)">Add</span>
+
+            <div class="col-xs-12 col-sm-7 pin-area-group">
+                <div class="row" ng-repeat = "i in zoneMgmt.temppojo.pincodes">
+                    <div class="col-xs-12 col-sm-5" ng-if="!i.isdeleted">
+                        <div class="show-mobile">
+                            <label>Pincode</label>
+                        </div>
+                        <input type="text" 
+                        class="form-control"
+                        name="zonePin"
+                        ng-model="i.pin"
+                        value = "{{i.pin}}"
+                        placeholder="Pincode" 
+                        required />
+                        <div ng-if="i.isPinError == true" style="color: red; font-size: 10px;">Enter valid Pincode
+                        </div>
+                   </div>
+                   <div class="col-xs-12 col-sm-5" ng-if="!i.isdeleted">
+                        <div class="show-mobile">
+                            <label>Area Name</label>
+                        </div>
+                        <input type="text" 
+                        class="form-control"
+                        name="zoneLocalities"
+                        ng-model="i.localities"
+                        value="{{i.localities}}" 
+                        placeholder="Area Name" 
+                        required />
+                        <div ng-if="i.isLocalityError == true" style="color: red; font-size: 10px;">Enter valid Locality
+                        </div>                    
+                   </div>
+                   <div class="col-sm-2" ng-if="!i.isdeleted">
+                        <span class="glyphicon glyphicon-minus-sign zone-minus" ng-click="zoneMgmt.removePinAndAreaRow(zoneMgmt.temppojo.pincodes, $index)"></span>
+                   </div>
+                </div>            
+            </div>
+        </div>
+        <div class="row" style="margin-left: 1px; margin-top: 10px;">
+            <div class="col-xs-12 col-sm-3">
+                <button class="btn btn-primary btn-sm" type="button" ng-click="zoneMgmt.saveZone(zoneMgmt.temppojo, $index)">Save</button> 
+                <button class="btn btn-default btn-sm" type="button" ng-click="zoneMgmt.temppojo.action = 'cancel'; zoneMgmt.cancelZoneEdit(zoneMgmt.temppojo, $index);">Cancel</button>
+            </div>
+            <div class="col-xs-12 col-sm-9">
+                <div style="color:red;" ng-if="zoneMgmt.zoneResponse.zoneValid == 'invalid'">
+                    <span style="vertical-align: -webkit-baseline-middle;">{{zoneMgmt.zoneResponse.zoneErrorMessage}}</span>
+                </div>
+            </div>            
+        </div>
+    </div> <!-- createZone end -->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form name = "zoneMgmtForm.adminFormForNewZone" data-ng-init="" data-ng-submit = "" novalidate>
+                        <table class="table table-striped table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th ng-click="zoneMgmt.sortZone('zonename')">
+                                        <span class="clsfleft">Zone</span>
+                                        <span class="glyphicon sort-icon" ng-show="zoneMgmt.zoneSortKey == 'zonename'" ng-class="{'glyphicon-chevron-up':zoneMgmt.zoneReverse,'glyphicon-chevron-down':!zoneMgmt.zoneReverse}"></span>
+                                    </th>
+
+                                    <th ng-click="sortZone('locality')"><span class="clsfleft">Locality</span>
+                                    </th>
+
+                                    <th>
+                                        
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="rec in zoneMgmt.arrZone|orderBy:zoneMgmt.zoneSortKey:zoneMgmt.zoneReverse|filter:search|itemsPerPage:5"
+                                    pagination-id="zoneMgmtId">
+                                    <td width="200">
+                                        <span ng-show = "rec.action != 'edit'">{{rec.zonename}}</span>
+                                    </td>
+                                    <td width="680">
+                                        <div class="localities-display">
+                                            <div ng-show = "rec.action != 'edit'" 
+                                                ng-repeat = "i in rec.pincodes">
+                                                <span ng-if="!i.isdeleted">{{i.pin}} - {{i.localities}}</span>
+                                            </div>
+                                        </div>                                        
+                                    </td>
+                                    <td width="60">
+                                        <span class="glyphicon glyphicon-pencil clickable" style="color: blue;" title="Edit this record" ng-click="zoneMgmt.addNewZone('editZone', rec, $index)" data-ng-hide="rec.action == 'edit'"></span>
+                                        <span class="glyphicon glyphicon-trash clickable" style="color: red;" title="Delete this record" ng-click="rec.action = 'delete'; zoneMgmt.removeZone(rec, $index);" data-ng-hide="rec.action == 'edit'"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <dir-pagination-controls
+                            max-size="5"
+                            pagination-id="zoneMgmtId"
+                            direction-links="true"
+                            boundary-links="true" >
+                        </dir-pagination-controls>
+                    </form>
+                </div> <!-- panel body end -->
+            </div> <!-- panel end -->
+        </div> <!-- col-md-12 end -->
+    </div> <!-- row end -->
+
+</div>

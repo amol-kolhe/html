@@ -1,0 +1,40 @@
+<div class="booknow-outer">
+	<span class="locations-section">
+		<select class="ac-select"
+            id="lCombo"
+            ac-model="cpc.selectedLocation"
+            ac-refresh = cpc.acRefresh
+            ac-options="l.val for l in cpc.getAllLocations()"
+            ac-settings="{ allowClear: true, maxWidth: '250px', itemsInView: 20, loadOnCreate: false, comboMode: false, loadOnOpen: true, minWidth: '250px', height: '23px' }"
+            ac-change="cpc.locationSelected(value)"
+            ac-key="pin">
+        </select>
+    </span>
+	<span class="date-section">
+        <div class='input-group date dt'>
+            <input type="text" id = "dt2"
+            name = "fromDate"
+            date-disabled="cpc.disabled(date, mode)"
+            title="From Date" 
+            class="callmeField2 datetimepicker2 form-control"
+            placeholder="Pick a Date"
+           />
+            <span class="input-group-addon">
+                <label for="dt2">
+                    <img src="./images/customer_portal/down_arrow.png" />
+                </label>                
+            </span>
+        </div>
+    </span>
+    <span class="timeslot-section">
+        <select ng-model="cpc.timeslot" ng-options = "time.starttime for time in cpc.timeslotArray">
+            <option value="">Select Time</option>
+        </select>
+        <!-- <select name="singleSelect" ng-model="cpc.timeslot" ng-change="cpc.checktimeslot()">
+            <option value="">Select Time</option>
+            <option ng-repeat="time in cpc.timeslotArray" value="{{time.starttime}}">{{time.starttime}}</option>
+        </select> -->
+    </span>
+
+	<span class="book-now-button" ng-click="cpc.redirectToBooking1()">BOOK MY SESSION</span>
+</div>

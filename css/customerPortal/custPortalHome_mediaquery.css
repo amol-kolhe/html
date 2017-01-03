@@ -1,0 +1,385 @@
+/* -------------------Media Queries------------- */
+
+/* Media query overridden to make navigation collapsible on large screens */
+@media (max-width: 2000px) {
+  .navbar-header {
+	float: none;
+  }
+  .navbar-left,.navbar-right {
+	float: none !important;
+  }
+  .navbar-toggle {
+	display: block;
+  }
+  .navbar-collapse {
+	border-top: 1px solid transparent;
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  .navbar-fixed-top {
+	top: 0;
+	border-width: 0 0 1px;
+  }
+  .navbar-collapse.collapse {
+	display: none!important;
+  }
+  .navbar-nav {
+	float: none!important;
+	margin-top: 7.5px;
+  }
+  .navbar-nav>li {
+	float: none;
+  }
+  .navbar-nav>li>a {
+	padding-top: 10px;
+	padding-bottom: 10px;
+  }
+  .collapse.in{
+	display:block !important;
+  }
+}
+
+/* ---- Portrait phones and smaller ------------- */
+@media (max-width: 480px) {
+	body { font-size: 14px !important; }
+	.pure-toggle-label { left: 2% !important; }
+	
+	/* ----HEADER----- */
+	.navbar-toggle { padding: 8px 5px; }
+	.phone-number, .phone-number-icon {	display: none; }
+	.home-navigation { padding: 0px 10px 0px 10px !important; }
+	.home-navigation .container { padding: 10px 10px 8px 10px !important; }
+	.logo-image { /*background-image: url(../../images/customer_portal/logo.png);background-repeat: no-repeat; background-size: contain; */ height: 38px; width: 112px; display: inline-block; margin-top: 4px; }
+	span.request-callback {	display: none; }
+	.callme-request-desktop { display: none; }
+	.callme-request-mobile { display: inline-block; }
+	.hide-on-large-screens { display: block; }
+
+	/*sliding callme div*/
+	.callme-input-scroll-fields .container { padding: 0px !important; }
+	.callme-input-scroll-fields { height: auto !important; }
+	input.input-scroll-name { width: 100%; margin-left: 0px; }
+	input.input-scroll-phone { width: 100%; }	
+	.scroll-phone, .scroll-submit { text-align: center; }
+	button.callme-input-scroll-submit { width: 100%; }
+	.scroll-or { font-size: 1.4em; font-family: 'Montserrat-Regular', sans-serif; text-align: center; }
+	.callme-input-scroll-fields .container .row > div { margin-bottom: 13px; }
+	button.makecall-input-scroll-submit {}
+	.callme1 { position: relative; top: 9px; right: 6px; float: right; }
+	.custom-width-img { width: 45px !important;	}
+	.callme-input-result-success, .callme-input-result-error { top: 62px !important; }
+	
+	/* ----SLIDER------- */
+	.slider-headtext { left: 6% !important; top: 10%; width: 62%; }
+	p.slider-subtext { width: 160px; }
+	.desktop-slider, .tablet-slider, .large-screen-slider { display: none; }
+	.mobile-slider { display: block; }
+	.slider-heading { font-size: 1.95em; }
+	img.sancheti-subtext-logo-mobile { width: 10%; vertical-align: baseline; }
+	span.sancheti-subtext2-mobile { font-size: 0.6em; }
+
+	/* -----BOOK NOW -----*/
+	.booknow-container { width: 100%; top: -120px; }
+	.booknow-outer { top: -35px; }
+	.locations-section { text-align: center; width: 100%; border-radius: 0px; height: 45px; background: rgba(255, 255, 255, 0.7); margin-bottom: 4px; padding: 8px 3px 3px 23px; /*padding-left: 42%;*/ font-weight: bold; }
+	.date-section {	width: 100%; height: 45px; background: rgba(255, 255, 255, 0.7); margin-bottom: 4px; padding: 4px 7px 7px 5px; font-weight: bold; }
+	.date-section .input-group .form-control { background: transparent;	padding-left: 27px;	padding-right: 0px;	/*text-align: center;*/	padding-left: 42%; }
+	.timeslot-section { width: 100%; height: 45px; background: rgba(255, 255, 255, 0.7); margin-bottom: -2px; padding: 12px 9px 6px 9px; font-weight: bold;	}
+	.timeslot-section select { background: transparent;	width: 100%; text-align: justify; padding-left: 38%; display: inline-block;	}
+	.book-now-button { width: 100%; border-radius: 30px; height: 45px; padding: 12px 24px; text-align: center; }
+	.ac-select-wrapper { width: 100% !important; }
+	.ac-select-main { min-width: 98% !important; max-width: 95% !important; }
+	.ac-select-table { width: 95%; }
+	div.ac-select-popup { min-width: 320px !important; }
+	.bootstrap-datetimepicker-widget { margin:0 auto !important; }
+
+	/*---HOW IT WORKS------*/
+	.col-centered {	display: block; }
+	.howitworks-subsection { padding: 10px 40px; }
+	.row-centered { display: inline-block; }
+	.howitworks-title { margin-top: 30px; }
+	.howitworks-subsection-title { margin-top: 8px; }
+	.howitworks-icon img { width: 45%; }
+	
+	/* -----SANCHETI ASSOCIATION-------- */
+	.sancheti-assoc-image { background-image: url('../../images/customer_portal/sancheti_320.png'); /*background-position: right;*/ min-height: 354px; }
+	.sancheti-assoc-content { margin-top: 2%; }
+	.sancheti-assoc-heading { line-height: 1.1; margin-top: 5%; width: 60%; margin-bottom: 10px; font-size: 1.8em; padding-left: 5px; }
+	.sancheti-assoc-text { width: 60%; padding-left: 5px; padding-right: 10px; line-height: 1; }
+	.sancheti-assoc_redirect button { margin-left: 20px; margin-top: 18px; margin-bottom: 15px; }
+	.sancheti-text-mobile { display: block; }
+	.sancheti-text-desktop { display: none; }
+	.sancheti-assoc-image .container { padding: 0px 15px; }
+	/*.sancheti-logo-image-desktop { display: none; }
+	.sancheti-logo-image-mobile { display: block; }*/
+	
+	/* ------The physio Experts ------------*/
+	/*.physio_experts_desktop_img { display: none; }
+	.physio_experts_mobile_img { display: block; margin: 0 auto; }*/
+	.row.physio-experts-content { padding-top: 0; }
+
+	/* ------Healyos on the go---------------------- */
+	.healyos_on_go_mobile_img { display: block; }
+	.healyos_on_go_desktop_img { display: none; }
+	.healyos_on_go_content {}
+
+	/* ----The physiotherapy experts--------------- */
+	.physio-experts-right-section { padding: 30px 20px 10px 20px; }
+ 	.physio-experts-learnmore { text-align: center; margin-bottom: 20px; }
+	.physio-experts-text-desktop { display: none; }
+	.physio-experts-text-mobile { display: block; }
+
+ 	/*-------FAQ-----------------------*/
+ 	.faq-redirect button { padding: 14px 20px; }
+	.faq-hide-mobile-view { display: none; }
+ 	
+ 	/*----------Testimonials------------------*/
+ 	.testimonial-text h1 { display: none; }
+ 	.testimonial-text p { margin-top: 30px;	padding: 0px 20px; }
+ 	.testimonial-text { text-align: center; padding-top: 0px;}
+	.testimonial-image img { width: 50%; }
+	.testimonial-main-container { border-top: 1px solid #999; }
+	.testimonial-container .carousel-control { height: 65%; }
+	#tcb-testimonial-carousel { min-height: 460px; }
+
+
+	/*--------Ready to book-------------------*/
+	.ready-to-book-image { background-image: url('../../images/customer_portal/Back_footer_320.png'); min-height: 296px; }
+	.ready-to-book-contact-section { text-align: center; /*position: absolute;*/ margin-top: 1%; display: block; }
+	.ready-to-book-booknow-section { margin-top: 42%; display: none; }
+	.ready-to-book-contact-subsection1, .ready-to-book-contact-subsection2, .ready-to-book-contact-subsection3 { width: 100%; display: inline-block; }
+	.ready-to-book-booknow-mobile { display: block;	margin-top: 10%; }
+	.ready-to-book-heading { margin-top: 10%; }
+	.ready-to-book-booknow-mobile button { width: 90%; display: none; }
+	.footer-booknow button { width: 90%; }
+}
+
+/* Landscape phones and portrait tablets */
+@media (min-width: 481px) and (max-width: 767px) {
+	body { font-size: 14px; }
+	.pure-drawer { width: 300px !important; }
+	.pure-toggle-label { left: 2% !important; }
+	.phone-number, .phone-number-icon {	display: none; }
+	.home-navigation { padding: 10px 20px 8px 20px; /*height: 60px;*/ }
+	.logo-image { /*background-image: url(../../images/customer_portal/logo.png); background-repeat: no-repeat; background-size: contain;*/ height: 38px; width: 112px; display: inline-block; margin-top: 4px; }
+	span.request-callback { display: none; }
+	.callme-request-desktop { display: none; }
+	.callme-request-mobile { display: inline-block;	}
+	.hide-on-large-screens { display: block; }
+
+	/*scroll*/
+	.callme-input-scroll-fields .container { padding: 0px !important; }
+	.callme-input-scroll-fields { height: auto !important; }
+	input.input-scroll-name { width: 100%; margin-left: 0px; }
+	input.input-scroll-phone { width: 100%; }	
+	.scroll-phone, .scroll-submit { text-align: center; }
+	button.callme-input-scroll-submit { width: 100%; }
+	.scroll-or { font-size: 1.4em; font-family: 'Montserrat-Regular', sans-serif; text-align: center; }
+	.callme-input-scroll-fields .container .row > div { margin-bottom: 13px; }
+	button.makecall-input-scroll-submit {}
+	img.callme1 { position: relative; top: 9px; right: 6px; float: right; }
+	.custom-width-img { width: 45px !important; }
+	.callme-input-result-success, .callme-input-result-error { top: 62px !important; }
+	
+  /* -- SLIDER ----*/
+	.slider-headtext { left: 50% !important; top: 21%; width: 45%; }
+	.desktop-slider, .large-screen-slider, .mobile-slider { display: none; }
+	.tablet-slider { display: block; }
+	.slider-heading { /*font-size: 2em;*/ }
+
+	/* BOOK NOW */
+	.booknow-container { width: 100%; top: -20px; }
+	.locations-section { text-align: center; width: 100%; border-radius: 0px; height: 45px; background: rgba(255, 255, 255, 0.7); margin-bottom: 4px; padding: 7px 0px 11px 20px; /*padding-left: 46%;*/ font-weight: bold; }
+	.date-section { width: 100%; height: 45px; background: rgba(255, 255, 255, 0.7); margin-bottom: 4px; padding: 3px 3px 7px 38px; font-weight: bold; }
+	.date-section .input-group .form-control { background: transparent; /*text-align: center;*/ padding-left: 42%; }
+	.timeslot-section { width: 100%; height: 45px; background: rgba(255, 255, 255, 0.7); margin-bottom: -10px; padding: 7px 6px 11px 20px; font-weight: bold; }
+	.timeslot-section select { background: transparent; width: 100%; text-align: justify; padding-left: 41%; }
+	.book-now-button { width: 100%;	border-radius: 30px; height: 45px; padding: 12px 24px; text-align: center; }
+	.ac-select-wrapper { width: 100% !important; }
+	.ac-select-main { min-width: 99% !important; max-width: 95% !important; }
+	.ac-select-table { width: 95%; }
+
+    /*---HOW IT WORKS------*/
+	.col-centered { display: block; }
+	.row-centered { display: inline-block; }
+
+	/* --SANCHETI ASSOCIATION--- */
+	.sancheti-assoc-image {	background-image: url('../../images/customer_portal/sancheti_768.png'); min-height: 444px; }
+	.sancheti-assoc-text { width: 63%; padding-left: 10px; padding-right: 10px; }
+	.sancheti-text-mobile { display: block; }
+	.sancheti-text-desktop { display: none; }
+	.sancheti-assoc-content { margin-top: 8%; }
+	.sancheti-assoc-heading { margin-top: 5%; width: 60%; margin-bottom: 10px; font-size: 1.8em; padding-left: 5px; }
+	.sancheti-assoc-image .container { padding: 0px 15px; }
+	/*.sancheti-logo-image-desktop {display: none;}
+	.sancheti-logo-image-mobile {display: block}*/
+	
+	/*----------Testimonials------------------*/
+ 	/*#testimonialCarousel .slide, .testimonial-center { height: 400px !important; }
+ 	.slide > img { margin-left: 38px !important; }*/
+ 	.testimonial-text h1 { display: none; }
+ 	.testimonial-text p { margin-top: 30px; padding: 0px 20px; }
+ 	.testimonial-text { text-align: center; padding-top: 0px; }
+	.testimonial-image img { width: 40%; }
+	.testimonial-main-container { border-top: 1px solid #999; }
+	#tcb-testimonial-carousel { min-height: 450px; }
+
+
+	/* ------Healyos on the go---------------------- */
+	.healyos_on_go_mobile_img {	display: block; }
+	.healyos_on_go_desktop_img { display: none; }
+
+	/* ----The physiotherapy experts--------------- */
+	.physio-experts-right-section { padding: 30px 20px 10px 20px; }
+	.physio-experts-left-section img { width: 75%; }
+	.physio-experts-learnmore { text-align: center; margin-bottom: 20px; }
+	.physio-experts-text-desktop { display: none; }
+	.physio-experts-text-mobile { display: block; }
+
+	/*.physio_experts_desktop_img {	display: none; }
+	.physio_experts_mobile_img { display: block; margin: 0 auto; }*/
+	.row.physio-experts-content { padding-top: 0; }
+
+	/*FAQ*****/
+	.faq-hide-mobile-view { display: none; }
+	
+	/* ------Ready to book--------------------- */
+	.ready-to-book-image { background-image: url('../../images/customer_portal/Back_footer_768.png'); min-height: 393px; }
+	.ready-to-book-booknow-section { display: none; }
+	.ready-to-book-booknow-mobile { display: none; }
+	.ready-to-book-contact-section { display: block; margin-top: 10% !important; }
+	.ready-to-book-heading { margin-top: 10%; }
+	.ready-to-book-booknow-mobile button { width: 340px; }
+	.footer-booknow button { width: 260px; }
+
+    /* ----FOOTER CSS -----*/
+	.footer-sub-section1 { width: 45%; }
+	.footer-sub-section2 { width: 45%; }
+}
+
+
+/* Extra Large desktops and laptops */
+@media (min-width: 1500px) {
+	.dotted-image-left { width: 20%; }
+	.dotted-image-right { width: 20%; right: 28.5%; }
+	.navbar-header { float: none };
+}
+
+
+/* Large desktops and laptops */
+@media (min-width: 1200px) {
+	
+	.hide-on-large-screens { display: none; }
+	
+	/*-----slider-----------*/
+	.desktop-slider, .tablet-slider, .mobile-slider { display: none; }
+	.large-screen-slider { display: block; }
+	
+	/* ------Ready to book--------------------- */
+	.ready-to-book-image { background-image: url('../../images/customer_portal/Back_footer_1200.png'); min-height: 393px; }
+
+	/*--------Testimonials-------------*/
+	.testimonial-image img { width: 60%; }
+	
+	/*sancheti assoc*/
+	.sancheti-assoc-image { background-image: url('../../images/customer_portal/sancheti_1200.png'); }
+	/*.sancheti-logo-image-desktop { display: block; }
+	.sancheti-logo-image-mobile { display: none; }*/
+	
+	/*The physio experts*/
+	.physio-experts-left-section img { width: 75%; }
+}
+
+/* Landscape tablets and medium desktops */
+@media (min-width: 992px) and (max-width: 1199px) {
+	body { font-size: 16px; }
+	.hide-on-large-screens { display: none; }
+	
+	/*-----slider-----------*/
+	.large-screen-slider, .tablet-slider, .mobile-slider { display: none; }
+	.desktop-slider { display: block; }	
+
+	/* ------Ready to book--------------------- */
+	.ready-to-book-image { background-image: url('../../images/customer_portal/Back_footer_992.png'); min-height: 393px; }
+
+	/*--------The Physio experts----------*/
+	.physio-experts-left-section img { width: 85%; }
+	.physio-experts-right-section { margin-top: 20px; }
+	
+	/*------Testimonials----------------*/
+	.testimonial-image img { width: 100%; }
+	
+	/*sancheti assoc*/
+	.sancheti-assoc-image { background-image: url('../../images/customer_portal/sancheti_992.png'); }
+
+	/*.sancheti-logo-image-desktop { display: block; }
+	.sancheti-logo-image-mobile { display: none; }*/
+}
+
+/* Portrait tablets and small desktops */
+@media (min-width: 768px) and (max-width: 991px) {
+	.container { /*width: 900px;*/ }
+	body { font-size: 14px; }
+
+   /*----Header-------------*/
+	.phone-number {	vertical-align: text-bottom; }
+	.hide-on-large-screens { display: none;	}
+	.pure-drawer { width: 300px !important; }
+	.logo-spacing {	width: 10px;	}
+	.portrait-tablet1 { width: 31%; }
+	.portrait-tablet2 { width: 66%; }
+	.navbar-toggle { margin-right: 0; padding: 9px 0px; }
+
+   /*-----slider-----------*/
+	.desktop-slider, .large-screen-slider, .mobile-slider { display: none; }
+	.tablet-slider { display: block; }
+	.slider-headtext { left: 45% !important; }
+	
+	/*----Book now---------*/
+	.booknow-container { width: 718px; }
+	.locations-section { width: 218px; }
+	.ac-select-table { width: 82% !important; }
+	div.ac-select-popup { min-width: 380px !important; }
+	.date-section {	width: 175px; }
+	.input-group-addon { padding: 6px 2px; }
+	.timeslot-section { width: 179px; padding: 16px 10px 11px 16px; }
+	.timeslot-section select { width: 151px; }
+	.book-now-button { width: 146px; padding: 21px 6px; }
+
+	/*-----How it works------------*/
+	.howitworks-subsection { padding: 20px 30px; }
+
+	/*-------Sancheti association---------------*/
+	.sancheti-assoc-heading { width: 41%; padding-left: 25px; /* margin-bottom: 65px;*/ margin-bottom: 31px; }
+	.sancheti-assoc-text { /*width: 100%;*/ width: 70%; padding-left: 25px; padding-right: 25px; }
+	.sancheti-assoc_redirect { padding-left: 25px; }
+	.sancheti-assoc-image { background-image: url('../../images/customer_portal/sancheti_768.png'); /*min-height: 565px;*/ }
+	/*.sancheti-logo-image-desktop { display: block; }
+	.sancheti-logo-image-mobile { display: none; }*/
+  	
+  	/* ----The physiotherapy experts--------------- */
+
+	/*.physio-experts-right-section { padding: 30px; }*/
+	/*.physio_experts_desktop_img { display: none; }
+	.physio_experts_mobile_img { display: block; margin: 0 auto; }
+	.physio_experts_desktop_img { width: 100%; }*/
+	.physio-experts-right-section { margin-top: 15px; }
+
+	/******* healyos to go***********/
+	.healyos_on_go_desktop_img { width: 100%; }
+
+	/*-------Testimonials--------*/
+	/*.slide > img { width: 22%; }
+	.text { width: 51%; vertical-align: middle; }*/
+	.testimonial-image img { width: 100%; top: 30px; position: relative; }
+
+	/* ------Ready to book--------------------- */
+	.ready-to-book-image { background-image: url('../../images/customer_portal/Back_footer_768.png'); min-height: 393px; }
+	.ready-to-book-heading { margin-top: 8%; }
+	.ready-to-book-contact-section { /*margin-top: 8%;*/ display: none; }
+
+	#tcb-testimonial-carousel {
+	    min-height: 205px;
+	}
+
+}
+

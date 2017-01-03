@@ -1,0 +1,65 @@
+<div class="ready-to-book-content">	
+	<div class="ready-to-book-heading">Ready to book</div>
+	<div class="booknow-container ">
+		<div class="ready-to-book-booknow-section">
+			<div class="booknow-outer">
+				<span class="locations-section">
+					<select class="ac-select"
+			            id="lCombo"
+			            ac-model="innerPageCtrl.model.selectedLocation"
+			            ac-refresh = innerPageCtrl.model.acRefresh
+			            ac-options="l.val for l in innerPageCtrl.method.getAllLocations()"
+			            ac-settings="{ allowClear: true, maxWidth: '250px', itemsInView: 20, loadOnCreate: false, comboMode: false, loadOnOpen: true, minWidth: '250px', height: '23px' }"
+			            ac-change="innerPageCtrl.method.locationSelected(value)"
+			            ac-key="pin">
+			        </select>
+			    </span>
+				<span class="date-section">
+			        <div class='input-group date dt'>
+			            <input type="text" id = "dt3"
+			            name = "fromDate"
+			            date-disabled="innerPageCtrl.disabled(date, mode)"
+			            title="From Date" 
+			            class="callmeField2 datetimepicker2 form-control"
+			            placeholder="Pick a Date"
+			           />
+			            <span class="input-group-addon">
+			                <label for="dt3">
+			                	<img src="./images/customer_portal/down_arrow.png" />
+			                </label>
+			            </span>
+			        </div>
+			    </span>
+			    <span class="timeslot-section">
+			        <select ng-model="innerPageCtrl.model.timeslot" ng-options = "time.starttime for time in innerPageCtrl.model.timeslotArray">
+			            <option value="">Select Time</option>
+			        </select>
+			    </span>
+
+				<span class="book-now-button" ng-click="innerPageCtrl.method.redirectToBooking1()">BOOK MY SESSION</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="ready-to-book-booknow-mobile">
+		<button type="button">START HERE</button>
+	</div>
+	<div class="ready-to-book-contact-section">
+		<span class="ready-to-book-contact-subsection1">
+			<img src="./images/customer_portal/Icon_call_white.png">
+			<a href="tel:02065802802"><span class="ready-to-book-phonenumber">020-65802802</span></a>
+		</span>
+		<div class="footer-booknow home-redirecting-buttons">
+			<button type="button" ng-click="cpc.navigateToHome()">BOOK NOW</button>
+		</div>
+		<span class="ready-to-book-contact-subsection2">
+			<span class="dash"></span>
+			<span class="or">or</span>
+			<span class="dash"></span>
+		</span>			
+		<span class="ready-to-book-contact-subsection3">
+			<img src="./images/customer_portal/Icon_callback_white.png">
+			<span class="ready-to-book-callback">REQUEST A CALL BACK</span>
+		</span>
+	</div>
+</div>

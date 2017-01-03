@@ -1,0 +1,214 @@
+<div class="booking2-custinfo-main-container">
+	<div class="booking2-custinfo-heading">Customer Information</div>
+	<form class="cust-info-form" name="bookingCtrl.custInfoForm" ng-submit = "bookingCtrl.custInfoForm.$valid && submit()" novalidate autocomplete="off">
+
+		<div class="general-error-message" ng-if="bookingCtrl.custInfoForm.$invalid && bookingCtrl.flags.custInfoFormSubmitted">
+			<p>Some of the information entered below is invalid or incomplete</p>
+		</div>
+		<div class="custinfo-myaccount">
+			
+			<!-- <div class="custinfo-radio-checkbox">
+				<label>
+					<input id="userAccount" type="checkbox" ng-model="bookingCtrl.custInfoFormFields.hasAccount" class="hidden"></input>
+					<label for="userAccount">
+						<img class="check-image" ng-src="{{bookingCtrl.custInfoFormFields.hasAccount? './images/customer_portal/radiobutton_selected.png' : './images/customer_portal/radiobutton1.png'}}" />
+					</label>
+					I already have an account
+				</label>				
+			</div> -->
+			
+			<div class="cust-info-form-group">
+				<div class="cust-info-form-section row">
+				<!-- first name -->
+					<div class="col-xs-12 col-sm-6 cust-info-form-subsection" ng-class="{'has-error-left': bookingCtrl.custInfoForm.firstName.$invalid && bookingCtrl.flags.custInfoFormSubmitted}">
+						<input type="text" 
+						ng-model="bookingCtrl.custInfoFormFields.firstName" 
+						name="firstName"
+						ng-pattern = "/^[a-zA-Z]+$/"
+						placeholder="First Name*"
+						ng-required="true" />
+						
+						<span ng-if="bookingCtrl.custInfoForm.firstName.$invalid && bookingCtrl.flags.custInfoFormSubmitted"
+						class="sign-validation">
+							<img src="./images/customer_portal/cross.png">
+						</span>
+						<span ng-if="bookingCtrl.custInfoForm.firstName.$valid && bookingCtrl.flags.custInfoFormSubmitted"
+						class="sign-validation" >
+							<img src="./images/customer_portal/tick.png">
+						</span>
+
+						<span ng-if="bookingCtrl.custInfoForm.firstName.$invalid && bookingCtrl.flags.custInfoFormSubmitted">
+							<span class="validation-message" ng-if="bookingCtrl.custInfoForm.firstName.$error.required">Required</span>
+							<span class="validation-message" ng-if="bookingCtrl.custInfoForm.firstName.$error.pattern">Invalid</span>
+						</span>
+					</div>
+					
+					
+					<!-- last name -->
+					<div class="col-xs-12 col-sm-6 cust-info-form-subsection" ng-class="{'has-error-right': bookingCtrl.custInfoForm.lastName.$invalid && bookingCtrl.flags.custInfoFormSubmitted}">
+						<input type="text" 
+						ng-model="bookingCtrl.custInfoFormFields.lastName" 
+						name="lastName" 
+						ng-pattern="/^[a-zA-Z]+$/" 
+						placeholder="Last Name" />
+						
+						<span ng-if="bookingCtrl.custInfoForm.lastName.$invalid && bookingCtrl.flags.custInfoFormSubmitted" class="sign-validation" >
+							<img src="./images/customer_portal/cross.png">							
+						</span>
+						<span ng-if="bookingCtrl.custInfoForm.lastName.$valid && bookingCtrl.flags.custInfoFormSubmitted" class="sign-validation">
+							<img src="./images/customer_portal/tick.png">
+						</span>
+
+						<span ng-if="bookingCtrl.custInfoForm.lastName.$invalid && bookingCtrl.flags.custInfoFormSubmitted">
+							<span class="validation-message" ng-if="bookingCtrl.custInfoForm.lastName.$error.pattern">Invalid</span>
+						</span>
+					</div>
+					
+				</div>
+				<div class="cust-info-form-section row">
+				<!-- Mobile -->
+					<div class="col-xs-12 col-sm-6 cust-info-form-subsection" ng-class="{'has-error': bookingCtrl.custInfoForm.mobile.$invalid && bookingCtrl.flags.custInfoFormSubmitted}">
+						<input type="text" 
+						ng-model="bookingCtrl.custInfoFormFields.mobile" 
+						name="mobile"
+						ng-pattern="/^[0-9]{10}$/"
+						placeholder="Mobile Number*"
+						ng-required="true" />
+
+						<span ng-if="bookingCtrl.custInfoForm.mobile.$invalid && bookingCtrl.flags.custInfoFormSubmitted" class="sign-validation" >
+							<img src="./images/customer_portal/cross.png">
+						</span>
+						<span ng-if="bookingCtrl.custInfoForm.mobile.$valid && bookingCtrl.flags.custInfoFormSubmitted" class="sign-validation">
+							<img src="./images/customer_portal/tick.png">
+						</span>
+
+						<span ng-if="bookingCtrl.custInfoForm.mobile.$invalid && bookingCtrl.flags.custInfoFormSubmitted">
+						<span class="validation-message" ng-if="bookingCtrl.custInfoForm.mobile.$error.required">Required</span>
+							<span class="validation-message" ng-if="bookingCtrl.custInfoForm.mobile.$error.pattern">Invalid</span>
+						</span>
+					</div>
+					
+
+					<!-- Gender -->
+					<div class="col-xs-12 col-sm-6 cust-info-form-subsection" ng-class="{'has-error': bookingCtrl.custInfoForm.gender.$invalid && bookingCtrl.flags.custInfoFormSubmitted}">
+						<!-- <input type="text" 
+						ng-model="bookingCtrl.custInfoFormFields.gender" 
+						name="gender" 
+						placeholder="Gender"></input> -->
+						<select name="gender" ng-model="bookingCtrl.custInfoFormFields.gender" required>
+							<option ng-style="bookingCtrl.optionStyle" value="">Gender</option>
+							<option ng-style="bookingCtrl.optionStyle" value="male">Male</option>
+							<option ng-style="bookingCtrl.optionStyle" value="female">Female</option>
+						</select>
+						<span ng-if="bookingCtrl.custInfoForm.gender.$invalid && bookingCtrl.flags.custInfoFormSubmitted" class="sign-validation" >
+							<img src="./images/customer_portal/cross.png">
+						</span>
+						<span ng-if="bookingCtrl.custInfoForm.gender.$valid && bookingCtrl.flags.custInfoFormSubmitted" class="sign-validation">
+							<img src="./images/customer_portal/tick.png">
+						</span>
+
+						<span ng-if="bookingCtrl.custInfoForm.gender.$invalid && bookingCtrl.flags.custInfoFormSubmitted">
+							<span class="validation-message" ng-if="bookingCtrl.custInfoForm.gender.$error.required">Required</span>
+						</span>
+					</div>
+					
+				</div>
+
+				<div class="cust-info-form-section row">
+					<!-- email -->
+					<div class="col-xs-12 cust-info-form-subsection" ng-class="{'has-error-full': bookingCtrl.custInfoForm.emailid.$invalid && bookingCtrl.flags.custInfoFormSubmitted}">
+						<input type="email" 
+						ng-model="bookingCtrl.custInfoFormFields.email" 
+						name="emailid"
+						placeholder="Email Address*"
+						ng-required="true" />
+
+						<span ng-if="bookingCtrl.custInfoForm.emailid.$invalid && bookingCtrl.flags.custInfoFormSubmitted" class="sign-validation" >
+							<img src="./images/customer_portal/cross.png">
+						</span>
+						<span ng-if="bookingCtrl.custInfoForm.emailid.$valid && bookingCtrl.flags.custInfoFormSubmitted" class="sign-validation">
+							<img src="./images/customer_portal/tick.png">
+						</span>
+
+						<span ng-if="bookingCtrl.custInfoForm.emailid.$invalid && bookingCtrl.flags.custInfoFormSubmitted">
+							<span class="validation-message" ng-if="bookingCtrl.custInfoForm.emailid.$error.required">Required</span>
+							<span class="validation-message" ng-if="bookingCtrl.custInfoForm.emailid.$error.email">Invalid</span>
+						</span>
+					</div>
+					
+				</div>
+			</div> 
+
+			<!-- Appointment Address -->
+			<div class="booking2-custinfo-heading">Appointment Address</div>
+
+			<div class="cust-info-form-group" ng-class="{'has-error-location': bookingCtrl.custInfoForm.address.$invalid && bookingCtrl.flags.custInfoFormSubmitted}">
+				<div class="left-inner-addon">
+				  	<span class="location_icon" ng-click="bookingCtrl.method.getlocation()">
+				  		<span class="locate-me-text">Locate me</span>
+				  		<i class="fa fa-map-marker"></i>
+				  	</span>
+				  	<input type="text"
+			        ng-model="bookingCtrl.custInfoFormFields.address"
+					value="{{bookingCtrl.custInfoFormFields.address}}"
+					name="address" 
+					placeholder="Locate or Enter your Location"
+					class="cust-info-form-location" 
+					ng-required="true"/>
+				</div>
+				<span ng-if="bookingCtrl.custInfoForm.address.$invalid && bookingCtrl.flags.custInfoFormSubmitted">
+					<span class="validation-message-location" ng-if="bookingCtrl.custInfoForm.address.$error.required">Required</span>
+					<!-- <span class="validation-message" ng-if="bookingCtrl.custInfoForm.address.$error.pattern">Invalid</span> -->
+				</span>
+			</div>		
+
+			<!-- Additional Comments -->
+			<div class="booking2-custinfo-heading">Additional Comments</div>
+			<div class="col-xs-12 additional-comments">
+				<textarea 
+				ng-model="bookingCtrl.custInfoFormFields.comments" 
+				name="comments"></textarea>
+			</div>
+			<!-- <div class="cust-info-form-group">
+				<div class="cust-info-form-section row">
+					<div class="col-xs-12 cust-info-form-subsection">
+						<textarea 
+						ng-model="bookingCtrl.custInfoFormFields.comments" 
+						name="comments"></textarea>
+					</div>
+				</div>
+			</div> -->
+			<div class="cust-info-form-section1 row">
+				<div class="col-xs-8 col-sm-4 promocode-input-subsection">
+					<input type="promocode" 
+					ng-model="bookingCtrl.custInfoFormFields.promocode"
+					value="bookingCtrl.custInfoFormFields.promocode"
+					name="promocode"
+					placeholder="Have a Promo Code?"/>
+				</div>
+				<div class="col-xs-2 col-sm-2 promocode-button-subsection">
+					<button ng-disabled="!bookingCtrl.custInfoFormFields.promocode" type="button" ng-click = "bookingCtrl.method.applyPromoCode()">Apply</button>
+				</div>
+			</div>
+			<div class="promocode-api-result-subsection">
+				<div ng-if="bookingCtrl.flags.promocodeValid == 'Not Valid'" style="color: #D71F27;margin-top: 5px;">{{bookingCtrl.model.promocodeResultMessage}}</div>
+				<div ng-if="bookingCtrl.flags.promocodeValid == 'Valid'" style="color: green;margin-top: 5px;">{{bookingCtrl.model.promocodeResultMessage}}</div>
+			</div>
+
+			<div class="custinfo-radio-checkbox cust-info-form-section row">
+				<label>
+					<input id="signup" type="checkbox" ng-model="bookingCtrl.custInfoFormFields.signup" class="hidden"></input>
+					<label for="signup">
+						<img class="check-image" ng-src="{{bookingCtrl.custInfoFormFields.signup? './images/customer_portal/checkbox_selected.png' : './images/customer_portal/checkbox.png'}}" />
+					</label>
+					Keep me informed of HealYos promotions
+				</label>				
+			</div>
+		</div>
+
+		<div class="form-footer-buttons">
+			<button type="button" class="form-button-left custinfo-buttons" ng-click="bookingCtrl.method.navigateBackToBooking1()">BACK</button>
+			<button type="button" class="form-button-right custinfo-buttons" ng-click="bookingCtrl.method.bookNewAppointment()">DONE</button>
+		</div>
+	</form>
+</div>

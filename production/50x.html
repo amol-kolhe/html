@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <title>Healyos - The Physio Experts</title>
+
+        <base href="/web/">
+
+        <link href="./css/bootstrap.min.css" async rel="stylesheet">
+        <link href="./css/bootstrap-social.css" async rel="stylesheet">
+        <link href="./css/bootstrap-theme.min.css" async rel="stylesheet">
+        <link href="./css/font-awesome.min.css" async rel="stylesheet">
+
+        <link rel="stylesheet" type="text/css" href="./css/customerPortal/styles.css" defer>
+
+        <style type="text/css">
+            @media (max-width: 767px) and (min-width: 481px) {
+                .backdrop {
+                    background: url(./images/customer_portal/back_hero2_1_320_sml.jpg); no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    height: 644px;
+                }
+            }            
+            @media (max-width: 767px) {
+                .backdrop {
+                    background: url(./images/customer_portal/back_hero2_1_320_sml.jpg); no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    height: 644px;
+                }
+            }
+            @media (min-width: 768px) {
+                .backdrop {
+                    background: url(./images/customer_portal/back_hero2_768_sml.png); no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    height: 100%;
+                }
+            }
+            @media (min-width: 992px) {
+                .backdrop {
+                    background: url(./images/customer_portal/back_hero2_992_sml.png); no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    height: 100%;
+                }
+            }
+            @media (min-width: 1200px) {
+                .backdrop {
+                    background: url(./images/customer_portal/back_hero2_1200_sml.png); no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    height: 100%;
+                }
+            }
+
+            .right-box {
+                float: none;
+                display: inline-block;
+                margin-top: 12%;
+            }
+
+            .container.full-height {
+                margin-top: 66px;
+                height: 90%;
+            }
+
+            p.slider-subtext2 {
+                font-size: 1.5em;
+                font-family: Neuton-Regular,sans-serif;
+                text-shadow: none;
+                background-color: #F00;
+            }
+
+            .slider-subtext2 .text {
+                padding: 10px;
+                color: #FFF;
+            }
+
+            .fa-home {
+                color: #F00;
+                font-size: 1.5em;
+            }
+
+            .no-wrap {
+                white-space: nowrap;
+            }
+
+            .portrait-tablet1{
+                width: 50% !important;
+            }
+
+            .slider-heading {
+                font-size: 2em;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar home-navigation navbar-fixed-top" id="menu-height">
+            <div class="container">
+                <div class="navbar-header row">
+                    <div class="col-xs-6 portrait-tablet1">
+                        <a href="/">
+                            <span class="logo-image"></span>
+                        </a>
+                    </div>
+                    <div class="col-xs-6 call-me text-right">
+                        <a href="tel:02065802802">
+                            <img class="1phone-number-icon" src="./images/customer_portal/call.png" />
+                        </a>
+                        <span class="phone-number hidden-xs">020-65802802</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid backdrop">
+            <div class="container full-height">
+                <div style="height: 80%;" class="row">
+                    <div class="col-xs-6">
+                        <div class="hidden-sm hidden-md hidden-lg">
+                            <div class="slider-heading">Heal Your Pain Feel Awesome Again</div>
+                            <p class="slider-subtext ng-binding" ng-bind-html="img.subtext">Expert Physios<br> At Your Door <br> <span class="sancheti-subtext2-mobile">Endorsed by Sancheti.</span> <img class="sancheti-subtext-logo-mobile" src="./images/customer_portal/sancheti_sml_logo.png"></p>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 right-box">
+                        <div class="hidden-xs">
+                            <div class="slider-heading">High Quality Physiotherapy Endorsed by Sancheti</div>
+                            <p class="slider-subtext ng-binding" ng-bind-html="img.subtext">
+                                <img class="sancheti-subtext-logo" src="./images/customer_portal/sancheti_sml_logo.png">India's Premier Orthopaedic Institute</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="height: 20%;" class="row text-center">
+                    <div>
+                        <div class="callme-error-message">
+                            <span>The page you are looking for is temporarily unavailable.</span>
+                            <br>
+                            <span>Please go to Home. 
+                                <a href="/">
+                                    <i class="fa fa-home" aria-hidden="true"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

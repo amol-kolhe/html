@@ -1,0 +1,509 @@
+<div class="mainContent1" ng-controller="CustCtrl">
+	<script type="text/ng-template" id="fbRegistrationInfo1">
+		<form name="signUpFbForm.fbRegistration" data-ng-init="" data-ng-submit="confirm('OK')">
+			<table style="width:100%">
+				<tr>
+					<td colspan="2">
+						<h4>Please provide following details</h4>
+					</td>
+				</tr>
+				<tr>
+					<td> Phone number: </td>
+					<td>
+						<input type = "text"
+							   name = "patientPhoneNumber"
+							   data-ng-model = "patientFbSignUp.phoneNumber"
+							   data-ng-minlength = "10"
+							   data-ng-maxlength ="10"
+							   data-ng-pattern = "/^\d*$/"
+							   data-ng-class = "{red: signUpFbForm.fbRegistration.patientPhoneNumber.$invalid && signUpFbForm.fbRegistration.patientPhoneNumber.$dirty && visitedPatientPhoneNumber, green: signUpFbForm.fbRegistration.patientPhoneNumber.$valid && signUpFbForm.fbRegistration.patientPhoneNumber.$dirty && visitedPatientPhoneNumber}"
+							   title = "Enter phone number here"
+							   placeholder = "Enter phone number"
+							   data-ng-blur = "visitedPatientPhoneNumber = true"
+							   data-ng-focus = "visitedPatientPhoneNumber = false"
+							   data-ng-required = "true"
+								/>
+                            <span style = "color:red" data-ng-show = "signUpFbForm.fbRegistration.patientPhoneNumber.$dirty && signUpFbForm.fbRegistration.patientPhoneNumber.$invalid && visitedPatientPhoneNumber">
+                                <span data-ng-show = "signUpFbForm.fbRegistration.patientPhoneNumber.$error.pattern"> Invalid phone number. </span>
+                                <span data-ng-show = "((signUpFbForm.fbRegistration.patientPhoneNumber.$error.minlength || signUpFbForm.fbRegistration.patientPhoneNumber.$error.maxlength) && signUpFbForm.fbRegistration.patientPhoneNumber.$dirty) && (!signUpFbForm.fbRegistration.patientPhoneNumber.$error.pattern)">Phone number should be of 10 digits.</span>
+                                <span data-ng-show = "signUpFbForm.fbRegistration.patientPhoneNumber.$error.required">Contact phone is required.</span>
+                            </span>
+					</td>
+				</tr>
+				<tr>
+					<td>BirthDate: </td>
+					<td style="cursor:pointer;">
+						<datepicker2>
+						</datepicker2>&nbsp;&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td> Email address: </td>
+					<td>
+						<input type = "text"
+							   name = "patientEmail"
+							   data-ng-model = "patientFbSignUp.email"
+							   data-ng-pattern = "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+							   data-ng-class = "{red: signUpFbForm.fbRegistration.patientEmail.$invalid && signUpFbForm.fbRegistration.patientEmail.$dirty && visitedPatientEmail, green: signUpFbForm.fbRegistration.patientEmail.$valid && signUpFbForm.fbRegistration.patientEmail.$dirty && visitedPatientEmail}"
+							   title = "Enter email address here"
+							   placeholder = "Enter email address"
+							   data-ng-blur = "visitedPatientEmail = true"
+							   data-ng-focus = "visitedPatientEmail = false"
+							   data-ng-required = "true"
+								/>
+						<span style = "color:red" data-ng-show = "signUpFbForm.fbRegistration.patientEmail.$dirty && signUpFbForm.fbRegistration.patientEmail.$invalid && visitedPatientEmail">
+							<span data-ng-show = "signUpFbForm.fbRegistration.patientEmail.$error.required"> Email address is required. </span>
+							<span data-ng-show = "signUpFbForm.fbRegistration.patientEmail.$error.pattern"> Invalid email address. </span>
+						</span>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">&nbsp;</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<button type="submit"
+								data-ng-disabled="signUpFbForm.fbRegistration.$invalid"
+								class="btn btn-primary">
+							Submit
+						</button>
+						&nbsp;&nbsp;&nbsp;
+						<button type="button"
+								class="btn"
+								data-ng-click="closeThisDialog('Cancel')">
+							Cancel
+						</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</script>
+	<script type="text/ng-template" id="fbRegistrationInfo2">
+		<form name="signUpFbForm.fbRegistration" data-ng-init="" data-ng-submit="confirm('OK')">
+			<table style="width:100%">
+				<tr>
+					<td colspan="2">
+						<h4>Please provide following details</h4>
+					</td>
+				</tr>
+				<tr>
+					<td> Phone number: </td>
+					<td>
+						<input type = "text"
+							   name = "patientPhoneNumber"
+							   data-ng-model = "patientFbSignUp.phoneNumber"
+							   data-ng-minlength = "10"
+							   data-ng-maxlength ="10"
+							   data-ng-pattern = "/^\d*$/"
+							   data-ng-class = "{red: signUpFbForm.fbRegistration.patientPhoneNumber.$invalid && signUpFbForm.fbRegistration.patientPhoneNumber.$dirty && visitedPatientPhoneNumber, green: signUpFbForm.fbRegistration.patientPhoneNumber.$valid && signUpFbForm.fbRegistration.patientPhoneNumber.$dirty && visitedPatientPhoneNumber}"
+							   title = "Enter phone number here"
+							   placeholder = "Enter phone number"
+							   data-ng-blur = "visitedPatientPhoneNumber = true"
+							   data-ng-focus = "visitedPatientPhoneNumber = false"
+							   data-ng-required = "true"
+								/>
+                            <span style = "color:red" data-ng-show = "signUpFbForm.fbRegistration.patientPhoneNumber.$dirty && signUpFbForm.fbRegistration.patientPhoneNumber.$invalid && visitedPatientPhoneNumber">
+                                <span data-ng-show = "signUpFbForm.fbRegistration.patientPhoneNumber.$error.pattern"> Invalid phone number. </span>
+                                <span data-ng-show = "((signUpFbForm.fbRegistration.patientPhoneNumber.$error.minlength || signUpFbForm.fbRegistration.patientPhoneNumber.$error.maxlength) && signUpFbForm.fbRegistration.patientPhoneNumber.$dirty) && (!signUpFbForm.fbRegistration.patientPhoneNumber.$error.pattern)">Phone number should be of 10 digits.</span>
+                                <span data-ng-show = "signUpFbForm.fbRegistration.patientPhoneNumber.$error.required">Contact phone is required.</span>
+                            </span>
+					</td>
+				</tr>
+				<tr>
+					<td>BirthDate: </td>
+					<td style="cursor:pointer;">
+						<datepicker2>
+						</datepicker2>&nbsp;&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">&nbsp;</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<button type="submit"
+								data-ng-disabled="signUpFbForm.fbRegistration.$invalid"
+								class="btn btn-primary">
+							Submit
+						</button>
+						&nbsp;&nbsp;&nbsp;
+						<button type="button"
+								class="btn"
+								data-ng-click="closeThisDialog('Cancel')">
+							Cancel
+						</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</script>
+	<script type="text/ng-template" id="fbRegistrationInfo3">
+		<form name="signUpFbForm.fbRegistration" data-ng-init="" data-ng-submit="confirm('OK')">
+			<table style="width:100%">
+				<tr>
+					<td colspan="2">
+						<h4>Please provide following details</h4>
+					</td>
+				</tr>
+				<tr>
+					<td> Phone number: </td>
+					<td>
+						<input type = "text"
+							   name = "patientPhoneNumber"
+							   data-ng-model = "patientFbSignUp.phoneNumber"
+							   data-ng-minlength = "10"
+							   data-ng-maxlength ="10"
+							   data-ng-pattern = "/^\d*$/"
+							   data-ng-class = "{red: signUpFbForm.fbRegistration.patientPhoneNumber.$invalid && signUpFbForm.fbRegistration.patientPhoneNumber.$dirty && visitedPatientPhoneNumber, green: signUpFbForm.fbRegistration.patientPhoneNumber.$valid && signUpFbForm.fbRegistration.patientPhoneNumber.$dirty && visitedPatientPhoneNumber}"
+							   title = "Enter phone number here"
+							   placeholder = "Enter phone number"
+							   data-ng-blur = "visitedPatientPhoneNumber = true"
+							   data-ng-focus = "visitedPatientPhoneNumber = false"
+							   data-ng-required = "true"
+								/>
+                            <span style = "color:red" data-ng-show = "signUpFbForm.fbRegistration.patientPhoneNumber.$dirty && signUpFbForm.fbRegistration.patientPhoneNumber.$invalid && visitedPatientPhoneNumber">
+                                <span data-ng-show = "signUpFbForm.fbRegistration.patientPhoneNumber.$error.pattern"> Invalid phone number. </span>
+                                <span data-ng-show = "((signUpFbForm.fbRegistration.patientPhoneNumber.$error.minlength || signUpFbForm.fbRegistration.patientPhoneNumber.$error.maxlength) && signUpFbForm.fbRegistration.patientPhoneNumber.$dirty) && (!signUpFbForm.fbRegistration.patientPhoneNumber.$error.pattern)">Phone number should be of 10 digits.</span>
+                                <span data-ng-show = "signUpFbForm.fbRegistration.patientPhoneNumber.$error.required">Contact phone is required.</span>
+                            </span>
+					</td>
+				</tr>
+				<tr>
+					<td> Email address: </td>
+					<td>
+						<input type = "text"
+							   name = "patientEmail"
+							   data-ng-model = "patientFbSignUp.email"
+							   data-ng-pattern = "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+							   data-ng-class = "{red: signUpFbForm.fbRegistration.patientEmail.$invalid && signUpFbForm.fbRegistration.patientEmail.$dirty && visitedPatientEmail, green: signUpFbForm.fbRegistration.patientEmail.$valid && signUpFbForm.fbRegistration.patientEmail.$dirty && visitedPatientEmail}"
+							   title = "Enter email address here"
+							   placeholder = "Enter email address"
+							   data-ng-blur = "visitedPatientEmail = true"
+							   data-ng-focus = "visitedPatientEmail = false"
+							   data-ng-required = "true"
+								/>
+						<span style = "color:red" data-ng-show = "signUpFbForm.fbRegistration.patientEmail.$dirty && signUpFbForm.fbRegistration.patientEmail.$invalid && visitedPatientEmail">
+							<span data-ng-show = "signUpFbForm.fbRegistration.patientEmail.$error.required"> Email address is required. </span>
+							<span data-ng-show = "signUpFbForm.fbRegistration.patientEmail.$error.pattern"> Invalid email address. </span>
+						</span>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">&nbsp;</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<button type="submit"
+								data-ng-disabled="signUpFbForm.fbRegistration.$invalid"
+								class="btn btn-primary">
+							Submit
+						</button>
+						&nbsp;&nbsp;&nbsp;
+						<button type="button"
+								class="btn"
+								data-ng-click="closeThisDialog('Cancel')">
+							Cancel
+						</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</script>
+	<script type="text/ng-template" id="fbRegistrationInfo4">
+		<form name="signUpFbForm.fbRegistration" data-ng-init="" data-ng-submit="confirm('OK')">
+			<table style="width:100%">
+				<tr>
+					<td colspan="2">
+						<h4>Please provide following detail</h4>
+					</td>
+				</tr>
+				<tr>
+					<td> Phone number: </td>
+					<td>
+						<input type = "text"
+							   name = "patientPhoneNumber"
+							   data-ng-model = "patientFbSignUp.phoneNumber"
+							   data-ng-minlength = "10"
+							   data-ng-maxlength ="10"
+							   data-ng-pattern = "/^\d*$/"
+							   data-ng-class = "{red: signUpFbForm.fbRegistration.patientPhoneNumber.$invalid && signUpFbForm.fbRegistration.patientPhoneNumber.$dirty && visitedPatientPhoneNumber, green: signUpFbForm.fbRegistration.patientPhoneNumber.$valid && signUpFbForm.fbRegistration.patientPhoneNumber.$dirty && visitedPatientPhoneNumber}"
+							   title = "Enter phone number here"
+							   placeholder = "Enter phone number"
+							   data-ng-blur = "visitedPatientPhoneNumber = true"
+							   data-ng-focus = "visitedPatientPhoneNumber = false"
+							   data-ng-required = "true"
+								/>
+                            <span style = "color:red" data-ng-show = "signUpFbForm.fbRegistration.patientPhoneNumber.$dirty && signUpFbForm.fbRegistration.patientPhoneNumber.$invalid && visitedPatientPhoneNumber">
+                                <span data-ng-show = "signUpFbForm.fbRegistration.patientPhoneNumber.$error.pattern"> Invalid phone number. </span>
+                                <span data-ng-show = "((signUpFbForm.fbRegistration.patientPhoneNumber.$error.minlength || signUpFbForm.fbRegistration.patientPhoneNumber.$error.maxlength) && signUpFbForm.fbRegistration.patientPhoneNumber.$dirty) && (!signUpFbForm.fbRegistration.patientPhoneNumber.$error.pattern)">Phone number should be of 10 digits.</span>
+                                <span data-ng-show = "signUpFbForm.fbRegistration.patientPhoneNumber.$error.required">Contact phone is required.</span>
+                            </span>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">&nbsp;</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<button type="submit"
+								data-ng-disabled="signUpFbForm.fbRegistration.$invalid"
+								class="btn btn-primary">
+							Submit
+						</button>
+						&nbsp;&nbsp;&nbsp;
+						<button type="button"
+								class="btn"
+								data-ng-click="closeThisDialog('Cancel')">
+							Cancel
+						</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</script>
+	<div data-ng-if="!userTabsFlg" style="padding:10px;">
+		<div style="1border:1px solid red; float:left; width:100%">
+			<div style="1border:1px solid red; float:left;">
+				<input type="button" data-ng-click="homeLogin('divOne')" data-ng-class="{active1: isActive('divOne')}" style="cursor:pointer;" value="Call Me Back" />
+				<input type="button" data-ng-click="homeLogin('divTwo')" data-ng-class="{active1: isActive('divTwo')}" style="cursor:pointer;" value="Sign In" />
+				<input type="button" data-ng-click="homeLogin('divSignup')" data-ng-class="{active1: isActive('divSignup')}" style="cursor:pointer;" value="Register" />
+			</div>
+
+			<div style="color:green; text-align: center; padding-top: 10px;" data-ng-if="custLogoutSuccess">
+				{{custLogoutSuccess}}
+			</div>
+			<div style="color:red; text-align: center; padding-top: 10px;" data-ng-if="custLogoutError">
+				{{custLogoutError}}
+			</div>
+		</div>
+		<div data-ng-show="divOne" class="clsloginborder">
+			<form name="quickAppointmentForm.patientSignUpForm" data-ng-submit="quickAppointmentForm.patientSignUpForm.$valid && quickAppointmentSubmit()" novalidate>
+				<table>
+					<tr>
+						<td> Quick Appointment </td>
+					</tr>
+					<tr></tr>
+					<tr></tr>
+					<tr></tr>
+					<tr>
+						<td>
+							<select class="clstxt2" name = "patientCity"
+									id = "quickAppointmentPatientCityId"
+									data-ng-model = "quickAppointmentPatient.city"
+									data-ng-class = "{red1: quickAppointmentForm.patientSignUpForm.patientCity.$invalid && quickAppointmentForm.patientSignUpForm.patientCity.$dirty, green2: quickAppointmentForm.patientSignUpForm.patientCity.$valid && quickAppointmentForm.patientSignUpForm.patientCity.$dirty}"
+									title = "Select your city here"
+									data-ng-required = "true">
+								<option value="">Select City</option>
+								<option value="Pune"> Pune </option>
+								<!-- <option value="Mumbai"> Mumbai </option>
+								<option value="Banglore"> Banglore </option>
+								<option value="Jaipur"> Jaipur </option> -->
+							</select>
+							<span style = "color:red" data-ng-show = "quickAppointmentForm.patientSignUpForm.patientCity.$dirty && quickAppointmentForm.patientSignUpForm.patientCity.$invalid">
+									<span data-ng-show = "quickAppointmentForm.patientSignUpForm.patientCity.$error.required">City is required.</span>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input class="clstxt2" type = "text"
+								   name = "patientName"
+								   data-ng-model = "quickAppointmentPatient.name"
+								   data-ng-pattern = "/^[a-zA-Z\s]*$/"
+								   data-ng-class = "{red1: quickAppointmentForm.patientSignUpForm.patientName.$invalid && quickAppointmentForm.patientSignUpForm.patientName.$dirty, green1: quickAppointmentForm.patientSignUpForm.patientName.$valid && quickAppointmentForm.patientSignUpForm.patientName.$dirty}"
+								   title = "Enter the name here"
+								   placeholder = "Enter your name"
+								   data-ng-required = "true"
+									/>
+							<span style = "color:red" data-ng-show = "quickAppointmentForm.patientSignUpForm.patientName.$dirty && quickAppointmentForm.patientSignUpForm.patientName.$invalid">
+								<span data-ng-show = "quickAppointmentForm.patientSignUpForm.patientName.$error.required"> Name is required. </span>
+								<span data-ng-show = "quickAppointmentForm.patientSignUpForm.patientName.$error.pattern"> Invalid name. </span>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input class="clstxt2" type = "text"
+								   name = "patientPhoneNumber"
+								   data-ng-model = "quickAppointmentPatient.phoneNumber"
+								   data-ng-pattern = "/^\d*$/"
+								   data-ng-class = "{red1: quickAppointmentForm.patientSignUpForm.patientPhoneNumber.$invalid && quickAppointmentForm.patientSignUpForm.patientPhoneNumber.$dirty, green1: quickAppointmentForm.patientSignUpForm.patientPhoneNumber.$valid && quickAppointmentForm.patientSignUpForm.patientPhoneNumber.$dirty}"
+								   title = "Enter your contact number here"
+								   placeholder = "Enter your contact number"
+								   data-ng-required = "true"
+									/>
+							<span style = "color:red" data-ng-show = "quickAppointmentForm.patientSignUpForm.patientPhoneNumber.$dirty && quickAppointmentForm.patientSignUpForm.patientPhoneNumber.$invalid">
+								<span data-ng-show = "quickAppointmentForm.patientSignUpForm.patientPhoneNumber.$error.pattern"> Invalid contact number. </span>
+								<span data-ng-show = "quickAppointmentForm.patientSignUpForm.patientPhoneNumber.$error.required">Contact number is required.</span>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input class="clstxt2" type = "text"
+								   name = "patientEmail"
+								   data-ng-model = "quickAppointmentPatient.email"
+								   data-ng-pattern = "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+								   data-ng-class = "{red1: quickAppointmentForm.patientSignUpForm.patientEmail.$invalid && quickAppointmentForm.patientSignUpForm.patientEmail.$dirty && visitedQuickAppointmentPatientEmail, green1: quickAppointmentForm.patientSignUpForm.patientEmail.$valid && quickAppointmentForm.patientSignUpForm.patientEmail.$dirty && visitedQuickAppointmentPatientEmail}"
+								   title = "Enter your email address here"
+								   placeholder = "Enter your email address"
+								   data-ng-blur = "visitedQuickAppointmentPatientEmail = true"
+								   data-ng-focus = "visitedQuickAppointmentPatientEmail = false"
+								   data-ng-required = "false"
+									/>
+							<span style = "color:red" data-ng-show = "quickAppointmentForm.patientSignUpForm.patientEmail.$dirty && quickAppointmentForm.patientSignUpForm.patientEmail.$invalid && visitedQuickAppointmentPatientEmail">
+								<span data-ng-show = "quickAppointmentForm.patientSignUpForm.patientEmail.$error.required"> Email address is required. </span>
+								<span data-ng-show = "quickAppointmentForm.patientSignUpForm.patientEmail.$error.pattern"> Invalid email address. </span>
+							</span>
+						</td>
+					</tr>
+					<tr></tr>
+					<tr></tr>
+					<tr>
+						<td>
+							<button type = "submit" data-ng-disabled = "quickAppointmentForm.patientSignUpForm.$invalid"> CallMe Back </button> &nbsp;&nbsp;
+							<button data-ng-disabled = "!quickAppointmentForm.patientSignUpForm.$dirty" data-ng-click = "quickAppointmentReset()"> Clear </button>
+						</td>
+					</tr>
+					<tr></tr>
+					<tr></tr>
+					<tr>
+						<td>
+							<span ng-show = "quickAppointmentPatient.errorResult">
+								<div>
+									<span></span>
+									<span style="color:red" ng-model = "quickAppointmentPatient.errorResult">{{quickAppointmentPatient.errorResult}}</span>
+									<span></span>
+								</div>
+							</span>
+							<span ng-show = "quickAppointmentPatient.successResult">
+								<div>
+									<span></span>
+									<span style="color:green" ng-model = "quickAppointmentPatient.successResult">Thank you for registering request. Your reference number is {{quickAppointmentPatient.successResult}}.</span>
+									<span></span>
+								</div>
+							</span>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<div data-ng-show="divTwo" class="clsloginborder">
+			<form name="signInForm2.patientSignInForm" data-ng-init="patientSignIn.uname=''; patientSignIn.password=''" data-ng-submit="signInForm2.patientSignInForm.$valid && patientSignInFormSubmit()" novalidate>
+                <table>
+                    <tr>
+                        <td style="border-right:1px solid #ccc; padding-right: 10px;">
+                            <table>
+                                <tr>
+                                    <td>Sign In</td>
+                                </tr>
+                                <tr></tr>
+                                <tr></tr>
+                                <tr></tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <input class="clstxt2" type = "text"
+                                               name = "patientUserName"
+                                               data-ng-model = "patientSignIn.uname"
+                                               data-ng-pattern = "/(^\d*$)|(^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$)/"
+                                               data-ng-class = "{red1: signInForm2.patientSignInForm.patientUserName.$invalid && signInForm2.patientSignInForm.patientUserName.$dirty && visitedCustUName, green1: signInForm2.patientSignInForm.patientUserName.$valid && signInForm2.patientSignInForm.patientUserName.$dirty && visitedCustUName}"
+                                               title = "Enter contact number or email address here"
+                                               placeholder = "Enter contact no. or email address"
+                                               maxlength="40"
+                                               data-ng-blur = "visitedCustUName = true"
+                                               data-ng-required = "true"
+                                                />
+                                        <span style = "color:red" data-ng-show = "signInForm2.patientSignInForm.patientUserName.$dirty && signInForm2.patientSignInForm.patientUserName.$invalid && visitedCustUName">
+                                            <span data-ng-show = "signInForm2.patientSignInForm.patientUserName.$error.required"> Username is required. </span>
+                                            <span data-ng-show = "signInForm2.patientSignInForm.patientUserName.$error.pattern"> Invalid username. </span>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <input class="clstxt2" type="password"
+                                            name="patientPassword"
+                                            data-ng-model="patientSignIn.password"
+                                            data-ng-class="{red1: signInForm2.patientSignInForm.patientPassword.$invalid && signInForm2.patientSignInForm.patientPassword.$dirty, green1: signInForm2.patientSignInForm.patientPassword.$valid && signInForm2.patientSignInForm.patientPassword.$dirty}"
+                                            title="Enter the password here"
+                                            value="{{patientSignIn.password}}"
+                                            placeholder="Enter password"
+                                            data-ng-required="true"
+                                        />
+                                        <span style="color:red" data-ng-show="signInForm2.patientSignInForm.patientPassword.$dirty && signInForm2.patientSignInForm.patientPassword.$invalid">
+                                            <span data-ng-show = "signInForm2.patientSignInForm.patientPassword.$error.required"> Password is required. </span>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr></tr>
+                                <tr></tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <button style="cursor:pointer;" type="submit" data-ng-disabled="signInForm2.patientSignInForm.$invalid"> Sign In </button> &nbsp;&nbsp;
+                                        <button style="cursor:pointer;" data-ng-disabled = "!signInForm2.patientSignInForm.$dirty" data-ng-click="patientSignInFormReset()"> Clear </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <a href="#" style="text-decoration:none; color: #0000ff;" data-ng-click="homeLogin('divThree')">Forgot Password</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"></td>
+                                </tr>
+                                <tr></tr>
+                                <tr></tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <span data-ng-show = "patientSignIn.errorResult">
+                                            <div>
+                                                <span></span>
+                                                <span style="color:red" ng-model = "patientSignIn.errorResult">{{patientSignIn.errorResult}}</span>
+                                                <span></span>
+                                            </div>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="padding-left: 10px; vertical-align: top">
+                             <table>
+                                 <tr><td style="padding-bottom: 10px;">Sign In using Facebook</td></tr>
+                                <tr>
+                                    <td>
+                                         <a href="#" data-ng-click="IntentLogin('signIn');" data-ng-class="" class="registerlink"><img alt="Facebook Sign In" src="../images/facebook.png" /></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span data-ng-show = "patientSignInError">
+                                            <span></span>
+                                            <span style="color:red" ng-model = "patientSignInError">{{patientSignInError}}</span>
+                                            <span></span>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+		</div>
+         <div data-ng-show="divSignup" class="clsregisterborder patientregistercontent" ng-include="'signUp.html'"></div>
+		<div data-ng-show="divThree" class="clsloginborder">
+			<div ng-include="'forgotPassword.html'"></div>
+		</div>
+	</div>
+    <div ng-if="userTabsFlg" style="padding:10px;">
+        <h1>Customer Home page</h1>
+	</div>
+</div>

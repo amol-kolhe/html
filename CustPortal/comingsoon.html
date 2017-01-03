@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>HealYos-Coming Soon</title>
+	    <link href="../css/bootstrap.min.css" rel="stylesheet">
+	    <link href="../css/bootstrap-social.css" rel="stylesheet">
+	    <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+	    <link href="../css/font-awesome.min.css" rel="stylesheet">	    
+    	<link href="../css/acute.select.css" rel="stylesheet" />
+  		<!-- <link href="../css/custPortalHome.css" rel="stylesheet"> -->
+    	<link href="../css/custPortalComingSoon.css" rel="stylesheet" type="text/css">
+    	<link href="../js/ngToast/ngToast.min.css" rel="stylesheet" type="text/css">
+	</head>
+	<body ng-app = "custPortalComingSoonApp" ng-controller = "custPortalComingSoonController as comingSoonCtrl" ng-init="comingSoonCtrl.initComingSoon()">
+		<toast></toast>
+		<div class="container">
+			<div ng-include = "'./custPortalComingSoonHeader.html'"></div>
+			<div class="background-image">				
+				<div class="main-container container">
+					<div class="logo-image row">
+						<div class="col-xs-offset-2 col-xs-8 col-sm-offset-3 col-sm-6">
+							<img src="../images/coming_soon/logo-01.png" />
+						</div>
+					</div>
+					<div class="height-div"></div>
+					<div class="tag-line">
+						<div>High quality, Hand-picked</div>
+						<div>Licensed Physiotherapists soon at your doorstep.</div>
+					</div>
+					<div class="notify-parent">
+						<div class="notify-input">
+							<input class = "notify-me-input" type="email" ng-model = "comingSoonCtrl.emailId" placeholder="Enter your Email">
+							<button class="notify-me-button" ng-click="comingSoonCtrl.verifyAndSendMail()">NOTIFY ME</button>
+						</div>
+					</div>				
+				</div>
+			</div>
+			<div>
+				<img src="../images/coming_soon/background_resized.jpg" width= "100%">
+				<div class="footer-bar">
+					<span >
+						<img src="../images/coming_soon/sancheti_logo-01.png" align="left">
+					</span>
+					<span class="footer-text">
+						Endorsed by Sancheti - India's best Orthopedic Institute.
+					</span>
+				</div>
+			</div>
+
+			<!-- Footer -->
+			<footer class="home-footer">
+				<div ng-include = "'./custPortalComingSoonFooter.html'"></div>
+			</footer>	
+			
+		</div><!-- container END -->
+
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	    <!-- Include all compiled plugins (below), or include individual files as needed -->
+	    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/angular.min.js"></script>
+		<script type="text/javascript" src="../js/angular-sanitize.min.js"></script>
+		<script type="text/javascript" src="../js/ngToast/ngToast.min.js"></script>
+		<script type="text/javascript" src="../js/utils/common.js"></script>
+		<script type="text/javascript" src="../js/services/custApiService.js"></script>
+		<script type="text/javascript" src="../js/angular-cookies.js"></script>
+		<script type="text/javascript" src="../js/angular-cookies.min.js"></script>
+		<script type="text/javascript" src="../js/angular-cookies.min.js.map"></script>
+		<script type="text/javascript" src="../js/custPortalComingSoon.js"></script>	
+	</body>
+</html>

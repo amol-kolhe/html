@@ -1,0 +1,51 @@
+/* Portrait phones and smaller */
+@media (max-width: 480px) {
+	/* about sancheti inner page*/
+	.inner-page-abtsancheti-banner-image { background-image: url('../../images/customer_portal/aboutsancheti_320.png') !important; min-height: 270px  !important;}
+}
+
+/* Common media query or small and extra small */
+@media (max-width: 767px) {
+	/*contact us*/
+	.inner-page-contactus-banner-image { min-height: 178px; }
+	.inner-page-banner-heading { margin-top: -86px; text-align: center; margin-left: 0; font-size: 1.9em; }
+	.contactus-submit button { width: 60%; }
+	.contactus-section-comment textarea { width: 100%; }
+	.contactus-submit { text-align: center; }
+
+	/*Our Physio Experts*/
+	.innerpage-physio-image-left { text-align: center; }
+	.innerpage-physio-image-left img { width: 25%; }
+	.innerpage-physio-section-heading, .innerpage-physio-section-subheading { text-align: center; }
+	.innerpage-physio-content { margin-top: 20px; }
+
+	/*About sancheti*/
+	.inner-page-abtsancheti-banner-heading { margin-left: 10px; margin-top: -170px; }
+
+/* Landscape phones and portrait tablets */
+@media (min-width: 481px) and (max-width: 767px) {
+	/* about sancheti inner page*/
+	.inner-page-abtsancheti-banner-image { background-image: url('../../images/customer_portal/aboutsancheti_768.png') !important; min-height: 335px  !important;}
+}
+
+/* Portrait tablets and small desktops */
+@media (min-width: 768px) and (max-width: 991px) {
+	/*contact us*/
+	.inner-page-contactus-banner-image { min-height: 230px; }
+	.inner-page-banner-heading { margin-top: -110px; }
+	.contactus-section-comment textarea { width: 90%; }
+	.contactus-submit button { width: 30%; }
+	/* about sancheti inner page*/
+	.inner-page-abtsancheti-banner-image { background-image: url('../../images/customer_portal/aboutsancheti_992.png') !important; min-height: 335px  !important;}
+}
+
+/* Landscape tablets and medium desktops */
+@media (min-width: 992px) and (max-width: 1199px) {
+	/*contact us*/
+	.inner-page-contactus-banner-image { min-height: 300px; }
+	.inner-page-banner-heading { margin-top: -150px; }
+}
+
+/* Large desktops and laptops */
+@media (min-width: 1200px) {}
+

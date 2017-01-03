@@ -1,0 +1,81 @@
+<div ng-controller="AdminCtrl" data-ng-init="initCache(); initCustCities(); initLocalities();">
+    <div ng-show="actionableAppt.mode == 'listing'">
+        <div class="actionableHeader">
+            <span>Actionable items requested by Physio</span>
+            <span class="pull-right clickable glyphicon glyphicon-refresh" title="Refresh the actionable items" ng-click="searchActionableAppts()"></span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th ng-click="sort2('appointment.approvalDetails.requestedOn')">Requested On
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='appointment.approvalDetails.requestedOn'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
+                        <th ng-click="sort2('appointment.approvalDetails.requestedByName')">Physio
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='appointment.approvalDetails.requestedByName'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
+                        <th ng-click="sort2('appointment.refno')">Ref No
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='appointment.refno'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
+                        <th ng-click="sort2('appointment.approvalDetails.requestType')">Request For
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='appointment.approvalDetails.requestType'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
+                        <th ng-click="sort2('appointment.approvalDetails.rescheduledOn')">Reschedule On
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='appointment.approvalDetails.rescheduledOn'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
+                        <th ng-click="sort2('appointment.approvalDetails.changerequestby')">Requested By
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='appointment.approvalDetails.changerequestby'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
+                        <th ng-click="sort2('appointment.approvalDetails.reason')">Reason
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='appointment.approvalDetails.reason'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr dir-paginate="apt in actionableApptsList|orderBy:sorting.by:sorting.reverse|filter:search|itemsPerPage:10"
+                        pagination-id="actionablesId">
+                        <td>{{apt.appointment.approvalDetails.requestedOn * 1000 | date:'yyyy-MM-dd hh:mm a'}}</td>
+                        <td>{{apt.appointment.approvalDetails.requestedByName}}</td>
+                        <td>
+                            <code><a href="#" ng-click="editAppointment(apt.appointment)" title="Show Appointment Details">{{apt.appointment.refno}}</a></code>
+                        </td>
+                        <td>{{spRequestType[apt.appointment.approvalDetails.requestType]}}</td>
+                        <td>
+                            <span ng-hide="apt.appointment.approvalDetails.requestType == 1">
+                                {{apt.appointment.approvalDetails.rescheduledOn * 1000 | date:'yyyy-MM-dd hh:mm a'}}
+                            </span>
+                            <span ng-show="apt.appointment.approvalDetails.requestType == 1">-</span>
+                        </td>
+                        <td>{{apt.appointment.approvalDetails.changerequestby}}</td>
+                        <td style="max-width:150px;" class="promo-row-text">
+                            <span style="word-break: break-word;">{{apt.appointment.approvalDetails.reason}}</span>
+                        </td>
+                        <td>
+                            <span class="glyphicon glyphicon-ok clickable"
+                                  style="color: #00F900;
+                                  margin-right: 15px;"
+                                  title="Approve"
+                                  ng-click="approveActionable(apt)"></span>
+                            <span class="glyphicon glyphicon-remove clickable"
+                                  style="color: #F90000"
+                                  title="Reject"
+                                  ng-click="rejectActionable(apt)"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <dir-pagination-controls
+                max-size="5"
+                pagination-id="actionablesId"
+                direction-links="true"
+                boundary-links="true" >
+            </dir-pagination-controls>
+        </div>
+    </div>
+
+    <div class="subContainer1" id="actionableEditAptContainer" ng-if="actionableAppt.mode == 'edit'">
+        <a href="#" ng-click="hideEditAptMode(); resetSelectedLocation()">Actionables</a>&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> <span>Ref. No. </span><span data-ng-bind="editAptId" style="font-family: arial;"></span>
+        <div ng-include="'editAppointment.html'"></div>
+    </div>
+</div>

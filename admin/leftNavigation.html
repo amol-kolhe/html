@@ -1,0 +1,11 @@
+<div style="background-color: #ECECEC;" id="accordionContainer" ng-init="initAccordion()">
+    <accordion>
+        <accordion-group ng-repeat="menu in adminMenus">
+            <accordion-heading>
+                <div ng-click="onClickMenu(menu)" class="accordionMenu" id={{asas[$index]}} ng-class="{active_tab:isActiveTab(menu.title)}">{{menu.title}}
+                    <span ng-if="menu.title == 'Actionables'" class="pull-right badge" ng-bind="actionableAppts.count"></span>
+                </div>
+            </accordion-heading>
+        </accordion-group>
+    </accordion>
+</div>

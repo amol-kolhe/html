@@ -1,0 +1,13 @@
+
+		<div id="leftNavigation">
+			<accordion>
+				<accordion-group ng-repeat="menu in custMenus">
+					<accordion-heading >
+						<div ng-click="onClickMenu(menu)" id={{asas[$index]}} ng-class="{active_tab:isActiveTab(menu.title)}">{{menu.title}}</div>
+					</accordion-heading>
+					<!-- <ul>
+						<li ng-repeat="item in menu.items" ng-click="onClickSubMenu(item)">{{item['item-title']}}</li>
+					</ul> -->
+				</accordion-group>   
+			</accordion>
+		</div>

@@ -1,0 +1,111 @@
+<nav class="navbar home-navigation navbar-fixed-top" id="menu-height">
+    <div class="container">
+        <div class="navbar-header row">
+            <div class="col-xs-8 col-sm-5 portrait-tablet1">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                  <!-- <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span> -->
+                 <!--  <img src="../images/customer_portal/hamburger.png"> -->
+                  <!-- <span class="pure-toggle-icon"></span> -->
+                  <span class="logo-spacing"></span>
+                </button>
+                <!-- <a ui-sref="home"> -->
+                    <span class="logo-image" ng-click="cpc.navigateToHome()">
+                        <img src="./images/healyos_logo_new.png"
+                            alt="Physiotherapy Services at Home | Physiotherapist in Pune"
+                            title="Healyos - The Physio Experts" />
+                    </span>
+                   <!--  <img src="../images/healyos_logo_transparent.gif" height="50" width="160" > -->
+                <!-- </a> -->
+            </div>
+            <div class="col-xs-4 col-sm-7 request-callback-block portrait-tablet2">                
+                <div class="call-me">
+                    <img class = "phone-number-icon" src="./images/customer_portal/call.png" />
+                    <span class="phone-number">020-65802802</span>
+                    <span class="callme-or callme-request-desktop" style="cursor: default;">OR</span>
+                    <span style="vertical-align: super;">
+                        <!-- other resolutions -->
+                        <!-- <span class="callme-request-desktop">
+                             <img src="../images/customer_portal/Icon_callback.png" ng-click="cpc.showCallmeScroll()"> 
+                        </span> -->
+                        
+                        <!-- for mobiles -->
+                        <span class="callme-request-mobile">
+                            <a href="tel:02065802802"><img src="./images/customer_portal/call.png" /></a>
+                            <!-- <img src="../images/customer_portal/call.png" ng-click="cpc.showCallmeScroll()"> -->
+                        </span>
+                        <span class="request-callback" ng-click="cpc.showCallmeScroll()">REQUEST A CALL BACK</span>
+                    </span>
+                </div> 
+            </div>                    
+        </div>
+
+        <!-- <div class="navbar-collapse collapse submenus">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="#">{{cpc.navMenuItems.home}}</a></li>
+              <li><a href="#about">{{cpc.navMenuItems.about}}</a></li>
+              <li><a href="#contact">{{cpc.navMenuItems.contact}}</a></li>
+            </ul>
+            <div class="navbar-header navbar-right"></div>
+        </div> -->
+    </div>
+</nav>
+
+<!-- Scrolling panel for call me back -->
+<div class="callme-input-scroll-fields">
+    <div class="hidden-xs" ng-click="cpc.hideCallmeScroll()"><a href=""><span class="cross">X</span></a></div> 
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-2 hide-on-large-screens">
+                <img class="callme1" src="./images/customer_portal/call.png">
+            </div>
+            <div class="col-xs-9 hide-on-large-screens">
+                <a href="tel:02065802802">
+                    <button type="button" class="makecall-input-scroll-submit callme-input-scroll-submit">MAKE A CALL</button>
+                </a>
+            </div>
+            <div class="col-xs-1 hide-on-large-screens" ng-click="cpc.hideCallmeScroll()"><span class="cross">X</span></div>
+            
+            <div class="col-xs-12 hide-on-large-screens scroll-or"> or </div>
+            
+            <div class="col-xs-2 col-sm-1">
+                <img class="callme1" src="./images/customer_portal/Icon_callback.png" style="visibility: hidden;">
+            </div>
+            <div class="col-xs-9 col-sm-4 callme-input-scroll-desktop">
+                <input type="text" class="input-scroll-name" 
+                    ng-model="cpc.callmeInputs.name" 
+                    maxlength="100"
+                    placeholder="YOUR NAME" />
+            </div>
+            <div class="col-xs-1 hide-on-large-screens"></div>
+
+            <div class="col-xs-offset-2 col-xs-9 col-sm-offset-0 col-sm-4 scroll-phone">
+                <input type="text" class="input-scroll-phone" 
+                    ng-model="cpc.callmeInputs.phone" 
+                    placeholder="YOUR PHONE NO." />
+            </div>
+            <div class="col-xs-1 hide-on-large-screens"></div>
+            <div class="col-xs-offset-2 col-xs-9 col-sm-offset-0 col-sm-3 scroll-submit">
+                <button type="button" class="callme-input-scroll-submit" ng-click="cpc.submitRequestACallBack()"> REQUEST A CALL BACK</button>
+            </div>
+            <div class="col-xs-1 hide-on-large-screens"></div>
+        </div>
+    </div>    
+</div>
+<div class="callme-input-result-success" ng-if="cpc.flags.requestACallbackSucess">
+    <div class="callme-success-message">Thank you for registering request. We will get back to you soon.
+    </div>
+</div>
+<div class="callme-input-result-error" ng-if="cpc.flags.requestACallbackError">
+    <div class="callme-error-message">{{cpc.requestACallbackErrorMessage}}</div>
+</div>
+<div class="callme-input-result-error" ng-if="cpc.flags.bookNowError">
+    <div class="callme-error-message">Please fill the Booking Details to proceed.</div>
+</div>
+<div class="callme-input-result-error" ng-if="cpc.flags.callMeValidationError">
+    <div class="callme-error-message">Please fill valid Name & Phone number</div>
+</div>
+<div class="callme-input-result-error" ng-if="cpc.flags.datesNotAvailable">
+    <div class="callme-error-message">Dates not Available for currently selected Location</div>
+</div>

@@ -1,0 +1,1162 @@
+@font-face {
+	font-family: Montserrat-Regular;
+	src: url(../../fonts/Montserrat-Regular.woff);
+}
+
+@font-face {
+	font-family: Montserrat-Hairline;
+	src: url(../../fonts/Montserrat-Hairline.woff);
+}
+
+@font-face {
+	font-family: Montserrat-UltraLight;
+	src: url(../../fonts/Montserrat-UltraLight.woff);
+}
+
+@font-face {
+	font-family: Montserrat-Bold;
+	src: url(../../fonts/Montserrat-Bold.woff);
+	font-weight: bold;
+}
+
+@font-face {
+	font-family: Montserrat-Light;
+	src: url(../../fonts/Montserrat-Light.woff);
+}
+
+@font-face {
+	font-family: Neuton-Regular;
+	src: url(../../fonts/Neuton-Regular.woff);
+}
+
+body {
+	font-family: 'Montserrat-Light', sans-serif;
+	font-size: 16px;
+    outline: none !important;
+}
+
+.container-fluid {
+	padding: 0;
+}
+.container-fluid .container {
+    /*padding-left:0;*/
+    /*padding-right:0;*/
+}
+
+.loading-dialog {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.4 ) url('../../images/customer_portal/load1.gif') 50% 50% no-repeat;
+}
+
+/* -----------Header css-------------------- */
+.container1 {
+	padding: 0px 30px 0px 20px;
+	/*padding: 0px 85px 0px 75px;
+	line-height: 115px;*/
+}
+
+.header-container {
+	padding-left: 20px;
+    padding-right: 27px;
+}
+.logo-image {
+    margin-top: -2px;
+    cursor: pointer;
+    /*background-image: url(../../images/healyos_logo_transparent.gif);*/
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 50px;
+    width: 160px;        
+    display: inline-block;
+}
+
+.logo-image img {
+    width: 100%;
+}
+
+ul.nav.navbar-nav {
+    display: inline-block;
+}
+
+.navbar-toggle {
+	float: left;
+	display: inline-block !important;
+	    margin-top: 0px;
+	/*margin-top: 11%;*/
+}
+
+.navbar-toggle .icon-bar {
+	background: rgba(0, 0, 0, 0.7);
+	width: 27px;
+}
+
+.home-navigation {
+	background: rgba(255 , 255, 255, 1);
+	padding: 10px 0px 5px 0px;
+	/*position: absolute;*/
+    position: fixed;
+	margin-bottom: 0; 
+	/*height: 128px;*/
+}
+
+.phone-number {
+	font-size: 1.33em;
+	/*border-right: 1px solid #999;*/
+	text-align: right;
+	padding-right: 15px;
+	margin-right: 11px;
+	display: inline-block;
+    vertical-align: bottom;
+}
+.callme-or {
+    font-size: 1em;
+    /* border-right: 1px solid #999; */
+    text-align: right;
+    padding-right: 15px;
+    margin-right: 11px;
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+
+.request-callback-block {
+	text-align: right;
+	color: #1A1A1A;
+}
+
+.callme-request-mobile {
+	display: none;
+}
+
+.fa-phone {
+	font-size: 1.5em;
+}
+
+.request-callback {
+	font-size: 0.9em;
+    padding: 10px 20px;
+    border: 2px solid #FC8F7A;
+    border-radius: 20px;
+}
+
+.call-me {
+	margin-top: 7px;
+}
+.call-me img {
+    vertical-align: bottom;
+    margin-right: 2px;
+}
+
+.call-me a {
+	color: #000;
+	text-decoration: none;
+}
+
+.callme-input-scroll-fields {
+    position: fixed;
+    z-index: 9999;
+    top: 0 !important;
+    right: 0 !important;
+    padding: 13px 25px !important;
+    height: 69px !important;
+    background: #fff;
+    display: none;
+    width: 100% !important;
+    margin-right: 0px !important;
+}
+
+.callme-input-result-success, .callme-input-result-error  {
+    position: fixed;
+    z-index: 9999;
+    width: 100% !important;
+    top: 69px !important;
+    right: 0 !important;
+    text-align: center;
+}
+
+.callme-success-message {
+    display: inline-block;
+    color: #26ADA9;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #5cb85c;
+    border-radius: 6px;
+    box-shadow: 1px 1px 17px -2px #26ADA9;
+}
+.callme-error-message {
+    display: inline-block;
+    color: #D71F27;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #D71F27;
+    border-radius: 6px;
+    box-shadow: 1px 1px 17px -2px #D71F27;
+}
+
+.callme-input-scroll-fields input {
+    height: 47px;
+    border: 2px solid rgb(208, 208, 208);
+    border-radius: 25px;
+    padding: 6px 9px;
+    font-size: 1em;
+  /*  margin-right: 30px;
+    margin-left: 30px;*/
+}
+.callme-input-scroll-fields .container {
+    padding: 0px 40px !important;
+}
+input.input-scroll-name {
+    width: 100%;
+    outline: none;
+    /*margin-left: 22px;*/
+}
+.callme-input-scroll-fields .container .row > div {
+    padding: 0px 5px !important;
+}
+input.input-scroll-phone {
+    width: 97%;
+    outline: none;
+}
+button.callme-input-scroll-submit {
+    height: 47px;
+    width: 85%;
+    border-radius: 30px;
+    background: #FC8F7A;
+    color: #fff;
+    font-weight: bold;
+    border: 0;
+    text-transform: uppercase;
+    outline:none;
+    font-size: 1em;
+}
+.callme1 {
+    position: relative;
+    top: 10px;
+    float: right;
+}
+.cross {
+    font-family: "Montserrat-Hairline", sans-serif;
+    font-size: 25px;
+    float: right;
+}
+.callme-request-desktop img, .request-callback {
+    cursor: pointer;
+}
+
+.logo-spacing {
+    width: 35px; 
+    display: block;
+}
+/* -----------Header css END-------------------- */
+
+/* -----------Slider --------------------------- */
+/*.home-slider {
+  margin-top: -88px;
+}*/
+
+/*.carousel {
+	position: absolute;
+	top: 0px;
+}*/
+/*.mobile-slider {
+	display: none;
+}
+.tablet-slider {
+	display: none;
+}
+*/
+.slider-headtext {
+    left: 48% !important;
+    /* width: 540px;*/
+    width: 45%;
+    top: 38%;
+    text-align: left;
+    color: #262626;
+}
+
+.slider-heading {
+	font-size: 2.5em;
+	font-family: 'Montserrat-UltraLight', sans-serif;
+	color: #262626;
+	text-shadow: none;
+}
+
+p.slider-subtext {
+	font-size: 1.5em;
+	font-family: 'Neuton-Regular', sans-serif;
+	text-shadow: none;
+}
+.carousel-indicators li {
+	margin-left: 6px !important;
+}
+
+.sancheti-subtext-logo {
+    margin-right: 10px;
+    vertical-align: bottom;
+}
+/* Slider End */
+
+/* ----------Book Now Section -------------------*/
+.booknow-outer {
+    height: 61px;
+    top: -134px;
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    font-family: "Montserrat-Regular", sans-serif;
+}
+.booknow-container {
+    position: relative;
+    width: 866px;
+    margin: 0 auto;
+}
+.locations-section {
+    height: 61px;
+    background: #fff;
+    float: left;
+    width: 260px;
+    border-radius: 30px 0px 0px 30px;
+    padding: 17px 0px 17px 20px;
+    border-right: 1px solid #f2f2f2;
+}
+
+.date-section, .book-now-button {
+    height: 61px;
+    background: #fff;
+    float: left;
+}
+
+.date-section {
+	border-right: 1px solid #f2f2f2;
+	width: 200px;
+	padding: 14px 11px;    
+}
+
+.date-section .input-group .form-control {
+	border: 0 !important;
+    box-shadow: none;
+    font-size: 1em;
+    color: #262626;
+    cursor: pointer;
+    /*font-weight: bold;*/
+}
+
+.date-section .input-group.date .input-group-addon {
+	border: 0;
+    background: transparent;
+}
+
+.input-group-addon {
+	padding: 6px 3px;
+}
+
+.timeslot-section {
+    height: 61px;
+    width: 206px;
+    background: #fff;
+    float: left;
+    padding-top: 16px;
+    padding-right: 10px;
+    padding-bottom: 11px;
+    padding-left: 16px;
+    font-size: 1em;
+    /*font-weight: bold;*/
+}
+@-moz-document url-prefix() {
+    .timeslot-section {
+        padding-top: 14px;
+    }
+}
+
+.timeslot-section select {
+    background: #fff;
+    border: 0;
+    background-image: url('../../images/customer_portal/down_arrow.png') no-repeat;
+    cursor: pointer;
+}
+
+.timeslot-section option {
+    font-size: 0.9em;
+}
+
+.book-now-button {
+	border-radius: 0px 30px 30px 0px;
+	width: 200px;
+	background: #FC8F7A;
+	color: #fff;
+	padding: 21px 20px;
+    font-family: 'Montserrat-Regular', sans-serif;
+    font-size: 1em;
+    cursor: pointer;
+    /*font-weight: bold;*/
+}
+.input-group .form-control {
+	height: 37px;
+}
+
+.timeslot-section select {
+    background: url("../../images/customer_portal/down_arrow.png") no-repeat !important;
+    background-position: right !important;
+    -webkit-appearance: none;
+	-moz-appearance: none;
+	width: 178px;
+	vertical-align: -webkit-baseline-middle;
+    vertical-align: -moz-middle-with-baseline;
+    outline: none;
+}
+/* Book Now End */
+
+/* -------------How It Works------------------- */
+.howitworks-main-container {
+    padding: 20px 20px 30px 20px;
+    text-align: center;
+}
+
+.howitworks-title {
+    font-size: 2.5em;
+    text-align: center;
+    font-family: 'Montserrat-UltraLight', sans-serif;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.howitworks-subsection-title {
+    font-size: 1em;
+    font-family: 'Montserrat-Light', sans-serif;
+    margin-bottom: 5px;
+    margin-top: 30px;
+    color: #262626;
+}
+
+.howitworks-icon {
+    border-radius: 50%;
+    margin-bottom: 12px;
+    margin: 0 auto;
+}
+
+.howitworks-icon img {
+    background-color: #fff;
+}
+
+.howitworks-subsection {
+    padding: 20px 40px;
+}
+
+.howitworks-subsection-content {
+    padding: 5px 11px;
+    font-family: 'Neuton-Regular', sans-serif;
+    font-size: 1em;
+    color: #58595B;
+
+}
+
+.row-centered {
+  text-align: center;
+  display: table-row;
+}
+
+.col-centered {
+  display: table-cell;
+  float: none;
+  vertical-align: top;
+}
+
+.dotted-image-left {
+	background-image: url("../../images/customer_portal/dot.png");
+    background-repeat: repeat-x;
+    width: 26%;
+    height: 10px;
+    right: 52%;
+    position: absolute;
+    margin-top: 77px;
+    z-index: -99;
+}
+
+.dotted-image-right {
+	background-image: url("../../images/customer_portal/dot.png");
+    background-repeat: repeat-x;
+    width: 23%;
+    height: 10px;
+    position: absolute;
+    right: 23.5%;
+    margin-top: 77px;
+    z-index: -99;
+}
+
+.how-it-works-redirect button {
+    margin-top: 50px;
+}
+
+/* How it works END */
+
+/*-----------SANCHETI ASSOCIATION--------------- */
+
+/* SANCHETI ASSOCIATION end */
+
+.sancheti-assoc-image {
+	/*background-image: url('../images/customer_portal/sancheti_desktop.png');*/
+	background-repeat: no-repeat;
+	min-height: 506px;
+    background-size: cover;
+    background-position: bottom right;
+}
+
+.sancheti-assoc-image .container {
+    padding: 25px;
+}
+
+/*.sancheti-logo-image-desktop, .sancheti-logo-image-mobile {
+    float: right;    
+}
+.sancheti-logo-image-mobile {
+    padding: 3px;
+}*/
+.sancheti-assoc-content {
+    margin-top: 12%;
+}
+
+.sancheti-assoc-heading {
+	color: #262626;
+	font-family: 'Montserrat-UltraLight', sans-serif;
+	font-size: 2.5em;
+    margin-bottom: 15px;
+}
+
+.sancheti-assoc-text {
+	color: #262626;
+	font-family: 'Neuton-Regular', sans-serif;
+	font-size: 1em;
+	width: 50%;
+}
+
+.sancheti-assoc_redirect button {
+    margin-top: 40px;
+}
+.sancheti-text-mobile {
+    display: none;
+}
+.sancheti-text-desktop {
+    display: block;
+}
+
+/* -------The Physiotherapy Experts------------ */
+/*.physio_experts_mobile_img {
+	display: none;
+}*/
+.physio-experts-left-section {
+    text-align: center;
+}
+
+.physio-experts-left-section img {
+    width: 91%;
+}
+
+.row.physio-experts-content {
+    padding: 60px 10px;
+}
+
+.physio-experts-heading {
+	color: #262626;
+	font-family: 'Montserrat-UltraLight', sans-serif;
+	font-size: 2.5em;
+	margin-bottom: 10px;
+}
+
+.physio-experts-text {
+	color: #58595B;
+	font-family: 'Neuton-Regular', sans-serif;
+	font-size: 1em;
+	margin-bottom: 30px;
+    line-height: 1.5;
+}
+.physio-experts-text-mobile {
+    display: none;
+}
+
+.home-redirecting-buttons button {
+    background: transparent;
+    border: 2px solid #f69279;
+    border-radius: 24px;
+    height: 50px;
+    font-size: 1em;
+    color: #262626;
+    padding: 14px 30px;
+    text-transform: uppercase;
+}
+
+.home-redirecting-buttons button:hover {
+    background: #f69279;
+}
+
+.physio-experts-right-section {
+    margin-top: 6%;
+}
+
+/* The Physiotherapy Experts END */
+
+/*----------FAQ----------------------------------*/
+
+.faq-container {
+    background: #C3E7E7;
+}
+
+.faq-content {
+    padding: 30px 40px;
+}
+
+.faq-heading {
+    font-size: 2.5em;
+    font-family: 'Montserrat-UltraLight', sans-serif;
+    margin-bottom: 20px;
+}
+
+ .panel-title {
+    
+}
+/*
+.faq-options li {
+    font-size: 1em;
+    font-family: 'Montserrat-Light', sans-serif;
+    padding: 15px 0px;
+    border-bottom: 1px solid #ccc;
+}
+
+.faq-options li:last-child {
+    border: 0px !important;
+}
+
+.faq-content .panel-default>.panel-heading {
+	background-color: #C3E7E7 !important;
+	background-image: none;
+	border: 0 !important;
+    padding-left: 0px;
+}
+
+.faq-content .panel-default {
+    box-shadow: none !important;
+    border: 0 !important;
+    border-bottom: 1px solid #999 !important;
+    border-radius: 0px;
+}
+
+.faq-content .panel {
+	background: #C3E7E7 !important;
+}
+
+.panel-default>.panel-heading+.panel-collapse .panel-body {
+	background: #C3E7E7 !important;
+}*/
+
+.faq-redirect button {
+    margin-top: 40px;
+}
+
+.faq-text .accordion_head { 
+    color: #262626; 
+    cursor: pointer;
+    padding: 2px 11px;
+    border-bottom: 1px solid #ADABAB;
+}
+.faq-text .accordion_body p { 
+    padding: 5px 5px 5px 35px;
+    margin: 0px; 
+}
+.faq-text .plusminus {
+    font-size: 30px;
+    font-weight: bold;
+    width: 20px;
+    display: inline-block;
+}
+.faq-text .accordian-title{
+    position: relative;
+    top: -5px;
+    font-size: 1em;
+    font-family: "Montserrat-Light", sans-serif;
+}
+
+/* FAQ */
+
+/*----------------Testimonial--------------------*/
+
+/*#testimonialCarousel {
+    height: auto !important;
+}*/
+.testimonial-container {
+    padding: 20px 10px 60px 10px;
+    text-align: center;
+}
+.testimonial-title {
+    color: #262626;
+    font-family: "Montserrat-UltraLight", sans-serif;
+    font-size: 2.5em !important;
+    margin-bottom: 20px;
+}
+
+.testimonial-left, .testimonial-center, .testimonial-right {
+    display: inline-block;
+}
+.testimonial-container .carousel-control {
+    width: 14%;
+    height: 70%;
+}
+/*.testimonial-left {
+    width: 9%;
+}
+
+.testimonial-center {
+    width: 80% !important;
+}
+
+.testimonial-right {
+    width: 9%;
+}*/
+/* Testimonial */
+
+/* ------Healyos on the go---------------------- */
+.healyos_on_go_mobile_img {
+	display: none;
+}
+
+.healyos_on_go_right_section {
+    margin-top: 19%;
+}
+
+.healyos_on_go_heading {
+	color: #262626;
+	font-family: 'Montserrat-UltraLight', sans-serif;
+	font-size: 2.5em;
+	margin-bottom: 10px;
+}
+
+.healyos_on_go_text {
+	color: #58595B;
+	font-family: 'Neuton-Regular', sans-serif;
+	font-size: 1em;
+}
+
+/* Healyos on the go END */
+
+/*--------Ready to book---------------------------*/
+.ready-to-book-image {
+	/*background-image: url('../images/customer_portal/book_back.png');*/
+	background-repeat: no-repeat;
+	min-height: 493px;
+    background-size: cover;
+    background-position: left;
+}
+.ready-to-book-heading {
+	color: #fff;
+	font-family: 'Montserrat-UltraLight', sans-serif;
+	font-size: 2.5em;
+	text-align: center;
+    margin-top: 4%;
+}
+.ready-to-book-contact-section {
+    margin-top: 5%;
+    text-align: center;
+    display: none;
+}
+.ready-to-book-phonenumber {
+	color: #fff;
+    font-size: 1.33em;
+}
+.ready-to-book-callback {
+    font-size: 0.9em;
+    color: #fff;
+}
+.dash {
+    width: 35px;
+    border-bottom: 1px solid #fff;
+    position: relative;
+    display: inline-block;
+    bottom: 5px;
+    margin: 0px 7px;
+}
+.or {
+    color: #fff;
+    font-size: 1.7em;
+    font-family: 'Neuton-Regular', sans-serif;
+    font-style: italic;
+}
+.ready-to-book-booknow-section {
+    margin-top: 5%;
+}
+
+.ready-to-book-booknow-section .booknow-outer {
+	position: initial;
+}
+.ready-to-book-contact-subsection1 a {
+    text-decoration: none;
+}
+.ready-to-book-booknow-mobile button {
+    border-radius: 33px;
+    border: 0;
+    width: 200px;
+    background: #FC8F7A;
+    color: #fff;
+    width: 250px;
+    padding: 18px 29px;
+    font-family: 'Montserrat-Regular', sans-serif;
+    font-size: 1.125em;
+    cursor: pointer;
+}
+.ready-to-book-booknow-mobile {
+    text-align: center;
+    margin-top: 5%;
+    display: none;
+}
+.footer-booknow {
+    margin-top: 25px;
+}
+.footer-booknow button {
+    width: 40%;
+}
+/*Ready to book END*/
+
+/* -----------Footer css------------------------ */
+.home-footer {
+    background: #CFD4D3;
+}
+
+.footer-container {
+	padding: 30px;
+	margin: 0;
+	background: #CFD4D3;
+}
+
+.footer-company-subsection a {
+	text-decoration: none;
+	color: #262626;
+	font-family: 'Montserrat-Light', sans-serif;
+	font-size: 0.9em;
+}
+
+.footer-company-subsection {
+	margin-top: 10px;
+}
+
+.footer-sub-section3 a {
+	text-decoration: none;
+	color: #000;
+}
+
+.footer-widget-headings {
+	font-weight: bold;
+	font-family: 'Montserrat-Light', sans-serif;
+	color: #262626;
+	font-size: 0.9em;
+}
+
+.therapist a {
+	display: inline-block;
+	margin-top: 37px;
+}
+
+ul.list-unstyled.footer-company-subsection li {
+	padding-bottom: 11px;
+}
+
+/* -----------Footer css END ------------------- */
+
+
+/********************* multiselect dropdown *******************************/
+.ac-select-wrapper, .ac-select-wrapper input, .ac-select-wrapper select {
+	outline: none;
+	background: transparent !important;
+	font-size: 1em !important;
+	/*font-weight: bold;*/
+}
+
+.ac-select-wrapper input {
+	border: 1px solid #ccc;
+}
+
+.ac-select-wrapper {
+	width: 195px;
+    cursor: pointer;
+}
+
+.ac-select-main {
+	height: 35px !important;
+	border:0 !important;
+	min-width: 228px !important;
+}
+
+.ac-select-table {
+	width: 80%;
+}
+div.ac-select-list {
+    overflow: auto !important;
+    height: 200px !important;
+}
+
+.ac-select-list ul li {
+    padding-left: 3px !important;
+    padding: 0;
+    font-size: 0.8em;
+}
+
+table.ac-select-table {
+    table-layout: fixed;
+}
+
+td.ac-select-display {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 32px !important;
+}
+div.ac-select-popup {
+    top: 36px !important;
+    border-left: 0 !important; 
+    border-right: 0 !important;
+    border-bottom: 0 !important; 
+    background-color: #fff !important;
+    margin-left: -9px !important;
+    min-width: 417px !important;
+}
+
+.ac-select-popup li {
+	margin-bottom: 7px;
+}
+
+td.ac-select-image {
+	border-left: 0 !important;
+	background-image: url('../../images/customer_portal/down_arrow.png') !important;
+	background-position: center;
+}
+.ac-select-popup li:hover {
+    background-color: rgba(252, 143, 122, 0.48) !important;
+}
+.ac-select-search-wrapper {
+    font-size: 0.9em;
+}
+.ac-select-list::-webkit-scrollbar-thumb {
+    background-color: #FC8F7A;
+    border-radius: 10px;
+}
+.ac-select-list::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background-color: #f2f2f2;
+}
+/********************* Testimonial Rotator plugin *******************************/
+
+.testimonial-text {
+    text-align: left;
+    padding-top: 10px;
+}
+
+.testimonial-text p {
+    color: #262626;
+    font-family: "Neuton-Regular", sans-serif;
+    font-size: 1.125em;
+}
+
+p.testimonial-cust-name {
+    font-family: "Montserrat-Regular", sans-serif;
+    font-size: 1em;
+}
+
+.testimonial-image img {
+    /*width: 80%;*/
+}
+.carousel-control.left,.carousel-control.right {
+    background: none !important;
+}
+.fa-angle-right, .fa-angle-left {
+    font-size: 43px;
+    color: #4E4E4E;
+    top: 50%;
+    position: absolute;
+}
+
+/********pure drawer*******************/
+.pure-pusher-container {
+    height: initial !important;
+}
+.pure-drawer {
+    background: #fff !important;
+    text-transform: uppercase;
+}
+.pure-drawer .collapse {
+    display: block;
+}
+.pure-drawer .row {
+    margin-left: -15px;
+    margin-right: 0px;
+}
+.pure-toggle-label {
+    top: -2px !important;
+    border: 0 !important;
+    /*left: 72px !important;*/
+}
+.pure-drawer .nav-primary {
+    margin: 0;
+    padding: 100px 0 0 0;
+    /*border-bottom: 1px solid #24323d;*/
+    width: 315px;
+}
+/*.nav-primary li {
+    border-top: 1px solid #24323d;
+    border-bottom: 1px solid #3f566a;
+}*/
+.pure-drawer .nav-primary li a {
+    font-family: "Montserrat-Regular", sans-serif;
+    display: block;
+    color: #262626;
+    padding: 10px 30px;
+    text-decoration: none !important;
+    text-transform: none;
+}
+.nav-primary li a:hover {
+    background-color: #FC8F7A;
+}
+.pure-toggle-label .pure-toggle-icon, .pure-toggle-label .pure-toggle-icon:before, .pure-toggle-label .pure-toggle-icon:after {
+    background: #000 !important;
+}
+.pure-toggle[data-toggle='left']:checked ~ .pure-toggle-label[data-toggle-label='left'] .pure-toggle-icon {
+    background-color: transparent !important;
+}
+@media only screen and (min-width: 64.063em) {
+.pure-drawer {
+    width: 300px;
+}
+}
+@media only screen and (min-width: 40.063em) {
+.pure-drawer {
+    width: 300px;
+}
+}
+/************accordian*******************************/
+.animate-show {
+  line-height: 20px;
+  opacity: 1;
+  padding: 10px;
+  border: 1px solid black;
+  background: white;
+}
+
+.animate-show.ng-hide-add, .animate-show.ng-hide-remove {
+  transition: all linear 2s;
+}
+
+.animate-show.ng-hide {
+  line-height: 0;
+  opacity: 0;
+  padding: 0 10px;
+}
+
+#arrow {
+    z-index: 999;
+    bottom: 0px;
+    margin-bottom: 35px;
+    display: none;
+    /*width: 100%;*/
+    position: fixed;
+    left: 50%;
+    margin-left: -0%;
+}
+#arrow img {
+    width: 25px;
+}
+.date-section ::-webkit-input-placeholder {
+   color: #262626;
+}
+
+.date-section :-moz-placeholder { /* Firefox 18- */
+   color: #262626;  
+}
+
+.date-section ::-moz-placeholder {  /* Firefox 19+ */
+   color: #262626;  
+}
+
+.date-section :-ms-input-placeholder {  
+   color: #262626;  
+}
+
+#tcb-testimonial-carousel {
+    min-height: 200px;
+}
+
+/*.ctrDropDown{
+    width:145px;
+    font-size:11px;
+}
+.ctrDropDownClick{
+    font-size:11px;
+
+    width:300px;
+
+}
+.plainDropDown{
+    width:145px;
+    font-size:11px;
+}*/
+
+.promo {
+    position: absolute;
+    right: -300px;
+    width: 300px;
+    top: 130px;
+
+    -moz-transition:all 800ms ease-in;
+    -webkit-transition:all 800ms ease-in;
+    -o-transition:all 800ms ease-in;
+    transition:all 800ms ease-in;
+}
+
+.promo .hider {
+    position: absolute;
+    right: 10px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #FFF;
+    cursor: default;
+}
+
+#promoTrigger {
+    position: fixed;
+    top: 130px;
+    right: 0;
+    text-align: left;
+    padding: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color: #000;
+    color: #FFF;
+    cursor: pointer;
+    z-index: 150;
+    /*display: none;*/
+    border: 1px solid #DDD;
+    border-right: 0;
+
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none; 
+}
+
+.promo.show {
+    right: calc(50% - 150px);
+
+    -moz-transition:all 800ms ease-in;
+    -webkit-transition:all 800ms ease-in;
+    -o-transition:all 800ms ease-in;
+    transition:all 800ms ease-in;
+}
+
+.overlay {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 150;
+    background-color: rgba(0,0,0,0.5);
+}

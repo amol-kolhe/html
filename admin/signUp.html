@@ -1,0 +1,274 @@
+<form name = "form.signUpForm" data-ng-submit = "form.signUpForm.$valid && submitForm()" novalidate>
+    <table>
+        <tr>
+            <td> Name: </td>
+            <td>
+                <input type = "text"
+                       name = "patientName"
+                       data-ng-model = "patient.name"
+                       data-ng-pattern = "/^[a-zA-Z\s]*$/"
+                       data-ng-class = "{red: form.signUpForm.patientName.$invalid && form.signUpForm.patientName.$dirty, green: form.signUpForm.patientName.$valid && form.signUpForm.patientName.$dirty}"
+                       title = "Enter the name here"
+                       placeholder = "name"
+                       data-ng-required = "true"
+                />
+                <span style = "color:red" data-ng-show = "form.signUpForm.patientName.$dirty && form.signUpForm.patientName.$invalid">
+                    <span data-ng-show = "form.signUpForm.patientName.$error.required"> Name is required. </span>
+                    <span data-ng-show = "form.signUpForm.patientName.$error.pattern"> Invalid name. </span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td> Email: </td>
+            <td>
+                <input type = "text"
+                       name = "patientEmail"
+                       data-ng-model = "patient.email"
+                       data-ng-pattern = "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+                       data-ng-class = "{red: form.signUpForm.patientEmail.$invalid && form.signUpForm.patientEmail.$dirty, green: form.signUpForm.patientEmail.$valid && form.signUpForm.patientEmail.$dirty}"
+                       title = "Enter the email address here"
+                       placeholder = "email"
+                       data-ng-required = "true"
+                />
+                <span style = "color:red" data-ng-show = "form.signUpForm.patientEmail.$dirty && form.signUpForm.patientEmail.$invalid">
+                    <span data-ng-show = "form.signUpForm.patientEmail.$error.required"> Email address is required. </span>
+                    <span data-ng-show = "form.signUpForm.patientEmail.$error.pattern"> Invalid email address. </span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td> Password: </td>
+            <td>
+                <input type = "password"
+                       name = "patientPassword"
+                       data-ng-model = "patient.password"
+                       data-ng-minlength = "6"
+                       data-ng-maxlength ="15"
+                       data-ng-class = "{red: form.signUpForm.patientPassword.$invalid && form.signUpForm.patientPassword.$dirty && visitedPassword, green: form.signUpForm.patientPassword.$valid && form.signUpForm.patientPassword.$dirty && visitedPassword}"
+                       data-ng-blur = "visitedPassword = true"
+                       title = "Enter the password here"
+                       value = "{{patient.password}}"
+                       data-ng-required = "true"
+                />
+                <span style = "color:red" data-ng-show = "form.signUpForm.patientPassword.$dirty && form.signUpForm.patientPassword.$invalid && visitedPassword">
+                    <span data-ng-show = "form.signUpForm.patientPassword.$error.required"> Password is required. </span>
+                    <span data-ng-show = "form.signUpForm.patientPassword.$error.minlength && form.signUpForm.patientPassword.$dirty ">Password should be of minimum 6 characters.</span>
+                    <span data-ng-show = "form.signUpForm.patientPassword.$error.maxlength && form.signUpForm.patientPassword.$dirty ">Password should be of maximum 15 characters.</span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td> Confirm Password: </td>
+            <td>
+                <input type = "password"
+                       name = "patientConfirmPassword"
+                       data-ng-model = "patient.confirmPassword"
+                       data-ng-pattern = "patient.password"
+                       data-ng-blur = "visitedConfirmPassword = true"
+                       data-ng-class = "{red: form.signUpForm.patientConfirmPassword.$invalid && form.signUpForm.patientConfirmPassword.$dirty && visitedConfirmPassword, green: form.signUpForm.patientConfirmPassword.$valid && form.signUpForm.patientConfirmPassword.$dirty && visitedConfirmPassword}"
+                       title = "Re-enter the password here"
+                       value = "{{patient.confirmPassword}}"
+                       data-ng-required = "true"
+                />
+                <span style = "color:red" data-ng-show = "form.signUpForm.patientConfirmPassword.$dirty && form.signUpForm.patientConfirmPassword.$invalid && (patient.password != patient.confirmPassword) && (patient.password.length != patient.confirmPassword.length) && visitedConfirmPassword">
+                    <span data-ng-show = "form.signUpForm.patientConfirmPassword.$error.pattern"> Passwords do not match. </span>
+                    <span data-ng-show = "form.signUpForm.patientConfirmPassword.$error.required"> Password is required. </span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td> Address: </td>
+            <td>
+                <textarea name = "patientAddress"
+                              id = "patientAddressId"
+                              data-ng-model = "patient.address"
+                              data-ng-class = "{red: form.signUpForm.patientAddress.$invalid && form.signUpForm.patientAddress.$dirty, green: form.signUpForm.patientAddress.$valid && form.signUpForm.patientAddress.$dirty}"
+                              title = "Enter the address here"
+                              placeholder = "address"
+                              data-ng-required = "true" >
+                </textarea>
+                <span style = "color:red" data-ng-show = "form.signUpForm.patientAddress.$dirty && form.signUpForm.patientAddress.$invalid">
+                        <span data-ng-show = "form.signUpForm.patientAddress.$error.required">Address is required.</span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td> State: </td>
+            <td>
+                <select name = "patientState"
+                        id = "patientStateId"
+                        data-ng-model = "patient.state"
+                        data-ng-class = "{red: form.signUpForm.patientState.$invalid && form.signUpForm.patientState.$dirty, green: form.signUpForm.patientState.$valid && form.signUpForm.patientState.$dirty}"
+                        title = "Select your state here"
+                        data-ng-required = "true" >
+                    <option></option>
+                    <option> Maharashtra </option>
+                    <option> Kerala </option>
+                    <option> Karnataka </option>
+                    <option> Rajasthan </option>
+                </select>
+                <span style = "color:red" data-ng-show = "form.signUpForm.patientState.$dirty && form.signUpForm.patientState.$invalid">
+                        <span data-ng-show = "form.signUpForm.patientState.$error.required">State is required.</span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td> City: </td>
+            <td>
+                <select name = "patientCity"
+                        id = "patientCityId"
+                        data-ng-model = "patient.city"
+                        data-ng-class = "{red: form.signUpForm.patientCity.$invalid && form.signUpForm.patientCity.$dirty, green: form.signUpForm.patientCity.$valid && form.signUpForm.patientCity.$dirty}"
+                        title = "Select your city here"
+                        data-ng-required = "true" >
+                    <option></option>
+                    <option> Pune </option>
+                    <option> Mumbai </option>
+                    <option> Banglore </option>
+                    <option> Jaipur </option>
+                </select>
+                <span style = "color:red" data-ng-show = "form.signUpForm.patientCity.$dirty && form.signUpForm.patientCity.$invalid">
+                        <span data-ng-show = "form.signUpForm.patientCity.$error.required">City is required.</span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td> Pincode: </td>
+            <td>
+                <input type = "text"
+                       name = "patientPincode"
+                       data-ng-model = "patient.pincode"
+                       data-ng-minlength = "6"
+                       data-ng-maxlength ="10"
+                       data-ng-pattern = "/^\d*$/"
+                       data-ng-class = "{red: form.signUpForm.patientPincode.$invalid && form.signUpForm.patientPincode.$dirty, green: form.signUpForm.patientPincode.$valid && form.signUpForm.patientPincode.$dirty}"
+                       title = "Enter the pincode here"
+                       placeholder = "pincode"
+                       data-ng-required = "true"
+                />
+                <span style = "color:red" data-ng-show = "form.signUpForm.patientPincode.$dirty && form.signUpForm.patientPincode.$invalid">
+                    <span data-ng-show = "form.signUpForm.patientPincode.$error.pattern"> Invalid pin-code.</span>
+                    <span data-ng-show = "form.signUpForm.patientPincode.$error.required"> Pin-code is required. </span>
+                    <span data-ng-show = "form.signUpForm.patientPincode.$error.minlength && form.signUpForm.patientPincode.$dirty ">Pin-code should be of minimum 6 digits.</span>
+                    <span data-ng-show = "form.signUpForm.patientPincode.$error.maxlength && form.signUpForm.patientPincode.$dirty ">Pin-code should be of maximum 10 digits.</span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td> Country: </td>
+            <td>
+                <select name = "patientCountry"
+                        id = "patientCountryId"
+                        data-ng-model = "patient.country"
+                        data-ng-class = "{red: form.signUpForm.patientCountry.$invalid && form.signUpForm.patientCountry.$dirty, green: form.signUpForm.patientCountry.$valid && form.signUpForm.patientCountry.$dirty}"
+                        title = "Select your country here"
+                        data-ng-required = "true" >
+                    <option></option>
+                    <option> India </option>
+                    <option> United States Of America </option>
+                    <option> England </option>
+                    <option> Australia </option>
+                </select>
+                <span style = "color:red" data-ng-show = "form.signUpForm.patientCountry.$dirty && form.signUpForm.patientCountry.$invalid">
+                        <span data-ng-show = "form.signUpForm.patientCountry.$error.required">Country is required.</span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td> Phone Number: </td>
+            <td>
+                <input type = "text"
+                       name = "patientPhoneNumber"
+                       data-ng-model = "patient.phoneNumber"
+                       data-ng-minlength = "10"
+                       data-ng-maxlength ="10"
+                       data-ng-pattern = "/^\d*$/"
+                       data-ng-class = "{red: form.signUpForm.patientPhoneNumber.$invalid && form.signUpForm.patientPhoneNumber.$dirty, green: form.signUpForm.patientPhoneNumber.$valid && form.signUpForm.patientPhoneNumber.$dirty}"
+                       title = "Enter the phone number here"
+                       placeholder = "phone number"
+                       data-ng-required = "true"
+                />
+                <span style = "color:red" data-ng-show = "form.signUpForm.patientPhoneNumber.$dirty && form.signUpForm.patientPhoneNumber.$invalid">
+                    <span data-ng-show = "form.signUpForm.patientPhoneNumber.$error.pattern"> Invalid phone number. </span>
+                    <span data-ng-show = "((form.signUpForm.patientPhoneNumber.$error.minlength || form.signUpForm.patientPhoneNumber.$error.maxlength) && form.signUpForm.patientPhoneNumber.$dirty) ">Phone number should be of 10 digits.</span>
+                    <span data-ng-show = "form.signUpForm.patientPhoneNumber.$error.required">Phone number is required.</span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td> Residence Number: </td>
+            <td>
+                <input type = "text"
+                       name = "patientResidenceNumber"
+                       data-ng-model = "patient.residenceNumber"
+                       data-ng-minlength = "10"
+                       data-ng-maxlength ="10"
+                       data-ng-pattern = "/^\d*$/"
+                       data-ng-class = "{red: form.signUpForm.patientResidenceNumber.$invalid && form.signUpForm.patientResidenceNumber.$dirty, green: form.signUpForm.patientResidenceNumber.$valid && form.signUpForm.patientResidenceNumber.$dirty}"
+                       title = "Enter the residence number here"
+                       placeholder = "residence number"
+                />
+                <span style = "color:red" data-ng-show = "form.signUpForm.patientResidenceNumber.$dirty && form.signUpForm.patientResidenceNumber.$invalid">
+                    <span data-ng-show = "form.signUpForm.patientResidenceNumber.$error.pattern"> Invalid residence number. </span>
+                    <span data-ng-show = "((form.signUpForm.patientResidenceNumber.$error.minlength || form.signUpForm.patientResidenceNumber.$error.maxlength) && form.signUpForm.patientResidenceNumber.$dirty) ">Residence number should be of 10 digits.</span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td> Birth Date: </td>
+            <td>
+                <input type = "date"
+                       id = "patientBirthDateId"
+                       name = "patientBirthDate"
+                       data-ng-model = "patient.birthDate"
+                       data-ng-class = "{red: form.signUpForm.patientBirthDate.$invalid && form.signUpForm.patientBirthDate.$dirty, green: form.signUpForm.patientBirthDate.$valid && form.signUpForm.patientBirthDate.$touched}"
+                       title = "Enter the birth date here"
+                />
+                <span style = "color:red" data-ng-show = "form.signUpForm.patientBirthDate.$dirty && form.signUpForm.patientBirthDate.$invalid">
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td> Avatar Image: </td>
+            <td>
+                <input type = "file"
+                       name = "patientImageFile"
+                       data-ng-model = "patient.imageFile"
+                       data-ng-class = "{red: form.signUpForm.patientImageFile.$invalid && form.signUpForm.patientImageFile.$dirty, green: form.signUpForm.patientImageFile.$valid && form.signUpForm.patientImageFile.$dirty}"
+                       title = "Upload file containing your image"
+                       placeholder = ""
+                />
+                <span style = "color:red" data-ng-show = "form.signUpForm.patientImageFile.$dirty && form.signUpForm.patientImageFile.$invalid">
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td> Problem Type: </td>
+            <td>
+                <select name = "patientProblemType"
+                        title = "Select your problem type here"
+                        multiple
+                        data-ng-model = "patient.problemType"
+                        data-ng-class = "{red: form.signUpForm.patientProblemType.$invalid && form.signUpForm.patientProblemType.$dirty, green: form.signUpForm.patientProblemType.$valid && form.signUpForm.patientProblemType.$dirty}"
+                        >
+                    <option></option>
+                    <option> A </option>
+                    <option> B </option>
+                    <option> C </option>
+                    <option> D </option>
+                </select>
+                <span style = "color:red" data-ng-show = "form.signUpForm.patientProblemType.$dirty && form.signUpForm.patientProblemType.$invalid">
+                </span>
+            </td>
+        </tr>
+        <tr></tr>
+        <tr></tr>
+        <tr>
+            <td></td>
+            <td>
+                <button data-ng-click = "reset()"> Reset </button> &nbsp;&nbsp;
+                <button type = "submit" data-ng-disabled = "form.signUpForm.$invalid"> Submit </button>
+            </td>
+        </tr>
+    </table>
+</form>
