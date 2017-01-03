@@ -5263,6 +5263,8 @@ angular.module('myApp.controllers')
 				item.disctype = item.disctype.toString();
 				item.isNewPromo = false;
 				item.noofappt = item.noofappt;
+				item.max_sessions = item.max_sessions;
+				item.min_sessions = item.min_sessions;
 			});
 		}).
 		error(function (data, status, headers, config) {
@@ -5313,6 +5315,7 @@ angular.module('myApp.controllers')
 				"validfrom": "",
 				"validtill": "",
 				"active":	false,
+				"is_promocode":false,
 				"discount":	"",
 				"disctype": "2",
 				"noofappt": 1,
@@ -5325,7 +5328,9 @@ angular.module('myApp.controllers')
 				"discTypeError": false,
 				"isRecValid": false,
 				"noofapptRequired": false,
-				"isNewPromo": true
+				"isNewPromo": true,
+				"max_sessions":0,
+				"min_sessions":0
 			}
 		);
 	}
@@ -5356,9 +5361,13 @@ angular.module('myApp.controllers')
 				"validfrom": fromEpoch,
 				"validtill": toEpoch,
 				"active":	rec.active,
+				"is_promocode": rec.is_promocode,
 				"discount":	rec.discount,
 				"disctype":	rec.disctype,
+				"max_sessions":rec.max_sessions,
+				"min_sessions":rec.min_sessions,
 				"noofappt": rec.noofappt
+				
 			};
 			if(rec.isNewPromo == true) {
 				adminApi.addPromoCode(obj).
@@ -5382,6 +5391,7 @@ angular.module('myApp.controllers')
 					$timeout(function () { $scope.scrollDiv("promoErrorBox");}, 100);
 				});
 			} else {
+				console.log(obj);
 				adminApi.updatePromoCode(obj, rec._id).
 				success(function(data, status, headers, config) {
 					console.log("Promo code updated successfully!");
@@ -5472,13 +5482,29 @@ angular.module('myApp.controllers')
 			}
 		}
 
+		if(rec.max_sessions == undefined || rec.max_sessions == "" || rec.max_sessions == 0) {
+			rec.maxsessionsError = true;
+		}
+		else{
+			rec.maxsessionsError = false;
+		}
+
+		if(rec.min_sessions == undefined || rec.min_sessions == "" || rec.min_sessions == 0) {
+			rec.minsessionsError = true;
+		}
+		else{
+			rec.minsessionsError = false;
+		}
+
 		if(rec.promoNameError == false && 
 			rec.promodescError == false && 
 			rec.validFromError == false &&
 			rec.validTillError == false &&
 			rec.discountError == false &&
 			rec.noofapptRequired == false &&
-			rec.discTypeError == false) {
+			rec.discTypeError == false &&
+			rec.maxsessionsError == false &&
+			rec.minsessionsError == false) {
 			rec.isRecValid = true;
 			return true;
 		} else { rec.isRecValid = false; rec.action = 'edit'; return false; }

@@ -49,7 +49,7 @@ angular.module('myApp.controllers')
         additionalSpCurrency : "INR",
         type : "Cash",
         amnt : "",
-        additionalSpAmnt : "",
+       // additionalSpAmnt : "",
         paymentModes: [],
         appointmentid : "",
         promocodeid: "",
@@ -58,8 +58,6 @@ angular.module('myApp.controllers')
         finalcost: ""
     };
     $scope.apptPaymentErrorMsg = "";
-    $scope.custPromocode = "";
-    $scope.custLeftApptCount = "";
     $scope.spCharges = "0";
     $scope.costPaid = "0";
     $scope.paymentType = "";
@@ -259,9 +257,6 @@ angular.module('myApp.controllers')
             $scope.getLocalityFromPincode($scope.custReadList.pincode);
             var appointmentHistory = [];
             if(typeof data.payload.appointments[0] != 'undefined'){
-                var appPromoCount = 0;
-                $scope.custPromocode = "NA";
-                $scope.custLeftApptCount = "NA";
                 for(var i = 0; i < data.payload.appointments.length; i++) {
                     data.payload.appointments[i].appointment.state = appointmentStateMap[data.payload.appointments[i].appointment.state];
                     if(data.payload.appointments[i].appointment.amnt == 0){
@@ -272,16 +267,7 @@ angular.module('myApp.controllers')
                     }else{
                         $scope.ratingFlag = true;
                     }
-                    
-                    if((data.payload.appointments[i].appointment.state == "Completed" || data.payload.appointments[i].appointment.state == "Confirmed") && data.payload.appointments[i].appointment.promoCode != ""){
-                        appPromoCount++;
-                        $scope.custPromocode = data.payload.appointments[i].appointment.promoCode;
-                        $scope.custLeftApptCount = data.payload.appointments[i].appointment.promoCodeLimit;
-                    }
                     appointmentHistory.push(data.payload.appointments[i].appointment);
-                }
-                if(appPromoCount > 0 && $scope.custLeftApptCount >= appPromoCount){
-                    $scope.custLeftApptCount = $scope.custLeftApptCount - appPromoCount;
                 }
             } else {
                 console.log("error");
@@ -378,7 +364,7 @@ angular.module('myApp.controllers')
 
                 $scope.spNewApptForCustErrorMsg = "";
                 $scope.resetPromoCodeFollowUp();
-  if (data.payload.appointment.additionalcharge != null && data.payload.appointment.additionalcharge != undefined){
+                if (data.payload.appointment.additionalcharge != null && data.payload.appointment.additionalcharge != undefined){
                 $scope.spNewAppointment.addcharges = data.payload.appointment.additionalcharge;
                 $scope.spNewAppointment.addchargedesc = data.payload.appointment.additionalchargedesc;
                     }
@@ -386,6 +372,7 @@ angular.module('myApp.controllers')
                      $scope.spNewAppointment.addcharges = 0;
                      $scope.spNewAppointment.addchargedesc="";
                 }
+                
                 $location.hash('mainDiv');
             }
         });
@@ -707,127 +694,96 @@ angular.module('myApp.controllers')
     }
 
     $scope.spApptForCustSubmit = function() {
-        if(($scope.custLeftApptCount != "NA" && $scope.custLeftApptCount > 0) || $scope.custPromocode == "NA"){
-            var custproblem;
-            if($scope.custProb == null || $scope.custProb == 'undefined'){
-                custproblem = "";
-            } else if (typeof $scope.custProb != 'undefined'){
-                custproblem = $scope.custProb;
-            }else {
-                custproblem = "";
-            }
+        var custproblem;
+        if($scope.custProb == null || $scope.custProb == 'undefined'){
+            custproblem = "";
+        } else if (typeof $scope.custProb != 'undefined'){
+            custproblem = $scope.custProb;
+        }else {
+            custproblem = "";
+        }
 
-            var resAddress;
-            if($scope.custResAddr == null || $scope.custResAddr == 'undefined') {
-                resAddress = "";
-            } else if (typeof $scope.custResAddr != 'undefined'){
-                resAddress = $scope.custResAddr;
+        var resAddress;
+        if($scope.custResAddr == null || $scope.custResAddr == 'undefined') {
+            resAddress = "";
+        } else if (typeof $scope.custResAddr != 'undefined'){
+            resAddress = $scope.custResAddr;
+        } else {
+            resAddress = "";
+        }
+
+        var spCommentsForCust;
+        if($scope.spNewAppointment.comment == null || $scope.spNewAppointment.comment == 'undefined') {
+            spCommentsForCust = "";
+        } else if (typeof $scope.spNewAppointment.comment != 'undefined') {
+            spCommentsForCust = $scope.spNewAppointment.comment;
+        } else {
+            spCommentsForCust = "";
+        }
+
+        var idObj = $cookies.get('u_id');
+
+        var dataObjSubmitAptForm = {
+            "customer":{
+                "cityid": $scope.custCityId,
+                "name": $scope.custName,
+                "phone": $scope.custPhone,
+                "email": $scope.custEmail,
+                "pincode": $scope.custPincode,
+                "address": resAddress,
+                "problem": custproblem,
+                "gender": $scope.custGender,
+                "signMeUp": true
+            },
+            "apptslots": $scope.spNewAppointment.selectedTimeSlots,
+            "adminid": idObj,
+            "comments": spCommentsForCust,
+            "zoneid": $scope.zoneId,
+            "serviceid": $scope.serviceIdInst,
+            "address": $scope.spNewAppointment.appointmentAddress,
+            "usecustomeraddress":$scope.spNewAppointment.check,
+            "locality": $scope.locality,
+            "apptRootId": $scope.rootApptId,
+            "promocode": $scope.applyPromoResponseFollowUp.promocode,
+            "additionalcharge":$scope.spNewAppointment.addcharges,
+            "additionalchargedesc":$scope.spNewAppointment.addchargedesc
+        }
+  if ($scope.spNewAppointment.addcharges == null || $scope.spNewAppointment.addcharges == undefined){
+            console.log("setting additional charge 0");
+            dataObjSubmitAptForm.additionalcharge = 0;
+        }
+        spApi.createNewAppointment(dataObjSubmitAptForm)
+        .success(function(data, status, headers, config) {
+            // $scope.frm.submit = data.payload.refno;
+            var refnos = [];
+            for(var i=0; i<data.payload.length; i++) {
+                refnos.push(data.payload[i].refno);
+            }
+            if(refnos.length == 1) {
+                $scope.frm.submit = "Thank you for confirming appointment. Appointment reference number is " + refnos[0];
             } else {
-                resAddress = "";
+                $scope.frm.submit = "Thank you for confirming appointments. Appointment reference numbers are " + refnos.join(", ");
             }
-
-            var spCommentsForCust;
-            if($scope.spNewAppointment.comment == null || $scope.spNewAppointment.comment == 'undefined') {
-                spCommentsForCust = "";
-            } else if (typeof $scope.spNewAppointment.comment != 'undefined') {
-                spCommentsForCust = $scope.spNewAppointment.comment;
-            } else {
-                spCommentsForCust = "";
-            }
-
-            var idObj = $cookies.get('u_id');
-
-            var dataObjSubmitAptForm = {
-                "customer":{
-                    "cityid": $scope.custCityId,
-                    "name": $scope.custName,
-                    "phone": $scope.custPhone,
-                    "email": $scope.custEmail,
-                    "pincode": $scope.custPincode,
-                    "address": resAddress,
-                    "problem": custproblem,
-                    "gender": $scope.custGender,
-                    "signMeUp": true
-                },
-                "apptslots": $scope.spNewAppointment.selectedTimeSlots,
-                "adminid": idObj,
-                "comments": spCommentsForCust,
-                "zoneid": $scope.zoneId,
-                "serviceid": $scope.serviceIdInst,
-                "address": $scope.spNewAppointment.appointmentAddress,
-                "usecustomeraddress":$scope.spNewAppointment.check,
-                "locality": $scope.locality,
-                "apptRootId": $scope.rootApptId,
-                "promocode": $scope.applyPromoResponseFollowUp.promocode,
-                "additionalcharge":$scope.spNewAppointment.addcharges,
-                "additionalchargedesc":$scope.spNewAppointment.addchargedesc
-            }
-            if ($scope.spNewAppointment.addcharges == null || $scope.spNewAppointment.addcharges == undefined){
-                console.log("setting additional charge 0");
-                dataObjSubmitAptForm.additionalcharge = 0;
-            }
-            spApi.createNewAppointment(dataObjSubmitAptForm)
-            .success(function(data, status, headers, config) {
-                // $scope.frm.submit = data.payload.refno;
-                var refnos = [];
-                for(var i=0; i<data.payload.length; i++) {
-                    refnos.push(data.payload[i].refno);
-                }
-                if(refnos.length == 1) {
-                    $scope.frm.submit = "Thank you for confirming appointment. Appointment reference number is " + refnos[0];
-                } else {
-                    $scope.frm.submit = "Thank you for confirming appointments. Appointment reference numbers are " + refnos.join(", ");
-                }
-                $scope.spNewApptForCustErrorMsg = "";
-                $scope.showDatepicker = false;
-                $scope.showAddressComments = false;
-            })
-            .error(function(data, status, headers, config) {
-                //$scope.showDatepicker = false;
-                //$scope.showAddressComments = false;
-                $scope.spNewApptForCustErrorMsg = data.error.message;
-                $scope.checkSessionTimeout(data);
-            });
-        }else{
-            $scope.spNewApptForCustErrorMsg = "No more package sessions are available.";
+            $scope.spNewApptForCustErrorMsg = "";
             $scope.showDatepicker = false;
             $scope.showAddressComments = false;
-        }
+        })
+        .error(function(data, status, headers, config) {
+            //$scope.showDatepicker = false;
+            //$scope.showAddressComments = false;
+            $scope.spNewApptForCustErrorMsg = data.error.message;
+            $scope.checkSessionTimeout(data);
+        });
     }
 
     $scope.addPaymentMode = function() {
-        if($scope.aptPayment.additionalSpCurrency &&
-            $scope.aptPayment.type &&
-            $scope.aptPayment.additionalSpAmnt != undefined) {
-
-            var modeAddSpSet = false;
-            for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
-                var modeaddsp = $scope.aptPayment.paymentModes[i];
-                if(modeaddsp.type === $scope.aptPayment.type) {
-                    modeaddsp.amount = $scope.aptPayment.additionalSpAmnt;
-                    modeAddSpSet = true;
-                    break;
-                }
-            }
-
-            if(!modeAddSpSet) {
-                 $scope.aptPayment.paymentModes.push({
-                    currency: $scope.aptPayment.currency,
-                    type: $scope.aptPayment.type,
-                    amount: $scope.aptPayment.additionalSpAmnt,
-                    description: "additional amount",
-                });
-            }
-
-            $scope.aptPayment.additionalSpAmnt = 0;
-        }
-
+       
         if($scope.aptPayment.currency &&
             $scope.aptPayment.type &&
             $scope.aptPayment.amnt != undefined) {
             
             var modeSet = false;
-            for(var i=1; i<$scope.aptPayment.paymentModes.length; i++) {
+            for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
                 var mode = $scope.aptPayment.paymentModes[i];
                 if(mode.type === $scope.aptPayment.type) {
                     mode.amount = $scope.aptPayment.amnt;
@@ -841,7 +797,6 @@ angular.module('myApp.controllers')
                     currency: $scope.aptPayment.currency,
                     type: $scope.aptPayment.type,
                     amount: $scope.aptPayment.amnt,
-                    description: "appointment amount",
                 });
             }
 
@@ -849,25 +804,24 @@ angular.module('myApp.controllers')
         }
     }
 
-    $scope.removePaymentMode = function() {
+    $scope.removePaymentMode = function() {     
         if($scope.aptPayment.selectedMode) {
-            var selectedIndex = $scope.aptPayment.selectedModeIndex;
-
-            /*for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
+            var index = -1;
+            for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
                 var mode = $scope.aptPayment.paymentModes[i];
                 if(mode.type === $scope.aptPayment.selectedMode.type) {
                     index = i;
-                    //break;
+                    break;
                 }
-            }*/
-
-            if(selectedIndex != -1) {
-                $scope.aptPayment.paymentModes.splice(selectedIndex, 1);
+            }
+            if(index != -1) {
+                $scope.aptPayment.paymentModes.splice(index, 1);
                 $scope.aptPayment.selectedMode = null;
                 $scope.aptPayment.selectedModeIndex = -1;
             }
         }
     }
+
 
     $scope.submitAptPayment = function() {
         $scope.apptPaymentErrorMsg = "";
@@ -900,13 +854,11 @@ angular.module('myApp.controllers')
             $scope.visitedpaymentAmt = false;
             //added for SP additional amount;
             $scope.visitedaddsppaymentAmt = false;
+
             var totalCostPaid = 0;
             for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
                 var mode = $scope.aptPayment.paymentModes[i];
                 totalCostPaid += parseInt(mode.amount);
-                if(mode.description == "additional amount"){
-                    $scope.spCharges = parseInt(mode.amount);
-                }
             }
             // $scope.costPaid = $scope.aptPayment.amnt;
             // $scope.costPaid = totalCostPaid;
@@ -915,14 +867,12 @@ angular.module('myApp.controllers')
             }
 
             $scope.adminNewAppointmentCust.payment = {
-                additionalSpAmnt: $scope.spCharges,
                 amnt: totalCostPaid,
                 payments: $scope.aptPayment.paymentModes
             }
 
             $scope.paymentType = $scope.aptPayment.type;
             $scope.adminNewAppointmentCust.appointment.state = "Completed";
-            $scope.aptPayment.additionalSpAmnt = "0";
             $scope.aptPayment.amnt = "0";
             $scope.aptPayment.type = "Cash";
             $scope.aptPayment.paymentModes = [];
@@ -944,9 +894,6 @@ angular.module('myApp.controllers')
         } catch(err) {}
         $scope.visitedpaymentAmt = false;
         $scope.aptPayment.amnt = "0";
-        //added for SP additional amount;
-        $scope.visitedaddsppaymentAmt = false;
-        $scope.aptPayment.additionalSpAmnt = "0";
     }
 
     $scope.showEditDocumentation = function() {
@@ -1442,7 +1389,6 @@ angular.module('myApp.controllers')
         $scope.apptPaymentErrorMsg = "";
         $scope.aptPayment.currency = "INR";
         $scope.aptPayment.type = "Cash";
-        $scope.aptPayment.additionalSpAmnt = "0";
         $scope.aptPayment.amnt = "0";
         $scope.aptPayment.paymentModes = [];
         $scope.aptPayment.promocodeid = "";
@@ -1576,7 +1522,7 @@ angular.module('myApp.controllers')
     }
 
     $scope.addTimeSlot = function() {
-        if($scope.obj.dt && $scope.spNewAppointment.aptstarttime && $scope.spInfo && ($scope.custPromocode == "NA" || $scope.custLeftApptCount > 0)) {
+        if($scope.obj.dt && $scope.spNewAppointment.aptstarttime && $scope.spInfo) {
             var date = moment($scope.obj.dt).format("YYYY-MM-DD");
             var time = "";
             var hr = parseInt($scope.spNewAppointment.aptstarttime.substring(0, 2));
@@ -1595,12 +1541,9 @@ angular.module('myApp.controllers')
             var slot = date + " " + time;
             if($scope.spNewAppointment.selectedTimeSlots.indexOf(slot) == -1) {
                 $scope.spNewAppointment.selectedTimeSlots.push(slot);
-                $scope.custLeftApptCount = $scope.custLeftApptCount - 1;
             } else {
                 alert("Selected Appointment Slot is already added in the list.");
             }
-        }else{
-            alert("No more package sessions are left.");
         }
     }
 
@@ -1620,10 +1563,6 @@ angular.module('myApp.controllers')
             $scope.spNewAppointment.selectedTimeSlots.splice(index, 1);
             $scope.spNewAppointment.selectedSlotIndex = -1;
             $scope.spNewAppointment.selectedSlot = null;
-
-            if($scope.custPromocode != "NA" && $scope.custLeftApptCount != "NA" && $scope.custLeftApptCount >= 0){
-                $scope.custLeftApptCount = $scope.custLeftApptCount + 1;
-            }
         }
     }
 

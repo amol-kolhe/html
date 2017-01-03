@@ -24,8 +24,21 @@
 							<th class="text-center" ng-click="sortPromoCode('active')"><span class="1clsfleft">Is Active?</span>
 								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='active'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
 							</th>
+							<th class="text-center" ng-click="sortPromoCode('is_promocode')"><span class="1clsfleft">Is Promo?</span>
+								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='is_promocode'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+							</th>
 							<th class="text-center" ng-click="sortPromoCode('discount')"><span class="1clsfleft">Discount <span style="color: red;" class="clickable" data-ng-show="(arrPromoCode.length > 0)" data-ng-click="scrollDiv('discountedCostNote');">#</span></span>
 								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='discount'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="sortPromoCode('min_sessions')">
+								<span class="1clsfleft">Min Sessions
+									<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='min_sessions'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+								</span>
+							</th>
+							<th class="text-center" ng-click="sortPromoCode('max_sessions')">
+								<span class="1clsfleft">Max Sessions
+									<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='max_sessions'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+								</span>
 							</th>
 							<th class="text-center" ng-click="sortPromoCode('noofappt')">
 								<span class="1clsfleft">No. of appts 
@@ -112,6 +125,16 @@
 								   		ng-model="rec.active" />
 							   	</span>
 							</td>
+							<td style="min-width:100px; vertical-align: middle;" class="promo-text text-center" class="promo-row-text">
+								<span ng-show = "rec.action != 'edit'">
+									<span ng-if="rec.is_promocode">YES</span>
+									<span ng-if="!rec.is_promocode">NO</span>
+								</span>
+								<span ng-show = "rec.action == 'edit'">
+									<input type="checkbox"
+								   		ng-model="rec.is_promocode" />
+							   	</span>
+							</td>
 							<td style="min-width:110px" class="promo-row-text text-center">
 								<span ng-show = "rec.action != 'edit'">{{rec.discount| number:2}}
 									<span ng-if="rec.disctype == '1'"> %</span>
@@ -131,6 +154,30 @@
 									<option value="1">%</option>
 									<option value="2">&#8377;</option>
 								</select>
+							</td>
+							<td style="min-width:130px" class="promo-row-text text-center">
+								<span ng-show = "rec.action != 'edit'">{{rec.min_sessions}}</span>
+								<div>
+									<span ng-if="rec.minsessionsError == true || rec.minsessionsError == true" style="color: red; font-size: 10px;">Minimum Sessions</span>
+								</div>
+								<input type="number" min="1" max="90" step="1" value="1" 
+									style="width: 50px; padding: 0 5px; display: inline-block;"
+									class="form-control"
+									ng-show="rec.action == 'edit'"
+									ng-model="rec.min_sessions"
+									ng-required="true" />
+							</td>
+							<td style="min-width:130px" class="promo-row-text text-center">
+								<span ng-show = "rec.action != 'edit'">{{rec.max_sessions}}</span>
+								<div>
+									<span ng-if="rec.maxsessionsError == true || rec.maxsessionsError == true" style="color: red; font-size: 10px;">Maximum Sessions</span>
+								</div>
+								<input type="number" min="1" max="90" step="1" value="1" 
+									style="width: 50px; padding: 0 5px; display: inline-block;"
+									class="form-control"
+									ng-show="rec.action == 'edit'"
+									ng-model="rec.max_sessions"
+									ng-required="true" />
 							</td>
 							<td style="min-width:130px" class="promo-row-text text-center">
 								<span ng-show = "rec.action != 'edit'">{{rec.noofappt}}</span>
