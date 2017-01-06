@@ -102,6 +102,18 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         return $http.get(url);
     };
 
+    //API support to get all promocodes.
+    spApi.getPackage = function(active, is_promocode) {
+        var url = baseUrl + "/hrest/v1/admin/packagecode?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + '&time=' + new Date().getTime() + '&role=2';
+        if(active != undefined) {
+            url += "&active=" + active;
+        }
+        if(is_promocode != undefined) {
+            url += "&is_promocode=" + is_promocode;
+        }
+        return $http.get(url);
+    };
+
     //API to fetch the appointment charges
     spApi.calculateApptCharges = function(obj) {
         var url = baseUrl + "/hrest/v1/appt/calculateapptcharges" +
@@ -117,6 +129,11 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
     // API to update (debit / credit) the customer wallet
     spApi.walletTransact = function(custId, obj) {
         return $http.put(baseUrl + "/hrest/v1/cust/" + custId + "/wallet?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2", obj);
+    }
+
+    // API to update package for customer
+    spApi.updatePackage = function(custId, obj) {
+        return $http.put(baseUrl + "/hrest/v1/cust/" + custId + "/package?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2", obj);
     }
 
 	return spApi;

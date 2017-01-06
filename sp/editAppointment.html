@@ -4,7 +4,16 @@
         <div id="aptReadonly" class="aptReadonly">
             <div class="headBar">
                 <span>Appointment Details</span>
-                <span style="float:right;">                    
+                <span style="float:right;">    
+                    <span>
+                        <span ng-hide="(adminNewAppointmentCust.customer.package_code != '0' && adminNewAppointmentCust.customer.no_of_sessions != '0')"
+                            title="Select Package"
+                            class="clickable glyphicon glyphicon-briefcase"
+                            style="color:red;margin-right:15px; font-size: 15px;"
+                            onclick="showPackageDialog();"
+                            data-ng-click="show.DocumentRO = false; editAptClicked();"></span>
+                    </span>
+
                     <span>
                         <span ng-show="showEditDocumentation()"
                             title="Edit Documentation"
@@ -511,6 +520,108 @@
             </div>
         </div>
     </div>
+
+    <!-- For Package Details Start -->
+    <div id="spPackageDetails" style="display:none;" class="spPackageDetails"  ng-controller="PackageCostCalculatorCtrl as packageCostCalculator" ng-init="packageCostCalculator.methods.init()">
+        <div class="headBar">
+            <span>Package Details</span>
+        </div>
+        <div class="bodyContainer">
+            <div>
+                <div>
+                    <p>Please submit the package details.</p>
+                    <form name="apptPackage.packageForm">
+                        <div class="row">
+                            <span class="itemLabel2 col-xs-12 col-sm-3 col-md-2">Package <span class="colonSeparator">:</span></span>
+                            <div class="col-xs-12 col-sm-9 col-md-10">
+                                <div class="dropdown" style="height: 40px;">
+                                    <button class="btn btn-default dropdown-toggle" 
+                                        type="button" 
+                                        id="dropdownPackagecode" 
+                                        style="min-width: 250px" 
+                                        data-toggle="dropdown" 
+                                        aria-haspopup="true" 
+                                        aria-expanded="true">
+                                        <div class="pull-left">
+                                            <span>{{packageCostCalculator.models.calculator.package}}</span>
+                                        </div>
+                                        <div class="pull-right">
+                                            <span class="caret"></span>
+                                        </div>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownPackagecode" style="min-width: 400px; max-height: 350px; overflow: auto;">
+                                        <li style="padding: 0" 
+                                            ng-model = "aptPayment.package_code"
+                                            ng-repeat="promo in packageCostCalculator.models.packagecodes"
+                                            ng-click="(($parent.packageCostCalculator.models.calculator.package = promo.promocode) && (aptPackage.package_id = promo._id) && (aptPackage.package_code = promo.promocode))"
+                                            ng-class="{active: packageCostCalculator.models.calculator.package == promo.promocode}">
+                                            <a href="#">
+                                                <span style="min-width: 130px; display: inline-block;">{{promo.promocode}}</span>
+                                                <span>
+                                                    <span class="menu-info">
+                                                        <span>Discount: </span>                         
+                                                        <span ng-if="promo.disctype == 1">
+                                                            <span>{{promo.discount}}</span>%    
+                                                        </span>
+                                                        <span ng-if="promo.disctype == 2">
+                                                            &#8377;<span>{{promo.discount}}</span>
+                                                        </span>
+                                                    </span>
+                                                    <span class="menu-info">
+                                                        <span>Sessions: </span>                         
+                                                        <span>Min -
+                                                            <span>{{promo.min_sessions}}, </span>
+                                                        </span>
+                                                        <span>Max -
+                                                            <span>{{promo.max_sessions}}</span>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li role="separator" class="divider" style="padding: 0; cursor: default;"
+                                            ng-if="packageCostCalculator.models.calculator.package != 'Select Package'"></li>
+                                        <li style="padding: 0"
+                                            ng-if="packageCostCalculator.models.calculator.package != 'Select Package'"
+                                            ng-click="packageCostCalculator.models.calculator.package = 'Select Package'">
+                                            <a href="#">Unselect Package</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                                <span class="itemLabel2 col-xs-12 col-sm-3 col-md-2">No. of Sessions <span class="colonSeparator">:</span></span>
+                                <div class="col-xs-12 col-sm-9 col-md-10">
+                                    <input type="text"
+                                            ng-model="aptPackage.no_of_sessions"
+                                            class="clstxt3 form-control"
+                                            ng-required = "true"
+                                            ng-pattern="/(^\d*$)/"
+                                            data-ng-blur = "visitedpaymentAmt = true"
+                                            name="no_of_sessions" 
+                                            style="min-width: 250px; max-height: 350px" />
+                                </div>
+                        </div>
+                        <div>
+                            <span style="color: red;" 
+                                ng-show="apptPackageErrorMsg">
+                                {{apptPackageErrorMsg}}
+                            </span>
+                        </div>
+                        <div class="footerBar">
+                            <button class="btn btn-primary btn-sm" 
+                                ng-click="submitAptPackage()"> Save 
+                            </button>
+                            <button class="btn btn-default btn-sm" ng-click="cancelAptPackage()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- For Package Details End -->
+
     <div id="spApptPayment" style="display:none;" class="spApptPayment" ng-hide="adminNewAppointmentCust.appointment.state == 'Cancelled' || disablePayment">
         <div class="headBar">
             <span>Appointment Completion Details</span>
@@ -877,6 +988,27 @@
                             <span>{{payment.amount}} {{payment.currency}}</span>
                             </li>
                         </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xs-12" ng-hide="((adminNewAppointmentCust.customer.package_code == '0' && adminNewAppointmentCust.customer.no_of_sessions == '0') || (aptPackage.package_code != '' && aptPackage.no_of_sessions != ''))">
+            <div class="row">
+                <div class="col-sm-12 col-xs-12 col-lg-12" id="spReadonly">
+                    <div class="headBar">
+                        <span>Customer Package Details</span>
+                    </div>
+                    <div class="bodyContainer">
+                        <div>
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4">Package <span class="colonSeparator">:</span></span>
+                                <span class="col-xs-8" ng-bind="adminNewAppointmentCust.customer.package_code"></span>
+                            </div>
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4">No Of Sessions <span class="colonSeparator">:</span></span>
+                                <span class="col-xs-8" ng-bind="adminNewAppointmentCust.customer.no_of_sessions"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

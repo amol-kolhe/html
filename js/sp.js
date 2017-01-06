@@ -43,13 +43,19 @@ angular.module('myApp.controllers')
     $scope.paymentModes = ["Cash", "Wallet"];
     $scope.currencies = ["INR"];
     $scope.apptPayment = {};
+    $scope.apptPackage = {};
+    $scope.apptPackage.packageForm = "";
+    $scope.aptPackage = {
+        package_id : "",
+        package_code : "",
+        no_of_sessions : ""
+    };
+    $scope.apptPackageErrorMsg = "";
     $scope.apptPayment.paymentForm = "";
     $scope.aptPayment = {
         currency : "INR",
-        additionalSpCurrency : "INR",
         type : "Cash",
         amnt : "",
-       // additionalSpAmnt : "",
         paymentModes: [],
         appointmentid : "",
         promocodeid: "",
@@ -58,7 +64,6 @@ angular.module('myApp.controllers')
         finalcost: ""
     };
     $scope.apptPaymentErrorMsg = "";
-    $scope.spCharges = "0";
     $scope.costPaid = "0";
     $scope.paymentType = "";
     $scope.disablePayment = false;
@@ -822,6 +827,29 @@ angular.module('myApp.controllers')
         }
     }
 
+    $scope.submitAptPackage = function() {
+        $scope.apptPackageErrorMsg = "";
+
+        var data = {
+            package_id: $scope.aptPackage.package_id,
+            package_code: $scope.aptPackage.package_code,
+            no_of_sessions: $scope.aptPackage.no_of_sessions
+        }
+
+        spApi.updatePackage($scope.adminNewAppointmentCust.appointment.patientid, data)
+        .success(function(data, status, headers, config) {
+            alert("Customer package updated successfully");
+            hidePackageDialog();            
+        })
+        .error(function(data, status, headers, config) {
+            $scope.apptPackageErrorMsg = data.error.message;
+            $scope.checkSessionTimeout(data);
+        });
+    }
+
+    $scope.cancelAptPackage = function() {
+        hidePackageDialog();
+    }
 
     $scope.submitAptPayment = function() {
         $scope.apptPaymentErrorMsg = "";
@@ -1007,6 +1035,24 @@ angular.module('myApp.controllers')
             slideUpByIndex('.spApptPayment', 0);
         }else if($scope.currentOpenView == 'CUSTOMER_APPOINTMENT') {
             slideUpByIndex('.spApptPayment', 1);
+        }
+        $scope.scrollDiv('apptSection');
+    }
+
+    showPackageDialog = function() {
+        if($scope.currentOpenView == 'APPOINTMENT') {
+            slideDownByIndex('.spPackageDetails', 0);
+        }else if($scope.currentOpenView == 'CUSTOMER_APPOINTMENT') {
+            slideDownByIndex('.spPackageDetails', 1);
+        }
+        $scope.scrollDiv('spPackageDetails');
+    }
+
+    hidePackageDialog = function() {
+        if($scope.currentOpenView == 'APPOINTMENT') {
+            slideUpByIndex('.spPackageDetails', 0);
+        }else if($scope.currentOpenView == 'CUSTOMER_APPOINTMENT') {
+            slideUpByIndex('.spPackageDetails', 1);
         }
         $scope.scrollDiv('apptSection');
     }
