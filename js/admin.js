@@ -5318,7 +5318,7 @@ angular.module('myApp.controllers')
 				"is_promocode":false,
 				"discount":	"",
 				"disctype": "2",
-				"noofappt": 1,
+				"noofappt": 0,
 				action: "edit",
 				"promoNameError": false,
 				"promodescError": false,
@@ -5329,8 +5329,8 @@ angular.module('myApp.controllers')
 				"isRecValid": false,
 				"noofapptRequired": false,
 				"isNewPromo": true,
-				"max_sessions":0,
-				"min_sessions":0
+				"max_sessions":1,
+				"min_sessions":1
 			}
 		);
 	}
@@ -5351,6 +5351,13 @@ angular.module('myApp.controllers')
 	};
 
 	$scope.savePromoCodeRecord = function(rec, index) {
+		//setting min and max values while saving promocode.-kalyani patil
+		rec.min_val=rec.min_sessions;
+		rec.max_val=rec.max_sessions;
+		rec.appt_val=rec.noofappt;
+
+
+
 		var isRecordValid = $scope.validatePromoCode(rec);
 		if(isRecordValid == true) {
 			var fromEpoch = convertToEpoch(rec.validfrom);
@@ -5442,6 +5449,7 @@ angular.module('myApp.controllers')
 
 	/* Function to validate promocode */
 	$scope.validatePromoCode = function(rec) {
+	
 		if(!rec.promocode) {
 			rec.promoNameError = true;
 		} else { rec.promoNameError = false;}
@@ -5466,7 +5474,7 @@ angular.module('myApp.controllers')
 			rec.discTypeError = true;
 		} else { rec.discTypeError = false; }
 
-		if(rec.noofappt == undefined || rec.noofappt == "" || rec.noofappt == 0) {
+		if((rec.noofappt == undefined || rec.noofappt == "" || rec.noofappt == 0) && rec.is_promocode == true) {
 			rec.noofapptRequired = true;
 		} else {
 			var num = -1;
@@ -5475,25 +5483,32 @@ angular.module('myApp.controllers')
 			} catch(err) {
 				rec.noofapptRequired = true;
 			}
-			if(isNaN(rec.noofappt) || num < 1 || num > 90) {
+			if((isNaN(rec.noofappt) || num < 1 || num > 90) && rec.is_promocode == true) {
 				rec.noofapptRequired = true;
 			}else {
 				rec.noofapptRequired = false;
 			}
 		}
 
-		if(rec.max_sessions == undefined || rec.max_sessions == "" || rec.max_sessions == 0) {
+
+		if((rec.max_sessions == undefined || rec.max_sessions == "" || rec.max_sessions == 0) && rec.is_promocode == false) {
 			rec.maxsessionsError = true;
 		}
 		else{
 			rec.maxsessionsError = false;
 		}
 
-		if(rec.min_sessions == undefined || rec.min_sessions == "" || rec.min_sessions == 0) {
+		if((rec.min_sessions == undefined || rec.min_sessions == "" || rec.min_sessions == 0) && rec.is_promocode == false) {
 			rec.minsessionsError = true;
 		}
 		else{
 			rec.minsessionsError = false;
+		}
+
+		if(rec.min_sessions > rec.max_sessions){
+            rec.minmaxcompareError = true;
+		}else{
+			rec.minmaxcompareError = false;
 		}
 
 		if(rec.promoNameError == false && 
@@ -5510,11 +5525,50 @@ angular.module('myApp.controllers')
 		} else { rec.isRecValid = false; rec.action = 'edit'; return false; }
 	};
 
+	$scope.onCheckSetValue = function(rec) {
+		//function to set default value while check is promo? checkbox.-Kalyani Patil
+		if(rec.is_promocode == true){
+			rec.min_sessions = 0;
+			rec.max_sessions = 0;
+			
+			if(rec.appt_val>1){
+				rec.noofappt=rec.appt_val;
+			}else{
+				rec.noofappt=1;
+			}
+		}else{
+			
+			if(rec.min_val != 0 || rec.max_val != 0){
+				rec.min_sessions = rec.min_val;
+				rec.max_sessions = rec.max_val;
+				rec.noofappt=0;
+			}else{
+				rec.min_sessions = 1;
+				rec.max_sessions = 1;
+				rec.noofappt=0;
+			}
+		}
+	};
+
 	/* Function to edit promocode. It copies the value the existing obj. */
 	$scope.editPromoCode = function(rec, index) {
 		var obj = {};
 		angular.copy(rec, obj);
 		$scope.promoStoreObj[obj._id] = obj;
+
+        //set default value for is promo? checkbox.-Kalyani Patil
+		if(rec.is_promocode == false){
+			rec.noofappt=0;
+			if(rec.min_val>1 || rec.max_val>1){
+				rec.min_sessions = rec.min_val;
+				rec.max_sessions = rec.max_val;
+
+			}else{
+				rec.min_sessions = 1;
+				rec.max_sessions = 1;
+			}
+		}
+
 	};
 
 	$scope.cancelPromoCodeEdit = function(rec, index) {

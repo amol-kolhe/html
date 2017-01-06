@@ -132,7 +132,9 @@
 								</span>
 								<span ng-show = "rec.action == 'edit'">
 									<input type="checkbox"
-								   		ng-model="rec.is_promocode" />
+								   		ng-model="rec.is_promocode"
+								   		ng-click="onCheckSetValue(rec)"
+								   		ng-init="rec.min_val=rec.min_sessions;rec.max_val=rec.max_sessions;rec.appt_val=rec.noofappt"/>
 							   	</span>
 							</td>
 							<td style="min-width:110px" class="promo-row-text text-center">
@@ -158,26 +160,29 @@
 							<td style="min-width:130px" class="promo-row-text text-center">
 								<span ng-show = "rec.action != 'edit'">{{rec.min_sessions}}</span>
 								<div>
-									<span ng-if="rec.minsessionsError == true || rec.minsessionsError == true" style="color: red; font-size: 10px;">Minimum Sessions</span>
-								</div>
+									<span ng-if="rec.minsessionsError == true" style="color: red; font-size: 10px;">Valid number of minimum Sessions expected </span>
+									<span ng-if="rec.minmaxcompareError == true" style="color: red; font-size: 10px;">Min session should always less than max session </span>
+								</div> 
 								<input type="number" min="1" max="90" step="1" value="1" 
 									style="width: 50px; padding: 0 5px; display: inline-block;"
 									class="form-control"
 									ng-show="rec.action == 'edit'"
 									ng-model="rec.min_sessions"
-									ng-required="true" />
+									ng-required="true" 
+									ng-disabled="rec.is_promocode"/>
 							</td>
 							<td style="min-width:130px" class="promo-row-text text-center">
 								<span ng-show = "rec.action != 'edit'">{{rec.max_sessions}}</span>
 								<div>
-									<span ng-if="rec.maxsessionsError == true || rec.maxsessionsError == true" style="color: red; font-size: 10px;">Maximum Sessions</span>
+									<span ng-if="rec.maxsessionsError == true" style="color: red; font-size: 10px;">Valid number of maximum Sessions expected </span>
 								</div>
 								<input type="number" min="1" max="90" step="1" value="1" 
 									style="width: 50px; padding: 0 5px; display: inline-block;"
 									class="form-control"
 									ng-show="rec.action == 'edit'"
 									ng-model="rec.max_sessions"
-									ng-required="true" />
+									ng-required="true" 
+									ng-disabled="rec.is_promocode"/>
 							</td>
 							<td style="min-width:130px" class="promo-row-text text-center">
 								<span ng-show = "rec.action != 'edit'">{{rec.noofappt}}</span>
@@ -189,7 +194,8 @@
 									class="form-control"
 									ng-show="rec.action == 'edit'"
 									ng-model="rec.noofappt"
-									ng-required="true" />
+									ng-required="true"
+									ng-disabled="!rec.is_promocode" />
 							</td>
 							<td style="min-width:80px" class="promo-row-text text-center">
 								<span class="glyphicon glyphicon-pencil clickable" 
