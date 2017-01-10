@@ -63,6 +63,11 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         return $http.get(baseUrl + "/hrest/v1/zone/avail?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&date=" + serviceDate + "&zoneid=" + zoneid + "&servid=" + servid + "&pincode=" + pin);
     }
 
+
+    spApi.getCalculatePackageDiscount=function(package_code,package_id,cost){
+        return $http.get(baseUrl + "/hrest/v1/appt/calculatePackageDiscount?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&package_code=" + package_code + "&package_id=" + package_id + "&cost=" + cost);
+    }
+
     //API for create new appointment
     spApi.createNewAppointment = function(data) {
         return $http.post(baseUrl + '/hrest/v1/appt?apikey=' + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2", data);

@@ -64,6 +64,10 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 	        return $http.get(baseUrl + "/hrest/v1/zone/avail?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&date=" + serviceDate + "&zoneid=" + zoneid + "&servid=" + servid + "&pincode=" + pin + "&spid=" + spid);
 	    }
 	}
+
+	adminApi.getCalculatePackageDiscount=function(package_code,package_id,cost){
+        return $http.get(baseUrl + "/hrest/v1/appt/calculatePackageDiscount?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&package_code=" + package_code + "&package_id=" + package_id + "&cost=" + cost);
+    };
 	
 	//API for create new appointment 
 	adminApi.createNewAppointment = function(data) {

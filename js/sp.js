@@ -337,7 +337,7 @@ angular.module('myApp.controllers')
             if(data.error == undefined) {
                 var jsonStringObj = JSON.stringify(data);
                 var spNewApptForCustObj = JSON.parse(jsonStringObj);
-
+    
                 $scope.obj.custid = $scope.custAptHistory[index].custid;
                 $scope.spNewAppointment.aptstarttime = "";
                 $scope.spInfo = false;
@@ -366,7 +366,7 @@ angular.module('myApp.controllers')
                 $scope.custReadList.zoneid = $scope.zoneId; // new code
                 $scope.serviceIdInst = $scope.serviceIdInst; // new code
                 $scope.getSpMonthlyAppointmentAvailability();
-
+             
                 $scope.spNewApptForCustErrorMsg = "";
                 $scope.resetPromoCodeFollowUp();
                 if (data.payload.appointment.additionalcharge != null && data.payload.appointment.additionalcharge != undefined){
@@ -377,7 +377,40 @@ angular.module('myApp.controllers')
                      $scope.spNewAppointment.addcharges = 0;
                      $scope.spNewAppointment.addchargedesc="";
                 }
-                
+
+
+
+                $scope.package_code = data.payload.customer.package_code;
+                $scope.package_id = data.payload.customer.package_id;
+                $scope.no_of_sessions = data.payload.customer.no_of_sessions;
+                $scope.patientid = data.payload.appointment.patientid;
+                //API to fetch discount of given package:kalyani patil
+                if( $scope.package_id != null &&  $scope.package_id != undefined){
+
+                    spApi.getCalculatePackageDiscount($scope.package_code,$scope.package_id, $scope.costFollowUp)
+                    .success(function(data, status, headers, config){
+
+                            var jsonStringObj = JSON.stringify(data);
+                            var DiscountObj = JSON.parse(jsonStringObj);
+
+                            if(data.payload.discount != null && data.payload.discount != undefined){
+                                $scope.discount =  data.payload.discount;
+                            }
+
+                            if($scope.discount > 0 && $scope.discount != null){
+                                 $scope.costFollowUp =  $scope.costFollowUp - $scope.discount;
+                             }
+
+                     })
+                    .error(function(data, status, headers, config) {
+                            console.log("error msg" + data);
+                            $scope.calculateDiscount = data;
+                            $scope.checkSessionTimeout(data);
+                    });
+
+                }
+        
+
                 $location.hash('mainDiv');
             }
         });
@@ -388,6 +421,9 @@ angular.module('myApp.controllers')
             $scope.spNewApptForCustErrorMsg = data.error.message;
             $scope.checkSessionTimeout(data);
         });
+
+
+
     }
 
     //API to get dates of given month:year have atleast one free slot for appointment.
@@ -726,6 +762,27 @@ angular.module('myApp.controllers')
             spCommentsForCust = "";
         }
 
+        var package_code;
+        if($scope.package_code == null || $scope.package_code == 'undefined'){
+            package_code = "";
+        }else{
+            package_code = $scope.package_code;
+        }
+
+        var package_id;
+        if($scope.package_id == null || $scope.package_id == 'undefined'){
+            package_id = "";
+        }else{
+            package_id = $scope.package_id;
+        }
+
+        var no_of_sessions;
+         if($scope.no_of_sessions == null || $scope.no_of_sessions == 'undefined'){
+            no_of_sessions = "";
+        }else{
+            no_of_sessions = $scope.no_of_sessions;
+        }
+
         var idObj = $cookies.get('u_id');
 
         var dataObjSubmitAptForm = {
@@ -738,7 +795,8 @@ angular.module('myApp.controllers')
                 "address": resAddress,
                 "problem": custproblem,
                 "gender": $scope.custGender,
-                "signMeUp": true
+                "signMeUp": true,
+                "no_of_sessions":no_of_sessions
             },
             "apptslots": $scope.spNewAppointment.selectedTimeSlots,
             "adminid": idObj,
@@ -751,7 +809,11 @@ angular.module('myApp.controllers')
             "apptRootId": $scope.rootApptId,
             "promocode": $scope.applyPromoResponseFollowUp.promocode,
             "additionalcharge":$scope.spNewAppointment.addcharges,
-            "additionalchargedesc":$scope.spNewAppointment.addchargedesc
+            "additionalchargedesc":$scope.spNewAppointment.addchargedesc,
+            "package_code":package_code,
+            "package_id":package_id,
+            "patientid":$scope.patientid,
+
         }
   if ($scope.spNewAppointment.addcharges == null || $scope.spNewAppointment.addcharges == undefined){
             console.log("setting additional charge 0");
