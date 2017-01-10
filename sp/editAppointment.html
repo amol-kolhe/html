@@ -6,12 +6,11 @@
                 <span>Appointment Details</span>
                 <span style="float:right;">    
                     <span>
-                        <span ng-hide="(adminNewAppointmentCust.customer.package_code != '0' && adminNewAppointmentCust.customer.no_of_sessions != '0')"
+                        <span ng-hide="((adminNewAppointmentCust.customer.package_code != '0' && adminNewAppointmentCust.customer.no_of_sessions != '0') || (aptPackage.package_code != '' && aptPackage.no_of_sessions != ''))"
                             title="Select Package"
                             class="clickable glyphicon glyphicon-briefcase"
                             style="color:red;margin-right:15px; font-size: 15px;"
-                            onclick="showPackageDialog();"
-                            data-ng-click="show.DocumentRO = false; editAptClicked();"></span>
+                            onclick="showPackageDialog();"></span>
                     </span>
 
                     <span>
@@ -527,13 +526,13 @@
             <span>Package Details</span>
         </div>
         <div class="bodyContainer">
-            <div>
-                <div>
-                    <p>Please submit the package details.</p>
-                    <form name="apptPackage.packageForm">
-                        <div class="row">
-                            <span class="itemLabel2 col-xs-12 col-sm-3 col-md-2">Package <span class="colonSeparator">:</span></span>
-                            <div class="col-xs-12 col-sm-9 col-md-10">
+            <p>Please submit the package details.</p>
+            <form name="apptPackage.packageForm">
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="row middleRowContent">
+                            <span class="itemLabel2 col-xs-4">Package <span class="colonSeparator">:</span></span>
+                            <div class="col-xs-8">
                                 <div class="dropdown" style="height: 40px;">
                                     <button class="btn btn-default dropdown-toggle" 
                                         type="button" 
@@ -553,7 +552,7 @@
                                         <li style="padding: 0" 
                                             ng-model = "aptPayment.package_code"
                                             ng-repeat="promo in packageCostCalculator.models.packagecodes"
-                                            ng-click="(($parent.packageCostCalculator.models.calculator.package = promo.promocode) && (aptPackage.package_id = promo._id) && (aptPackage.package_code = promo.promocode))"
+                                            ng-click="(($parent.packageCostCalculator.models.calculator.package = promo.promocode) && (aptPackage.package_id = promo._id) && (aptPackage.package_code = promo.promocode) && (aptPackage.min_sessions = promo.min_sessions) && (aptPackage.max_sessions = promo.max_sessions) && (aptPackage.no_of_sessions = promo.min_sessions)) && packageCostCalculator.methods.calculateCost()"
                                             ng-class="{active: packageCostCalculator.models.calculator.package == promo.promocode}">
                                             <a href="#">
                                                 <span style="min-width: 130px; display: inline-block;">{{promo.promocode}}</span>
@@ -590,34 +589,59 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                                <span class="itemLabel2 col-xs-12 col-sm-3 col-md-2">No. of Sessions <span class="colonSeparator">:</span></span>
-                                <div class="col-xs-12 col-sm-9 col-md-10">
-                                    <input type="text"
-                                            ng-model="aptPackage.no_of_sessions"
-                                            class="clstxt3 form-control"
-                                            ng-required = "true"
-                                            ng-pattern="/(^\d*$)/"
-                                            data-ng-blur = "visitedpaymentAmt = true"
-                                            name="no_of_sessions" 
-                                            style="min-width: 250px; max-height: 350px" />
+                        <div class="row middleRowContent">
+                            <span class="itemLabel2 col-xs-4">No. of Sessions <span class="colonSeparator">:</span></span>
+                            <div class="col-xs-8">
+                                <input type="text"
+                                        ng-keyup="packageCostCalculator.methods.calculateCost()"
+                                        ng-model="aptPackage.no_of_sessions"
+                                        class="clstxt3 form-control"
+                                        ng-required = "true"
+                                        ng-pattern="/(^\d*$)/"
+                                        data-ng-blur = "visitedpaymentAmt = true"
+                                        name="no_of_sessions" 
+                                        style="min-width: 250px; max-height: 350px" />
+                                <span style="color: red;"
+                                    ng-show="apptPackageError">
+                                    {{apptPackageError}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="row middleRowContent">
+                            <div class="col-xs-12" ng-if="packageCostCalculator.models.response.showResponse">
+                                <div class="headBar">
+                                    <span>Cost Distribution</span>
                                 </div>
+                                <div class="bodyContainer">
+                                    <div>
+                                        <div>
+                                            <div>Net Total Cost &#8377; {{packageCostCalculator.models.response.netTotalCharges}}</div>
+                                        </div>
+                                        <div>
+                                            <div>Discounted cost per appointment &#8377; {{packageCostCalculator.models.response.perApptCharges}}</div>
+                                            <div style="color: #989898;">Original cost per appointment &#8377; {{packageCostCalculator.models.response.originalChargePerAppt}}</div >
+                                        </div>
+                                        <div ng-if="packageCostCalculator.models.response.status.statusCode == '2164391937'"
+                                            style="margin-top: 15px;">
+                                            <div class="alert alert-warning" role="alert">
+                                                {{packageCostCalculator.models.response.status.message}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <span style="color: red;" 
-                                ng-show="apptPackageErrorMsg">
-                                {{apptPackageErrorMsg}}
-                            </span>
-                        </div>
-                        <div class="footerBar">
-                            <button class="btn btn-primary btn-sm" 
-                                ng-click="submitAptPackage()"> Save 
-                            </button>
-                            <button class="btn btn-default btn-sm" ng-click="cancelAptPackage()">Cancel</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+                <div class="footerBar">
+                    <button class="btn btn-primary btn-sm" 
+                        ng-click="submitAptPackage()"> Save 
+                    </button>
+                    <button class="btn btn-default btn-sm" ng-click="cancelAptPackage()">Cancel</button>
+                </div>
+            </form>
         </div>
     </div>
     <!-- For Package Details End -->
@@ -938,6 +962,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4">Total Appointments <span class="colonSeparator">:</span></span>
+                                <span class="col-xs-8">
+                                    {{custTotalAppt}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1002,11 +1036,15 @@
                         <div>
                             <div class="row middleRowContent">
                                 <span class="itemLabel2 col-xs-4">Package <span class="colonSeparator">:</span></span>
-                                <span class="col-xs-8" ng-bind="adminNewAppointmentCust.customer.package_code"></span>
+                                <span class="col-xs-8" ng-bind="(adminNewAppointmentCust.customer.package_code || aptPackage.package_code)"></span>
                             </div>
                             <div class="row middleRowContent">
                                 <span class="itemLabel2 col-xs-4">No Of Sessions <span class="colonSeparator">:</span></span>
-                                <span class="col-xs-8" ng-bind="adminNewAppointmentCust.customer.no_of_sessions"></span>
+                                <span class="col-xs-8" ng-bind="(adminNewAppointmentCust.customer.no_of_sessions || aptPackage.no_of_sessions)"></span>
+                            </div>
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4">Completed Sessions <span class="colonSeparator">:</span></span>
+                                <span class="col-xs-8" ng-bind="custPackageTotalAppt"></span>
                             </div>
                         </div>
                     </div>

@@ -48,9 +48,14 @@ angular.module('myApp.controllers')
     $scope.aptPackage = {
         package_id : "",
         package_code : "",
-        no_of_sessions : ""
+        no_of_sessions : "",
+        min_sessions : "",
+        max_sessions : "",
+        net_amount : "",
     };
-    $scope.apptPackageErrorMsg = "";
+    $scope.apptPackageError = "";
+    $scope.custTotalAppt = 0;
+    $scope.custPackageTotalAppt = 0;
     $scope.apptPayment.paymentForm = "";
     $scope.aptPayment = {
         currency : "INR",
@@ -157,6 +162,48 @@ angular.module('myApp.controllers')
     }
 
     $scope.showAppointment = function(appointment, fromView) {
+        $scope.custTotalAppt = 0;
+        $scope.custPackageTotalAppt = 0;
+        $scope.aptPackage.package_code = "";
+        $scope.aptPackage.no_of_sessions = "";
+        spApi.getCustomerDetails(appointment.custid)
+        .success(function(data, status, headers, config){
+            $scope.custReadList = data.payload.customer;
+            $scope.customerId = data.payload.customer.healyoscustid;
+            $scope.obj.custid = data.payload.customer._id;
+            if($scope.custReadList.age == 0 && $scope.custReadList.birthdate == undefined){
+                $scope.custReadList.age = "-";
+                $scope.custReadList.birthdate = "-";
+            }
+            $scope.getLocalityFromPincode($scope.custReadList.pincode);
+            var appointmentHistory = [];
+            if(typeof data.payload.appointments[0] != 'undefined'){
+                for(var i = 0; i < data.payload.appointments.length; i++) {
+                    $scope.custTotalAppt++;
+                    data.payload.appointments[i].appointment.state = appointmentStateMap[data.payload.appointments[i].appointment.state];
+                    if(data.payload.appointments[i].appointment.amnt == 0){
+                        data.payload.appointments[i].appointment.amnt = "NA";
+                    }
+                    if(data.payload.appointments[i].appointment.rating == 0){
+                        $scope.ratingFlag = false;
+                    }else{
+                        $scope.ratingFlag = true;
+                    }
+                    if(data.payload.appointments[i].appointment.package_id == data.payload.customer.package_id && data.payload.appointments[i].appointment.package_code == data.payload.customer.package_code && data.payload.appointments[i].appointment.current_session_no != "0"){
+                        $scope.custPackageTotalAppt++;
+                    }
+                    appointmentHistory.push(data.payload.appointments[i].appointment);
+                }
+            } else {
+                console.log("error");
+            }
+            $scope.custAptHistory = appointmentHistory;
+        })
+        .error(function(data, status, headers, config){
+            $scope.aptErrorMsg = data.error.message;
+            $scope.checkSessionTimeout(data);
+        });
+
         $scope.disablePayment = false;
         $scope.costPaid = "0";
         $scope.spCharges = "0";
@@ -169,10 +216,12 @@ angular.module('myApp.controllers')
             if(fromView == "customer") {
                 $scope.currentOpenView = "CUSTOMER_APPOINTMENT";
                 hidePaymentDialog();
+                hidePackageDialog();
             }
             else {
                 $scope.currentOpenView = "APPOINTMENT";
                 hidePaymentDialog();
+                hidePackageDialog();
             }
             $scope.adminNewAppointmentCust = data.payload;
             $scope.adminNewAppointmentCust.appointment.state = appointmentStateMap[$scope.adminNewAppointmentCust.appointment.state];
@@ -890,28 +939,34 @@ angular.module('myApp.controllers')
     }
 
     $scope.submitAptPackage = function() {
-        $scope.apptPackageErrorMsg = "";
+        if( $scope.aptPackage.no_of_sessions >= $scope.aptPackage.min_sessions && $scope.aptPackage.no_of_sessions <= $scope.aptPackage.max_sessions)
+        {
+            if($scope.custReadList.custwallet.walletbalance >= $scope.aptPackage.net_amount)
+            {
+                var data = {
+                    package_id: $scope.aptPackage.package_id,
+                    package_code: $scope.aptPackage.package_code,
+                    no_of_sessions: $scope.aptPackage.no_of_sessions
+                }
 
-        var data = {
-            package_id: $scope.aptPackage.package_id,
-            package_code: $scope.aptPackage.package_code,
-            no_of_sessions: $scope.aptPackage.no_of_sessions
+                spApi.updatePackage($scope.adminNewAppointmentCust.appointment.patientid, data)
+                .success(function(data, status, headers, config) {
+                    alert("Customer package updated successfully");
+                    hidePackageDialog();            
+                })
+                .error(function(data, status, headers, config) {
+                    $scope.apptPackageError = data.error.message;
+                    $scope.checkSessionTimeout(data);
+                });
+            }else{
+                $scope.apptPackageError = "Customer don't have enough credit in wallet.";
+            }
+        }else{
+            $scope.apptPackageError = "No. of Sessions must be in a range of package.";
         }
-
-        spApi.updatePackage($scope.adminNewAppointmentCust.appointment.patientid, data)
-        .success(function(data, status, headers, config) {
-            alert("Customer package updated successfully");
-            hidePackageDialog();            
-        })
-        .error(function(data, status, headers, config) {
-            $scope.apptPackageErrorMsg = data.error.message;
-            $scope.checkSessionTimeout(data);
-        });
     }
 
-    $scope.cancelAptPackage = function() {
-        hidePackageDialog();
-    }
+
 
     $scope.submitAptPayment = function() {
         $scope.apptPaymentErrorMsg = "";

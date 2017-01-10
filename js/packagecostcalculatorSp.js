@@ -21,7 +21,7 @@ angular.module('myApp.controllers')
 		init: init,
 		getServices: getServices,
 		getPackageCodes: getPackageCodes,
-		//calculateCost: calculateCost,
+		calculateCost: calculateCost,
 		//verifyNoofappt: verifyNoofappt
 	};
 
@@ -73,19 +73,31 @@ angular.module('myApp.controllers')
 		});
 	}
 
-	/*function calculateCost() {
+	$scope.cancelAptPackage = function() {
+		hidePackageDialog();
+        try {
+            $scope.apptPackage.packageForm.$setPristine();
+            $scope.apptPackage.packageForm.$setUntouched();
+        } catch(err) {}
+        $scope.aptPackage.no_of_sessions = "";
+        $scope.packageCostCalculator.models.calculator.package = 'Select Package';
+        $scope.apptPackageError = "";
+        vm.models.response.showResponse = false;
+    }
+
+	function calculateCost() {
 		vm.models.response = null;
 		var data = {
-			massnoofappt: vm.models.calculator.noofappt,
-			serviceid: vm.models.service.id
+			massnoofappt: $scope.aptPackage.no_of_sessions,
+			serviceid: vm.models.service.id,
+			promocode: $scope.packageCostCalculator.models.calculator.package,
 		};
-		if(vm.models.calculator.package != packageLabel) {
-			data.promocode = vm.models.calculator.package;
-		}
+		
 		spApi.calculateApptCharges(data).
 		success(function (data, status, headers, config) {
 			if(data && data.payload) {
 				vm.models.response = data.payload;
+				$scope.aptPackage.net_amount = vm.models.response.netTotalCharges;
 				vm.models.response.showResponse = true;
 				vm.models.response.status = data.status;
 			}
@@ -100,7 +112,7 @@ angular.module('myApp.controllers')
 		});
 	}
 
-	function verifyNoofappt() {
+	/*function verifyNoofappt() {
 		if(vm.models.calculator.noofappt == undefined || vm.models.calculator.noofappt == "") {
 			vm.models.calculator.noofappt = 1;
 		} else if(isNaN(vm.models.calculator.noofappt)) {
