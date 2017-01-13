@@ -28,14 +28,17 @@ angular.module('myApp.controllers')
 
 	$scope.aptPayment = {		
 		currency : "INR",
-		type : "Cash",
+		type : "Wallet",
+		sptype : "Wallet",
 		amnt : "0",
+		additionalSpAmnt : "",
 		paymentModes: [],
 		appointmentid : "",
 		promocodeid: "",
 		promocode: "",
 		discount: "",
-		finalcost: ""
+		finalcost: "",
+		additionalSpAmntDesc:"",
 	};
 	$scope.spRequestType = {
 		1 : "Cancel",
@@ -43,6 +46,7 @@ angular.module('myApp.controllers')
 	};
 	$scope.currencies = ["INR"];
 	$scope.paymentModes = ["Cash", "Wallet"];
+	$scope.paymentModesSp = ["Cash", "Wallet"];
 	$scope.appointmentCriteria = {
 		fromDate : "",
 		fromEpoch : "",
@@ -1071,15 +1075,15 @@ angular.module('myApp.controllers')
 		}
 
 		var package_code;
-        if($scope.package_code == null || $scope.package_code == 'undefined'){
-            package_code = "";
+        if($scope.package_code == null || $scope.package_code == 'undefined' || $scope.package_code == "0"){
+            package_code = null;
         }else{
             package_code = $scope.package_code;
         }
 
         var package_id;
         if($scope.package_id == null || $scope.package_id == 'undefined'){
-            package_id = "";
+            package_id = null;
         }else{
             package_id = $scope.package_id;
         }
@@ -1090,6 +1094,14 @@ angular.module('myApp.controllers')
         }else{
             no_of_sessions = $scope.no_of_sessions;
         }
+
+        var promocode;
+        if($scope.applyPromoResponseFollowUp.promocode == null || $scope.applyPromoResponseFollowUp.promocode == "" || $scope.applyPromoResponseFollowUp.promocode == "0"){
+            promocode = null;
+        }else{
+            promocode = $scope.applyPromoResponseFollowUp.promocode;
+        }
+
 
 		var idObj = $cookies.get('u_id');
 		var dataObjSubmitAptForm = {
@@ -1116,7 +1128,7 @@ angular.module('myApp.controllers')
 			"locality": $scope.locality,
 			"spid" : $scope.obj.followupSpid,
 			"apptRootId": $scope.rootApptId,
-			"promocode": $scope.applyPromoResponseFollowUp.promocode,
+			"promocode": promocode,
             "additionalcharge":$scope.spNewAppointment.addcharges,
             "additionalchargedesc":$scope.spNewAppointment.addchargedesc,
             "package_code":package_code,
@@ -2535,7 +2547,15 @@ angular.module('myApp.controllers')
 				$scope.adminNewAppointmentCust.hasDocument = true;
 			}
 
-			if ($scope.adminNewAppointmentCust.payment != undefined && $scope.adminNewAppointmentCust.payment != "") {
+
+		    if($scope.adminNewAppointmentCust.appointment.promocode == undefined || $scope.adminNewAppointmentCust.appointment.promocode == ''){
+                $scope.adminNewAppointmentCust.appointment.promocode = '';
+            }
+            if($scope.adminNewAppointmentCust.appointment.package_code == undefined || $scope.adminNewAppointmentCust.appointment.package_code == ''){
+                $scope.adminNewAppointmentCust.appointment.package_code = '';
+            }
+
+			/*if ($scope.adminNewAppointmentCust.payment != undefined && $scope.adminNewAppointmentCust.payment != "") {
 				if ($scope.adminNewAppointmentCust.payment.amnt != undefined && $scope.adminNewAppointmentCust.payment.amnt != "") {
 					$scope.costPaid = $scope.adminNewAppointmentCust.payment.amnt;
 				} else {
@@ -2543,7 +2563,16 @@ angular.module('myApp.controllers')
 				}
 			} else {
 				$scope.costPaid = 0;
-			}
+			}*/
+
+          
+            if($scope.adminNewAppointmentCust.appointment.finalcost > 0){
+                $scope.costPaid = $scope.adminNewAppointmentCust.appointment.finalcost;
+                if($scope.adminNewAppointmentCust.appointment.additionalcharge > 0 && $scope.adminNewAppointmentCust.appointment.additionalcharge != undefined){
+                    $scope.costPaid = $scope.costPaid + $scope.adminNewAppointmentCust.appointment.additionalcharge;
+                }
+            }
+            
 		})
 		.error(function(data, status, headers, config){
 			$scope.aptErrorMsg = data.error.message;
@@ -2836,48 +2865,81 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.addPaymentMode = function() {
+
+		alert($scope.aptPayment.additionalSpAmntDesc);
 		if($scope.aptPayment.currency &&
-			$scope.aptPayment.type &&
-			$scope.aptPayment.amnt != undefined) {
+            $scope.aptPayment.type &&
+            $scope.aptPayment.amnt != undefined) {
+            
+            var modeSet = false;
+            for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
+                var mode = $scope.aptPayment.paymentModes[i];
+                if(mode.type === $scope.aptPayment.type) {
+                    mode.amount = $scope.aptPayment.amnt;
+                    modeSet = true;
+                    break;
+                }
+            }
+            
+            if(!modeSet) {
+                $scope.aptPayment.paymentModes.push({
+                    currency: $scope.aptPayment.currency,
+                    type: $scope.aptPayment.type,
+                    amount: $scope.aptPayment.amnt,
+                    description: "appointment amount",
+                });
+            }
 
-			var modeSet = false;
-			for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
-				var mode = $scope.aptPayment.paymentModes[i];
-				if(mode.type === $scope.aptPayment.type) {
-					mode.amount = $scope.aptPayment.amnt;
-					modeSet = true;
-					break;
-				}
-			}
-			
-			if(!modeSet) {
-				$scope.aptPayment.paymentModes.push({
-					currency: $scope.aptPayment.currency,
-					type: $scope.aptPayment.type,
-					amount: $scope.aptPayment.amnt
-				});
-			}
+            $scope.aptPayment.amnt = 0;
+        }
 
-			$scope.aptPayment.amnt = 0;
-		}
+       
+       if($scope.aptPayment.sptype &&
+            $scope.aptPayment.additionalSpAmnt != undefined) {
+
+            var modeAddSpSet = false;
+            for(var i=1; i<$scope.aptPayment.paymentModes.length; i++) {
+                var modeaddsp = $scope.aptPayment.paymentModes[i];
+                if(modeaddsp.sptype === $scope.aptPayment.sptype) {
+                    modeaddsp.amount = $scope.aptPayment.additionalSpAmnt;
+                    modeAddSpSet = true;
+                    break;
+                }
+            }
+
+            if(!modeAddSpSet) {
+                 $scope.aptPayment.paymentModes.push({
+                    currency: $scope.aptPayment.currency,
+                    type: $scope.aptPayment.sptype,
+                    amount: $scope.aptPayment.additionalSpAmnt,
+                    //description: "additional amount",
+                    description:$scope.aptPayment.additionalSpAmntDesc,
+                });
+            }
+
+            $scope.aptPayment.additionalSpAmnt = 0;
+        }
+
 	}
 
 	$scope.removePaymentMode = function() {		
-		if($scope.aptPayment.selectedMode) {
-			var index = -1;
-			for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
-				var mode = $scope.aptPayment.paymentModes[i];
-				if(mode.type === $scope.aptPayment.selectedMode.type) {
-					index = i;
-					break;
-				}
-			}
-			if(index != -1) {
-				$scope.aptPayment.paymentModes.splice(index, 1);
-				$scope.aptPayment.selectedMode = null;
-				$scope.aptPayment.selectedModeIndex = -1;
-			}
-		}
+		  if($scope.aptPayment.selectedMode) {
+            var selectedIndex = $scope.aptPayment.selectedModeIndex;
+
+            /*for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
+                var mode = $scope.aptPayment.paymentModes[i];
+                if(mode.type === $scope.aptPayment.selectedMode.type) {
+                    index = i;
+                    //break;
+                }
+            }*/
+
+            if(selectedIndex != -1) {
+                $scope.aptPayment.paymentModes.splice(selectedIndex, 1);
+                $scope.aptPayment.selectedMode = null;
+                $scope.aptPayment.selectedModeIndex = -1;
+            }
+        }
 	}
 
 	$scope.submitAptPayment = function() {
@@ -2918,6 +2980,8 @@ angular.module('myApp.controllers')
                 $scope.apptPayment.paymentForm.$setUntouched();
             } catch(err) {}
 			$scope.visitedpaymentAmt = false;
+			 //added for SP additional amount;
+            $scope.visitedaddsppaymentAmt = false;
 
 			var totalCostPaid = 0;
             for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
@@ -2933,8 +2997,10 @@ angular.module('myApp.controllers')
 			$scope.paymentType = $scope.aptPayment.type;
 			$scope.adminNewAppointmentCust.appointment.state = "Completed";
 			$scope.applyPromoResponsePaymentSection = {};
+			$scope.aptPayment.additionalSpAmnt = "0";
 			$scope.aptPayment.amnt = "0";
-			$scope.aptPayment.type = "Cash";
+			$scope.aptPayment.type = "Wallet";
+            $scope.aptPayment.sptype = "Wallet";
 			$scope.aptPayment.paymentModes = [];
 			$scope.aptPayment.selectedMode = null;
 			$scope.aptPayment.selectedModeIndex = -1;
@@ -2958,10 +3024,14 @@ angular.module('myApp.controllers')
         } catch(err) {}
 		$scope.visitedpaymentAmt = false;
 		$scope.aptPayment.amnt = "0";
-		$scope.aptPayment.type = "Cash";
+		$scope.aptPayment.type = "Wallet";
 		$scope.aptPayment.paymentModes = [];
 		$scope.aptPayment.selectedMode = null;
 		$scope.aptPayment.selectedModeIndex = -1;
+
+		//added for SP additional amount;
+        $scope.visitedaddsppaymentAmt = false;
+        $scope.aptPayment.additionalSpAmnt = "0";
 	}
 
 	$scope.makeAptPayment = function(appointmentRefNo) {
@@ -5821,8 +5891,10 @@ angular.module('myApp.controllers')
 
 	$scope.resetPromoCodePaymentSection = function () {
 		$scope.aptPayment.currency = "INR";
-        $scope.aptPayment.type = "Cash";
+        $scope.aptPayment.type = "Wallet";
+        $scope.aptPayment.sptype = "Wallet";
         $scope.aptPayment.amnt = "0";
+        $scope.aptPayment.additionalSpAmnt = "0";
         $scope.aptPayment.paymentModes = [];
         $scope.aptPayment.promocodeid = "";
         $scope.aptPayment.promocode = "";
@@ -5902,11 +5974,11 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.showPromocodeInfoInAdmin = function() {
-		if(($scope.adminNewAppointmentCust.appointment != undefined) && ($scope.adminNewAppointmentCust.appointment.promocode != undefined) && ($scope.adminNewAppointmentCust.appointment.promocode.trim().length > 0)) {
+		/*if(($scope.adminNewAppointmentCust.appointment != undefined) && ($scope.adminNewAppointmentCust.appointment.promocode != undefined) && ($scope.adminNewAppointmentCust.appointment.promocode.trim().length > 0)) {
 			if(($scope.adminNewAppointmentCust.appointment.finalcost != undefined) && ($scope.adminNewAppointmentCust.appointment.finalcost >= 0)) {
 				return true;
 			}
-		}
+		}*/
 
 		return false;
 	}
