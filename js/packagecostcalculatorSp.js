@@ -2,7 +2,7 @@ angular.module('myApp.controllers')
 .controller('PackageCostCalculatorCtrl', function($scope, $http, spApi){
 	var vm = this;
 	var packageLabel = "Select Package";
-
+	
 	vm.models = {
 		calculator: {
 			min_sessions: 1,
@@ -73,7 +73,7 @@ angular.module('myApp.controllers')
 		});
 	}
 
-	$scope.cancelAptPackage = function() {
+	vm.cancelAptPackage = function() {
 		hidePackageDialog();
         try {
             $scope.apptPackage.packageForm.$setPristine();
@@ -84,7 +84,7 @@ angular.module('myApp.controllers')
         $scope.apptPackageError = "";
         vm.models.response.showResponse = false;
     }
-
+    
 	function calculateCost() {
 		vm.models.response = null;
 		var data = {

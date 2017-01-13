@@ -129,7 +129,7 @@
                 </div>
             </div> <!-- End of wallet details -->
 
-            <div class="row">
+            <div class="row" ng-show="custOldPackage.package_code">
                 <div class="col-xs-12">
                     <div class="headBar">
                         <span>Package Details</span>
@@ -142,7 +142,7 @@
                                 </div>
                                 <div class="col-xs-8">
                                     <span class="colonSeparatorRight">:</span>
-                                    {{custPromocode}}
+                                    {{custOldPackage.package_code}}
                                 </div>
                             </div>
                             <div class="row middleRowContent">
@@ -151,7 +151,7 @@
                                 </div>
                                 <div class="col-xs-8">
                                     <span class="colonSeparatorRight">:</span>
-                                    {{custLeftApptCount}}
+                                    {{custLeftPackageSeesion}}
                                 </div>
                             </div>
                         </form>
