@@ -74,6 +74,7 @@ angular.module('myApp.controllers')
         finalcost: "",
         additionalSpAmntDesc:"",
     };
+    $scope.calculatedAptAmount = "";
     $scope.custOldPackage = {
         package_id : "",
         package_code : "",
@@ -277,6 +278,9 @@ angular.module('myApp.controllers')
             }else{
                 $scope.custLeftPackageSeesion = data.payload.customer.no_of_sessions - $scope.custPackageTotalAppt;
             }
+
+
+
         })
         .error(function(data, status, headers, config){
             $scope.aptErrorMsg = data.error.message;
@@ -332,7 +336,21 @@ angular.module('myApp.controllers')
                 if($scope.adminNewAppointmentCust.appointment.additionalcharge > 0 && $scope.adminNewAppointmentCust.appointment.additionalcharge != undefined){
                     $scope.costPaid = $scope.costPaid + $scope.adminNewAppointmentCust.appointment.additionalcharge;
                 }
+                if($scope.adminNewAppointmentCust.appointment.additionalchargesp > 0 && $scope.adminNewAppointmentCust.appointment.additionalchargesp != undefined){
+                    $scope.costPaid = $scope.costPaid + $scope.adminNewAppointmentCust.appointment.additionalchargesp;
+                }
             }
+
+            if($scope.adminNewAppointmentCust.appointment.finalcost > 0 && $scope.adminNewAppointmentCust.appointment.additionalcharge > 0){
+                var total;
+                total = $scope.adminNewAppointmentCust.appointment.finalcost + $scope.adminNewAppointmentCust.appointment.additionalcharge;
+                $scope.calculatedAptAmount = $scope.adminNewAppointmentCust.appointment.finalcost +" + "+ $scope.adminNewAppointmentCust.appointment.additionalcharge +" = "+ total;
+                //alert($scope.calculatedAptAmount);
+            }else{
+                $scope.calculatedAptAmount =  $scope.adminNewAppointmentCust.appointment.finalcost;
+                //alert($scope.calculatedAptAmount);
+            }
+
             $scope.aptPayment.appointmentid = id;
 
             if($cookies.get('u_id') == $scope.adminNewAppointmentCust.sp._id) {
@@ -361,6 +379,8 @@ angular.module('myApp.controllers')
                 $scope.adminNewAppointmentCust.documentRO = angular.copy($scope.adminNewAppointmentCust.appointment.document);
                 $scope.adminNewAppointmentCust.hasDocument = true;
             }
+
+
         })
         .error(function(data, status, headers, config){
             $scope.aptErrorMsg = data.error.message;
@@ -1040,7 +1060,6 @@ angular.module('myApp.controllers')
 
     $scope.addPaymentMode = function() {
 
-     
         if($scope.aptPayment.currency &&
             $scope.aptPayment.type &&
             $scope.aptPayment.amnt != undefined) {
@@ -1091,7 +1110,7 @@ angular.module('myApp.controllers')
                 });
             }
 
-            $scope.aptPayment.additionalSpAmnt = 0;
+            //$scope.aptPayment.additionalSpAmnt = 0;
         }
 
        
@@ -1243,7 +1262,8 @@ angular.module('myApp.controllers')
             promocodeid: $scope.aptPayment.promocodeid,
             promocode: $scope.aptPayment.promocode,
             paymentmodes: $scope.aptPayment.paymentModes,
-            promocost:$scope.applypromocost
+            promocost:$scope.applypromocost,
+            additionalchargespdesc:$scope.aptPayment.additionalSpAmntDesc
         }
 
         spApi.markAppointmentComplete(data)
@@ -1921,19 +1941,30 @@ angular.module('myApp.controllers')
                  $scope.applypromocost='';
             }
 
-             if($scope.applypromocost != 'undefined'){
+            if($scope.applypromocost != 'undefined'){
 
                 if($scope.applypromocost != 'undefined' && $scope.adminNewAppointmentCust.appointment.additionalcharge >0){
                     $scope.aptPayment.amnt = $scope.applypromocost + $scope.adminNewAppointmentCust.appointment.additionalcharge;
+
+                    var addition;
+                    addition =$scope.applypromocost + $scope.adminNewAppointmentCust.appointment.additionalcharge;
+                    $scope.calculatedAptAmount = $scope.applypromocost +" + "+ $scope.adminNewAppointmentCust.appointment.additionalcharge +" = "+ addition;
                 }else{
                     $scope.aptPayment.amnt = $scope.applypromocost;
+                    $scope.calculatedAptAmount = $scope.applypromocost;
                 }
                 
             }else{
                 if($scope.adminNewAppointmentCust.appointment.additionalcharge>0){
                     $scope.aptPayment.amnt = $scope.adminNewAppointmentCust.appointment.finalcost + $scope.adminNewAppointmentCust.appointment.additionalcharge;
+
+                    var tot;
+                    tot = $scope.adminNewAppointmentCust.appointment.finalcost + $scope.adminNewAppointmentCust.appointment.additionalcharge;
+                    $scope.calculatedAptAmount = $scope.adminNewAppointmentCust.appointment.finalcost +" + "+ $scope.adminNewAppointmentCust.appointment.additionalcharge +" = "+ tot;
+
                 }else{
                     $scope.aptPayment.amnt = $scope.adminNewAppointmentCust.appointment.finalcost;
+                    $scope.calculatedAptAmount = $scope.adminNewAppointmentCust.appointment.finalcost
                 }
             }
 

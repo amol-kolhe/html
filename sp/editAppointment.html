@@ -90,7 +90,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6 col-xs-12">
-                            <div class="row middleRowContent">
+                            <div class="row middleRowContent" ng-hide="(adminNewAppointmentCust.appointment.finalcost > 0 &&  adminNewAppointmentCust.appointment.promocode == '' && adminNewAppointmentCust.appointment.package_code == '') ">
                                 <span class="itemLabel2 col-xs-4">Basic Price <span class="colonSeparator">:</span></span>
                                 <span class="col-xs-8"> {{adminNewAppointmentCust.appointment.cost | currency:"&#8377;"}} </span>
                             </div>
@@ -113,6 +113,10 @@
                                 <span class="col-xs-8">
                                     <span>{{adminNewAppointmentCust.appointment.finalcost | currency:"&#8377;"}}</span>
                                 </span>
+                            </div>
+                            <div class="row middleRowContent" ng-show="(adminNewAppointmentCust.appointment.finalcost > 0 &&  adminNewAppointmentCust.appointment.promocode == '' && adminNewAppointmentCust.appointment.package_code == '') ">
+                                <span class="itemLabel2 col-xs-4">Basic Price <span class="colonSeparator">:</span></span>
+                                <span class="col-xs-8"> {{adminNewAppointmentCust.appointment.cost | currency:"&#8377;"}} </span>
                             </div>
                         </div>
                     </div>
@@ -137,6 +141,20 @@
                             <div class="row middleRowContent">
                                 <span class="itemLabel2 col-xs-4"> Additional Charges <span class="colonSeparator">:</span></span>
                                 <span class="col-xs-8"> {{adminNewAppointmentCust.appointment.additionalcharge | currency:"&#8377;"}} </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="adminNewAppointmentCust.appointment.additionalchargesp > 0">
+                         <div class="col-sm-6 col-xs-12">
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4"> Extra Charges Desc. <span class="colonSeparator">:</span></span>
+                                <span class="col-xs-8"> {{adminNewAppointmentCust.appointment.additionalchargespdesc}} </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="row middleRowContent">
+                                <span class="itemLabel2 col-xs-4"> Extra Charges <span class="colonSeparator">:</span></span>
+                                <span class="col-xs-8"> {{adminNewAppointmentCust.appointment.additionalchargesp | currency:"&#8377;"}} </span>
                             </div>
                         </div>
                     </div>
@@ -570,27 +588,12 @@
                                                     ng-show="apptPayment.paymentForm.pytAmnt.$invalid && visitedpaymentAmt">
                                                     Invalid amount entered
                                                     </span> -->
-
-                                                    <span  ng-show = "applypromocost == undefined || applypromocost == ''">
-                                                        <span ng-show="adminNewAppointmentCust.appointment.finalcost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
-
-                                                        {{adminNewAppointmentCust.appointment.finalcost}}  + {{adminNewAppointmentCust.appointment.additionalcharge}} =  {{adminNewAppointmentCust.appointment.finalcost + adminNewAppointmentCust.appointment.additionalcharge }}
-                                                       </span>
-                                                       <span  ng-hide="adminNewAppointmentCust.appointment.finalcost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
-
-                                                        {{adminNewAppointmentCust.appointment.finalcost}}
-                                                       </span>
-                                                     </span>
-                                                     
-                                                     <span  ng-show = "applypromocost != undefined">
-                                                         <span ng-show="applypromocost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
-
-                                                            {{applypromocost}}  + {{adminNewAppointmentCust.appointment.additionalcharge}} =  {{applypromocost + adminNewAppointmentCust.appointment.additionalcharge }} 
-                                                        </span>
-                                                        <span  ng-hide="applypromocost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
-                                                            {{applypromocost}}
-                                                        </span>
+                                                    <span>
+                                                        <pre>
+                                                            {{calculatedAptAmount}}
+                                                        </pre>
                                                     </span>
+
                                                 </div>
                                             </div>    
                                         </div> 
@@ -660,7 +663,8 @@
                                                 class="btn btn-default btn-sm" 
                                                 style="margin: 10px;" 
                                                 ng-click="addPaymentMode()"
-                                                ng-disabled="aptPayment.amnt < 0 || aptPayment.amnt == undefined">
+                                                ng-disabled="(aptPayment.amnt < 0 || aptPayment.amnt == undefined) || ((aptPayment.additionalSpAmnt > 0 && aptPayment.additionalSpAmntDesc == '') || (aptPayment.additionalSpAmnt > 0 
+                                                && aptPayment.additionalSpAmntDesc == undefined))">
                                                 <i class="glyphicon glyphicon-arrow-right"></i>
                                             </button>
                                             <br>
@@ -681,7 +685,8 @@
                                                 class="btn btn-default btn-sm" 
                                                 style="margin: 10px;" 
                                                 ng-click="addPaymentMode()"
-                                                ng-disabled="aptPayment.amnt < 0 || aptPayment.amnt == undefined">
+                                                ng-disabled="(aptPayment.amnt < 0 || aptPayment.amnt == undefined) || ((aptPayment.additionalSpAmnt > 0 && aptPayment.additionalSpAmntDesc == '') || (aptPayment.additionalSpAmnt > 0 
+                                                && aptPayment.additionalSpAmntDesc == undefined))">
                                                 <i class="glyphicon glyphicon-arrow-down"></i>
                                             </button>
                                             <button type="button" 
@@ -720,7 +725,7 @@
 
                         <div class="footerBar">
                             <button class="btn btn-primary btn-sm" 
-                                ng-disabled="aptPayment.paymentModes.length == 0" 
+                                ng-disabled="(aptPayment.paymentModes.length == 0) || ((aptPayment.additionalSpAmnt > 0 && aptPayment.additionalSpAmntDesc == '') || (aptPayment.additionalSpAmnt > 0 && aptPayment.additionalSpAmntDesc == undefined))" 
                                 ng-click="submitAptPayment()">Mark As Complete
                             </button>
                             <button class="btn btn-default btn-sm" ng-click="cancelAptPayment()">Cancel</button>
