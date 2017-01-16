@@ -498,6 +498,8 @@ angular.module('myApp.controllers')
             if(data.error == undefined) {
                 var jsonStringObj = JSON.stringify(data);
                 var spNewApptForCustObj = JSON.parse(jsonStringObj);
+
+                console.log(spNewApptForCustObj);
     
                 $scope.obj.custid = $scope.custAptHistory[index].custid;
                 $scope.spNewAppointment.aptstarttime = "";
@@ -545,6 +547,19 @@ angular.module('myApp.controllers')
                 $scope.package_id = data.payload.customer.package_id;
                 $scope.no_of_sessions = data.payload.customer.no_of_sessions;
                 $scope.patientid = data.payload.appointment.patientid;
+                if(data.payload.customer.additional_amount){
+                    $scope.additional_amount = parseFloat(data.payload.customer.additional_amount);
+                }else{
+                    $scope.additional_amount = 0;
+                }
+                   
+                if(data.payload.customer.is_package_assign){
+                    $scope.is_package_assign = data.payload.customer.is_package_assign;
+                }else{
+                    $scope.is_package_assign = false;
+                }    
+
+                
                 //API to fetch discount of given package:kalyani patil
                 if( $scope.package_id != null &&  $scope.package_id != undefined){
 
@@ -896,6 +911,7 @@ angular.module('myApp.controllers')
     }
 
     $scope.spApptForCustSubmit = function() {
+
         var custproblem;
         if($scope.custProb == null || $scope.custProb == 'undefined'){
             custproblem = "";
@@ -951,6 +967,14 @@ angular.module('myApp.controllers')
             promocode = $scope.applyPromoResponseFollowUp.promocode;
         }
 
+        var additional_amount;
+        if($scope.additional_amount < 0 || $scope.additional_amount == ""){
+            $scope.additional_amount = 0;
+        }else{
+            $scope.additional_amount = $scope.additional_amount;
+        }
+
+
         var idObj = $cookies.get('u_id');
 
         var dataObjSubmitAptForm = {
@@ -964,7 +988,9 @@ angular.module('myApp.controllers')
                 "problem": custproblem,
                 "gender": $scope.custGender,
                 "signMeUp": true,
-                "no_of_sessions":no_of_sessions
+                "no_of_sessions":no_of_sessions,
+                "is_package_assign":$scope.is_package_assign,
+                "additional_amount":$scope.additional_amount
             },
             "apptslots": $scope.spNewAppointment.selectedTimeSlots,
             "adminid": idObj,
@@ -976,7 +1002,8 @@ angular.module('myApp.controllers')
             "locality": $scope.locality,
             "apptRootId": $scope.rootApptId,
             "promocode": promocode,
-            "additionalcharge":$scope.spNewAppointment.addcharges,
+           // "additionalcharge":$scope.spNewAppointment.addcharges,
+            "additionalcharge":$scope.additional_amount,
             "additionalchargedesc":$scope.spNewAppointment.addchargedesc,
             "package_code":package_code,
             "package_id":package_id,
@@ -1013,8 +1040,7 @@ angular.module('myApp.controllers')
 
     $scope.addPaymentMode = function() {
 
-        alert($scope.aptPayment.amnt);
-
+     
         if($scope.aptPayment.currency &&
             $scope.aptPayment.type &&
             $scope.aptPayment.amnt != undefined) {
@@ -1218,7 +1244,8 @@ angular.module('myApp.controllers')
             appointmentid: $scope.aptPayment.appointmentid,
             promocodeid: $scope.aptPayment.promocodeid,
             promocode: $scope.aptPayment.promocode,
-            paymentmodes: $scope.aptPayment.paymentModes
+            paymentmodes: $scope.aptPayment.paymentModes,
+            promocost:$scope.applypromocost
         }
 
         spApi.markAppointmentComplete(data)
@@ -1253,6 +1280,7 @@ angular.module('myApp.controllers')
             $scope.paymentType = $scope.aptPayment.type;
             $scope.adminNewAppointmentCust.appointment.state = "Completed";
             $scope.aptPayment.additionalSpAmnt = "0";
+            $scope.aptPayment.additionalSpAmntDesc = "";
            //$scope.aptPayment.amnt = "0";
 
             if($scope.adminNewAppointmentCust.appointment.additionalcharge>0){
@@ -1287,6 +1315,7 @@ angular.module('myApp.controllers')
         //added for SP additional amount;
         $scope.visitedaddsppaymentAmt = false;
         $scope.aptPayment.additionalSpAmnt = "0";
+        $scope.aptPayment.additionalSpAmntDesc = "";
         $scope.applypromocost= '';
 
     }
@@ -1818,6 +1847,7 @@ angular.module('myApp.controllers')
 
 
         $scope.aptPayment.additionalSpAmnt = "0";
+        $scope.aptPayment.additionalSpAmntDesc = "";
         $scope.aptPayment.paymentModes = [];
         $scope.aptPayment.promocodeid = "";
         $scope.aptPayment.promocode = "";
@@ -1857,6 +1887,7 @@ angular.module('myApp.controllers')
             "cityid": $scope.adminNewAppointmentCust.appointment.cityid,
             "custname": $scope.adminNewAppointmentCust.customer.name,
             "problem": $scope.adminNewAppointmentCust.customer.problem,
+            "patientid": $scope.adminNewAppointmentCust.appointment.patientid,
             "apptslots": [apptslot],
             // "apptstarttime": time[0],
             // "apptendtime": time[1],

@@ -572,30 +572,24 @@
                                                     </span> -->
 
                                                     <span  ng-show = "applypromocost == undefined || applypromocost == ''">
-                                                        <span style = "color: red; margin-left: 5px;" 
-                                                        ng-show="adminNewAppointmentCust.appointment.finalcost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
+                                                        <span ng-show="adminNewAppointmentCust.appointment.finalcost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
 
                                                         {{adminNewAppointmentCust.appointment.finalcost}}  + {{adminNewAppointmentCust.appointment.additionalcharge}} =  {{adminNewAppointmentCust.appointment.finalcost + adminNewAppointmentCust.appointment.additionalcharge }}
                                                        </span>
-                                                       <span 
-                                                        style = "color: red; margin-left: 5px;" 
-                                                        ng-hide="adminNewAppointmentCust.appointment.finalcost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
+                                                       <span  ng-hide="adminNewAppointmentCust.appointment.finalcost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
 
                                                         {{adminNewAppointmentCust.appointment.finalcost}}
                                                        </span>
                                                      </span>
+                                                     
                                                      <span  ng-show = "applypromocost != undefined">
-                                                         <span style = "color: red; margin-left: 5px;" 
-                                                            ng-show="applypromocost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
+                                                         <span ng-show="applypromocost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
 
                                                             {{applypromocost}}  + {{adminNewAppointmentCust.appointment.additionalcharge}} =  {{applypromocost + adminNewAppointmentCust.appointment.additionalcharge }} 
-                                                           </span>
-                                                           <span 
-                                                            style = "color: red; margin-left: 5px;" 
-                                                            ng-hide="applypromocost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
-
+                                                        </span>
+                                                        <span  ng-hide="applypromocost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
                                                             {{applypromocost}}
-                                                           </span>
+                                                        </span>
                                                     </span>
                                                 </div>
                                             </div>    
@@ -641,11 +635,12 @@
                                                 maxlength="500" 
                                                 class="form-control" 
                                                 ng-model="aptPayment.additionalSpAmntDesc"
+                                                title="Enter Additional Treatment charges"
+                                                placeholder="Enter Additional Treatment charges"
                                                 ng-trim="false" 
                                                 rows="2" 
                                                 cols="80" 
                                                 name="additionalSpAmntDesc"
-                                                title="Enter Addl. Amount Description"
                                                 data-ng-required="true" >
                                                 </textarea>
                                             </span>

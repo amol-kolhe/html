@@ -452,7 +452,7 @@
                                                 </div>
 
                                                  <div class="col-xs-8 col-sm-8" style="padding-left: 1px;">
-                                                    <input type="text"
+                                                  <!-- <input type="text"
                                                     ng-model="aptPayment.amnt"
                                                     class="clstxt3 form-control"
                                                     ng-required = "true"
@@ -464,7 +464,29 @@
                                                     style = "color: red; margin-left: 5px;" 
                                                     ng-show="apptPayment.paymentForm.pytAmnt.$invalid && visitedpaymentAmt">
                                                     Invalid amount entered
+                                                    </span> -->
+
+                                                     <span  ng-show = "applypromocost == undefined || applypromocost == ''">
+                                                        <span ng-show="adminNewAppointmentCust.appointment.finalcost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
+
+                                                        {{adminNewAppointmentCust.appointment.finalcost}}  + {{adminNewAppointmentCust.appointment.additionalcharge}} =  {{adminNewAppointmentCust.appointment.finalcost + adminNewAppointmentCust.appointment.additionalcharge }}
+                                                       </span>
+                                                       <span  ng-hide="adminNewAppointmentCust.appointment.finalcost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
+
+                                                        {{adminNewAppointmentCust.appointment.finalcost}}
+                                                       </span>
+                                                     </span>
+                                                     
+                                                     <span  ng-show = "applypromocost != undefined">
+                                                         <span ng-show="applypromocost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
+
+                                                            {{applypromocost}}  + {{adminNewAppointmentCust.appointment.additionalcharge}} =  {{applypromocost + adminNewAppointmentCust.appointment.additionalcharge }} 
+                                                        </span>
+                                                        <span  ng-hide="applypromocost > 0 && adminNewAppointmentCust.appointment.additionalcharge > 0 ">
+                                                            {{applypromocost}}
+                                                        </span>
                                                     </span>
+                                                    
                                                 </div>
                                             </div>    
                                         </div> 
@@ -509,11 +531,12 @@
                                                 maxlength="500" 
                                                 class="form-control" 
                                                 ng-model="aptPayment.additionalSpAmntDesc"
+                                                title="Enter Additional Treatment charges"
+                                                placeholder="Enter Additional Treatment charges"
                                                 ng-trim="false" 
                                                 rows="2" 
                                                 cols="80" 
                                                 name="additionalSpAmntDesc"
-                                                title="Enter Addl. Amount Description"
                                                 data-ng-required="true" >
                                                 </textarea>
                                             </span>
