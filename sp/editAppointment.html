@@ -6,8 +6,8 @@
                 <span>Appointment Details</span>
                 <span style="float:right;">    
                     <span>
-                        <span ng-show="(((adminNewAppointmentCust.customer.package_code == '0' || adminNewAppointmentCust.customer.package_code == '') && adminNewAppointmentCust.customer.no_of_sessions == '0') || assignPackageFlag)"
-                            title="Select Package"
+                        <span ng-show="(!adminNewAppointmentCust.customer.is_package_assign && adminNewAppointmentCust.appointment.state == 'Confirmed')"
+                            title="Select Package"  
                             class="clickable glyphicon glyphicon-briefcase"
                             style="color:red;margin-right:15px; font-size: 15px;"
                             onclick="showPackageDialog();"></span>

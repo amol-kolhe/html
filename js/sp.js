@@ -59,7 +59,6 @@ angular.module('myApp.controllers')
     $scope.apptPackageError = "";
     $scope.custTotalAppt = 0;
     $scope.custPackageTotalAppt = 0;
-    $scope.assignPackageFlag = false;
     $scope.apptPayment.paymentForm = "";
     $scope.aptPayment = {
         currency : "INR",
@@ -79,6 +78,7 @@ angular.module('myApp.controllers')
         package_id : "",
         package_code : "",
         no_of_sessions : "",
+        is_package_assign : "",
     };
     $scope.custLeftPackageSeesion = 0;
     $scope.apptPaymentErrorMsg = "";
@@ -240,6 +240,7 @@ angular.module('myApp.controllers')
                 package_id : data.payload.customer.package_id,
                 package_code : data.payload.customer.package_code,
                 no_of_sessions : data.payload.customer.no_of_sessions,
+                is_package_assign : data.payload.customer.is_package_assign,
             };
             $scope.custReadList = data.payload.customer;
             $scope.customerId = data.payload.customer.healyoscustid;
@@ -272,7 +273,6 @@ angular.module('myApp.controllers')
             }
             $scope.custAptHistory = appointmentHistory;
             if($scope.custPackageTotalAppt >= data.payload.customer.no_of_sessions){
-                $scope.assignPackageFlag = true;
                 $scope.custLeftPackageSeesion = 0
             }else{
                 $scope.custLeftPackageSeesion = data.payload.customer.no_of_sessions - $scope.custPackageTotalAppt;
@@ -399,6 +399,7 @@ angular.module('myApp.controllers')
                 package_id : data.payload.customer.package_id,
                 package_code : data.payload.customer.package_code,
                 no_of_sessions : data.payload.customer.no_of_sessions,
+                is_package_assign : data.payload.customer.is_package_assign,
             };
             $scope.currentOpenView = "CUSTOMER";
             $scope.custReadList = data.payload.customer;
@@ -431,7 +432,6 @@ angular.module('myApp.controllers')
             }
             $scope.custAptHistory = appointmentHistory;
             if($scope.custPackageTotalAppt >= data.payload.customer.no_of_sessions){
-                $scope.assignPackageFlag = true;
                 $scope.custLeftPackageSeesion = 0
             }else{
                 if(data.payload.customer.no_of_sessions > 0)
@@ -1132,7 +1132,6 @@ angular.module('myApp.controllers')
 
                 spApi.updatePackage($scope.adminNewAppointmentCust.appointment.patientid, data)
                 .success(function(data, status, headers, config) {
-                    $scope.assignPackageFlag = false;
                     $scope.adminNewAppointmentCust.customer.package_code = $scope.aptPackage.package_code;
                     $scope.adminNewAppointmentCust.customer.no_of_sessions = $scope.aptPackage.no_of_sessions;
                     $scope.adminNewAppointmentCust.customer.additional_amount = $scope.aptPackage.additional_amount;
@@ -1147,7 +1146,7 @@ angular.module('myApp.controllers')
                 });
 
             }else{
-                if($scope.custOldPackage.package_id == $scope.aptPackage.package_id && $scope.custOldPackage.package_code == $scope.aptPackage.package_code){
+                if(!$scope.custOldPackage.is_package_assign && $scope.custOldPackage.package_id == $scope.aptPackage.package_id && $scope.custOldPackage.package_code == $scope.aptPackage.package_code){
                     
                     if($scope.custReadList.custwallet.walletbalance >= $scope.aptPackage.temp_net_amount)
                     {
@@ -1161,7 +1160,6 @@ angular.module('myApp.controllers')
 
                         spApi.updatePackage($scope.adminNewAppointmentCust.appointment.patientid, data)
                         .success(function(data, status, headers, config) {
-                            $scope.assignPackageFlag = false;
                             $scope.adminNewAppointmentCust.customer.package_code = $scope.aptPackage.package_code;
                             $scope.adminNewAppointmentCust.customer.no_of_sessions = $scope.aptPackage.no_of_sessions;
                             $scope.adminNewAppointmentCust.customer.additional_amount = $scope.aptPackage.additional_amount;
