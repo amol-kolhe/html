@@ -6,7 +6,7 @@
                 <span>Appointment Details</span>
                 <span style="float:right;">    
                     <span>
-                        <span ng-show="(!adminNewAppointmentCust.customer.is_package_assign && adminNewAppointmentCust.appointment.state == 'Confirmed')"
+                        <span ng-show="(!adminNewAppointmentCust.customer.is_package_assign && adminNewAppointmentCust.appointment.state == 'Confirmed' && adminNewAppointmentCust.appointment.current_session_no == '0')"
                             title="Select Package"  
                             class="clickable glyphicon glyphicon-briefcase"
                             style="color:red;margin-right:15px; font-size: 15px;"
@@ -896,7 +896,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-6 col-xs-12" ng-show="(((adminNewAppointmentCust.customer.package_code != '0' || adminNewAppointmentCust.customer.package_code != '') && adminNewAppointmentCust.customer.no_of_sessions != '0'))">
+        <div class="col-sm-6 col-xs-12" ng-show="(adminNewAppointmentCust.customer.is_package_assign)">
             <div class="row">
                 <div class="col-sm-12 col-xs-12 col-lg-12" id="spReadonly">
                     <div class="headBar">

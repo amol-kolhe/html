@@ -874,7 +874,10 @@ angular.module('myApp.controllers')
 				"address": $scope.adminNewAppointmentCust.residenceAddress,
 				"problem": custproblem,
 				"gender": $scope.adminNewAppointmentCust.gender,
-				"signMeUp": true
+				"signMeUp": true,
+				"no_of_sessions":0,
+				"is_package_assign":false,
+                "additional_amount":0
 			},
 			"apptslots": [apptstarttime],
 			"adminid": idObj,
@@ -1402,7 +1405,7 @@ angular.module('myApp.controllers')
                 }    
 
                //API to fetch discount of given package:kalyani patil
-                if( $scope.package_id != null &&  $scope.package_id != undefined){
+                if( $scope.package_id != null &&  $scope.package_id != undefined && $scope.is_package_assign == true){
 
 	                adminApi.getCalculatePackageDiscount($scope.package_code,$scope.package_id, $scope.costFollowUp)
 	                .success(function(data, status, headers, config){

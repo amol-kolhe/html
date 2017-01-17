@@ -53,7 +53,7 @@ angular.module('myApp.controllers')
         max_sessions : "",
         net_amount : "",
         temp_net_amount : "",
-        additional_amount : "",
+        additional_amount : 0,
     };
     $scope.test = "";
     $scope.apptPackageError = "";
@@ -265,7 +265,7 @@ angular.module('myApp.controllers')
                         $scope.ratingFlag = true;
                     }
                     if(data.payload.appointments[i].appointment.state == "Completed" && data.payload.appointments[i].appointment.package_id == data.payload.customer.package_id && data.payload.appointments[i].appointment.package_code == data.payload.customer.package_code && data.payload.appointments[i].appointment.current_session_no != "0"){
-                        $scope.custPackageTotalAppt++;
+                        $scope.custPackageTotalAppt = data.payload.appointments[i].appointment.current_session_no;
                     }
                     appointmentHistory.push(data.payload.appointments[i].appointment);
                 }
@@ -443,7 +443,7 @@ angular.module('myApp.controllers')
                         $scope.ratingFlag = true;
                     }
                     if(data.payload.appointments[i].appointment.package_id == data.payload.customer.package_id && data.payload.appointments[i].appointment.package_code == data.payload.customer.package_code && data.payload.appointments[i].appointment.current_session_no != "0"){
-                        $scope.custPackageTotalAppt++;
+                        $scope.custPackageTotalAppt = data.payload.appointments[i].appointment.current_session_no;
                     }
                     appointmentHistory.push(data.payload.appointments[i].appointment);
                 }
@@ -581,7 +581,7 @@ angular.module('myApp.controllers')
 
                 
                 //API to fetch discount of given package:kalyani patil
-                if( $scope.package_id != null &&  $scope.package_id != undefined){
+                if( $scope.package_id != null &&  $scope.package_id != undefined && $scope.is_package_assign == true){
 
                     spApi.getCalculatePackageDiscount($scope.package_code,$scope.package_id, $scope.costFollowUp)
                     .success(function(data, status, headers, config){
@@ -1461,7 +1461,7 @@ angular.module('myApp.controllers')
         }
         $scope.scrollDiv('spPackageDetails');
         $scope.aptPackage.no_of_sessions = "";
-        $scope.aptPackage.additional_amount = "";
+        $scope.aptPackage.additional_amount = 0;
         $scope.models.calculator.package = 'Select Package';
         $scope.apptPackageError = "";
         $scope.models.response.showResponse = false;
