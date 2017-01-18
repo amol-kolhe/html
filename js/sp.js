@@ -552,6 +552,7 @@ angular.module('myApp.controllers')
              
                 $scope.spNewApptForCustErrorMsg = "";
                 $scope.resetPromoCodeFollowUp();
+               
                 if (data.payload.appointment.additionalcharge != null && data.payload.appointment.additionalcharge != undefined){
                 $scope.spNewAppointment.addcharges = data.payload.appointment.additionalcharge;
                 $scope.spNewAppointment.addchargedesc = data.payload.appointment.additionalchargedesc;
@@ -1022,9 +1023,9 @@ angular.module('myApp.controllers')
             "locality": $scope.locality,
             "apptRootId": $scope.rootApptId,
             "promocode": promocode,
-           // "additionalcharge":$scope.spNewAppointment.addcharges,
+            // "additionalcharge":$scope.spNewAppointment.addcharges,
             "additionalcharge":$scope.additional_amount,
-            "additionalchargedesc":$scope.spNewAppointment.addchargedesc,
+            //"additionalchargedesc":$scope.spNewAppointment.addchargedesc,
             "package_code":package_code,
             "package_id":package_id,
             "patientid":$scope.patientid,
