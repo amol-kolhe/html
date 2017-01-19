@@ -1949,7 +1949,7 @@ angular.module('myApp.controllers')
 
             if($scope.applypromocost != 'undefined'){
 
-                if($scope.applypromocost != 'undefined' && $scope.adminNewAppointmentCust.appointment.additionalcharge >0){
+               /* if($scope.applypromocost != 'undefined' && $scope.adminNewAppointmentCust.appointment.additionalcharge >0){
                     $scope.aptPayment.amnt = $scope.applypromocost + $scope.adminNewAppointmentCust.appointment.additionalcharge;
 
                     var addition;
@@ -1958,7 +1958,10 @@ angular.module('myApp.controllers')
                 }else{
                     $scope.aptPayment.amnt = $scope.applypromocost;
                     $scope.calculatedAptAmount = $scope.applypromocost;
-                }
+                }*/
+
+                 $scope.aptPayment.amnt = $scope.applypromocost;
+                 $scope.calculatedAptAmount = $scope.applypromocost;
                 
             }else{
                 if($scope.adminNewAppointmentCust.appointment.additionalcharge>0){
