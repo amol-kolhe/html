@@ -14,6 +14,7 @@ angular.module('myApp.controllers')
         "8" : "Prepaid"
     };
     
+    $scope.lastApptID = "";
     $scope.largeImage = "";
     $scope.spApts = {time : 'today'};
     $scope.currentOpenView = "LISTING";
@@ -75,6 +76,8 @@ angular.module('myApp.controllers')
         additionalSpAmntDesc:"",
     };
     $scope.calculatedAptAmount = "";
+    $scope.aptSlotCount = 0;
+    $scope.aptSlotFlag = false;
     $scope.custOldPackage = {
         package_id : "",
         package_code : "",
@@ -234,9 +237,9 @@ angular.module('myApp.controllers')
         $scope.aptPackage.package_code = "";
         $scope.aptPackage.no_of_sessions = "";
         $scope.applypromocost= '';
+        $scope.lastApptID = "";
         
-        spApi.getCustomerDetails(appointment.custid)
-        .success(function(data, status, headers, config){
+        spApi.getCustomerDetails(appointment.custid).success(function(data, status, headers, config){
             $scope.custOldPackage = {
                 package_id : data.payload.customer.package_id,
                 package_code : data.payload.customer.package_code,
@@ -268,6 +271,8 @@ angular.module('myApp.controllers')
                         $scope.custPackageTotalAppt = data.payload.appointments[i].appointment.current_session_no;
                     }
                     appointmentHistory.push(data.payload.appointments[i].appointment);
+
+                    $scope.lastApptID = data.payload.appointments[i].appointment.refno;
                 }
             } else {
                 console.log("error");
@@ -278,8 +283,6 @@ angular.module('myApp.controllers')
             }else{
                 $scope.custLeftPackageSeesion = data.payload.customer.no_of_sessions - $scope.custPackageTotalAppt;
             }
-
-
 
         })
         .error(function(data, status, headers, config){
@@ -380,13 +383,12 @@ angular.module('myApp.controllers')
                 $scope.adminNewAppointmentCust.hasDocument = true;
             }
 
-
         })
         .error(function(data, status, headers, config){
             $scope.aptErrorMsg = data.error.message;
             $scope.checkSessionTimeout(data);
         });
-
+        
         $scope.manageRootApptDocumentationCollapse();
         $scope.manageDocumentationCollapse();
         $scope.spInfo = false;
@@ -412,6 +414,8 @@ angular.module('myApp.controllers')
     }
 
     $scope.showCustomer = function(appointment) {
+        $scope.aptSlotCount = 0;
+        $scope.aptSlotFlag = false;
         $scope.custPackageTotalAppt = 0;
         spApi.getCustomerDetails(appointment.custid)
         .success(function(data, status, headers, config){
@@ -552,7 +556,6 @@ angular.module('myApp.controllers')
              
                 $scope.spNewApptForCustErrorMsg = "";
                 $scope.resetPromoCodeFollowUp();
-               
                 if (data.payload.appointment.additionalcharge != null && data.payload.appointment.additionalcharge != undefined){
                 $scope.spNewAppointment.addcharges = data.payload.appointment.additionalcharge;
                 $scope.spNewAppointment.addchargedesc = data.payload.appointment.additionalchargedesc;
@@ -932,6 +935,8 @@ angular.module('myApp.controllers')
     }
 
     $scope.spApptForCustSubmit = function() {
+        $scope.aptSlotCount = 0;
+        $scope.aptSlotFlag = false;
 
         var custproblem;
         if($scope.custProb == null || $scope.custProb == 'undefined'){
@@ -1023,9 +1028,9 @@ angular.module('myApp.controllers')
             "locality": $scope.locality,
             "apptRootId": $scope.rootApptId,
             "promocode": promocode,
-            // "additionalcharge":$scope.spNewAppointment.addcharges,
+           // "additionalcharge":$scope.spNewAppointment.addcharges,
             "additionalcharge":$scope.additional_amount,
-            //"additionalchargedesc":$scope.spNewAppointment.addchargedesc,
+            "additionalchargedesc":"",
             "package_code":package_code,
             "package_id":package_id,
             "patientid":$scope.patientid,
@@ -2038,6 +2043,9 @@ angular.module('myApp.controllers')
     }
 
     $scope.addTimeSlot = function() {
+
+        $scope.aptSlotCount = $scope.aptSlotCount + 1;
+
         if($scope.obj.dt && $scope.spNewAppointment.aptstarttime && $scope.spInfo) {
             var date = moment($scope.obj.dt).format("YYYY-MM-DD");
             var time = "";
@@ -2059,11 +2067,30 @@ angular.module('myApp.controllers')
                 $scope.spNewAppointment.selectedTimeSlots.push(slot);
             } else {
                 alert("Selected Appointment Slot is already added in the list.");
+                $scope.aptSlotCount = $scope.aptSlotCount - 1;
             }
         }
+
+
+        if($scope.aptSlotCount > 0 && $scope.custLeftPackageSeesion > 0 && $scope.aptSlotCount == $scope.custLeftPackageSeesion){
+            $scope.aptSlotFlag = true;
+        }else{
+            $scope.aptSlotFlag = false;
+        }
+
+      
     }
 
     $scope.removeTimeSlot = function() {
+
+
+        $scope.aptSlotCount = $scope.aptSlotCount - 1;
+        if($scope.aptSlotCount > 0 && $scope.custLeftPackageSeesion > 0 && $scope.aptSlotCount == $scope.custLeftPackageSeesion){
+            $scope.aptSlotFlag = true;
+        }else{
+            $scope.aptSlotFlag = false;
+        }
+       
         var index = -1;
         if($scope.spNewAppointment.selectedSlot) {
             for(var i=0; i<$scope.spNewAppointment.selectedTimeSlots.length; i++) {
@@ -2080,6 +2107,7 @@ angular.module('myApp.controllers')
             $scope.spNewAppointment.selectedSlotIndex = -1;
             $scope.spNewAppointment.selectedSlot = null;
         }
+
     }
 
  });

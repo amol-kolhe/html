@@ -41,6 +41,9 @@ angular.module('myApp.controllers')
 		additionalSpAmntDesc:"",
 	};
 	$scope.calculatedAptAmount = "";
+	$scope.aptSlotCount = 0;
+    $scope.aptSlotFlag = false;
+	$scope.custPackageTotalAppt = 0;
 	$scope.spRequestType = {
 		1 : "Cancel",
 		2 : "Reschedule"
@@ -828,6 +831,10 @@ angular.module('myApp.controllers')
 	}); 
 	
 	$scope.aptSubmit = function() {
+		$scope.aptSlotCount = 0;
+        $scope.aptSlotFlag = false;
+        $scope.custPackageTotalAppt = 0;
+
 		var dateInst = $scope.obj.dt;
 		var year = dateInst.getFullYear();
 		var month = dateInst.getMonth();
@@ -995,6 +1002,10 @@ angular.module('myApp.controllers')
 	$scope.custReadListview = false;
 	$scope.ratingFlag = true;
 	$scope.fnFetchCust = function(cust) {
+		$scope.aptSlotCount = 0;
+        $scope.aptSlotFlag = false;
+		$scope.custPackageTotalAppt = 0;
+
 		var custID = cust._id == undefined ? cust.custid : cust._id;
 		$scope.obj.custid = custID;
 		$scope.currentOpenView = "showCustomer";
@@ -1022,20 +1033,30 @@ angular.module('myApp.controllers')
 					data.payload.appointments[i].appointment.state = appointmentStateMap[data.payload.appointments[i].appointment.state];
 					if(data.payload.appointments[i].appointment.amnt == 0){
 						data.payload.appointments[i].appointment.amnt = "NA";
-					}
-									
+					}									
 					
 					if(data.payload.appointments[i].appointment.rating == 0){
 						$scope.ratingFlag = false;
 					}else{
 						$scope.ratingFlag = true;
 					}
+
+					if(data.payload.appointments[i].appointment.package_id == data.payload.customer.package_id && data.payload.appointments[i].appointment.package_code == data.payload.customer.package_code && data.payload.appointments[i].appointment.current_session_no != "0"){
+                        $scope.custPackageTotalAppt = data.payload.appointments[i].appointment.current_session_no;
+                    }
 					appointmentHistory.push(data.payload.appointments[i].appointment);
 				}
 			} else {
 				console.log("error");
 			}
 			$scope.custAptHistory = appointmentHistory;
+
+			if($scope.custPackageTotalAppt >= data.payload.customer.no_of_sessions){
+                $scope.custLeftPackageSeesion = 0
+            }else{
+                $scope.custLeftPackageSeesion = data.payload.customer.no_of_sessions - $scope.custPackageTotalAppt;
+            }
+
 		})
 		.error(function(data, status, headers, config) {
 			$scope.checkSessionTimeout(data);
@@ -1051,6 +1072,9 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.spApptForCustSubmit = function() {
+		$scope.aptSlotCount = 0;
+        $scope.aptSlotFlag = false;
+
 		var custproblem;
 		if($scope.custProb == null || $scope.custProb == 'undefined'){
 			custproblem = "";
@@ -1142,9 +1166,9 @@ angular.module('myApp.controllers')
 			"spid" : $scope.obj.followupSpid,
 			"apptRootId": $scope.rootApptId,
 			"promocode": promocode,
-           //"additionalcharge":$scope.spNewAppointment.addcharges,
+           // "additionalcharge":$scope.spNewAppointment.addcharges,
             "additionalcharge":$scope.additional_amount,
-            //"additionalchargedesc":$scope.spNewAppointment.addchargedesc,
+            "additionalchargedesc":$scope.spNewAppointment.addchargedesc,
             "package_code":package_code,
             "package_id":package_id,
             "patientid":$scope.patientid,
@@ -2534,6 +2558,7 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.editAppointment = function(appointment) {
+		$scope.custPackageTotalAppt = 0;
         $scope.applypromocost= '';
 
 		hideDiv('#aptEditable');
@@ -6610,6 +6635,9 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.addTimeSlot = function() {
+		
+		$scope.aptSlotCount = $scope.aptSlotCount + 1;
+
 		if($scope.obj.dt && $scope.spNewAppointment.aptstarttime && $scope.spInfo) {
 			var date = moment($scope.obj.dt).format("YYYY-MM-DD");
 			var time = "";
@@ -6631,11 +6659,26 @@ angular.module('myApp.controllers')
 				$scope.spNewAppointment.selectedTimeSlots.push(slot);
 			} else {
 				alert("Selected Appointment Slot is already added in the list.");
+				$scope.aptSlotCount = $scope.aptSlotCount - 1;
 			}
 		}
+
+		if($scope.aptSlotCount > 0 && $scope.custLeftPackageSeesion > 0 && $scope.aptSlotCount == $scope.custLeftPackageSeesion){
+            $scope.aptSlotFlag = true;
+        }else{
+            $scope.aptSlotFlag = false;
+        }
 	}
 
 	$scope.removeTimeSlot = function() {
+
+		$scope.aptSlotCount = $scope.aptSlotCount - 1;
+        if($scope.aptSlotCount > 0 && $scope.custLeftPackageSeesion > 0 && $scope.aptSlotCount == $scope.custLeftPackageSeesion){
+            $scope.aptSlotFlag = true;
+        }else{
+            $scope.aptSlotFlag = false;
+        }
+
 		var index = -1;
 		if($scope.spNewAppointment.selectedSlot) {
 			for(var i=0; i<$scope.spNewAppointment.selectedTimeSlots.length; i++) {

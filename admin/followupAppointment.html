@@ -105,7 +105,7 @@
                             class="btn btn-default btn-sm" 
                             style="margin: 10px;" 
                             ng-click="addTimeSlot()"
-                            ng-disabled="!obj.dt || !spNewAppointment.aptstarttime || !spInfo">
+                            ng-disabled="(!obj.dt || !spNewAppointment.aptstarttime || !spInfo) || (aptSlotFlag == true)">
                             <i class="glyphicon glyphicon-arrow-right"></i>
                         </button>
                         <br>
@@ -210,14 +210,27 @@
                             <div id="errormsg" style="color:red;"></div>
                         </div>
                     </div>
-                    <div class="row" style="margin-bottom: 10px;">
+                    
+                    <div class="row" style="margin-bottom: 10px;" data-ng-hide="additional_amount > 0">
                         <div class="col-sm-3 col-xs-12">
                             <label>Appointment Charges</label>
                         </div>
                         <div class="col-sm-9 col-xs-12">
                             <span class="colonSeparatorRight hidden-xs">:</span>
                             {{currFollowUp}}
-                            {{costFollowUp * spNewAppointment.selectedTimeSlots.length}} 
+                            {{costFollowUp * spNewAppointment.selectedTimeSlots.length}}
+                        </div>
+                    </div>
+
+                     <div class="row" style="margin-bottom: 10px;" data-ng-show="additional_amount > 0">
+                        <div class="col-sm-3 col-xs-12">
+                            <label>Appointment Charges</label>
+                        </div>
+
+                        <div class="col-sm-9 col-xs-12" >
+                            <span class="colonSeparatorRight hidden-xs">:</span>
+                            {{currFollowUp}}
+                            {{costFollowUp * spNewAppointment.selectedTimeSlots.length + additional_amount * spNewAppointment.selectedTimeSlots.length}}
                         </div>
                     </div>
                      <!--   <div class="row" style="margin-bottom: 10px;">
