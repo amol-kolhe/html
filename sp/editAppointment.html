@@ -6,8 +6,8 @@
                 <span>Appointment Details</span>
                 <span style="float:right;">    
                     <span>
-                        <span ng-show="(!adminNewAppointmentCust.customer.is_package_assign && adminNewAppointmentCust.appointment.state == 'Confirmed' && adminNewAppointmentCust.appointment.current_session_no == '0' && lastApptID == adminNewAppointmentCust.appointment.refno)"
-                            title="Select Package"  
+                        <span ng-show="(!adminNewAppointmentCust.customer.is_package_assign && adminNewAppointmentCust.appointment.state == 'Confirmed' && adminNewAppointmentCust.appointment.current_session_no == '0' && lastApptTime == adminNewAppointmentCust.appointment.starttime)"
+                            title="Select Package"
                             class="clickable glyphicon glyphicon-briefcase"
                             style="color:red;margin-right:15px; font-size: 15px;"
                             onclick="showPackageDialog();"></span>
@@ -456,6 +456,13 @@
                                     ng-show="apptPackageError">
                                     {{apptPackageError}}
                                 </span>
+                                <span class="alert" 
+                                    ng-if="custReadList.custwallet.response"
+                                    ng-class="{'alert-success' : custReadList.custwallet.response.status == 'success', 'alert-danger' : custReadList.custwallet.response.status == 'error'}">
+                                    {{custReadList.custwallet.response.message}}
+                                </span>
+                                <br />
+                                <a ng-show="walletFlag" title='Add money into wallet' class='clickable' style='margin-right: 15px; font-size: 15px;' ng-click='requestApptWalletTrans()'>Add Money(&#8377;) In Wallet</a>
                                 <span style="color: red;"
                                     ng-show="apptPackage.packageForm.additional_amount.$invalid && visitedaddAmt">
                                     Invalid content in Additional amount.

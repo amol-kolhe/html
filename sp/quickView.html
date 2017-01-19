@@ -5,8 +5,6 @@
            <!-- <form name="Form" data-ng-submit="confirm('OK')">-->
                <form role="form" name="CancelRequestForm" novalidate>
                 <div style="margin:10px; padding:10px">
-
-    
                     <div class="row">
                         <div>
                             <span>Choose who requested the change</span>
@@ -48,6 +46,40 @@
             </form>
     </script>
 
+    <script type="text/ng-template" id="AptWallet">
+        <form role="form" name="WalletTransForm" novalidate>
+            <div style="margin:10px; padding:10px">
+                <div class="row middleRowContent">
+                    <div class="col-xs-3">
+                        <label>Balance: </label>
+                    </div>
+                    <div class="col-xs-9">
+                        <span ng-if="custReadList.custwallet.currency.toLowerCase() == 'inr'">&#8377; </span>{{custReadList.custwallet.walletbalance}}
+                    </div>
+                </div>
+                <div class="row middleRowContent">
+                    <div class="col-xs-3">
+                        <label>Transact: </label>
+                    </div>
+                    <div class="col-xs-9">
+                        <input type="text" 
+                            placeholder="amount" 
+                            class="form-control" 
+                            style="max-width: 300px;"
+                            ng-model="custReadList.custwallet.amount"
+                            ng-pattern="/^\d+(\.\d{1,2})?$/"
+                            ng-required = "true" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="margin-top:10px; padding:10px;">
+                        <button type="submit" class="ngdialog-button ngdialog-button-primary" ng-click="submitted=true;WalletTransForm.$valid && confirm('OK')">Ok</button>
+                        <button ng-click="closeThisDialog('Cancel')" type="button" class="ngdialog-button ngdialog-button-secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </script>
 
 	<div>
         <div data-ng-show="currentOpenView == 'LISTING'">

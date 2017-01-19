@@ -14,7 +14,7 @@ angular.module('myApp.controllers')
         "8" : "Prepaid"
     };
     
-    $scope.lastApptID = "";
+    $scope.lastApptTime = "";
     $scope.largeImage = "";
     $scope.spApts = {time : 'today'};
     $scope.currentOpenView = "LISTING";
@@ -56,6 +56,7 @@ angular.module('myApp.controllers')
         temp_net_amount : "",
         additional_amount : 0,
     };
+    $scope.walletFlag = false;
     $scope.test = "";
     $scope.apptPackageError = "";
     $scope.custTotalAppt = 0;
@@ -237,7 +238,7 @@ angular.module('myApp.controllers')
         $scope.aptPackage.package_code = "";
         $scope.aptPackage.no_of_sessions = "";
         $scope.applypromocost= '';
-        $scope.lastApptID = "";
+        $scope.lastApptTime = "";
         
         spApi.getCustomerDetails(appointment.custid).success(function(data, status, headers, config){
             $scope.custOldPackage = {
@@ -272,7 +273,7 @@ angular.module('myApp.controllers')
                     }
                     appointmentHistory.push(data.payload.appointments[i].appointment);
 
-                    $scope.lastApptID = data.payload.appointments[i].appointment.refno;
+                    $scope.lastApptTime = data.payload.appointments[i].appointment.starttime;
                 }
             } else {
                 console.log("error");
@@ -1200,13 +1201,16 @@ angular.module('myApp.controllers')
 
                     }else{
                         $scope.apptPackageError = "Customer does't have enough credit in wallet.";
+                        $scope.walletFlag = true;
                     }
                 }else{
                     $scope.apptPackageError = "Customer does't have enough credit in wallet.";
+                    $scope.walletFlag = true;
                 }
             }
         }else{
             $scope.apptPackageError = "No. of Sessions must be in a range of package.";
+            $scope.walletFlag = false;
         }
     }
 
@@ -1623,7 +1627,56 @@ angular.module('myApp.controllers')
         });
     }
 
-  
+    $scope.requestApptWalletTrans = function() {
+        
+        ngDialog.openConfirm({
+            template: 'AptWallet',
+            showClose:false,
+            scope: $scope 
+        }).then(function(value)
+        {
+            if($scope.custReadList.custwallet.amount > 0){
+                var data = {
+                    "walletAmount": $scope.custReadList.custwallet.amount,
+                    "walletTransType": "credit",
+                    "currency":"INR"
+                }
+                spApi.walletTransact($scope.custReadList._id, data)
+                .success(function(data, status, headers, config) {
+                    if(data.error == undefined && data.payload != undefined) {
+                        $scope.apptPackageError = "";
+                        $scope.walletFlag = false;
+                        $scope.custReadList.custwallet = data.payload.custwallet;
+                        $scope.custReadList.custwallet.response = {
+                            status: "success",
+                            message: "Wallet updated successfully!"
+                        }
+                        $timeout(function() {
+                            delete $scope.custReadList.custwallet.response;
+                        }, 5000);
+                    }
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("Failed to update the wallet transaction!");
+                    $scope.custReadList.custwallet.response = {
+                        status: "error",
+                        message: "Wallet updation failed!"
+                    }
+                    $timeout(function() {
+                        delete $scope.custReadList.custwallet.response;
+                    }, 5000);
+                });
+            }else{
+                $scope.custReadList.custwallet.response = {
+                    status: "error",
+                    message: "Wallet updation failed!"
+                }
+            }
+        },
+        function(value) {
+            console.log("Fail wallet transaction.");
+        });
+    }
 
     $scope.requestApptCancel = function() {
        /* var result = confirm("Are you sure you want to cancel this appointment?");
@@ -1638,32 +1691,24 @@ angular.module('myApp.controllers')
             template: 'AptReason',
             showClose:false,
 			scope: $scope 
-        }).then(
-                    function(value)
-                    {
-                             cancelRequestInfo.reason=$scope.CancelRequest.reason;
-                             cancelRequestInfo.changerequestby=$scope.CancelRequest.changerequestby;
-                             console.log(cancelRequestInfo);
-                             spApi.requestAppointmentChange($scope.adminNewAppointmentCust.appointment._id, "cancel",cancelRequestInfo)
-                            .success(function(data, status, headers, config) {
-                             alert("Appointment cancellation request sent successfully!");
-                    })
-                    .error(function(data, status, headers, config) {
-                     var error = data.error.message;
-                    alert("Failed to make appointment cancellation request! " + error);
-                    $scope.checkSessionTimeout(data);
-                    });
-                    },
-                    function(value) {
-			                        	console.log("Fail " + $scope.CancelRequest.reason );
-			                        }
-
-                );
-      
-   
-		
-
-
+        }).then(function(value)
+        {
+            cancelRequestInfo.reason=$scope.CancelRequest.reason;
+            cancelRequestInfo.changerequestby=$scope.CancelRequest.changerequestby;
+            console.log(cancelRequestInfo);
+            spApi.requestAppointmentChange($scope.adminNewAppointmentCust.appointment._id, "cancel",cancelRequestInfo)
+            .success(function(data, status, headers, config) {
+                alert("Appointment cancellation request sent successfully!");
+            })
+            .error(function(data, status, headers, config) {
+                var error = data.error.message;
+                alert("Failed to make appointment cancellation request! " + error);
+                $scope.checkSessionTimeout(data);
+            });
+        },
+        function(value) {
+        	console.log("Fail " + $scope.CancelRequest.reason );
+        });
     }
 
     $scope.requestApptRescheduleClicked = function() {
