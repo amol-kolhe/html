@@ -445,6 +445,7 @@
                             <span class="itemLabel2 col-xs-4">Additional Amount (Per Appointment)<span class="colonSeparator">:</span></span>
                             <div class="col-xs-8">
                                 <input type="text"
+                                        ng-keyup="calculateCost()"
                                         ng-model="aptPackage.additional_amount"
                                         class="clstxt3 form-control"
                                         ng-required = "true"
@@ -482,7 +483,7 @@
                                             <div>Net Total Cost &#8377; {{models.response.netTotalCharges}}</div>
                                         </div>
                                         <div>
-                                            <div>Discounted cost per appointment &#8377; {{models.response.perApptCharges}}</div>
+                                            <div>Discounted cost per appointment &#8377; {{models.response.perApptCharges}} + {{aptPackage.additional_amount}}</div>
                                             <div style="color: #989898;">Original cost per appointment &#8377; {{models.response.originalChargePerAppt}}</div >
                                         </div>
                                         <div ng-if="models.response.status.statusCode == '2164391937'"

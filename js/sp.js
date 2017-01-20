@@ -1215,6 +1215,10 @@ angular.module('myApp.controllers')
     }
 
     $scope.calculateCost = function() {
+        var temp_add = null;
+        if($scope.aptPackage.no_of_sessions > 0 && $scope.aptPackage.additional_amount > 0){
+            temp_add = $scope.aptPackage.additional_amount * $scope.aptPackage.no_of_sessions;
+        }
         $scope.models.response = null;
         var data = {
             massnoofappt: $scope.aptPackage.no_of_sessions,
@@ -1226,6 +1230,7 @@ angular.module('myApp.controllers')
         success(function (data, status, headers, config) {
             if(data && data.payload) {
                 $scope.models.response = data.payload;
+                $scope.models.response.netTotalCharges = $scope.models.response.netTotalCharges + temp_add;
                 $scope.aptPackage.net_amount = $scope.models.response.netTotalCharges;
                 $scope.aptPackage.temp_net_amount = parseInt($scope.models.response.netTotalCharges / 2);
                 $scope.models.response.showResponse = true;
