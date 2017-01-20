@@ -29,7 +29,7 @@ angular.module('myApp.controllers')
 	$scope.aptPayment = {		
 		currency : "INR",
 		type : "Wallet",
-		sptype : "Wallet",
+		sptype : "Cash",
 		amnt : "0",
 		additionalSpAmnt : "",
 		paymentModes: [],
@@ -50,7 +50,7 @@ angular.module('myApp.controllers')
 	};
 	$scope.currencies = ["INR"];
 	$scope.paymentModes = ["Cash", "Wallet"];
-	$scope.paymentModesSp = ["Cash", "Wallet"];
+	$scope.paymentModesSp = ["Cash"];
 	$scope.appointmentCriteria = {
 		fromDate : "",
 		fromEpoch : "",
@@ -5970,7 +5970,7 @@ angular.module('myApp.controllers')
 	$scope.resetPromoCodePaymentSection = function () {
 		$scope.aptPayment.currency = "INR";
         $scope.aptPayment.type = "Wallet";
-        $scope.aptPayment.sptype = "Wallet";
+        $scope.aptPayment.sptype = "Cash";
        // $scope.aptPayment.amnt = "0";
 
         if($scope.adminNewAppointmentCust.appointment.additionalcharge>0){

@@ -42,7 +42,7 @@ angular.module('myApp.controllers')
     $scope.spNewAppointment.aptstarttime = "";
     $scope.spNewAppointment.selectedTimeSlots = [];
     $scope.paymentModes = ["Cash", "Wallet"];
-    $scope.paymentModesSp = ["Cash", "Wallet"];
+    $scope.paymentModesSp = ["Cash"];
     $scope.apptPayment = {};
     $scope.apptPackage = {};
     $scope.apptPackage.packageForm = "";
@@ -65,7 +65,7 @@ angular.module('myApp.controllers')
     $scope.aptPayment = {
         currency : "INR",
         type : "Wallet",
-        sptype : "Wallet",
+        sptype : "Cash",
         amnt : "",
         additionalSpAmnt : "",
         paymentModes: [],
@@ -1905,7 +1905,7 @@ angular.module('myApp.controllers')
         $scope.apptPaymentErrorMsg = "";
         $scope.aptPayment.currency = "INR";
         $scope.aptPayment.type = "Wallet";
-        $scope.aptPayment.sptype = "Wallet";
+        $scope.aptPayment.sptype = "Cash";
        // $scope.aptPayment.amnt = "0";
 
         if($scope.adminNewAppointmentCust.appointment.additionalcharge>0){
