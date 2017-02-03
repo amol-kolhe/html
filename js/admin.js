@@ -884,7 +884,8 @@ angular.module('myApp.controllers')
 				"signMeUp": true,
 				"no_of_sessions":0,
 				"is_package_assign":false,
-                "additional_amount":0
+                "additional_amount":0,
+        
 			},
 			"apptslots": [apptstarttime],
 			"adminid": idObj,
@@ -1051,10 +1052,17 @@ angular.module('myApp.controllers')
 			}
 			$scope.custAptHistory = appointmentHistory;
 
-			if($scope.custPackageTotalAppt >= data.payload.customer.no_of_sessions){
+			var curr_session;
+            if(data.payload.customer.use_sessions){
+                curr_session = parseFloat(data.payload.customer.use_sessions);
+            }else{
+                curr_session = 0;
+            }
+            
+			if(curr_session >= data.payload.customer.no_of_sessions){
                 $scope.custLeftPackageSeesion = 0
             }else{
-                $scope.custLeftPackageSeesion = data.payload.customer.no_of_sessions - $scope.custPackageTotalAppt;
+                $scope.custLeftPackageSeesion = data.payload.customer.no_of_sessions - curr_session;
             }
 
 		})
@@ -1137,6 +1145,13 @@ angular.module('myApp.controllers')
             $scope.additional_amount = $scope.additional_amount;
         }
 
+        var use_sessions;
+        if($scope.use_sessions <= 0 || $scope.use_sessions == ""){
+            $scope.use_sessions = 0;
+        }else{
+            $scope.use_sessions = $scope.use_sessions;
+        }
+
 
 		var idObj = $cookies.get('u_id');
 		var dataObjSubmitAptForm = {
@@ -1152,7 +1167,8 @@ angular.module('myApp.controllers')
 				"signMeUp": true,
 				"no_of_sessions":no_of_sessions,
                 "is_package_assign":$scope.is_package_assign,
-                "additional_amount":$scope.additional_amount
+                "additional_amount":$scope.additional_amount,
+                "use_sessions":$scope.use_sessions
 			},
 			"apptslots": $scope.spNewAppointment.selectedTimeSlots,
 			// "apptstarttime": apptstarttime,
@@ -1426,7 +1442,14 @@ angular.module('myApp.controllers')
                     $scope.is_package_assign = data.payload.customer.is_package_assign;
                 }else{
                     $scope.is_package_assign = false;
-                }    
+                }  
+
+                if(data.payload.customer.use_sessions){
+                    $scope.use_sessions = parseFloat(data.payload.customer.use_sessions);
+                }else{
+                    $scope.use_sessions = 0;
+                }  
+  
 
                //API to fetch discount of given package:kalyani patil
                 if( $scope.package_id != null &&  $scope.package_id != undefined && $scope.is_package_assign == true){
