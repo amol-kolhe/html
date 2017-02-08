@@ -217,6 +217,25 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		return $http.get(url);
 	};
 
+	//API support to Add New clinic.
+	adminApi.addClinic = function(clinicobj) {
+		return $http.post(baseUrl + "/hrest/v1/admin/clinic?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid(), clinicobj);
+	};
+
+	//API support to get all clinic.
+	adminApi.getClinic = function(active) {
+		var url = baseUrl + "/hrest/v1/admin/clinic?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + '&role=0';
+		if(active != undefined) {
+			url += "&active=" + active;
+		}
+		return $http.get(url);
+	};
+
+	//API support to update the clinic
+	adminApi.updateClinic = function(id, dataObj) {
+		return $http.put(baseUrl + "/hrest/v1/admin/updateClinic/" + id + "?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0",dataObj);
+	}
+
 	//APIsupport to delet promocodes
 	adminApi.deletePromoCode = function(promoId) {
 		return $http.delete(baseUrl + "/hrest/v1/admin/promocode/" + promoId + "?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid());

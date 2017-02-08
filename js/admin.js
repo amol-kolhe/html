@@ -19,6 +19,7 @@ angular.module('myApp.controllers')
 	$scope.apptPayment = {};
 	$scope.apptPayment.paymentForm = "";
 	$scope.arrPromoCode = [];
+	$scope.arrayClinic = [];
 	
 	$scope.promoStoreObj = {};
 	$scope.promocodeResponse = {
@@ -348,6 +349,34 @@ angular.module('myApp.controllers')
 	];
 
 	$scope.zoneCity = [
+		{
+			id: "",
+			name: ""
+		}
+	];
+
+	$scope.clinicCountry = [
+		{
+			id: "",
+			name: ""
+		}
+	];
+
+	$scope.clinicState = [
+		{
+			id: "",
+			name: ""
+		}
+	];
+
+	$scope.clinicCity = [
+		{
+			id: "",
+			name: ""
+		}
+	];
+
+	$scope.clinicZone = [
 		{
 			id: "",
 			name: ""
@@ -1999,6 +2028,12 @@ angular.module('myApp.controllers')
 		var zones = [];
 		var pincode = [];
 		var pincode1 = [];
+		$scope.clinicZone = [
+			{
+				id: "",
+				name: ""
+			}
+		];
 
 		adminApi.getZones(cityid)
 		.success(function(data, status, headers, config) {
@@ -2013,6 +2048,7 @@ angular.module('myApp.controllers')
 				zoneObj[zonId] = [];
 
 				for(var j = 0; j < result1.pincodes.length; j++){
+					$scope.clinicZone.push({id: result1.zoneid, name: result1.zonename+" - "+result1.pincodes[j].pin});
 					var result2 =  result1.pincodes[j];
 					if(!hasInList(pincode, result1.pincodes[j], "pin")) {
 						pincode.push(result1.pincodes[j]);
@@ -2374,16 +2410,25 @@ angular.module('myApp.controllers')
 			$scope.zoneCountry = [];
 			$scope.zoneState = [];
 			$scope.zoneCity = [];
+			$scope.clinicCountry = [];
+			$scope.clinicState = [];
+			$scope.clinicCity = [];
 			$scope.zoneCountry.push({id: data.payload.id, name: data.payload.name});
 			$scope.zoneCountry.id = data.payload.id;
 			$scope.zoneCountry.name = data.payload.name;
 			$scope.zoneCountrySelected = $scope.zoneCountry[0].id;
+			$scope.clinicCountry.push({id: data.payload.id, name: data.payload.name});
+			$scope.clinicCountry.id = data.payload.id;
+			$scope.clinicCountry.name = data.payload.name;
+			$scope.clinicCountrySelected = $scope.clinicCountry[0].id;
 
 			data.payload.states.forEach(function(item) {
 				$scope.zoneState.push({id: item.id, name: item.name});
+				$scope.clinicState.push({id: item.id, name: item.name});
 
 				item.cities.forEach(function(item) {
 					$scope.zoneCity.push({id: item.id, name: item.name});
+					$scope.clinicCity.push({id: item.id, name: item.name});
 				});
 			});
 			$scope.zoneState.id = data.payload.states[0].id;
@@ -2394,6 +2439,14 @@ angular.module('myApp.controllers')
 			$scope.zoneCity.name = data.payload.states[0].cities[0].name;
 			$scope.zoneCitySelected = $scope.zoneCity[0].id;
 
+			$scope.clinicState.id = data.payload.states[0].id;
+			$scope.clinicState.name = data.payload.states[0].name;
+			$scope.clinicStateSelected = $scope.clinicState[0].id;
+
+			$scope.clinicCity.id = data.payload.states[0].cities[0].id;
+			$scope.clinicCity.name = data.payload.states[0].cities[0].name;
+			$scope.clinicCitySelected = $scope.clinicCity[0].id;
+
 			cache.cityToIdMap = buildCitiesToIdMap(data.payload);
 			cache.cityIdToNameMap = buildCitiesIdToNameMap(data.payload);
 			cache.cityIdToStateMap = buildCityIdToStateMap(data.payload);
@@ -2401,6 +2454,11 @@ angular.module('myApp.controllers')
 			adminApi.getZones(cache.cityToIdMap["Pune"])
 			.success(function(data, status, headers, config){
 				$rootScope.zonesList = buildZonesList(data.payload);
+				data.payload.forEach(function(item) {
+					item.pincodes.forEach(function(innerItem) {
+						$scope.clinicZone.push({id: item.zoneid, name: item.zonename+" - "+innerItem.pin});
+					});
+				});
 				cache.zoneIdToNameMap = buildZoneIdToNameMap(data.payload);
 				cache.pincodeIdToPincodeNameMap = buildPincodeIdToPincodeNameMap(data.payload);
 				cache.pincodeToPincodeIdMap = buildPincodeToPincodeIdMap(data.payload);
@@ -6130,6 +6188,333 @@ angular.module('myApp.controllers')
 		return false;
 	}
 
+	/* **********CLINIC********************** */
+
+	$scope.clinicMgmt = {};
+	$scope.clinicMgmt.arrayClinic = [];
+
+	$scope.clinicMgmt.getClinic = function() {
+		$scope.clinicMgmt.editMode = false;
+		$scope.clinicMgmt.InitClinicParams();
+		$scope.clinicMgmt.arrayClinic = [];
+
+		adminApi.getClinic(true).
+		success(function (data, status, headers, config) {
+			var arrStoreTrue = [];
+			var arrStoreTrue = data.payload;
+			console.log("successfully received clinics");
+			arrStoreTrue.forEach(function(item) {
+				$scope.clinicMgmt.arrayClinic.push(item);
+			});
+		}).
+		error(function (data, status, headers, config) {
+			console.log("Error in receiving clinics");
+		});
+
+		adminApi.getClinic(false).
+		success(function (data, status, headers, config) {
+			var arrStoreFalse = [];
+			var arrStoreFalse = data.payload;
+			console.log("successfully received clinics");
+			arrStoreFalse.forEach(function(item) {
+				$scope.clinicMgmt.arrayClinic.push(item);
+			});
+		}).
+		error(function (data, status, headers, config) {
+			console.log("Error in receiving clinics");
+		});
+	};
+
+	$scope.clinicReverse = false;
+
+	$scope.clinicMgmt.sortClinic = function(keyname) {
+		$scope.clinicSortKey = keyname;
+		$scope.clinicReverse = !$scope.clinicReverse;
+	}
+
+	$scope.clinicMgmt.sortClinic('created_on');
+
+	$scope.clinicHours = 1;
+	$scope.clinicMinutes = 15;
+
+	$scope.options = {
+		clinicHours: [1, 2, 3],
+		clinicMinutes: [1, 5, 10, 15, 25, 30]
+	};
+
+	$scope.ismeridianstarttime = false;
+	$scope.toggleModeClinicStartTime = function() {
+		$scope.ismeridianstarttime = ! $scope.ismeridianstarttime;
+	};
+
+	$scope.updateClinicStartTime = function() {
+		var d = new Date();
+		d.setHours( 14 );
+		d.setMinutes( 0 );
+		$scope.clinicMgmt.temppojo.clinic_start_time = d;
+	};
+
+	$scope.changedClinicStartTime = function () {
+		console.log('Start Time changed to: ' + $scope.clinicMgmt.temppojo.clinic_start_time);
+	};
+
+	$scope.clearClinicStartTime = function() {
+		$scope.clinicMgmt.temppojo.clinic_start_time = null;
+	};
+
+
+	$scope.ismeridianendtime = false;
+	$scope.toggleModeClinicEndTime = function() {
+		$scope.ismeridianendtime = ! $scope.ismeridianendtime;
+	};
+
+	$scope.updateClinicEndTime = function() {
+		var d = new Date();
+		d.setHours( 14 );
+		d.setMinutes( 0 );
+		$scope.clinicMgmt.temppojo.clinic_end_time = d;
+	};
+
+	$scope.changedClinicEndTime = function () {
+		console.log('End Time changed to: ' + $scope.clinicMgmt.temppojo.clinic_end_time);
+	};
+
+	$scope.clearClinicEndTime = function() {
+		$scope.clinicMgmt.temppojo.clinic_end_time = null;
+	};
+
+	$scope.clinicMgmt.saveClinic = function(rec, index) {
+		console.log(rec);
+		$scope.clinicMgmt.InitClinicParams();
+		var validClinic = true;
+		validClinic = $scope.clinicMgmt.validateClinic(rec, validClinic);
+		if(validClinic){
+			if(rec._id == null || rec._id == "" || rec._id == undefined) {
+				adminApi.addClinic(rec).
+				success(function (data, status, headers, config) {
+					$scope.clinicMgmt.InitClinicParams();
+					$scope.clinicMgmt.editMode = false;
+					$scope.clinicMgmt.clinicAddEditSection = false;
+					$scope.clinicMgmt.getClinic();
+					$scope.clinicMgmt.clinicSuccessMsg = "You have successfully added new clinic.";
+					$scope.clinicMgmt.clinicErrorMsg = "";
+				}).
+				error(function (data, status, headers, config) {
+					$scope.clinicMgmt.clinicSuccessMsg = "";
+					$scope.clinicMgmt.clinicErrorMsg = "Error while saving the new clinic setting.";
+				});
+			}else{
+				adminApi.updateClinic(rec._id, rec).
+				success(function (data, status, headers, config) {
+					$scope.clinicMgmt.InitClinicParams();
+					$scope.clinicMgmt.editMode = false;
+					$scope.clinicMgmt.clinicAddEditSection = false;
+					$scope.clinicMgmt.getClinic();
+					$scope.clinicMgmt.clinicSuccessMsg = "You have successfully updated the clinic setting.";
+					$scope.clinicMgmt.clinicErrorMsg = "";
+				}).
+				error(function (data, status, headers, config) {
+					$scope.clinicMgmt.clinicSuccessMsg = "";
+					$scope.clinicMgmt.clinicErrorMsg = "Error while updating the clinic setting.";
+				});
+			}
+		}
+	}
+
+	$scope.clinicMgmt.InitClinicParams = function(){
+		$scope.clinicMgmt.clinic_id_error = null;
+		$scope.clinicMgmt.clinic_name_error = null;
+		$scope.clinicMgmt.clinic_description_error = null;
+		$scope.clinicMgmt.clinic_country_error = null;
+		$scope.clinicMgmt.clinic_state_error = null;
+		$scope.clinicMgmt.clinic_state_error = null;
+		$scope.clinicMgmt.clinic_city_error = null;
+		$scope.clinicMgmt.clinic_zone_error = null;
+		$scope.clinicMgmt.clinic_address_error = null;
+		$scope.clinicMgmt.clinic_base_price_error = null;
+		$scope.clinicMgmt.clinic_capacity_error = null;
+		$scope.clinicMgmt.clinic_time_slot_duration_error = null;
+		$scope.clinicMgmt.clinic_start_time_error = null;
+		$scope.clinicMgmt.clinic_end_time_error = null;
+		$scope.clinicMgmt.clinicSuccessMsg = "";
+		$scope.clinicMgmt.clinicErrorMsg = "";
+	}
+
+	$scope.clinicMgmt.validateClinic = function(rec, validClinic){
+		
+		if(rec.clinic_id == ""){
+			validClinic = false;
+			$scope.clinicMgmt.clinic_id_error = "Registration ID cannot be blank.";
+		}
+		
+		if(rec.clinic_name == ""){
+			validClinic = false;
+			$scope.clinicMgmt.clinic_name_error = "Clinic name cannot be blank.";
+		}
+		
+		if(rec.clinic_description == ""){
+			validClinic = false;
+			$scope.clinicMgmt.clinic_description_error = "Clinic description cannot be blank.";
+		}
+		
+		if(rec.clinic_country == "" || rec.clinic_country == undefined){
+			validClinic = false;
+			$scope.clinicMgmt.clinic_country_error = "Country cannot be blank.";
+		}
+		
+		if(rec.clinic_state == "" || rec.clinic_state == undefined){
+			validClinic = false;
+			$scope.clinicMgmt.clinic_state_error = "State cannot be blank.";
+		}
+		
+		if(rec.clinic_city == "" || rec.clinic_city == undefined){
+			validClinic = false;
+			$scope.clinicMgmt.clinic_city_error = "City cannot be blank.";
+		}
+		
+		if(rec.clinic_zone == "" || rec.clinic_zone == undefined){
+			validClinic = false;
+			$scope.clinicMgmt.clinic_zone_error = "Zone cannot be blank.";
+		}
+		
+		if(rec.clinic_address == ""){
+			validClinic = false;
+			$scope.clinicMgmt.clinic_address_error = "Address cannot be blank.";
+		}
+		
+		if(rec.clinic_base_price == ""){
+			validClinic = false;
+			$scope.clinicMgmt.clinic_base_price_error = "Base price cannot be blank.";
+		}
+		
+		if(rec.clinic_capacity == ""){
+			validClinic = false;
+			$scope.clinicMgmt.clinic_capacity_error = "Capacity cannot be blank.";
+		}
+		
+		if(rec.clinic_time_slot_duration == ""){
+			validClinic = false;
+			$scope.clinicMgmt.clinic_time_slot_duration_error = "Time slot duration cannot be blank.";
+		}
+		
+		if(rec.clinic_start_time == ""){
+			validClinic = false;
+			$scope.clinicMgmt.clinic_start_time_error = "Start time cannot be blank.";
+		}
+		
+		if(rec.clinic_end_time == ""){
+			validClinic = false;
+			$scope.clinicMgmt.clinic_end_time_error = "End time cannot be blank.";
+		}
+		return validClinic;
+	}
+
+	$scope.clinicMgmt.emptyClinicArr = {
+		"clinic_id" : "",
+		"clinic_name" : "",
+		"clinic_description" : "",
+		"clinic_country" : $scope.clinicCountrySelected,
+		"clinic_state" : $scope.clinicStateSelected,
+		"clinic_city" : $scope.clinicCitySelected,
+		"clinic_zone" : "",
+		"clinic_address" : "",
+		"clinic_base_price" : 0,
+		"clinic_capacity" : 0,
+		"clinic_time_slot_duration" : 0,
+		"clinic_start_time" : "",
+		"clinic_end_time" : "",
+		"is_active" : true
+	};
+
+	$scope.clinicMgmt.addNewClinic = function(action, rec, index) {
+		$scope.clinicMgmt.InitClinicParams();
+		$scope.clinicMgmt.clinicIndex;
+		if(action == 'add') {
+			$scope.clinicMgmt.temppojo = {};
+			angular.copy($scope.clinicMgmt.emptyClinicArr, $scope.clinicMgmt.temppojo);
+			$scope.clinicMgmt.clinicAddEditSection = true;
+			$scope.clinicMgmt.editMode = false;
+		}
+
+		if(action == 'edit') {
+			$scope.clinicMgmt.temppojo = {};
+			$scope.clinicMgmt.clinicIndex = index;
+			$scope.clinicMgmt.clinicRecord = rec;
+			/*copy the record to be editted to temppojo*/
+			angular.copy(rec, $scope.clinicMgmt.temppojo);
+			var start_time_array = null;
+			start_time_array = rec.clinic_start_time.split(":");
+			var start_time = new Date();
+			start_time.setHours(start_time_array[0]);
+			start_time.setMinutes(start_time_array[1]);
+			$scope.clinicMgmt.temppojo.clinic_start_time = start_time;
+
+			var end_time_array = null;
+			end_time_array = rec.clinic_end_time.split(":");
+			var end_time = new Date();
+			end_time.setHours(end_time_array[0]);
+			end_time.setMinutes(end_time_array[1]);
+			$scope.clinicMgmt.temppojo.clinic_end_time = end_time;
+
+			$scope.clinicMgmt.clinicAddEditSection = true;
+			$scope.clinicMgmt.editMode = true;
+		}
+	};
+
+	/* Function to cancel clinic editing */
+	$scope.clinicMgmt.cancelClinicEdit = function() {
+		$scope.clinicMgmt.InitClinicParams();
+		$scope.clinicMgmt.editMode = false;
+		$scope.clinicMgmt.clinicAddEditSection = false;
+	};
+
+	$scope.clinicMgmt.actionClinic = function(is_active, rec, index) {
+		if(is_active)
+			var con = confirm("Are you sure you want to activate this clinic.");
+		else
+			var con = confirm("Are you sure you want to deactivate this clinic.");
+
+		if(con){
+			rec.is_active = is_active;
+
+			var start_time_array = null;
+			start_time_array = rec.clinic_start_time.split(":");
+			var start_time = new Date();
+			start_time.setHours(start_time_array[0]);
+			start_time.setMinutes(start_time_array[1]);
+			rec.clinic_start_time = start_time;
+
+			var end_time_array = null;
+			end_time_array = rec.clinic_end_time.split(":");
+			var end_time = new Date();
+			end_time.setHours(end_time_array[0]);
+			end_time.setMinutes(end_time_array[1]);
+			rec.clinic_end_time = end_time;
+
+			console.log(rec);
+
+			adminApi.updateClinic(rec._id, rec).
+			success(function (data, status, headers, config) {
+				$scope.clinicMgmt.InitClinicParams();
+				$scope.clinicMgmt.editMode = false;
+				$scope.clinicMgmt.clinicAddEditSection = false;
+				$scope.clinicMgmt.getClinic();
+				if(is_active)
+					$scope.clinicMgmt.clinicSuccessMsg = "You have successfully activated the clinic setting.";
+				else
+					$scope.clinicMgmt.clinicSuccessMsg = "You have successfully deactivated the clinic setting.";
+				$scope.clinicMgmt.clinicErrorMsg = "";
+			}).
+			error(function (data, status, headers, config) {
+				$scope.clinicMgmt.clinicSuccessMsg = "";
+				if(is_active)
+					$scope.clinicMgmt.clinicErrorMsg = "Error while activating the clinic setting.";
+				else
+					$scope.clinicMgmt.clinicErrorMsg = "Error while deactivating the clinic setting.";
+			});
+		}
+	}
+
 	/**************ZONE MAGANEMENT*******************/
 
 	$scope.zoneMgmt = {};
@@ -6174,8 +6559,8 @@ angular.module('myApp.controllers')
 		"country": $scope.zoneCountry.name,
 		"countryid": $scope.zoneCountry.id,
 		"state": $scope.zoneState.name,
-			"stateid": $scope.zoneState.id,
-			"zonename"	: "",
+		"stateid": $scope.zoneState.id,
+		"zonename"	: "",
 		"pincodes" : [
 			{
 				"pin" : "",

@@ -460,6 +460,11 @@ code {
     width: 100px;
 }
 
+.clinic-label {
+    display: inline-block;
+    width: 100px;
+}
+
 .leftSideAlignment {
     min-width:100px;
 }

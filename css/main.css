@@ -570,6 +570,15 @@ span.glyphicon.glyphicon-pencil.clickable {
     padding: 8px;
     border-radius: 6px;
 }
+.createClinic {
+    border: 1px solid #999;
+    margin-left: 1px;
+    background: #f2f2f2;
+    width: 98%;
+    margin-top: 16px;
+    padding: 8px;
+    border-radius: 6px;
+}
 .pin-area-group {
     max-height: 180px;
     overflow: auto;
@@ -589,6 +598,10 @@ span.glyphicon.glyphicon-plus-sign {
 }
 
 .zone-label {
+    font-weight: bold;
+}
+
+.clinic-label {
     font-weight: bold;
 }
 
