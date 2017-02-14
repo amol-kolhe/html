@@ -402,6 +402,15 @@ td.ac-select-image {
     border-radius: 20px;
 }
 
+.ellipsisClinicName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: 1px solid;
+    padding: 5px;
+    border-radius: 20px;
+}
+
 .followup-appt-time-slot {
     border: 1px solid #CCC;
     padding: 15px;

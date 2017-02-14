@@ -204,46 +204,56 @@ angular.module('myApp.controllers')
 
 	$scope.markSpLeavesForm = {};
 	var arrayDates = [];
+	var arrayRemoveDates = [];
+	var existingWorkTimeSlots = [];
 	$scope.wrkHrsAllSlots = [
 		{
 			"selected": false,
 			"label": 	"07:30 - 09:00",
-			"selectZoneIds": []
+			"selectZoneIds": [],
+			"selectClinicIds": []
 		},
 		{
 			"selected": false,
 			"label": 	"09:00 - 10:30",
-			"selectZoneIds": []
+			"selectZoneIds": [],
+			"selectClinicIds": []
 		},
 		{
 			"selected": false,
 			"label": 	"10:30 - 12:00",
-			"selectZoneIds": []
+			"selectZoneIds": [],
+			"selectClinicIds": []
 		},
 		{
 			"selected": false,
 			"label": 	"12:00 - 13:30",
-			"selectZoneIds": []
+			"selectZoneIds": [],
+			"selectClinicIds": []
 		},
 		{
 			"selected": false,
 			"label": 	"15:00 - 16:30",
-			"selectZoneIds": []
+			"selectZoneIds": [],
+			"selectClinicIds": []
 		},
 		{
 			"selected": false,
 			"label": 	"16:30 - 18:00",
-			"selectZoneIds": []
+			"selectZoneIds": [],
+			"selectClinicIds": []
 		},
 		{
 			"selected": false,
 			"label": 	"18:00 - 19:30",
-			"selectZoneIds": []
+			"selectZoneIds": [],
+			"selectClinicIds": []
 		},
 		{
 			"selected": false,
 			"label": 	"19:30 - 21:00",
-			"selectZoneIds": []
+			"selectZoneIds": [],
+			"selectClinicIds": []
 		}
 	];
 
@@ -389,6 +399,7 @@ angular.module('myApp.controllers')
 	$scope.manageSp.addNewSp = false;
 	$scope.manageSp.updateSp = false;
 	$scope.selectZoneIdsArr = [];
+
 
 	$scope.getAllLocations = function (callback) {
 		callback($scope.locationArr);
@@ -2386,12 +2397,266 @@ angular.module('myApp.controllers')
 						return cache.cityIdToNameMap[value];
 					case "state":
 						return cache.cityIdToStateMap[value];
+					case "clinic":
+						return cache.clinicIdToNameMap[value];
 				}
 			}
 			catch(err) {
 			}
 			
 		}
+	}
+
+	$scope.calculateSpTimeSlots = function(spId, dateArray){
+		$scope.SpWorkTime = null;
+		var dataObj = {
+				"sp_id" : spId,
+				"service_location" : "",
+				"sp_workingDate": dateArray
+			};
+		existingWorkTimeSlots = [];
+		adminApi.getSpMonthlyWtimeAndOffSlots(dataObj)
+		.success(function(data, status, headers, config) {
+			$scope.SpWorkTime = data.payload.sp_monthlyWtimeAndOffSlots;
+			var record_1 = null;
+			record_1 = data.payload.sp_monthlyWtimeAndOffSlots;
+			record_1.forEach(function(item_1) {
+				var record_2 = null;
+				if(item_1.wtime != undefined){
+					record_2 = item_1.wtime;
+					record_2.forEach(function(item_2) {
+						if(existingWorkTimeSlots.length != 0){
+							existingWorkTimeSlots.forEach(function(item_3) {
+								if(item_3.st != item_2.st || item_3.et != item_2.et){
+									existingWorkTimeSlots.push({"st" : item_2.st, "et" : item_2.et});
+								}
+							});
+						}else{
+							existingWorkTimeSlots.push({"st" : item_2.st, "et" : item_2.et});
+						}
+					});
+				}
+			});
+		})
+		.error(function(data, status, headers, config) {
+			$scope.checkSessionTimeout(data);
+			$scope.showWTime = false;
+		});
+
+		return existingWorkTimeSlots;
+	}
+
+	$scope.changeWorkTimeSlot = function(spId, clinic_id, clinics_array) {
+		var tempDateArray = [];
+		for (var d = 0; d < arrayDates.length; d++){
+			var res = arrayDates[d].split("-").join("");
+			tempDateArray.push(res);
+		}
+
+		$scope.SpWorkTime = null;
+		var dataObj = {
+				"sp_id" : spId,
+				"service_location" : "",
+				"sp_workingDate": tempDateArray
+			};
+		existingWorkTimeSlots = [];
+		adminApi.getSpMonthlyWtimeAndOffSlots(dataObj)
+		.success(function(data, status, headers, config) {
+			$scope.SpWorkTime = data.payload.sp_monthlyWtimeAndOffSlots;
+			var record_1 = null;
+			record_1 = data.payload.sp_monthlyWtimeAndOffSlots;
+			record_1.forEach(function(item_1) {
+				var record_2 = null;
+				if(item_1.wtime != undefined){
+					record_2 = item_1.wtime;
+					record_2.forEach(function(item_2) {
+						if(existingWorkTimeSlots.length != 0){
+							existingWorkTimeSlots.forEach(function(item_3) {
+								if(item_3.st != item_2.st || item_3.et != item_2.et){
+									existingWorkTimeSlots.push({"st" : item_2.st, "et" : item_2.et});
+								}
+							});
+						}else{
+							existingWorkTimeSlots.push({"st" : item_2.st, "et" : item_2.et});
+						}
+					});
+				}
+			});
+
+			if(clinic_id != 0){
+				$scope.wrkHrsAllSlots = [];
+				var clinic_time_slot_duration = null;
+				var clinic_start_time = null;
+				var clinic_end_time = null;
+				var slot_start_time = null;
+				var slot_start_time_str = null;
+				var slot_end_time = null;
+				var newWorkTimeSlots = [];
+
+				for (var i = 0; i < clinics_array.length; i++){
+					if(clinics_array[i]._id == clinic_id){
+						clinic_time_slot_duration = clinics_array[i].clinic_time_slot_duration;
+						clinic_start_time = clinics_array[i].clinic_start_time;
+						clinic_end_time = clinics_array[i].clinic_end_time;
+						slot_start_time = clinic_start_time;
+						slot_start_time_str = clinic_start_time;
+
+						var st_arry = clinic_start_time.split(":");
+						var st = st_arry[0]+""+st_arry[1];
+
+						var et_arry = clinic_end_time.split(":");
+						var et = et_arry[0]+""+et_arry[1];
+
+						while(st < et){
+							var slot_end_time = null;
+							var newSt = null; var newEt = null;
+
+							var slot_end_time = $scope.claculateEndTimeOfSlot(clinic_time_slot_duration, slot_start_time, clinic_end_time);
+							newSt = slot_start_time_str.split(":").join("");
+							newEt = slot_end_time.split(":").join("");
+							newWorkTimeSlots.push({"st" : newSt, "et" : newEt});
+							$scope.wrkHrsAllSlots.push({"selected": false, "label":slot_start_time_str+" - "+slot_end_time, "selectZoneIds": [], "selectClinicIds": []});
+
+							slot_start_time_str = $scope.addMinutes(slot_end_time, 1000);
+
+							slot_start_time = slot_end_time;
+							var new_st_arry = null;
+							var new_st = null;
+							new_st_arry = slot_end_time.split(":");
+							new_st = new_st_arry[0]+""+new_st_arry[1];
+							st = new_st;
+						}
+					}
+				}
+
+				if(existingWorkTimeSlots.length != 0){
+					existingWorkTimeSlots.forEach(function(item_4) {
+						newWorkTimeSlots.forEach(function(item_5) {
+							if(item_5.st >= item_4.st && item_5.st <= item_4.et){
+								var first = item_5.st.slice(0,2);
+								var middle = item_5.st.slice(2,4);
+								var delimeter = ":";
+								var result = first+delimeter+middle;
+								$scope.wrkHrsAllSlots.forEach(function(item_6) {
+									if(item_6.label != ""){
+										var label_split = item_6.label.split(" - ");
+										if(label_split[0] == result){
+											var d = null;
+											d = $scope.wrkHrsAllSlots.indexOf(item_6);
+											if(d != -1) {
+												$scope.wrkHrsAllSlots.splice(d, 1);
+											}
+										}
+									}
+								});
+							}
+						});
+					});
+				}
+			}else{
+				$scope.wrkHrsAllSlots = [
+					{
+						"selected": false,
+						"label": 	"07:30 - 09:00",
+						"selectZoneIds": [],
+						"selectClinicIds": []
+					},
+					{
+						"selected": false,
+						"label": 	"09:00 - 10:30",
+						"selectZoneIds": [],
+						"selectClinicIds": []
+					},
+					{
+						"selected": false,
+						"label": 	"10:30 - 12:00",
+						"selectZoneIds": [],
+						"selectClinicIds": []
+					},
+					{
+						"selected": false,
+						"label": 	"12:00 - 13:30",
+						"selectZoneIds": [],
+						"selectClinicIds": []
+					},
+					{
+						"selected": false,
+						"label": 	"15:00 - 16:30",
+						"selectZoneIds": [],
+						"selectClinicIds": []
+					},
+					{
+						"selected": false,
+						"label": 	"16:30 - 18:00",
+						"selectZoneIds": [],
+						"selectClinicIds": []
+					},
+					{
+						"selected": false,
+						"label": 	"18:00 - 19:30",
+						"selectZoneIds": [],
+						"selectClinicIds": []
+					},
+					{
+						"selected": false,
+						"label": 	"19:30 - 21:00",
+						"selectZoneIds": [],
+						"selectClinicIds": []
+					}
+				];
+			}
+		})
+		.error(function(data, status, headers, config) {
+			$scope.checkSessionTimeout(data);
+			$scope.showWTime = false;
+		});
+
+		return $scope.wrkHrsAllSlots;
+	}
+
+	$scope.addMinutes = function(timeString, minAdd){
+		var time_array = null;
+		time_array = timeString.split(":");
+		var full_time = new Date();
+		full_time.setHours(time_array[0]);
+		full_time.setMinutes(time_array[1]);
+
+		full_time.setTime(full_time.getTime() + minAdd * 60);
+
+		var time = null;
+		time = (full_time.getHours()<10?'0'+full_time.getHours():full_time.getHours())+":"+(full_time.getMinutes()<10?'0'+full_time.getMinutes():full_time.getMinutes());
+
+		return time;
+	}
+
+	$scope.claculateEndTimeOfSlot = function(duration, slot_start_time, end_time) {
+
+		if(duration != "" && slot_start_time != "" && end_time != ""){
+			duration = parseInt(duration * 1000);
+
+			var slot_end_time = null;
+			slot_end_time = $scope.addMinutes(slot_start_time, duration);
+
+			var compare = null;
+			compare = $scope.dateCompare(slot_end_time+":00", end_time+":00");
+
+			if (compare===0) return end_time;
+			if (compare===1) return end_time;
+			if (compare===-1) return slot_end_time;
+		}
+	}
+
+	$scope.dateCompare = function (time1,time2) {
+		var t1 = new Date();
+		var parts = time1.split(":");
+		t1.setHours(parts[0],parts[1],parts[2],0);
+		var t2 = new Date();
+		parts = time2.split(":");
+		t2.setHours(parts[0],parts[1],parts[2],0);
+
+		if (t1.getTime()>t2.getTime()) return 1;
+		if (t1.getTime()<t2.getTime()) return -1;
+		return 0;
 	}
 
 	$scope.initCache = function() {
@@ -3470,6 +3735,21 @@ angular.module('myApp.controllers')
 			.error(function(data, status, headers, config) {
 				$scope.checkSessionTimeout(data);
 			});
+
+			adminApi.getCityClinic(cityId)
+			.success(function(data, status, headers, config) {
+				var arrClinic = [];
+				var arrClinic = data.payload;
+				console.log("successfully received city wise clinics");
+				$scope.arrayClinic.push({"_id":"0", "clinic_name":"Home"});
+				arrClinic.forEach(function(item) {
+					$scope.arrayClinic.push(item);
+				});
+				cache.clinicIdToNameMap = buildClinicIdToNameMap(data.payload);
+			})
+			.error(function(data, status, headers, config) {
+				$scope.checkSessionTimeout(data);
+			});
 		}
 	}
 
@@ -3992,13 +4272,13 @@ angular.module('myApp.controllers')
 		}
 	}
 
-	$scope.selectAllDaysExceptSunday = function () {
+	$scope.selectAllDaysExceptSunday = function (selectedDate) {
 		$('#datetimepicker9').multiDatesPicker('removeDates', arrayDates);
 
 		var arrDateInst = [];
 		arrDateInst.push($(".ui-datepicker-month").text()); // March
 		arrDateInst.push($(".ui-datepicker-year").text()); // 2016
-
+		//alert(selectedDate);
 		var monthObj = "";
 		var dateObject = new Date(); // current date
 		var currentDay = null;
@@ -4083,12 +4363,25 @@ angular.module('myApp.controllers')
 			}
 		}
 
+		var e = arrayRemoveDates.indexOf(selectedDate);
+		if(e != -1) {
+			arrayRemoveDates.splice(e, 1);
+		}else{
+			arrayRemoveDates.push(selectedDate);
+		}
+		for(var j=0; j<arrayRemoveDates.length; j++){
+			var d = arrayDates.indexOf(arrayRemoveDates[j]);
+			if(d != -1) {
+				arrayDates.splice(d, 1);
+			}
+		}
+
 		$('#datetimepicker9').multiDatesPicker('addDates', arrayDates);
 	}
 
 	$scope.initDatePicker = function () {
 		$scope.initSelectAllDaysExceptSunday();
-
+		$scope.spChangeAddSpWrkHoursResetValues($scope.SpWrkHrs.spNamesId, $scope.SpWrkHrs.spServiceLocationId, $scope.arrayClinic);
 		$timeout(function () {
 			var d = moment(new Date()).format('YYYY-MM-DD');
 			$('#datetimepicker9').multiDatesPicker({
@@ -4100,6 +4393,14 @@ angular.module('myApp.controllers')
 					$timeout(function () {
 						$scope.selectAllDaysExceptSunday();
 						$scope.populateBusySlotsTable1();
+						$scope.spChangeAddSpWrkHoursResetValues($scope.SpWrkHrs.spNamesId, $scope.SpWrkHrs.spServiceLocationId, $scope.arrayClinic);
+					}, 50);
+				},
+				onSelect: function (date, obj) {
+					$timeout(function () {
+						$scope.selectAllDaysExceptSunday(date);
+						$scope.populateBusySlotsTable1();
+						$scope.spChangeAddSpWrkHoursResetValues($scope.SpWrkHrs.spNamesId, $scope.SpWrkHrs.spServiceLocationId, $scope.arrayClinic);
 					}, 50);
 				}
 			});
@@ -4108,6 +4409,7 @@ angular.module('myApp.controllers')
 
 	$scope.resetDatePicker9 = function () {
 		$('#datetimepicker9').multiDatesPicker('destroy');
+		arrayRemoveDates = [];
 		$timeout(function(){
 			$('#datetimepicker9').val('');
 			$scope.initDatePicker();
@@ -4133,110 +4435,289 @@ angular.module('myApp.controllers')
 		return isButtonDisabled;
 	}
 
-	$scope.spChangeAddSpWrkHoursResetValues = function (spId) {
-		$timeout(function() {
-			$scope.wrkHrsAllSlots = [
-				{
-					"selected": false,
-					"label": 	"07:30 - 09:00",
-					"selectZoneIds": []
-				},
-				{
-					"selected": false,
-					"label": 	"09:00 - 10:30",
-					"selectZoneIds": []
-				},
-				{
-					"selected": false,
-					"label": 	"10:30 - 12:00",
-					"selectZoneIds": []
-				},
-				{
-					"selected": false,
-					"label": 	"12:00 - 13:30",
-					"selectZoneIds": []
-				},
-				{
-					"selected": false,
-					"label": 	"15:00 - 16:30",
-					"selectZoneIds": []
-				},
-				{
-					"selected": false,
-					"label": 	"16:30 - 18:00",
-					"selectZoneIds": []
-				},
-				{
-					"selected": false,
-					"label": 	"18:00 - 19:30",
-					"selectZoneIds": []
-				},
-				{
-					"selected": false,
-					"label": 	"19:30 - 21:00",
-					"selectZoneIds": []
+	$scope.spChangeAddSpWrkHoursResetValues = function (spId, serviceLocation, clinic_rec) {
+		if(spId != undefined && spId != ""){
+			$timeout(function() {
+				/*if(serviceLocation != undefined){
+					$scope.changeWorkTimeSlot(spId, serviceLocation, clinic_rec);
+				}else{
+					$scope.changeWorkTimeSlot(spId, "0", clinic_rec);
+				}*/
+
+				var tempDateArray = [];
+				for (var d = 0; d < arrayDates.length; d++){
+					var res = arrayDates[d].split("-").join("");
+					tempDateArray.push(res);
 				}
-			];
 
-			$scope.selectZoneIdsArr = [];
-			for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
-				if ((spId != undefined) && (spId != null) && (spId.length > 0) && (spId == $scope.arrSpRecords[i]._id)) {
-					if (($scope.arrSpRecords[i].zones != undefined) && ($scope.arrSpRecords[i].zones.length > 0)) {
-						for(var j = 0 ; j < $scope.arrSpRecords[i].zones.length ; j++) {
-							var zoneObj1 = {
-								"sp_zoneid": "",
-								"sp_zonename": "",
-								"sp_zwtime": {
-									"start_time": "",
-									"end_time": ""
+				$scope.SpWorkTime = null;
+				var dataObj = {
+						"sp_id" : spId,
+						"service_location" : "",
+						"sp_workingDate": tempDateArray
+					};
+				existingWorkTimeSlots = [];
+				adminApi.getSpMonthlyWtimeAndOffSlots(dataObj)
+				.success(function(data, status, headers, config) {
+					$scope.SpWorkTime = data.payload.sp_monthlyWtimeAndOffSlots;
+					var record_1 = null;
+					record_1 = data.payload.sp_monthlyWtimeAndOffSlots;
+					record_1.forEach(function(item_1) {
+						var record_2 = null;
+						if(item_1.wtime != undefined){
+							record_2 = item_1.wtime;
+							record_2.forEach(function(item_2) {
+								existingWorkTimeSlots.push({"st" : item_2.st, "et" : item_2.et});
+							});
+						}
+					});
+					var flags = [], output = [], l = existingWorkTimeSlots.length, i;
+					for( i=0; i<l; i++) {
+					    if( flags[existingWorkTimeSlots[i].st] || flags[existingWorkTimeSlots[i].et]) continue;
+					    flags[existingWorkTimeSlots[i].st] = true; flags[existingWorkTimeSlots[i].et] = true;
+					    output.push({"st": existingWorkTimeSlots[i].st, "et": existingWorkTimeSlots[i].et});
+					}
+
+					existingWorkTimeSlots = output;
+
+					if(serviceLocation != undefined && serviceLocation != 0){
+						$scope.wrkHrsAllSlots = [];
+						var clinic_time_slot_duration = null;
+						var clinic_start_time = null;
+						var clinic_end_time = null;
+						var slot_start_time = null;
+						var slot_start_time_str = null;
+						var slot_end_time = null;
+						var newWorkTimeSlots = [];
+
+						for (var i = 0; i < clinic_rec.length; i++){
+							if(clinic_rec[i]._id == serviceLocation){
+								clinic_time_slot_duration = clinic_rec[i].clinic_time_slot_duration;
+								clinic_start_time = clinic_rec[i].clinic_start_time;
+								clinic_end_time = clinic_rec[i].clinic_end_time;
+								slot_start_time = clinic_start_time;
+								slot_start_time_str = clinic_start_time;
+
+								var st_arry = clinic_start_time.split(":");
+								var st = st_arry[0]+""+st_arry[1];
+
+								var et_arry = clinic_end_time.split(":");
+								var et = et_arry[0]+""+et_arry[1];
+
+								while(st < et){
+									var slot_end_time = null;
+									var newSt = null; var newEt = null;
+
+									var slot_end_time = $scope.claculateEndTimeOfSlot(clinic_time_slot_duration, slot_start_time, clinic_end_time);
+									newSt = slot_start_time_str.split(":").join("");
+									newEt = slot_end_time.split(":").join("");
+									newWorkTimeSlots.push({"st" : newSt, "et" : newEt});
+									$scope.wrkHrsAllSlots.push({"selected": false, "label":slot_start_time_str+" - "+slot_end_time, "selectZoneIds": [], "selectClinicIds": []});
+
+									slot_start_time_str = $scope.addMinutes(slot_end_time, 1000);
+
+									slot_start_time = slot_end_time;
+									var new_st_arry = null;
+									var new_st = null;
+									new_st_arry = slot_end_time.split(":");
+									new_st = new_st_arry[0]+""+new_st_arry[1];
+									st = new_st;
 								}
-							};
+							}
+						}
+					}else{
+						$scope.wrkHrsAllSlots = [
+							{
+								"selected": false,
+								"label": 	"07:30 - 09:00",
+								"selectZoneIds": [],
+								"selectClinicIds": []
+							},
+							{
+								"selected": false,
+								"label": 	"09:00 - 10:30",
+								"selectZoneIds": [],
+								"selectClinicIds": []
+							},
+							{
+								"selected": false,
+								"label": 	"10:30 - 12:00",
+								"selectZoneIds": [],
+								"selectClinicIds": []
+							},
+							{
+								"selected": false,
+								"label": 	"12:00 - 13:30",
+								"selectZoneIds": [],
+								"selectClinicIds": []
+							},
+							{
+								"selected": false,
+								"label": 	"15:00 - 16:30",
+								"selectZoneIds": [],
+								"selectClinicIds": []
+							},
+							{
+								"selected": false,
+								"label": 	"16:30 - 18:00",
+								"selectZoneIds": [],
+								"selectClinicIds": []
+							},
+							{
+								"selected": false,
+								"label": 	"18:00 - 19:30",
+								"selectZoneIds": [],
+								"selectClinicIds": []
+							},
+							{
+								"selected": false,
+								"label": 	"19:30 - 21:00",
+								"selectZoneIds": [],
+								"selectClinicIds": []
+							}
+						];
 
-							zoneObj1.sp_zoneid = $scope.arrSpRecords[i].zones[j].id;
-							zoneObj1.sp_zonename = $scope.arrSpRecords[i].zones[j].name;
-							zoneObj1.sp_zwtime.start_time = "";
-							zoneObj1.sp_zwtime.end_time = "";
-							$scope.selectZoneIdsArr.push(zoneObj1);
+						var newWorkTimeSlots = [];
+						$scope.wrkHrsAllSlots.forEach(function(item_1) {
+							var temp_arr = null;
+							var st = null;
+							var et = null;
+							temp_arr = item_1.label.split(" - ");
+							st = temp_arr[0].split(":").join("");
+							et = temp_arr[1].split(":").join("");
 
-							for (var k = 0 ; k < $scope.wrkHrsAllSlots.length ; k++) {
-								var strSlot = $scope.wrkHrsAllSlots[k].label;
-								strSlot = strSlot.replace(/:/g, "");
-								var arrSlots = strSlot.split("-");
+							newWorkTimeSlots.push({"st" : st, "et" : et});
+						});
+					}
 
-								var start_time = arrSlots[0].trim();
-								var end_time = arrSlots[1].trim();
-								var intSt = parseInt(start_time);
-								var intEt = parseInt(end_time);
+					if(existingWorkTimeSlots.length != 0){
+						existingWorkTimeSlots.forEach(function(item_4) {
+							newWorkTimeSlots.forEach(function(item_5) {
+								if(item_5.st >= item_4.st && item_5.st <= item_4.et){
+									var first = item_5.st.slice(0,2);
+									var middle = item_5.st.slice(2,4);
+									var delimeter = ":";
+									var result = first+delimeter+middle;
+									$scope.wrkHrsAllSlots.forEach(function(item_6) {
+										if(item_6.label != ""){
+											var label_split = item_6.label.split(" - ");
+											if(label_split[0] == result){
+												var d = null;
+												d = $scope.wrkHrsAllSlots.indexOf(item_6);
+												if(d != -1) {
+													$scope.wrkHrsAllSlots.splice(d, 1);
+												}
+											}
+										}
+									});
+								}
+							});
+						});
+					}
 
-								var zoneObj = {
-									"sp_zoneid": "",
-									"sp_zonename": "",
-									"sp_zwtime": {
-										"start_time": "",
-										"end_time": ""
+					$scope.selectZoneIdsArr = [];
+					for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
+						if ((spId != undefined) && (spId != null) && (spId.length > 0) && (spId == $scope.arrSpRecords[i]._id)) {
+							if(serviceLocation == undefined || serviceLocation == 0){
+								if (($scope.arrSpRecords[i].zones != undefined) && ($scope.arrSpRecords[i].zones.length > 0)) {
+									for(var j = 0 ; j < $scope.arrSpRecords[i].zones.length ; j++) {
+										var zoneObj1 = {
+											"sp_zoneid": "",
+											"sp_zonename": "",
+											"sp_zwtime": {
+												"start_time": "",
+												"end_time": ""
+											}
+										};
+
+										zoneObj1.sp_zoneid = $scope.arrSpRecords[i].zones[j].id;
+										zoneObj1.sp_zonename = $scope.arrSpRecords[i].zones[j].name;
+										zoneObj1.sp_zwtime.start_time = "";
+										zoneObj1.sp_zwtime.end_time = "";
+										$scope.selectZoneIdsArr.push(zoneObj1);
+
+										for (var k = 0 ; k < $scope.wrkHrsAllSlots.length ; k++) {
+											var strSlot = $scope.wrkHrsAllSlots[k].label;
+											strSlot = strSlot.replace(/:/g, "");
+											var arrSlots = strSlot.split("-");
+
+											var start_time = arrSlots[0].trim();
+											var end_time = arrSlots[1].trim();
+											var intSt = parseInt(start_time);
+											var intEt = parseInt(end_time);
+
+											var zoneObj = {
+												"sp_zoneid": "",
+												"sp_zonename": "",
+												"sp_zwtime": {
+													"start_time": "",
+													"end_time": ""
+												}
+											};
+
+											zoneObj.sp_zoneid = $scope.arrSpRecords[i].zones[j].id;
+											zoneObj.sp_zonename = $scope.arrSpRecords[i].zones[j].name;
+											zoneObj.sp_zwtime.start_time = start_time;
+											zoneObj.sp_zwtime.end_time = end_time;
+
+											$scope.wrkHrsAllSlots[k].selectZoneIds.push(zoneObj);
+										}
 									}
-								};
+								}
+							}else{
+								for (var k = 0 ; k < $scope.wrkHrsAllSlots.length ; k++) {
+									var strSlot = $scope.wrkHrsAllSlots[k].label;
+									strSlot = strSlot.replace(/:/g, "");
+									var arrSlots = strSlot.split("-");
 
-								zoneObj.sp_zoneid = $scope.arrSpRecords[i].zones[j].id;
-								zoneObj.sp_zonename = $scope.arrSpRecords[i].zones[j].name;
-								zoneObj.sp_zwtime.start_time = start_time;
-								zoneObj.sp_zwtime.end_time = end_time;
+									var start_time = arrSlots[0].trim();
+									var end_time = arrSlots[1].trim();
+									var intSt = parseInt(start_time);
+									var intEt = parseInt(end_time);
+									for (var c = 0; c < clinic_rec.length; c++){
+										if(clinic_rec[c]._id == serviceLocation){
+											var clinicObj = {
+												"sp_clinicid": "",
+												"sp_clinicname": "",
+												"sp_cwtime": {
+													"start_time": "",
+													"end_time": ""
+												}
+											};
 
-								$scope.wrkHrsAllSlots[k].selectZoneIds.push(zoneObj);
+											clinicObj.sp_clinicid = serviceLocation;
+											clinicObj.sp_clinicname = clinic_rec[c].clinic_name;
+											clinicObj.sp_cwtime.start_time = start_time;
+											clinicObj.sp_cwtime.end_time = end_time;
+										}
+									}
+
+									$scope.wrkHrsAllSlots[k].selectClinicIds.push(clinicObj);
+								}
 							}
 						}
 					}
-				}
-			}
 
-			$scope.wrkHrErrorSlot = false;
-			$scope.SpWrkHrs = {};
-			$scope.addSpWrkHrsForm.adminFormForSp.$setPristine();
-			$scope.addSpWrkHrsForm.adminFormForSp.$setUntouched();
+					$scope.wrkHrErrorSlot = false;
+					$scope.SpWrkHrs = {};
+					$scope.addSpWrkHrsForm.adminFormForSp.$setPristine();
+					$scope.addSpWrkHrsForm.adminFormForSp.$setUntouched();
 
-			$scope.SpWrkHrs.spNamesId = spId;
-			$scope.addSpWrkHrsForm.adminFormForSp.spNamesId.$setDirty();
-		}, 50);
+					$scope.SpWrkHrs.spNamesId = spId;
+					$scope.addSpWrkHrsForm.adminFormForSp.spNamesId.$setDirty();
+
+					if(serviceLocation != undefined && serviceLocation != 0){
+						$scope.SpWrkHrs.spServiceLocationId = serviceLocation;
+					}else{
+						$scope.SpWrkHrs.spServiceLocationId = "0";
+					}
+				})
+				.error(function(data, status, headers, config) {
+					$scope.checkSessionTimeout(data);
+					$scope.showWTime = false;
+				});
+			}, 50);
+		}
 	}
 
 	$scope.resetAddSpWrkHrsForm = function () {
@@ -4248,42 +4729,50 @@ angular.module('myApp.controllers')
 			{
 				"selected": false,
 				"label": 	"07:30 - 09:00",
-				"selectZoneIds": []
+				"selectZoneIds": [],
+				"selectClinicIds": []
 			},
 			{
 				"selected": false,
 				"label": 	"09:00 - 10:30",
-				"selectZoneIds": []
+				"selectZoneIds": [],
+				"selectClinicIds": []
 			},
 			{
 				"selected": false,
 				"label": 	"10:30 - 12:00",
-				"selectZoneIds": []
+				"selectZoneIds": [],
+				"selectClinicIds": []
 			},
 			{
 				"selected": false,
 				"label": 	"12:00 - 13:30",
-				"selectZoneIds": []
+				"selectZoneIds": [],
+				"selectClinicIds": []
 			},
 			{
 				"selected": false,
 				"label": 	"15:00 - 16:30",
-				"selectZoneIds": []
+				"selectZoneIds": [],
+				"selectClinicIds": []
 			},
 			{
 				"selected": false,
 				"label": 	"16:30 - 18:00",
-				"selectZoneIds": []
+				"selectZoneIds": [],
+				"selectClinicIds": []
 			},
 			{
 				"selected": false,
 				"label": 	"18:00 - 19:30",
-				"selectZoneIds": []
+				"selectZoneIds": [],
+				"selectClinicIds": []
 			},
 			{
 				"selected": false,
 				"label": 	"19:30 - 21:00",
-				"selectZoneIds": []
+				"selectZoneIds": [],
+				"selectClinicIds": []
 			}
 		];
 
@@ -4307,6 +4796,7 @@ angular.module('myApp.controllers')
 		var wrkDates = [];
 		var selectedSlots = [];
 		var zoneWorkingTime = [];
+		var clinicWorkingTime = [];
 
 		if ($scope.SpWrkHrs.spNamesId != undefined) {
 		} else {
@@ -4339,6 +4829,12 @@ angular.module('myApp.controllers')
 					if (($scope.wrkHrsAllSlots[i].selectZoneIds != undefined) && ($scope.wrkHrsAllSlots[i].selectZoneIds.length > 0)) {
 						for (var j = 0 ; j < $scope.wrkHrsAllSlots[i].selectZoneIds.length ; j++) {
 							zoneWorkingTime.push($scope.wrkHrsAllSlots[i].selectZoneIds[j]);
+						}
+					}
+
+					if (($scope.wrkHrsAllSlots[i].selectClinicIds != undefined) && ($scope.wrkHrsAllSlots[i].selectClinicIds.length > 0)) {
+						for (var j = 0 ; j < $scope.wrkHrsAllSlots[i].selectClinicIds.length ; j++) {
+							clinicWorkingTime.push($scope.wrkHrsAllSlots[i].selectClinicIds[j]);
 						}
 					}
 				}
@@ -4389,12 +4885,53 @@ angular.module('myApp.controllers')
 			}
 		}
 
+		var finalClinicWorkingTime = [];
+		for(var index = 0 ; index < clinicWorkingTime.length ; index++) {
+			var obj = {
+				"sp_clinicid": "",
+				"sp_cwtime": [{}]
+			};
+			obj.sp_clinicid = clinicWorkingTime[index].sp_clinicid;
+			obj.sp_cwtime[0] = angular.copy(clinicWorkingTime[index].sp_cwtime);
+
+			if ((finalClinicWorkingTime != undefined) && (finalClinicWorkingTime.length > 0)) {
+				var clinicFound = false;
+				for(var cnt = 0 ; cnt < finalClinicWorkingTime.length ; cnt++) {
+					if (obj.sp_clinicid == finalClinicWorkingTime[cnt].sp_clinicid) {
+						clinicFound = true;
+						finalClinicWorkingTime[cnt].sp_cwtime.push(obj.sp_cwtime[0]);
+					}
+				}
+
+				if (!clinicFound) {
+					var arrCwtime = [{}];
+
+					arrCwtime = angular.copy(obj.sp_cwtime);
+
+					var finalObj = {};
+					finalObj.sp_clinicid = obj.sp_clinicid;
+					finalObj.sp_cwtime = angular.copy(arrCwtime);
+					finalClinicWorkingTime.push(finalObj);
+				}
+			} else if ((finalClinicWorkingTime != undefined) && (finalClinicWorkingTime.length == 0)){
+				var arrCwtime = [{}];
+
+				arrCwtime = angular.copy(obj.sp_cwtime);
+
+				var finalObj = {};
+				finalObj.sp_clinicid = obj.sp_clinicid;
+				finalObj.sp_cwtime = angular.copy(arrCwtime);
+				finalClinicWorkingTime.push(finalObj);
+			}
+		}
+
 		if (!($scope.dateErrorFlag)) {
 			var dataObj = {
 				"sp_id": $scope.SpWrkHrs.spNamesId,
 				"sp_workingDate": wrkDates,
 				"sp_workTime": selectedSlots,
-				"spZoneAllocatedWTime": finalZoneWorkingTime
+				"spZoneAllocatedWTime": finalZoneWorkingTime,
+				"spClinicAllocatedWTime": finalClinicWorkingTime
 			};
 
 			adminApi.addSpWrkHrs(dataObj)
@@ -4420,6 +4957,11 @@ angular.module('myApp.controllers')
 
 	$scope.deSelectAllWrkDates = function () {
 		$('#datetimepicker9').val('').multiDatesPicker('removeDates', arrayDates);
+		
+		for(var j=0; j<arrayDates.length; j++){
+			arrayRemoveDates.push(arrayDates[j]);
+		}
+
 		var dateVal = $('#datePicker9Value').val();
 		if(dateVal != undefined && dateVal != '') {
 			var arrDates = $('#datePicker9Value').val().split(",");
@@ -4427,6 +4969,7 @@ angular.module('myApp.controllers')
 			for(var i = 0 ; i < arrDates.length ; i++) {
 				var strDate = arrDates[i].trim();
 				arrayDt.push(strDate);
+				arrayRemoveDates.push(strDate);
 			}
 			$('#datetimepicker9').val('').multiDatesPicker('removeDates', arrayDt);
 		}
@@ -4779,6 +5322,7 @@ angular.module('myApp.controllers')
 		$scope.dispArrWTime = [];
 		$scope.showWTime = false;
 		var sp_Id = $scope.SpWrkHrs.spNamesId;
+		var service_location_Id = $scope.SpWrkHrs.spServiceLocationId;
 
 		if((sp_Id != null) && (sp_Id != undefined) && (sp_Id.length > 0)) {
 			var dateObject = new Date(); // current date
@@ -4810,8 +5354,13 @@ angular.module('myApp.controllers')
 				arrDates.push(dateVal);
 			}
 
+			if(service_location_Id == undefined){
+				service_location_Id = "0";
+			}
+
 			var dataObj = {
 				"sp_id" : sp_Id,
+				"service_location" : service_location_Id,
 				"sp_workingDate": arrDates
 			};
 
@@ -4867,7 +5416,49 @@ angular.module('myApp.controllers')
 								}
 							}
 						}
-					} else {
+					}
+
+					if (($scope.arrWTime[i].sp_clinicSpecificWtimeDetail != undefined) && ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length > 0)) {
+						for (var k = 0 ; k < $scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length ; k++) {
+							if (($scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime[0].st != 0) && ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime[0].et != 0)) {
+								$scope.showWTime = true;
+								$scope.arrWTime[i].flag = true;
+
+								if (($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length == 2) && ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime.length == 1)) {
+									if ($scope.table1ItemsPerPage > 3) {
+										$scope.table1ItemsPerPage = 3;
+									}
+								} else if ((($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length >= 2) && ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length <= 3)) && (($scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime.length >= 1) && (($scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime.length <= 2)))) {
+									if ($scope.table1ItemsPerPage > 2) {
+										$scope.table1ItemsPerPage = 2;
+									}
+								} else if ((($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length >= 2) && ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length <= 3)) && ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime.length >= 1)) {
+									if ($scope.table1ItemsPerPage > 1) {
+										$scope.table1ItemsPerPage = 1;
+									}
+								} else if ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length > 3) {
+									if ($scope.table1ItemsPerPage > 1) {
+										$scope.table1ItemsPerPage = 1;
+									}
+								}
+
+								var sp_clinicName = cache.clinicIdToNameMap[$scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_clinicid];
+								$scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_clinicName = sp_clinicName;
+
+								for(var j = 0 ; j < $scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime.length ; j++) {
+									var strTime1 = $scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime[j].st;
+									strTime1 = $scope.getTimeInAmPmFormat(strTime1);
+									$scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime[j].st = strTime1;
+
+									var strTime2 = $scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime[j].et;
+									strTime2 = $scope.getTimeInAmPmFormat(strTime2);
+									$scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime[j].et = strTime2;
+								}
+							}
+						}
+					}
+
+					if ((($scope.arrWTime[i].sp_zoneSpecificWtimeDetail == undefined) || ($scope.arrWTime[i].sp_zoneSpecificWtimeDetail.length <= 0)) && (($scope.arrWTime[i].sp_clinicSpecificWtimeDetail == undefined) || ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length <= 0))) {
 						$scope.arrWTime[i].flag = false;
 					}
 				}
@@ -4892,6 +5483,7 @@ angular.module('myApp.controllers')
 		$scope.showWTime = false;
 
 		var sp_Id = $scope.SpWrkHrs.spNamesId;
+		var service_location_Id = $scope.SpWrkHrs.spServiceLocationId;
 		if((sp_Id != null) && (sp_Id != undefined) && (sp_Id.length > 0)) {
 			var arrDateInst = [];
 			arrDateInst.push($(".ui-datepicker-month").text()); // March
@@ -4975,8 +5567,24 @@ angular.module('myApp.controllers')
 				arrDates.push(dateVal);
 			}
 
+			for(var j=0; j<arrayRemoveDates.length; j++){
+				var sDate = null;
+				if(arrayRemoveDates[j] != undefined){
+					sDate = arrayRemoveDates[j].split("-");
+					var d = arrDates.indexOf(sDate[0] + sDate[1] + sDate[2]);
+					if(d != -1) {
+						arrDates.splice(d, 1);
+					}
+				}
+			}
+
+			if(service_location_Id == undefined){
+				service_location_Id = "0";
+			}
+
 			var dataObj = {
 				"sp_id" : sp_Id,
+				"service_location" : service_location_Id,
 				"sp_workingDate": arrDates
 			};
 
@@ -5030,7 +5638,49 @@ angular.module('myApp.controllers')
 								}
 							}
 						}
-					} else {
+					}
+
+					if (($scope.arrWTime[i].sp_clinicSpecificWtimeDetail != undefined) && ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length > 0)) {
+						for (var k = 0 ; k < $scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length ; k++) {
+							if (($scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime[0].st != 0) && ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime[0].et != 0)) {
+								$scope.showWTime = true;
+								$scope.arrWTime[i].flag = true;
+
+								if (($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length == 2) && ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime.length == 1)) {
+									if ($scope.table1ItemsPerPage > 3) {
+										$scope.table1ItemsPerPage = 3;
+									}
+								} else if ((($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length >= 2) && ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length <= 3)) && (($scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime.length >= 1) && (($scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime.length <= 2)))) {
+									if ($scope.table1ItemsPerPage > 2) {
+										$scope.table1ItemsPerPage = 2;
+									}
+								} else if ((($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length >= 2) && ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length <= 3)) && ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime.length >= 1)) {
+									if ($scope.table1ItemsPerPage > 1) {
+										$scope.table1ItemsPerPage = 1;
+									}
+								} else if ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length > 3) {
+									if ($scope.table1ItemsPerPage > 1) {
+										$scope.table1ItemsPerPage = 1;
+									}
+								}
+
+								var sp_clinicName = cache.clinicIdToNameMap[$scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_clinicid];
+								$scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_clinicName = sp_clinicName;
+
+								for(var j = 0 ; j < $scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime.length ; j++) {
+									var strTime1 = $scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime[j].st;
+									strTime1 = $scope.getTimeInAmPmFormat(strTime1);
+									$scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime[j].st = strTime1;
+
+									var strTime2 = $scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime[j].et;
+									strTime2 = $scope.getTimeInAmPmFormat(strTime2);
+									$scope.arrWTime[i].sp_clinicSpecificWtimeDetail[k].sp_cwtime[j].et = strTime2;
+								}
+							}
+						}
+					}
+
+					if ((($scope.arrWTime[i].sp_zoneSpecificWtimeDetail == undefined) || ($scope.arrWTime[i].sp_zoneSpecificWtimeDetail.length <= 0)) && (($scope.arrWTime[i].sp_clinicSpecificWtimeDetail == undefined) || ($scope.arrWTime[i].sp_clinicSpecificWtimeDetail.length <= 0))) {
 						$scope.arrWTime[i].flag = false;
 					}
 				}
@@ -6869,7 +7519,9 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.checkBoxSelected = function (wrkHrSlot, $index) {
+		console.log(wrkHrSlot.selectZoneIds);
 		if ((wrkHrSlot.selected == true) && (wrkHrSlot.selectZoneIds != undefined) && (wrkHrSlot.selectZoneIds.length > 0) && ($scope.selectZoneIdsArr != undefined) && ($scope.selectZoneIdsArr.length > 0)) {
+			
 			var temporaryArray = angular.copy($scope.wrkHrsAllSlots);
 
 			var strSlot = temporaryArray[$index].label;

@@ -222,6 +222,15 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		return $http.post(baseUrl + "/hrest/v1/admin/clinic?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid(), clinicobj);
 	};
 
+	//API support to get all city wise clinic.
+	adminApi.getCityClinic = function(clinic_city) {
+		var url = baseUrl + "/hrest/v1/admin/cityClinic?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + '&role=0';
+		if(clinic_city != "") {
+			url += "&clinic_city=" + clinic_city;
+		}
+		return $http.get(url);
+	};
+
 	//API support to get all clinic.
 	adminApi.getClinic = function(active) {
 		var url = baseUrl + "/hrest/v1/admin/clinic?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + '&role=0';

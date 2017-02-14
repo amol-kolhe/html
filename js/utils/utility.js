@@ -258,6 +258,14 @@ function buildZoneIdToNameMap(payload) {
 	return map;
 }
 
+function buildClinicIdToNameMap(payload) {
+	var map = {};
+	for(var i=0; i<payload.length; i++) {
+		map[payload[i]._id] = payload[i].clinic_name;
+	}
+	return map;
+}
+
 function buildCitiesToIdMap(payload) {
 	var map = {};
 	for(var i=0; i<payload.states.length; i++) {
