@@ -4459,6 +4459,7 @@ angular.module('myApp.controllers')
 				existingWorkTimeSlots = [];
 				adminApi.getSpMonthlyWtimeAndOffSlots(dataObj)
 				.success(function(data, status, headers, config) {
+					console.log(data.payload);
 					$scope.SpWorkTime = data.payload.sp_monthlyWtimeAndOffSlots;
 					var record_1 = null;
 					record_1 = data.payload.sp_monthlyWtimeAndOffSlots;
@@ -4473,7 +4474,7 @@ angular.module('myApp.controllers')
 					});
 					var flags = [], output = [], l = existingWorkTimeSlots.length, i;
 					for( i=0; i<l; i++) {
-					    if( flags[existingWorkTimeSlots[i].st] || flags[existingWorkTimeSlots[i].et]) continue;
+					    if( flags[existingWorkTimeSlots[i].st] && flags[existingWorkTimeSlots[i].et]) continue;
 					    flags[existingWorkTimeSlots[i].st] = true; flags[existingWorkTimeSlots[i].et] = true;
 					    output.push({"st": existingWorkTimeSlots[i].st, "et": existingWorkTimeSlots[i].et});
 					}
@@ -4509,12 +4510,13 @@ angular.module('myApp.controllers')
 									var newSt = null; var newEt = null;
 
 									var slot_end_time = $scope.claculateEndTimeOfSlot(clinic_time_slot_duration, slot_start_time, clinic_end_time);
-									newSt = slot_start_time_str.split(":").join("");
+									//newSt = slot_start_time_str.split(":").join("");
+									newSt = slot_start_time.split(":").join("");
 									newEt = slot_end_time.split(":").join("");
 									newWorkTimeSlots.push({"st" : newSt, "et" : newEt});
-									$scope.wrkHrsAllSlots.push({"selected": false, "label":slot_start_time_str+" - "+slot_end_time, "selectZoneIds": [], "selectClinicIds": []});
+									$scope.wrkHrsAllSlots.push({"selected": false, "label":slot_start_time+" - "+slot_end_time, "selectZoneIds": [], "selectClinicIds": []});
 
-									slot_start_time_str = $scope.addMinutes(slot_end_time, 1000);
+									//slot_start_time_str = $scope.addMinutes(slot_end_time, 1000);
 
 									slot_start_time = slot_end_time;
 									var new_st_arry = null;
@@ -4589,11 +4591,12 @@ angular.module('myApp.controllers')
 							newWorkTimeSlots.push({"st" : st, "et" : et});
 						});
 					}
-
+					console.log(existingWorkTimeSlots);
+					console.log(newWorkTimeSlots);
 					if(existingWorkTimeSlots.length != 0){
 						existingWorkTimeSlots.forEach(function(item_4) {
 							newWorkTimeSlots.forEach(function(item_5) {
-								if(item_5.st >= item_4.st && item_5.st <= item_4.et){
+								if(item_5.st >= item_4.st && item_5.st < item_4.et){
 									var first = item_5.st.slice(0,2);
 									var middle = item_5.st.slice(2,4);
 									var delimeter = ":";
@@ -5978,6 +5981,7 @@ angular.module('myApp.controllers')
 		var wrkDates = [];
 		var selectedSlots = [];
 		var zoneWorkingTime = [];
+		var clinicWorkingTime = [];
 
 		if ($scope.SpWrkHrs.spNamesId != undefined) {
 		} else {
@@ -6001,6 +6005,11 @@ angular.module('myApp.controllers')
 			if (($scope.wrkHrsAllSlots[i].selectZoneIds != undefined) && ($scope.wrkHrsAllSlots[i].selectZoneIds.length > 0)) {
 				for (var j = 0 ; j < $scope.wrkHrsAllSlots[i].selectZoneIds.length ; j++) {
 					zoneWorkingTime.push($scope.wrkHrsAllSlots[i].selectZoneIds[j]);
+				}
+			}
+			if (($scope.wrkHrsAllSlots[i].selectClinicIds != undefined) && ($scope.wrkHrsAllSlots[i].selectClinicIds.length > 0)) {
+				for (var j = 0 ; j < $scope.wrkHrsAllSlots[i].selectClinicIds.length ; j++) {
+					clinicWorkingTime.push($scope.wrkHrsAllSlots[i].selectClinicIds[j]);
 				}
 			}
 		}
@@ -6048,6 +6057,48 @@ angular.module('myApp.controllers')
 			}
 		}
 
+		var finalClinicWorkingTime = [];
+		for(var index = 0 ; index < clinicWorkingTime.length ; index++) {
+			var obj = {
+				"sp_clinicid": "",
+				"sp_cwtime": [{
+					"start_time": "0000",
+					"end_time": "0000"
+				}]
+			};
+			obj.sp_clinicid = clinicWorkingTime[index].sp_clinicid;
+
+			if ((finalClinicWorkingTime != undefined) && (finalClinicWorkingTime.length > 0)) {
+				var clinicFound = false;
+				for(var cnt = 0 ; cnt < finalClinicWorkingTime.length ; cnt++) {
+					if (obj.sp_clinicid == finalClinicWorkingTime[cnt].sp_clinicid) {
+						clinicFound = true;
+						finalClinicWorkingTime[cnt].sp_cwtime = angular.copy(obj.sp_cwtime[0]);
+					}
+				}
+
+				if (!clinicFound) {
+					var arrCwtime = [{}];
+
+					arrCwtime = angular.copy(obj.sp_cwtime);
+
+					var finalObj = {};
+					finalObj.sp_clinicid = obj.sp_clinicid;
+					finalObj.sp_cwtime = angular.copy(arrCwtime);
+					finalClinicWorkingTime.push(finalObj);
+				}
+			} else if ((finalClinicWorkingTime != undefined) && (finalClinicWorkingTime.length == 0)){
+				var arrCwtime = [{}];
+
+				arrCwtime = angular.copy(obj.sp_cwtime);
+
+				var finalObj = {};
+				finalObj.sp_clinicid = obj.sp_clinicid;
+				finalObj.sp_cwtime = angular.copy(arrCwtime);
+				finalClinicWorkingTime.push(finalObj);
+			}
+		}
+
 		// total work time
 		for(var i = 0 ; i < $scope.wrkHrsAllSlots.length ; i++) {
 			var wrkSlot = {};
@@ -6061,13 +6112,18 @@ angular.module('myApp.controllers')
 				"sp_id": $scope.SpWrkHrs.spNamesId,
 				"sp_workingDate": wrkDates,
 				"sp_workTime": selectedSlots,
-				"spZoneAllocatedWTime": finalZoneWorkingTime
+				"spZoneAllocatedWTime": finalZoneWorkingTime,
+				"spClinicAllocatedWTime": finalClinicWorkingTime
 			};
 
 			adminApi.addSpWrkHrs(dataObj)
 			.success(function(data, status, headers, config) {
-				$scope.populateBusySlotsTable1();
-				$scope.deSelectAllWrkDates();
+				$scope.resetAddSpWrkHrsForm();
+				$scope.resetDatePicker9();
+				$scope.dateErrorFlag = false;
+				$scope.wrkHrErrorSlot = false;
+				//$scope.populateBusySlotsTable1();
+				//$scope.deSelectAllWrkDates();
 				alert("Physio's work hours cleared successfully!");
 			})
 			.error(function(data, status, headers, config) {
