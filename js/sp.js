@@ -42,6 +42,7 @@ angular.module('myApp.controllers')
     $scope.spNewAppointment.aptstarttime = "";
     $scope.spNewAppointment.selectedTimeSlots = [];
     $scope.paymentModes = ["Cash", "Wallet"];
+    $scope.serviceLocation = "";
     $scope.paymentModesSp = ["Cash"];
     $scope.apptPayment = {};
     $scope.apptPackage = {};
@@ -175,12 +176,14 @@ angular.module('myApp.controllers')
                             "custid": apt.appointment.custid,
                             "customername": apt.customer.name,
                             "customercontact": apt.customer.phone,
-                            "status": appointmentStateMap[apt.appointment.state]
+                            "status": appointmentStateMap[apt.appointment.state],
+                            "servicelocation": apt.appointment.clinic_id
                         }
                     );
                 });
             }
             $scope.spAppointmentList = appList;
+
             if($scope.spApts.time == "past") {
                 $scope.spSearch = "";
             }
@@ -329,6 +332,8 @@ angular.module('myApp.controllers')
                 hidePackageDialog();
             }
             $scope.adminNewAppointmentCust = data.payload;
+            console.log($scope.adminNewAppointmentCust);
+
             $scope.adminNewAppointmentCust.appointment.state = appointmentStateMap[$scope.adminNewAppointmentCust.appointment.state];
             //populate pincode string from pincode id
             $scope.adminNewAppointmentCust.appointment.pincodestr = cache.pincodeIdToPincodeNameMap[$scope.adminNewAppointmentCust.appointment.pincode];
@@ -341,6 +346,43 @@ angular.module('myApp.controllers')
             }
             if($scope.adminNewAppointmentCust.appointment.package_code == undefined || $scope.adminNewAppointmentCust.appointment.package_code == ''){
                 $scope.adminNewAppointmentCust.appointment.package_code = '';
+            }
+
+           //api to fetch clinic data of given city:kalyani patil.
+           $scope.clinicArrData = [];
+           $scope.clinicBasePriceVal = 0;
+           if($scope.adminNewAppointmentCust.appointment.cityid){
+
+                var cityid = $scope.adminNewAppointmentCust.appointment.cityid;
+                spApi.getClinics(cityid)
+                 .success(function(data, status, headers, config) {
+                    $scope.clinicArrData = data.payload;
+
+                    //assign servicelocation name by using its Id. 
+                    if($scope.adminNewAppointmentCust.appointment.clinic_id){
+                        $scope.serviceLocationId = $scope.adminNewAppointmentCust.appointment.clinic_id;
+
+                        for(var i = 0;i < $scope.clinicArrData.length; i++){
+                            if($scope.clinicArrData[i]._id == $scope.serviceLocationId){
+                                $scope.serviceLocation = $scope.clinicArrData[i].clinic_name;
+                                $scope.serviceLocationLabel = $scope.clinicArrData[i].clinic_name;
+                                $scope.clinicBasePriceVal = $scope.clinicArrData[i].clinic_base_price;
+                            }
+                        }
+
+                    }else{
+                        $scope.serviceLocationLabel = 'At Home';
+                    }
+
+
+                
+                })
+                .error(function(data, status, headers, config) {
+                    $scope.checkSessionTimeout(data);
+                });
+            }else{
+
+                $scope.serviceLocationLabel = 'At Home';
             }
             /*if ($scope.adminNewAppointmentCust.payment != undefined && $scope.adminNewAppointmentCust.payment != "") {
                 if ($scope.adminNewAppointmentCust.payment.amnt != undefined && $scope.adminNewAppointmentCust.payment.amnt != "") {
@@ -663,7 +705,7 @@ angular.module('myApp.controllers')
 
         var pincode;
         var zoneid;
- if($scope.custReadList != undefined ) {
+         if($scope.custReadList != undefined ) {
             if ($scope.currentOpenView == 'NEW_APPOINTMENT'){
                 pincode = $scope.custReadList.pincode;
                 zoneid = $scope.custReadList.zoneid;
@@ -1886,6 +1928,7 @@ angular.module('myApp.controllers')
         var todate = new Date(year, month, day);
         todate.setTime(fromdate.getTime() + 90*60*1000);
         var myEpochtotime = todate.getTime()/1000.0;
+
 
         var dataObj = {
             "promocode": $scope.spNewAppointment.promocode,

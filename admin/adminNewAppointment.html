@@ -41,7 +41,7 @@
                                      id = "quickAppointmentPatientCityId2"
                                      data-ng-class = "{red2: adminNewAppointmentForm.adminSignInForCust.patientCity.$invalid && adminNewAppointmentForm.adminSignInForCust.patientCity.$dirty}"
                                      title = "Select customer city"
-                                     data-ng-change="custPin(users1.city)"
+                                     data-ng-change="custPin(users1.city);getServiceLocation(users1.city)"
                                      ng-options="city.id as city.name for city in custCities1"
                                      data-ng-required = "true"
                                      data-ng-disabled = "users1.disableFlag">
@@ -53,6 +53,25 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row row-align">
+                            <div class="col-xs-12 col-sm-3 appointment-label">Service Location</div>
+                            <div class="col-xs-12 col-sm-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <select ng-model="adminNewAppointmentCust.serviceLocation" name="patientServiceLocation"
+                                class="input-width clstxt2 form-control"
+                                data-ng-class = "{red2: adminNewAppointmentForm.adminSignInForCust.patientServiceLocation.$invalid && adminNewAppointmentForm.adminSignInForCust.patientServiceLocation.$dirty}"
+                                title = "Select Service Location"
+                                data-ng-required = "true"
+                                ng-options="clinic._id as clinic.clinic_name for clinic in clinicArrList">
+                                <option value="">Select Service Location</option>
+                                </select>
+                                <span style="color:red" data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientServiceLocation.$dirty && adminNewAppointmentForm.adminSignInForCust.patientServiceLocation.$invalid">
+                                    <span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientServiceLocation.$error.required">Service location is required.</span>
+                                </span>
+                            </div>
+                        </div>
+
                         <div class="row row-align">
                             <div class="col-xs-12 col-sm-3 appointment-label">Name</div>
                             <div class="col-xs-12 col-sm-9">
@@ -137,7 +156,7 @@
 								</span>
                             </div>
                         </div>
-                        <div class="row" style="margin-bottom: 5px;margin-top: 5px;">
+                        <div class="row" style="margin-bottom: 5px;margin-top: 5px;" ng-show = "adminNewAppointmentCust.serviceLocation == 0">
                             <div class="col-xs-12 col-sm-3 appointment-label">Location</div>
                             <div class="col-xs-12 col-sm-9">
                                 <span class="colonSeparatorRight hidden-xs">:</span>
@@ -158,10 +177,10 @@
                     </div>
                 </div>
                 <div style="float: right;">
-                    <button ng-click="showNext('serviceProvider'); getMonthlyAppointmentAvailabilityCheck(adminNewAppointmentCust.pincode, adminNewAppointmentCust.zone)"
+                   <button ng-click="showNext('serviceProvider'); getMonthlyAppointmentAvailabilityCheck(adminNewAppointmentCust.pincode, adminNewAppointmentCust.zone);getClinicSps(adminNewAppointmentCust.serviceLocation)"
                             class="btn btn-default"
                             type="button"
-                            ng-disabled="!(!!users1.city && !!users1.name && !!users1.contactNo && !!users1.email && !!adminNewAppointmentCust.pincode && !!adminNewAppointmentCust.Problem && !!adminNewAppointmentCust.gender)">
+                            ng-disabled="!(!!users1.city && !!users1.name && !!users1.contactNo && !!users1.email && !!adminNewAppointmentCust.Problem && !!adminNewAppointmentCust.gender)">
                         Next </button>
                     <input style="margin:0; float:right" type="button" value="Record Enquiry"
                            class="btn btn-primary"

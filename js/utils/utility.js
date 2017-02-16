@@ -178,7 +178,8 @@ function buildAppointmentsList(payload) {
 			"rating" : data.appointment.rating,
 			"payment" : payment,
 			"sdate" : moment(new Date(data.appointment.starttime * 1000)).format("YYYY-MM-DD hh:mm A"),
-			"custid" : data.appointment.custid
+			"custid" : data.appointment.custid,
+			"servicelocation" : data.appointment.clinic_id
 		});
 	}
 	return appointmentsList;

@@ -36,6 +36,11 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         return $http.get(baseUrl + "/hrest/v1/zone/map?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&cityid=" + cityId);
     }
 
+    //API to get clinics for given city
+    spApi.getClinics = function(cityId) {
+        return $http.get(baseUrl + "/hrest/v1/zone/clinic?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&cityid=" + cityId);
+    }
+
 	spApi.getCustomerDetails = function(custID) {
         return $http.get(baseUrl + '/hrest/v1/admin/cust/' + custID + "?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2");
     };

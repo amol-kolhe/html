@@ -51,6 +51,10 @@ angular.module('myApp.controllers')
 	};
 	$scope.currencies = ["INR"];
 	$scope.paymentModes = ["Cash", "Wallet"];
+	$scope.customerServiceLocationArr = ["At Home"];
+	$scope.clinicBasePriceVal = 0;
+	$scope.serviceLocation = "";
+	$scope.serviceLocationLabel = "";
 	$scope.paymentModesSp = ["Cash"];
 	$scope.appointmentCriteria = {
 		fromDate : "",
@@ -905,6 +909,22 @@ angular.module('myApp.controllers')
 		} else {
 			resAddress = "";
 		}
+
+		var serviceLocation;
+		if ($scope.adminNewAppointmentCust.serviceLocation == null || $scope.adminNewAppointmentCust.serviceLocation == 'undefined' || $scope.adminNewAppointmentCust.serviceLocation == 0) {
+			serviceLocation = null;
+		} else if (typeof $scope.adminNewAppointmentCust.serviceLocation != 'undefined') {
+			serviceLocation = $scope.adminNewAppointmentCust.serviceLocation;
+		} else {
+			serviceLocation = null;
+		}
+
+		var clinicBasePriceVal;
+		if($scope.clinicBasePriceVal != 0 && $scope.clinicBasePriceVal != undefined){
+			clinicBasePriceVal = $scope.clinicBasePriceVal;
+		}else{
+			clinicBasePriceVal = 0;
+		}
 		
 		var idObj = $cookies.get('u_id');
 
@@ -938,7 +958,9 @@ angular.module('myApp.controllers')
 			"apptRootId": "",
 			"promocode": $scope.applyPromoResponse.promocode,
             "additionalcharge": $scope.adminNewAppointmentCust.addcharges,
-            "additionalchargedesc":$scope.adminNewAppointmentCust.addchargedesc
+            "additionalchargedesc":$scope.adminNewAppointmentCust.addchargedesc,
+            "clinic_id":serviceLocation,
+            "clinicBasePrice":clinicBasePriceVal
 		}
 
 		if($scope.users1.uuid != undefined && $scope.users1.uuid != "") {
@@ -1258,6 +1280,7 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.getSpMonthlyAppointmentAvailability = function() {
+       
 		var pincode = null;
 		var zoneid = null;
 		if($scope.custReadList) {
@@ -1315,7 +1338,11 @@ angular.module('myApp.controllers')
 			var apiKeyInst = $cookies.get('u_apikey');
 			var roleInst = $cookies.get('u_type');
 
-			var url = "/healyos-pdt/hrest/v1/appt/calmon/" + yyyymmDate + "?apikey=" + apiKeyInst + "&sid=" + sidInst + "&role=" + roleInst + "&pincode=" + pincode + "&zoneid=" + zoneid + "&serviceid=" + serviceId + "&spid=" + $scope.obj.followupSpid; //b24abc5e-ac43-86d4-5a83-aa1807fde79b";
+            if($scope.adminNewAppointmentCust.serviceLocation == 0 || $scope.adminNewAppointmentCust.serviceLocation == undefined){
+				var url = "/healyos-pdt/hrest/v1/appt/calmon/" + yyyymmDate + "?apikey=" + apiKeyInst + "&sid=" + sidInst + "&role=" + roleInst + "&pincode=" + pincode + "&zoneid=" + zoneid + "&serviceid=" + serviceId + "&spid=" + $scope.obj.followupSpid; //b24abc5e-ac43-86d4-5a83-aa1807fde79b";
+			}else{
+				var url = "/healyos-pdt/hrest/v1/appt/calmon/" + yyyymmDate + "?apikey=" + apiKeyInst + "&sid=" + sidInst + "&role=" + roleInst + "&clinic_id=" + $scope.adminNewAppointmentCust.serviceLocation + "&serviceid=" + serviceId + "&spid=" + $scope.obj.followupSpid;
+			}
 
 			var result = $http.get(url);
 
@@ -1644,12 +1671,14 @@ angular.module('myApp.controllers')
 
 	//API to get dates of given month:year have atleast one free slot for appointment.
 	$scope.getMonthlyAppointmentAvailability = function(pincode, zoneid) {
+       
 		var yyyymmDate = "";
 		var arrDateInst = [];
 		var monthObj = "";
 		var yr = 0;
 
 		arrDateInst = $(".btn.btn-default.btn-sm").eq(1).text().split(' '); // November 2015
+		console.log(arrDateInst);
 		if (arrDateInst[0] == "January") {
 			monthObj = "01";
 		} else if(arrDateInst[0] == "February") {
@@ -1687,7 +1716,13 @@ angular.module('myApp.controllers')
 			var sidInst = $cookies.get('u_sid');
 			var apiKeyInst = $cookies.get('u_apikey');
 			var roleInst = $cookies.get('u_type');
-			var url = "/healyos-pdt/hrest/v1/appt/calmon/" + yyyymmDate + "?apikey=" + apiKeyInst + "&sid=" + sidInst + "&role=" + roleInst + "&pincode=" + pincode + "&zoneid=" + zoneid + "&serviceid=" + $scope.service;
+
+			if($scope.adminNewAppointmentCust.serviceLocation == 0 || $scope.adminNewAppointmentCust.serviceLocation == undefined){
+				var url = "/healyos-pdt/hrest/v1/appt/calmon/" + yyyymmDate + "?apikey=" + apiKeyInst + "&sid=" + sidInst + "&role=" + roleInst + "&pincode=" + pincode + "&zoneid=" + zoneid + "&serviceid=" + $scope.service;
+			}else{
+				var url = "/healyos-pdt/hrest/v1/appt/calmon/" + yyyymmDate + "?apikey=" + apiKeyInst + "&sid=" + sidInst + "&role=" + roleInst + "&clinic_id=" + $scope.adminNewAppointmentCust.serviceLocation + "&serviceid=" + $scope.service;
+			}
+			
 
 			if($scope.activeTab == "New Appointment") {
 				if($scope.adminNewAppointmentCust.selectSp == true && $scope.spNewAppointment.spNames != undefined && $scope.spNewAppointment.spNames != "") {
@@ -2161,6 +2196,45 @@ angular.module('myApp.controllers')
 		});
     }
 
+
+    $scope.getServiceLocation = function(cityid){
+
+        $scope.clinicArrList =[];
+
+    	adminApi.getClinics(cityid)
+		.success(function(data, status, headers, config) {
+			myJsonString = JSON.stringify(data);
+			var clinicObj = JSON.parse(myJsonString);
+			$scope.clinicArr = data.payload;
+
+			for(var i = 0; i < clinicObj.payload.length; i++) {
+				var result =  clinicObj.payload[i];
+			
+				var clinicId = result._id;
+				var clinicName = result.clinic_name;
+
+
+				$scope.clinicArrList.push({
+			        _id : clinicId,
+			        clinic_name : clinicName
+			    });
+
+
+			}
+
+			$scope.clinicArrList.push({
+			        _id : 0,
+			        clinic_name : 'Home'
+			    });
+		
+			
+		})
+		.error(function(data, status, headers, config) {
+			$scope.checkSessionTimeout(data);
+		});
+    	
+    }
+
 	/* function to sort pincodes */
 	function compare(a,b) {
 		if (a.pin < b.pin)
@@ -2175,6 +2249,7 @@ angular.module('myApp.controllers')
 	$scope.wtUndefined = false;
 
 	$scope.getSpInfo = function(zoneid, servid, pin, spid) {
+
 		var serviceDate = "";
 		var dateInst = "";
 		var intMonth = 0;
@@ -2206,7 +2281,14 @@ angular.module('myApp.controllers')
 		yearObj = dateInst.getFullYear();
 		serviceDate = yearObj + monthInst + dayObj + "";
 
-		adminApi.getSpInfo(serviceDate, zoneid, servid, pin, spid)
+        
+		if($scope.adminNewAppointmentCust.serviceLocation != 0 || $scope.adminNewAppointmentCust.serviceLocation != undefined){
+           $scope.clinicId = $scope.adminNewAppointmentCust.serviceLocation;
+		}else{
+		   $scope.clinicId = 0;
+		}
+
+		adminApi.getSpInfo(serviceDate, zoneid, servid, pin, spid, $scope.clinicId)
 		.success(function(data, status, headers, config) {
 			myJsonString = JSON.stringify(data);
 			var getSpInfoObj = JSON.parse(myJsonString);
@@ -2275,6 +2357,7 @@ angular.module('myApp.controllers')
 	$scope.pincodeSelected;
 	$scope.pincodeSelectedAvailable;
 	$scope.problemSelectedAvailable;
+	$scope.serviceLocationSelectedAvailable;
 	
 	$scope.custDetails = true;
 	$scope.showNext = function (item){
@@ -2316,10 +2399,39 @@ angular.module('myApp.controllers')
 									$scope.currency = result1.currency;
 									$scope.service = result1.services[j].id;
 									$scope.problemSelected = result1.services[j].problems[k]
+
+									$scope.originalPrice = result1.rate;
 								}
 							}
 						}
 					}
+				}
+
+
+				if($scope.adminNewAppointmentCust.serviceLocation != 0 && $scope.adminNewAppointmentCust.serviceLocation != undefined){
+					
+					var clinicId = $scope.adminNewAppointmentCust.serviceLocation;
+				
+					for(var i = 0; i < $scope.clinicArr.length; i++) {
+						
+						var result = $scope.clinicArr[i];
+						if(clinicId == result._id){
+							var clinic_name = result.clinic_name;
+							var clinicBasePrice = result.clinic_base_price;
+
+							$scope.clinicName = clinic_name;
+							$scope.clinicId = result._id;
+							$scope.clinicBasePriceVal = result.clinic_base_price;
+						}
+						
+					}
+
+					if(clinicBasePrice > 0 && clinicBasePrice != undefined){
+						$scope.originalCost = clinicBasePrice;
+					}
+					
+				}else{
+					$scope.originalCost = $scope.originalPrice;
 				}
 			
 				break;
@@ -2359,12 +2471,24 @@ angular.module('myApp.controllers')
 
 	$scope.getMonthlyAppointmentAvailabilityCheck = function(pincode, zoneid) {
 
-		if(($scope.adminNewAppointmentCust.pincode != $scope.pincodeSelectedAvailable) ||
-			($scope.adminNewAppointmentCust.Problem != $scope.problemSelectedAvailable)) {
-			$scope.pincodeSelectedAvailable = $scope.adminNewAppointmentCust.pincode;
-			$scope.problemSelectedAvailable = $scope.adminNewAppointmentCust.Problem;
-			pincode = cache.pincodeToPincodeIdMap[pincode];
-			$scope.getMonthlyAppointmentAvailability(pincode, zoneid);
+		if($scope.adminNewAppointmentCust.serviceLocation == 0){
+
+			if(($scope.adminNewAppointmentCust.pincode != $scope.pincodeSelectedAvailable) ||
+				($scope.adminNewAppointmentCust.Problem != $scope.problemSelectedAvailable)) {
+				$scope.pincodeSelectedAvailable = $scope.adminNewAppointmentCust.pincode;
+				$scope.problemSelectedAvailable = $scope.adminNewAppointmentCust.Problem;
+				pincode = cache.pincodeToPincodeIdMap[pincode];
+				$scope.getMonthlyAppointmentAvailability(pincode, zoneid);
+			}
+
+		}else{
+
+			if(($scope.adminNewAppointmentCust.serviceLocation != $scope.serviceLocationSelectedAvailable)) {
+				$scope.serviceLocationSelectedAvailable = $scope.adminNewAppointmentCust.serviceLocation;
+				pincode = cache.pincodeToPincodeIdMap[pincode];
+				$scope.getMonthlyAppointmentAvailability(pincode, zoneid);
+			}
+
 		}
 	};	
 
@@ -2953,6 +3077,45 @@ angular.module('myApp.controllers')
             if($scope.adminNewAppointmentCust.appointment.package_code == undefined || $scope.adminNewAppointmentCust.appointment.package_code == ''){
                 $scope.adminNewAppointmentCust.appointment.package_code = '';
             }
+
+            //api to fetch clinic data of given city:kalyani patil.
+ 		   $scope.clinicArrData = [];
+ 		   $scope.clinicBasePriceVal = 0;
+           if($scope.adminNewAppointmentCust.appointment.cityid){
+
+           		var cityid = $scope.adminNewAppointmentCust.appointment.cityid;
+           		adminApi.getClinics(cityid)
+			     .success(function(data, status, headers, config) {
+					$scope.clinicArrData = data.payload;
+
+					//assign servicelocation name by using its Id. 
+					if($scope.adminNewAppointmentCust.appointment.clinic_id){
+		                $scope.serviceLocationId = $scope.adminNewAppointmentCust.appointment.clinic_id;
+
+		                for(var i = 0;i < $scope.clinicArrData.length; i++){
+		                	if($scope.clinicArrData[i]._id == $scope.serviceLocationId){
+		                		$scope.serviceLocation = $scope.clinicArrData[i].clinic_name;
+		                		$scope.serviceLocationLabel = $scope.clinicArrData[i].clinic_name;
+		                		$scope.clinicBasePriceVal = $scope.clinicArrData[i].clinic_base_price;
+		                	}
+		                }
+
+		            }else{
+		                $scope.serviceLocationLabel = 'At Home';
+		            }
+
+
+				
+				})
+				.error(function(data, status, headers, config) {
+					$scope.checkSessionTimeout(data);
+				});
+	      	}else{
+
+	      		$scope.serviceLocationLabel = 'At Home';
+	      	}
+            
+          
 
 			/*if ($scope.adminNewAppointmentCust.payment != undefined && $scope.adminNewAppointmentCust.payment != "") {
 				if ($scope.adminNewAppointmentCust.payment.amnt != undefined && $scope.adminNewAppointmentCust.payment.amnt != "") {
@@ -3693,6 +3856,7 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.getSps = function (value) {
+
 		var cityId = "";
 
 		if(value == undefined || value == "" || value.length < 1) {
@@ -3752,6 +3916,83 @@ angular.module('myApp.controllers')
 			});
 		}
 	}
+    
+
+    $scope.getClinicSps = function (clinic_id) {
+
+		var cityId = $scope.users1.city;
+
+		if(clinic_id != undefined && clinic_id != 0){
+
+			adminApi.getClinicSps(clinic_id)
+			.success(function(data, status, headers, config) {
+
+				$scope.spNamesArr = data.payload.spList;
+				$scope.arrSpRecords = angular.copy(data.payload.spList);
+				$scope.arrSpRecords.cityId = data.payload.cityId;
+
+				for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
+					$scope.arrSpRecords[i].primaryZones = [];
+					$scope.arrSpRecords[i].secondaryZones = [];
+
+					for(var j = 0 ; j < $scope.arrSpRecords[i].zones.length ; j++) {
+						if ($scope.arrSpRecords[i].zones[j].zonerole == 1) {
+							$scope.arrSpRecords[i].primaryZones.push($scope.arrSpRecords[i].zones[j].name);
+						} else if ($scope.arrSpRecords[i].zones[j].zonerole == 2) {
+							$scope.arrSpRecords[i].secondaryZones.push($scope.arrSpRecords[i].zones[j].name);
+						}
+					}
+				}
+
+				for(var i = 0 ; i < $scope.spNamesArr.length ; i++) {
+					if($scope.obj.followupSpid == $scope.spNamesArr[i]._id) {
+						$scope.spNewAppointment.spNames = $scope.spNamesArr[i]._id;
+						break;
+					}
+				}
+				
+			})
+			.error(function(data, status, headers, config) {
+				$scope.checkSessionTimeout(data);
+			});
+
+		}else{
+
+			if(cityId != undefined && cityId != "" && cityId.length > 0) {
+				adminApi.getSps(cityId)
+				.success(function(data, status, headers, config) {
+					$scope.spNamesArr = data.payload.spList;
+					$scope.arrSpRecords = angular.copy(data.payload.spList);
+					$scope.arrSpRecords.cityId = data.payload.cityId;
+
+					for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
+						$scope.arrSpRecords[i].primaryZones = [];
+						$scope.arrSpRecords[i].secondaryZones = [];
+
+						for(var j = 0 ; j < $scope.arrSpRecords[i].zones.length ; j++) {
+							if ($scope.arrSpRecords[i].zones[j].zonerole == 1) {
+								$scope.arrSpRecords[i].primaryZones.push($scope.arrSpRecords[i].zones[j].name);
+							} else if ($scope.arrSpRecords[i].zones[j].zonerole == 2) {
+								$scope.arrSpRecords[i].secondaryZones.push($scope.arrSpRecords[i].zones[j].name);
+							}
+						}
+					}
+
+					for(var i = 0 ; i < $scope.spNamesArr.length ; i++) {
+						if($scope.obj.followupSpid == $scope.spNamesArr[i]._id) {
+							$scope.spNewAppointment.spNames = $scope.spNamesArr[i]._id;
+							break;
+						}
+					}
+				})
+				.error(function(data, status, headers, config) {
+					$scope.checkSessionTimeout(data);
+				});
+			}
+
+	   }
+	}
+
 
 	$scope.reAssignCityId = function () {
 		$timeout(function(){
@@ -6608,6 +6849,13 @@ angular.module('myApp.controllers')
 		var apptslot = moment(new Date(fromdate.getTime())).format("YYYY-MM-DD hh:mm A");
 		var pincodeid = cache.pincodeToPincodeIdMap[$scope.adminNewAppointmentCust.pincode];
 
+		var clinicBasePriceVal;
+		if($scope.clinicBasePriceVal != 0 && $scope.clinicBasePriceVal != undefined){
+			clinicBasePriceVal = $scope.clinicBasePriceVal;
+		}else{
+			clinicBasePriceVal = 0;
+		}
+
 		var dataObj = {
 			"promocode": $scope.adminNewAppointmentCust.promocode,
 			"apptid": "",
@@ -6618,7 +6866,8 @@ angular.module('myApp.controllers')
 			"apptslots": [apptslot],
 			// "apptstarttime": myEpochfromtime,
 			// "apptendtime": myEpochtotime,
-			"serviceid": $scope.service
+			"serviceid": $scope.service,
+			"clinicBasePrice":clinicBasePriceVal
 		};
 
 		adminApi.applyPromocode(dataObj).
@@ -6798,6 +7047,13 @@ angular.module('myApp.controllers')
 
 		var apptslot = moment(new Date(time[0] * 1000)).format("YYYY-MM-DD hh:mm A");
 
+		var clinicBasePriceVal;
+		if($scope.clinicBasePriceVal != 0 && $scope.clinicBasePriceVal != undefined){
+			clinicBasePriceVal = $scope.clinicBasePriceVal;
+		}else{
+			clinicBasePriceVal = 0;
+		}
+
 		var dataObj = {
 			"promocode": $scope.aptPayment.promocode,
 			"apptid": "",
@@ -6807,7 +7063,8 @@ angular.module('myApp.controllers')
 			"problem": $scope.editAptModel.problem,
 			"patientid": $scope.adminNewAppointmentCust.appointment.patientid,
 			"apptslots": [apptslot],
-			"serviceid": $scope.editAptModel.service
+			"serviceid": $scope.editAptModel.service,
+			"clinicBasePrice": clinicBasePriceVal
 		};
 
 		adminApi.applyPromocode(dataObj).

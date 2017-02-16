@@ -123,6 +123,9 @@
                             <th ng-click="sort('customername')">Customer
                                 <span class="glyphicon sort-icon" ng-show="sortKey=='customername'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
                             </th>
+                            <th ng-click="sort('servicelocation')">Service Location
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='servicelocation'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
                             <th ng-click="sort('customercontact')">Customer Contact
                                 <span class="glyphicon sort-icon" ng-show="sortKey=='customercontact'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
                             </th>
@@ -143,6 +146,7 @@
                             <td>
                                 <a href="#" ng-click="showCustomer(item)" title="Show Customer Details">{{item.customername}}</a>
                             </td>
+                            <td>{{item.servicelocation}}</td>
                             <td><a ng-href="tel:{{item.customercontact}}">{{item.customercontact}}</a></td>
                             <td>{{item.status}}</td>
                             <td style="display:none;">{{item.sdate}}</td>

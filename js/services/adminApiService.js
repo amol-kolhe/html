@@ -44,6 +44,12 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 	adminApi.getZones = function(cityId) {
 		return $http.get(baseUrl + "/hrest/v1/zone/map?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&cityid=" + cityId);
 	}
+
+	//API to get clinics for given city
+	adminApi.getClinics = function(cityId) {
+		return $http.get(baseUrl + "/hrest/v1/zone/clinic?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&cityid=" + cityId);
+	}
+	
 	
 	//API to record enquiry
 	adminApi.createAptRecordEnquiry = function(data) {
@@ -56,13 +62,23 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 	}
 	
 	//API to get service provider info
-	adminApi.getSpInfo = function(serviceDate, zoneid, servid, pin, spid) {
-	    if(spid == undefined) {
-		    return $http.get(baseUrl + "/hrest/v1/zone/avail?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&date=" + serviceDate + "&zoneid=" + zoneid + "&servid=" + servid + "&pincode=" + pin);
-	    }
-	    else {
-	        return $http.get(baseUrl + "/hrest/v1/zone/avail?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&date=" + serviceDate + "&zoneid=" + zoneid + "&servid=" + servid + "&pincode=" + pin + "&spid=" + spid);
-	    }
+	adminApi.getSpInfo = function(serviceDate, zoneid, servid, pin, spid,clinicId) {
+		if(clinicId == 0 || clinicId == undefined){
+			if(spid == undefined) {
+		    	 return $http.get(baseUrl + "/hrest/v1/zone/avail?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&date=" + serviceDate + "&zoneid=" + zoneid + "&servid=" + servid + "&pincode=" + pin);
+		    }
+		    else {
+		        return $http.get(baseUrl + "/hrest/v1/zone/avail?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&date=" + serviceDate + "&zoneid=" + zoneid + "&servid=" + servid + "&pincode=" + pin + "&spid=" + spid);
+		    }
+		}else{
+            if(spid == undefined) {
+		    	 return $http.get(baseUrl + "/hrest/v1/zone/avail?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&date=" + serviceDate + "&servid=" + servid + "&clinic_id=" + clinicId);
+		    }
+		    else {
+		        return $http.get(baseUrl + "/hrest/v1/zone/avail?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&date=" + serviceDate + "&servid=" + servid + "&spid=" + spid + "&clinic_id=" + clinicId);
+		    } 
+		}
+	    
 	}
 
 	adminApi.getCalculatePackageDiscount=function(package_code,package_id,cost){
@@ -166,6 +182,11 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 	// API support to get sp list
 	adminApi.getSps = function (cityId) {
 		return $http.get(baseUrl + "/hrest/v1/admin/" + cityId + "/sps?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0");
+	};
+
+	// API support to get sp list
+	adminApi.getClinicSps = function (clinic_id) {
+		return $http.get(baseUrl + "/hrest/v1/admin/" + clinic_id + "/clinicsps?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0");
 	};
 
 	// API support to add new sp record
