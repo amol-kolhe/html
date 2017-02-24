@@ -92,7 +92,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 			{title: 'Service Provider Management', url: 'spManagement.html', clsclass: 'clsgray'},
 			{title: 'Promotional Code Management', url: 'promotionalCodeMgmt.html', clsclass: 'clsgray'},
 			{title: 'Cost Calculator', url: 'costcalculator.html', clsclass: 'clsgray'},
-			{title: 'Clinic Management', url: 'clinicManagement.html', clsclass: 'clsgray'}
+			{title: 'Clinics Management', url: 'clinicManagement.html', clsclass: 'clsgray'}
 			];
 
 		$scope.custMenus = [{title: "My Appointments", url: 'appointments.html'},

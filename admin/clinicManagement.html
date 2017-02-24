@@ -1,4 +1,29 @@
 <div class="mainContent2" ng-controller="AdminCtrl" ng-init="initCache(); clinicMgmt.getClinic()">
+	<script type="text/ng-template" id="ClinicAction">
+	    <form role="form" name="ClinicActionTransForm" novalidate>
+	        <div style="margin:10px; padding:10px">
+	            <div class="row middleRowContent">
+	                <div class="col-xs-3">
+	                    <label>Password: </label>
+	                </div>
+	                <div class="col-xs-9">
+	                    <input class="form-control" type="password"
+                            name="clinicPassword"
+                            data-ng-model="clinicAction.password"
+                            title="Enter the password here"
+                            placeholder="Enter password"
+                            data-ng-required="true"/>
+	                </div>
+	            </div>
+	            <div class="row">
+	                <div style="margin-top:10px; padding:10px;">
+	                    <button type="submit" class="ngdialog-button ngdialog-button-primary" ng-click="submitted=true;ClinicActionTransForm.$valid && confirm('OK')">Ok</button>
+	                    <button ng-click="closeThisDialog('Cancel')" type="button" class="ngdialog-button ngdialog-button-secondary">Cancel</button>
+	                </div>
+	            </div>
+	        </div>
+	    </form>
+	</script>
 	<div style="padding:10px;">
 		<div class="row" ng-show="(clinicMgmt.clinicSuccessMsg || clinicMgmt.clinicErrorMsg)">
 			<div class="alert alert-success alert-dismissible" role="alert" ng-show="clinicMgmt.clinicSuccessMsg">
@@ -373,7 +398,7 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th>Code</th>
+							<!--<th>Code</th>
 							<th>Name</th>
 							<th>Description</th>
 							<th>Address</th>
@@ -383,6 +408,41 @@
 							<th>Base Price</th>
 							<th>Capacity</th>
 							<th>Is Active?</th>
+							<th>Action</th>-->
+
+							<th ng-click="clinicMgmt.sortClinic('clinic_id')"><span class="1clsfleft">Code</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_id'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th ng-click="clinicMgmt.sortClinic('clinic_name')"><span class="1clsfleft">Name</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_name'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th ng-click="clinicMgmt.sortClinic('clinic_description')"><span class="1clsfleft">Description</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_description'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th ng-click="clinicMgmt.sortClinic('clinic_address')"><span class="1clsfleft">Address</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_address'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th ng-click="clinicMgmt.sortClinic('clinic_start_time')"><span class="1clsfleft">Start Time</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_start_time'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th ng-click="clinicMgmt.sortClinic('clinic_end_time')"><span class="1clsfleft">End Time</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_end_time'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th ng-click="clinicMgmt.sortClinic('clinic_time_slot_duration')"><span class="1clsfleft">Time Slot Duration</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_time_slot_duration'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th ng-click="clinicMgmt.sortClinic('clinic_base_price')">
+								<span class="1clsfleft">Base Price</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_base_price'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th ng-click="clinicMgmt.sortClinic('clinic_capacity')">
+								<span class="1clsfleft">Capacity</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_capacity'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th ng-click="clinicMgmt.sortClinic('is_active')">
+								<span class="1clsfleft">Is Active?</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='is_active'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
 							<th>Action</th>
 						</tr>
 					</thead>

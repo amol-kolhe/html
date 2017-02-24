@@ -20,7 +20,8 @@ angular.module('myApp.controllers')
 	$scope.apptPayment.paymentForm = "";
 	$scope.arrPromoCode = [];
 	$scope.arrayClinic = [];
-	
+	$scope.clinicAction = {};
+	$scope.clinicAction.password = "";
 	$scope.promoStoreObj = {};
 	$scope.promocodeResponse = {
 		promocodeValid: '',
@@ -4944,23 +4945,25 @@ angular.module('myApp.controllers')
 					if(existingWorkTimeSlots.length != 0){
 						existingWorkTimeSlots.forEach(function(item_4) {
 							newWorkTimeSlots.forEach(function(item_5) {
-								if((item_5.st >= item_4.st && item_5.st < item_4.et) || (item_5.et >= item_4.st && item_5.et < item_4.et)){
-									var first = item_5.st.slice(0,2);
-									var middle = item_5.st.slice(2,4);
-									var delimeter = ":";
-									var result = first+delimeter+middle;
-									$scope.wrkHrsAllSlots.forEach(function(item_6) {
-										if(item_6.label != ""){
-											var label_split = item_6.label.split(" - ");
-											if(label_split[0] == result){
-												var d = null;
-												d = $scope.wrkHrsAllSlots.indexOf(item_6);
-												if(d != -1) {
-													$scope.wrkHrsAllSlots.splice(d, 1);
+								if(item_4.st != undefined && item_4.et != undefined){
+									if((item_5.st >= item_4.st && item_5.st < item_4.et) || (item_5.et > item_4.st && item_5.et < item_4.et)){
+										var first = item_5.st.slice(0,2);
+										var middle = item_5.st.slice(2,4);
+										var delimeter = ":";
+										var result = first+delimeter+middle;
+										$scope.wrkHrsAllSlots.forEach(function(item_6) {
+											if(item_6.label != ""){
+												var label_split = item_6.label.split(" - ");
+												if(label_split[0] == result){
+													var d = null;
+													d = $scope.wrkHrsAllSlots.indexOf(item_6);
+													if(d != -1) {
+														$scope.wrkHrsAllSlots.splice(d, 1);
+													}
 												}
 											}
-										}
-									});
+										});
+									}
 								}
 							});
 						});
@@ -5288,12 +5291,12 @@ angular.module('myApp.controllers')
 			adminApi.addSpWrkHrs(dataObj)
 			.success(function(data, status, headers, config) {
 				alert("Physio's work hours inserted successfully!");
+				$scope.showSpManagementWebPage('Set Working Hours');
+				$scope.resetAddSpWrkHrsWebPage();
 				//$scope.resetAddSpWrkHrsForm();
 				//$scope.resetDatePicker9();
 				//$scope.dateErrorFlag = false;
 				//$scope.wrkHrErrorSlot = false;
-				$scope.showSpManagementWebPage('Set Working Hours');
-				$scope.resetAddSpWrkHrsWebPage();
 			})
 			.error(function(data, status, headers, config) {
 				$scope.checkSessionTimeout(data);
@@ -7543,50 +7546,67 @@ angular.module('myApp.controllers')
 	};
 
 	$scope.clinicMgmt.actionClinic = function(is_active, rec, index) {
-		if(is_active)
-			var con = confirm("Are you sure you want to activate this clinic.");
-		else
-			var con = confirm("Are you sure you want to deactivate this clinic.");
 
-		if(con){
-			rec.is_active = is_active;
+		ngDialog.openConfirm({
+            template: 'ClinicAction',
+            showClose:false,
+            scope: $scope 
+        }).then(function(value)
+        {
+			/*if(is_active)
+				var con = confirm("Are you sure you want to activate this clinic.");
+			else
+				var con = confirm("Are you sure you want to deactivate this clinic.");
+			*/
 
-			var start_time_array = null;
-			start_time_array = rec.clinic_start_time.split(":");
-			var start_time = new Date();
-			start_time.setHours(start_time_array[0]);
-			start_time.setMinutes(start_time_array[1]);
-			rec.clinic_start_time = start_time;
+			if($scope.clinicAction.password == 'healyos1234'){
+				$scope.clinicAction.password = "";
+				rec.is_active = is_active;
 
-			var end_time_array = null;
-			end_time_array = rec.clinic_end_time.split(":");
-			var end_time = new Date();
-			end_time.setHours(end_time_array[0]);
-			end_time.setMinutes(end_time_array[1]);
-			rec.clinic_end_time = end_time;
+				var start_time_array = null;
+				start_time_array = rec.clinic_start_time.split(":");
+				var start_time = new Date();
+				start_time.setHours(start_time_array[0]);
+				start_time.setMinutes(start_time_array[1]);
+				rec.clinic_start_time = start_time;
 
-			console.log(rec);
+				var end_time_array = null;
+				end_time_array = rec.clinic_end_time.split(":");
+				var end_time = new Date();
+				end_time.setHours(end_time_array[0]);
+				end_time.setMinutes(end_time_array[1]);
+				rec.clinic_end_time = end_time;
 
-			adminApi.updateClinic(rec._id, rec).
-			success(function (data, status, headers, config) {
-				$scope.clinicMgmt.InitClinicParams();
-				$scope.clinicMgmt.editMode = false;
-				$scope.clinicMgmt.clinicAddEditSection = false;
-				$scope.clinicMgmt.getClinic();
-				if(is_active)
-					$scope.clinicMgmt.clinicSuccessMsg = "You have successfully activated the clinic setting.";
-				else
-					$scope.clinicMgmt.clinicSuccessMsg = "You have successfully deactivated the clinic setting.";
-				$scope.clinicMgmt.clinicErrorMsg = "";
-			}).
-			error(function (data, status, headers, config) {
-				$scope.clinicMgmt.clinicSuccessMsg = "";
-				if(is_active)
-					$scope.clinicMgmt.clinicErrorMsg = "Error while activating the clinic setting.";
-				else
-					$scope.clinicMgmt.clinicErrorMsg = "Error while deactivating the clinic setting.";
-			});
-		}
+				console.log(rec);
+
+				adminApi.updateClinic(rec._id, rec).
+				success(function (data, status, headers, config) {
+					$scope.clinicMgmt.InitClinicParams();
+					$scope.clinicMgmt.editMode = false;
+					$scope.clinicMgmt.clinicAddEditSection = false;
+					$scope.clinicMgmt.getClinic();
+					if(is_active)
+						$scope.clinicMgmt.clinicSuccessMsg = "You have successfully activated the clinic setting.";
+					else
+						$scope.clinicMgmt.clinicSuccessMsg = "You have successfully deactivated the clinic setting.";
+					$scope.clinicMgmt.clinicErrorMsg = "";
+				}).
+				error(function (data, status, headers, config) {
+					$scope.clinicMgmt.clinicSuccessMsg = "";
+					if(is_active)
+						$scope.clinicMgmt.clinicErrorMsg = "Error while activating the clinic setting.";
+					else
+						$scope.clinicMgmt.clinicErrorMsg = "Error while deactivating the clinic setting.";
+				});
+			}else{
+				$scope.clinicAction.password = "";
+				$scope.clinicMgmt.clinicErrorMsg = "Invalid password.";
+			}
+		},
+		function(value) {
+			$scope.clinicAction.password = "";
+            console.log("Fail clinic transaction.");
+        });
 	}
 
 	/**************ZONE MAGANEMENT*******************/
