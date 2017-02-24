@@ -17,9 +17,9 @@
 					<a href="tel:02065802802"><img src="./images/customer_portal/call.png" /></a>
 				</span>
 			</div>
-			<div class="col-xs-12 col-sm-9 booking1-down-section">                
+			<div class="col-xs-12 col-sm-9 booking1-down-section" >                
 				<div class="row">
-					<div class="col-xs-3 col-sm-5 booking1-header-locations booking1-subsection">
+					<div class="col-xs-3 col-sm-5 booking1-header-locations booking1-subsection" ng-hide="bookingCtrl.model.clinic_id != undefined">
 						<select class="ac-select"
 				            id="l2Combo"
 				            ac-model="bookingCtrl.model.selectedLocation"
@@ -29,6 +29,9 @@
 				            ac-change="bookingCtrl.method.locationSelected(value)"
 				            ac-key="pin">
 				        </select>
+					</div>
+					<div class="col-xs-3 col-sm-5 booking1-header-locations booking1-subsection" ng-show="bookingCtrl.model.clinic_id != undefined">
+						Appointment At Clinic {{bookingCtrl.model.selectedLocation}}.
 					</div>
 					<div class="col-xs-5 col-sm-3 booking1-header-date booking1-subsection">
 						<div class="input-group date">
@@ -56,6 +59,10 @@
 				</div>
 			</div>                    
 		</div>
+
+
+
+
 		<div class="floating-price-container">
 			<div class="floating-price-input">Rs. {{bookingCtrl.model.apptCost|number:2}}</div>
 		</div>

@@ -93,6 +93,7 @@
 	custPortalController.$inject = ['$timeout', '$http', 'custApi', '$cookies', '$scope', '$state', 'custportalGetSetService', '$window'];
 
 	function custPortalController ($timeout, $http, custApi, $cookies, $scope, $state, custportalGetSetService, $window) {
+		
 		var vm = this;
 
 		vm.flags = {

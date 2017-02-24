@@ -179,7 +179,7 @@ function buildAppointmentsList(payload) {
 			"payment" : payment,
 			"sdate" : moment(new Date(data.appointment.starttime * 1000)).format("YYYY-MM-DD hh:mm A"),
 			"custid" : data.appointment.custid,
-			"servicelocation" : data.appointment.clinic_id
+			"servicelocation" : data.appointment.clinic_name
 		});
 	}
 	return appointmentsList;

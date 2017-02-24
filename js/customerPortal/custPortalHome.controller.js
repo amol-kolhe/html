@@ -6,9 +6,10 @@
 
 	app.controller('custPortalController', custPortalController);
 	
-	custPortalController.$inject = ['$timeout', '$http', 'custApi', '$cookies', '$scope', '$state', 'custportalGetSetService', '$window'];
+	custPortalController.$inject = ['$timeout', '$http', 'custApi', '$cookies', 'ngDialog', '$scope', '$state', 'custportalGetSetService', '$window'];
 
-	function custPortalController ($timeout, $http, custApi, $cookies, $scope, $state, custportalGetSetService, $window) {
+	function custPortalController ($timeout, $http, custApi, $cookies, ngDialog, $scope, $state, custportalGetSetService, $window) {
+		
 		var vm = this;
 
 		vm.flags = {
@@ -35,10 +36,12 @@
 		var validateRequestCallbackForm = validateRequestCallbackForm;
 		//vm.isDrawerOpen = isDrawerOpen;
 		vm.redirectToBooking1 = redirectToBooking1;
+		vm.redirectToClinicBooking = redirectToClinicBooking;
 		var registerEvents = registerEvents;
 		var calcViewPort = calcViewPort;
 		var initDatepicker = initDatepicker;
 		var initDatepicker1 = initDatepicker1;
+
 		vm.checktimeslot = checktimeslot;
 		vm.checkHomeDataFilled = checkHomeDataFilled;
 		vm.swipeleft = swipeleft;
@@ -54,6 +57,16 @@
 		vm.openTermsOfUse = openTermsOfUse;
 		vm.scrollToTopBookNow = scrollToTopBookNow;
 		vm.cityMap = {};
+
+		vm.redirectToBookingClinic = redirectToBookingClinic;
+		vm.getCities = getCities;
+		vm.getCities();
+		vm.cities = '';
+		vm.getClinics = getClinics;
+		vm.clinics = '';
+		var initDatepicker2 = initDatepicker2;
+		//vm.initClinicPicker = initClinicPicker;
+		vm.clinicSelected = clinicSelected;
 		
 
 		/*===Variable declaration===*/
@@ -67,12 +80,14 @@
 		var screenWidth = 0;
 		vm.viewPort = '';
 		vm.selectedDate = '';
+		vm.selectedDateClinic = '';
 		var cache = {};
 		vm.locationArr = [];
 		var enableDatesArray = [];
 		vm.acRefresh = false;
 		vm.physiotherapyId;
 		vm.timeslot = '';
+		vm.timeslotClinic = '';
 		vm.apptCost = '';
 		vm.navMenuItems = {
 			'home': 'Home',
@@ -162,6 +177,7 @@
 		};
 
 		vm.timeslotArray = [];
+		vm.timeslotArrayClinic = [];
 
 		/* FAQ questions */
 		vm.groups = [
@@ -310,6 +326,160 @@
 			}
 		}
 
+
+		function redirectToClinicBooking() {
+			// InitiateCheckout
+			// Track when people enter the checkout flow (ex. click/landing page on checkout button)
+			try {
+				fbq('track', 'InitiateCheckout');
+			} catch(err) {}
+
+			// Google Analytics - 'Book My Session' event
+			try {
+				ga('send', 'event', 'Book My Session', 'click');
+			} catch(err) {}
+			
+			/*vm.fromDt = $('.dt1').val();*/
+
+			$scope.clinicName = '';
+			$scope.clinicPrice = '';
+			$scope.clinicAddress = '';
+
+			if(vm.clinics != null && 
+				(vm.selectedDateClinic != undefined || vm.selectedDateClinic != "") &&
+				 (vm.timeslotClinic != "Select Time")) {
+
+                for(var i = 0;i < $scope.clinicArr.length ; i++){
+                	//console.log($scope.clinicArr[i]);
+
+                	if($scope.clinicArr[i]._id == vm.clinics){
+                		$scope.clinicName=$scope.clinicArr[i].clinic_name;
+                		$scope.clinicPrice=$scope.clinicArr[i].clinic_base_price;
+                		$scope.clinicAddress=$scope.clinicArr[i].clinic_address;
+                	}
+    	
+                }
+
+				var obj = {
+					location: $scope.clinicName,
+					date: vm.selectedDateClinic,
+					datesEnabled: enableDatesArray,
+					timeslot: vm.timeslotClinic,
+					timeslotArray: vm.timeslotArrayClinic,
+					cityid: cache.cityToIdMap["Pune"],
+					apptCost: $scope.clinicPrice,
+					clinic_id:vm.clinics,
+					clinic_address:$scope.clinicAddress
+				};
+				vm.flags.booknowSectionfieldsValid = true;
+				custportalGetSetService.setBooknowObj(obj);
+				$cookies.put('booking_session', 'in_progress', { path: "/"});
+				$state.go('booking.booking1');
+			} else {
+				vm.flags.booknowSectionfieldsValid = false;
+				vm.flags.bookNowError = true;
+				$timeout(function () { vm.flags.bookNowError = false; }, 5000);
+				//alert("Please fill the Booking Details to proceed.");
+			}
+		}
+
+
+
+        function getCities(){
+
+        	var city = [];
+		    var city1 = [];
+            
+	        custApi.getCities("India")
+			.success(function(data, status, headers, config) {
+				myJsonString = JSON.stringify(data);
+
+				
+				var initCustCitiesObj = JSON.parse(myJsonString);
+				for(var i = 0; i < initCustCitiesObj.payload.states.length; i++) {
+					result1 =  initCustCitiesObj.payload.states[i];
+					for(var j = 0; j < result1.cities.length; j++){
+						city1.push(result1.cities[j]);
+						city.push(result1.cities[j].name);
+					}
+				}
+				$scope.custCities = city;
+				$scope.custCities1 = city1;
+			})
+			.error(function(data, status, headers, config) {
+				$scope.checkSessionTimeout(data);
+			});
+        	
+        }	
+
+
+        function getClinics(cityId){
+
+        	$scope.clinicArrList =[];
+	    	custApi.getClinics(cityId)
+			.success(function(data, status, headers, config) {
+				myJsonString = JSON.stringify(data);
+				var clinicObj = JSON.parse(myJsonString);
+				$scope.clinicArr = data.payload;
+
+				for(var i = 0; i < clinicObj.payload.length; i++) {
+					var result =  clinicObj.payload[i];
+				
+					var clinicId = result._id;
+					var clinicName = result.clinic_name;
+
+
+					$scope.clinicArrList.push({
+				        _id : clinicId,
+				        clinic_name : clinicName
+				    });
+
+
+				}
+		
+			
+			})
+			.error(function(data, status, headers, config) {
+				$scope.checkSessionTimeout(data);
+			});
+        	
+        }
+
+       /* function initClinicPicker(){
+        	initDatepicker2();
+        }*/
+
+
+        //This function will redirect page to clinic booking:kalyani patil
+		function redirectToBookingClinic(){
+
+			initDatepicker2();
+			vm.cities = 'Select City';
+			vm.clinics = 'Select Clinic';
+			vm.timeslotClinic = 'Select Time';
+			vm.timeslotArrayClinic = [];
+            
+			 ngDialog.openConfirm({
+		            template: 'ClinicDialog',
+		            showClose:false,
+		            scope: $scope 
+		        }).then(function(value)
+		        {
+                   //vm.initCustPortal();
+                   //console.log(vm.clinics);
+                   //console.log(vm.selectedDateClinic);
+                   //console.log(vm.timeslotClinic);
+
+                   vm.redirectToClinicBooking();
+                       
+		        },
+		        function(value) {
+		            console.log("Fail clinic transaction.");
+		        });
+
+
+		}
+
 		/*
 		* Function to initialize customer portal
 		*/
@@ -339,10 +509,13 @@
 			}
 			vm.selectedLocation = "Choose Location";
 			vm.timeslot = "Select Time";
+			vm.timeslotClinic = "Select Time";
 			vm.initLocalities();
 			registerEvents();
 			initDatepicker();
 			initDatepicker1();
+			//initDatepicker2();
+			
 		} /* initCustPortal() END */
 
 		/*
@@ -387,6 +560,8 @@
 		* If only 1 instance found then call the function again in timeout.
 		*/
 		function initDatepicker() {
+			//console.log('first' + $('#dt1').length);
+
 			if($('#dt1').length != 1) {
 				$timeout(initDatepicker, 50);
 				//console.log("inside datepicker");
@@ -488,6 +663,8 @@
 		* If only 1 instance found then call the function again in timeout.
 		*/
 		function initDatepicker1() {
+			//console.log('second'+ $('#dt2').length);
+
 			if($('#dt2').length != 1) {
 				$timeout(initDatepicker1, 50);
 				//console.log("inside datepicker");
@@ -580,6 +757,108 @@
 			});
 		}
 		/* END of DATEPICKER2*/
+
+        //date picker for clinic:kalyani patil
+		function initDatepicker2() {
+
+			//console.log('Mine'+ $('#dt3').length);
+
+			if($('#dt3').length != 1) {
+				$timeout(initDatepicker2, 50);
+				//console.log("inside datepicker");
+				return;
+			}
+
+			$('#dt3').datetimepicker({
+				/*defaultDate: new Date(),*/
+				format: 'DD-MM-YYYY'
+			});
+			vm.fromMonthDate = moment(new Date()).format("YYYYMM");
+			$("#dt3").data("DateTimePicker").enabledDates([new Date('1970/1/1')]);
+            
+
+			/* Event called when month is changed */
+			$("#dt3").on("dp.update", function (e) {
+				vm.fromMonthDate = e.viewDate.format("YYYYMM");
+				/*var getdate = $('.dt1').val();
+				$('.dt1').data('DateTimePicker').date(moment(getdate, 'DD-MM-YYYY'));*/
+				/* If location not Pune then check 'available dates' for the month */
+				if(vm.clinics != 'null') {
+					custApi.checkAvailableDatesInMonthClinic(3, vm.fromMonthDate, vm.clinics, vm.physiotherapyId).
+					success(function (data, status, header, config) {
+						console.log("Available dates retrieved successfully");
+						
+						/* Enabling available dates */
+						var i=0;
+						enableDatesArray = [];
+						var yr='';
+						var month='';
+						var day='';
+						var date='';
+						data.payload.dates.forEach(function(p) {
+							yr = p.substring(0,4);
+							month = p.substring(4,6);
+							day = p.substring(6,8);
+							date = yr + '/' + month + '/' + day;
+							enableDatesArray.push(new Date(date));
+						});
+						if(enableDatesArray.length != 0) {
+							vm.flags.datesNotAvailable = false;
+							$("#dt3").data("DateTimePicker").enabledDates(enableDatesArray);
+						} else {
+							vm.flags.datesNotAvailable = true;
+							$timeout(function () { vm.flags.datesNotAvailable = false; }, 5000);
+							$("#dt3").data("DateTimePicker").enabledDates([new Date('1970/1/1')]);
+						}
+						
+					}).
+					error(function (data, status, header, config) {
+						console.log("Error in retrieving available dates");
+					});
+				}
+			});
+
+/*
+			* Event called when date is changed 
+			*/
+			$("#dt3").on("dp.change", function (e) {
+				vm.fromDate = e.date.format("YYYYMMDD");
+				//$("#dt2").data("DateTimePicker").date(e.date);
+				vm.selectedDateClinic = e.date;
+				/* For available date retrieve 'available time' slots */
+				if(vm.clinics != 'null') {
+					custApi.fetchAvailableSlotsForDayClinic(vm.fromDate, vm.clinics, vm.physiotherapyId ).
+					success(function (data, status, header, config) {
+						console.log("Available slots retrieved successfully");
+						console.log("Slots:");
+						console.log(data);
+						vm.timeslotArrayClinic = [];
+						/* format time slot into hr:min am/pm */
+						data.payload.appointmentslots.forEach(function(item) {
+							var hours = item.st.substring(0,2);
+							var mins = item.st.substring(2,4);
+							var period = "";
+							if(hours > 12) {
+								hours = hours - 12;
+								period = "PM";
+							} else if(hours < 12) {
+								period = "AM";
+							} else if(hours == 12) {
+								period = "PM";
+							}
+							var timeformat = hours + ":" + mins + " " + period;
+							vm.timeslotArrayClinic.push({starttime: timeformat});
+						});
+					}).
+					error(function (data, status, header, config) {
+						console.log("Error in retrieving available slots");
+					});
+				}            	
+			});
+
+			
+		}
+		/* END of DATEPICKER3*/
 
 		/*
 		* Function used to perform anonymous login for customer portal
@@ -752,6 +1031,88 @@
 							}
 							var timeformat = hours + ":" + mins + " " + period;
 							vm.timeslotArray.push({starttime: timeformat});
+						});
+					}).
+					error(function (data, status, header, config) {
+						console.log("Error in retrieving available slots");
+					});
+				}
+			}).
+			error(function (data, status, header, config) {
+				console.log("Error in retrieving available dates");
+			});
+		}
+
+
+		/*
+		* function for location selected
+		*/
+		function clinicSelected(value) {
+			//console.log('my:'+value);
+
+			if($("#dt3").data("DateTimePicker").date() != null) {
+				vm.fromMonthDate = $("#dt3").data("DateTimePicker").date().format("YYYYMM");
+			}
+			else {
+				vm.fromMonthDate = moment(new Date()).format("YYYYMM");
+			}
+			/* API call to check available dates */
+			custApi.checkAvailableDatesInMonthClinic(3, vm.fromMonthDate, value, vm.physiotherapyId).
+			success(function (data, status, header, config) {
+				console.log("Available dates retrieved successfully");
+				console.log(data);
+				/* Enabling available dates */
+				var i=0;
+				enableDatesArray = [];
+				var yr='';
+				var month='';
+				var day='';
+				var date='';
+				data.payload.dates.forEach(function(p) {
+					yr = p.substring(0,4);
+					month = p.substring(4,6);
+					day = p.substring(6,8);
+					date = yr + '/' + month + '/' + day;
+					enableDatesArray.push(new Date(date));
+				});				
+				if(enableDatesArray.length != 0) {
+					vm.flags.datesNotAvailable = false;
+					$("#dt3").data("DateTimePicker").enabledDates(enableDatesArray);			
+				} else {
+					vm.flags.datesNotAvailable = true;
+					$timeout(function () { vm.flags.datesNotAvailable = false; }, 5000);
+					$("#dt3").data("DateTimePicker").enabledDates([new Date('1970/1/1')]);
+				}
+
+				//console.log(vm.fromDate);
+				
+				/* For available date retrieve 'available time' slots */
+				if(vm.clinics != 'null' && vm.fromDate != undefined) {
+					console.log('in');
+					custApi.fetchAvailableSlotsForDayClinic(vm.fromDate, vm.clinics, vm.physiotherapyId).
+					success(function (data, status, header, config) {
+						console.log("Available slots retrieved successfully");
+						console.log("Slots:");
+						console.log(data);
+						vm.timeslotArrayClinic = [];
+						/* format time slot into hr:min am/pm */
+						data.payload.appointmentslots.forEach(function(item) {
+							var hours = item.st.substring(0,2);
+							var mins = item.st.substring(2,4);
+							var period = "";
+							if(hours > 12) {
+								hours = hours - 12;
+								period = "PM";
+								/*if(hours.toString().length == 1) {
+									hours = "0"+hours;
+								}*/
+							} else if(hours < 12) {
+								period = "AM";
+							} else if(hours == 12) {
+								period = "PM";
+							}
+							var timeformat = hours + ":" + mins + " " + period;
+							vm.timeslotArrayClinic.push({starttime: timeformat});
 						});
 					}).
 					error(function (data, status, header, config) {

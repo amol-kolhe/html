@@ -70,7 +70,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6 col-xs-12">
-                            <div class="row middleRowContent">
+                            <div class="row middleRowContent" ng-hide = "serviceLocationLabel != 'At Home'">
                                 <span class="itemLabel2 col-xs-4">Location <span class="colonSeparator">:</span></span>
                                 <span class="col-xs-8">
                                     <input type="hidden" value="{{adminNewAppointmentCust.appointment._id}}">
@@ -90,7 +90,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6 col-xs-12">
-                            <div class="row middleRowContent">
+                            <div class="row middleRowContent" ng-hide = "serviceLocationLabel != 'At Home'">
                                 <span class="itemLabel2 col-xs-4">Pincode <span class="colonSeparator">:</span></span>
                                 <span class="col-xs-8" ng-bind="adminNewAppointmentCust.appointment.pincode"></span>
                             </div>

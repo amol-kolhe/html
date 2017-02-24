@@ -1,3 +1,4 @@
+<span class="clinic-book-now-button" ng-click="cpc.redirectToBookingClinic()"> BOOK SESSION AT CLINIC</span>
 <div class="booknow-outer">
 	<span class="locations-section">
 		<select class="ac-select"
@@ -36,4 +37,109 @@
     </span>
 
 	<span class="book-now-button" ng-click="cpc.redirectToBooking1()">BOOK MY SESSION</span>
+    
+
+    <!--<div>
+      <span class="request-callback" ng-click="" style="color:red;background-color: white;" >BOOK CLINIC APPOINTMENT</span>
+    </div>-->
+
+
+    <script type="text/ng-template" id="ClinicDialog">
+        <form role="form" name="WalletTransForm" novalidate  style="background-color: #f2dede;">
+            <div style="margin:10px; padding:10px">
+                <div class="row middleRowContent">
+                    <div class="col-xs-12">
+                        <label style="font-size: 21px;">Book Clinic Appointment: </label>
+                    </div>
+                    
+                </div>
+
+                <div class="row middleRowContent">
+                    &nbsp;
+                </div>
+
+                <div class="row middleRowContent">
+                    <div class="col-xs-6">
+                        <label>Choose City: </label>
+                    </div>
+                    <div class="col-xs-6">
+                        <select ng-model="cpc.cities" ng-options = "city.id as city.name for city in custCities1" ng-change="cpc.getClinics(cpc.cities)" style="width: 172px;">
+                            <option value="">Select City</option>
+                        </select>
+
+                    </div>  
+                </div>
+
+                <div class="row middleRowContent">
+                    &nbsp;
+                </div>
+
+                <div class="row middleRowContent">
+                    <div class="col-xs-6">
+                        <label>Choose Clinic: </label>
+                    </div>
+                    <div class="col-xs-6">
+                        <select ng-model="cpc.clinics" ng-options = "clinic._id as clinic.clinic_name for clinic in clinicArrList" ng-change="cpc.clinicSelected(cpc.clinics)" style="width: 172px;">
+                            <option value="">Select Clinic</option>
+                        </select>
+
+                    </div>
+                </div>
+
+                <div class="row middleRowContent">
+                    &nbsp;
+                </div>
+
+                <div class="row middleRowContent">
+                    <div class="col-xs-6">
+                        <label>Select Date: </label>
+                    </div>
+                     <div class="col-xs-6">
+                       
+                             <div class='input-group date dt'>
+                                <input type="text" id = "dt3"
+                                name = "fromDate"
+                                date-disabled="cpc.disabled(date, mode)"
+                                title="From Date" class="callmeField2 datetimepicker2 form-control"
+                                placeholder="Pick a Date"  style="font-size: 1em"/>
+
+                                <span class="input-group-addon">
+                                    <label for="dt3">
+                                        <img src="./images/customer_portal/down_arrow.png" />
+                                    </label>
+                                </span>
+                            </div>
+                    
+                    </div>
+                </div>
+
+                <div class="row middleRowContent">
+                    &nbsp;
+                </div>
+
+                <div class="row middleRowContent">
+                    <div class="col-xs-6">
+                        <label>Select Time: </label>
+                    </div>
+                    <div class="col-xs-6">
+                        <select ng-model="cpc.timeslotClinic" ng-options = "time.starttime for time in cpc.timeslotArrayClinic"  style="width: 172px;">
+                            <option value="">Select Time</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div style="margin-top:10px; padding:10px;">
+                        <button type="submit" class="ngdialog-button ngdialog-button-primary" ng-click="submitted=true;WalletTransForm.$valid && confirm('OK')" style="width: 123px;">Next</button>
+                        <button ng-click="closeThisDialog('Cancel')" type="button" class="ngdialog-button ngdialog-button-primary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </script>
+
+   
 </div>
+
+ 

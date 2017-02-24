@@ -5,11 +5,12 @@
 		'ui.router',
 		'acute.select', 
 		'myApp.Services', 
-		'ngCookies', 
+		'ngCookies',
+		'ngDialog',
 		'ui.bootstrap', 
 		'ngSanitize',
 		'ngTouch',
-		'ngAnimate'
+		'ngAnimate',
 		]);
 
 	app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider', function ($urlRouterprovider, $stateProvider, $locationProvider) {

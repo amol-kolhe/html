@@ -69,7 +69,10 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 		selectedDate: '',
 		bookingErrorMessageContainer: '',
 		apptCost: '',
-		promocodeResultMessage: ''
+		promocodeResultMessage: '',
+		clinic_id: '',
+		clinicPrice: '',
+		clinicAddress: ''
 	};
 	
 	var localVariables = {
@@ -139,6 +142,16 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 			vm.model.timeslot = localVariables.bookNowobj.timeslot;
 			vm.model.fromDate = localVariables.bookNowobj.date.format('YYYYMMDD');
 			localVariables.cityId = localVariables.bookNowobj.cityid;
+			vm.model.clinic_id = localVariables.bookNowobj.clinic_id;
+
+			vm.model.clinicPrice = localVariables.bookNowobj.apptCost;
+			vm.model.clinicAddress = localVariables.bookNowobj.clinic_address;
+
+            //set clinic address as appointment address in case of clinic appointment booking:kalyani patil
+			if(vm.model.clinic_id != undefined){
+				vm.custInfoFormFields.address = vm.model.clinicAddress;
+			}
+			
 		}
 		if(localVariables.bookNowobj != undefined) {
 			localmethods.getServicesList();
@@ -166,95 +179,193 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 		$("#booking1-dt").data("DateTimePicker").enabledDates(localVariables.bookNowobj.datesEnabled);
 
 		/* Event called when month is changed */
-        $("#booking1-dt").on("dp.update", function (e) {
+
+		if(vm.model.clinic_id == undefined){
+
+			$("#booking1-dt").on("dp.update", function (e) {
+	        	vm.model.selectedDate = e.date;
+	        	vm.model.fromMonthDate = e.viewDate.format("YYYYMM");
+	        	if(vm.model.selectedLocation != 'Choose Location') {
+	        		custApi.checkAvailableDatesInMonth(3, vm.model.fromMonthDate, vm.model.selectedLocation.pincodeid, vm.model.selectedLocation.zoneid, vm.model.physiotherapyId).
+					success(function (data, status, header, config) {
+						console.log("Available dates retrieved successfully");
+						
+						/* Enabling available dates */
+						var i=0;
+						var enableDatesArray = [];
+						var yr='';
+						var month='';
+						var day='';
+						var date='';
+						data.payload.dates.forEach(function(p) {
+							yr = p.substring(0,4);
+							month = p.substring(4,6);
+							day = p.substring(6,8);
+							date = yr + '/' + month + '/' + day;
+							enableDatesArray.push(new Date(date));
+						});				
+						/*$("#booking1-dt").data("DateTimePicker").enabledDates(enableDatesArray);*/
+						if(enableDatesArray.length != 0) {
+							$("#booking1-dt").data("DateTimePicker").enabledDates(enableDatesArray);
+							vm.flags.datesNotAvailable = false;
+							vm.flags.bookingErrorContainer = vm.flags.datesNotAvailable;
+						} else {
+							vm.flags.datesNotAvailable = true;
+							vm.flags.bookingErrorContainer = vm.flags.datesNotAvailable;
+							vm.model.bookingErrorMessageContainer = 'Dates not Available for currently selected Location';
+							$timeout(function () { vm.flags.bookingErrorContainer = false; vm.flags.datesNotAvailable = false}, 5000);
+							$("#booking1-dt").data("DateTimePicker").enabledDates([new Date('1970/1/1')]);
+						}
+					}).
+					error(function (data, status, header, config) {
+						console.log("Error in retrieving available dates");
+					});
+	        	}
+	        	vm.promoobj.promocode='';
+				vm.promoobj.promocodeid='';
+				vm.promoobj.finalcost='';
+				vm.promoobj.discount='';
+				vm.model.apptCost = localVariables.bookNowobj.apptCost;
+				vm.custInfoFormFields.promocode='';
+	        });
+
+	        /*
+	        * Event called when date is changed 
+	        */
+	        $("#booking1-dt").on("dp.change", function (e) {
+	        	vm.model.fromDate = e.date.format("YYYYMMDD");
+	        	vm.model.selectedDate = e.date;
+	        	/* For available date retrieve 'available time' slots */
+	        	if(vm.model.selectedLocation != 'Choose Location') {
+	        		custApi.fetchAvailableSlotsForDay(vm.model.fromDate, vm.model.selectedLocation.zoneid, vm.model.physiotherapyId, vm.model.selectedLocation.pincodeid).
+	            	success(function (data, status, header, config) {
+	            		console.log("Available slots retrieved successfully");
+	            		console.log("Slots:");
+	            		console.log(data);
+	            		vm.model.timeslotArray = [];
+	            		/* format time slot into hr:min am/pm */
+	            		data.payload.appointmentslots.forEach(function(item) {
+	            			var hours = item.st.substring(0,2);
+	            			var mins = item.st.substring(2,4);
+	            			var period = "";
+							if(hours > 12) {
+								hours = hours - 12;
+								period = "PM";
+							} else if(hours < 12) {
+								period = "AM";
+							} else if(hours == 12) {
+								period = "PM";
+							}
+	            			var timeformat = hours + ":" + mins + " " + period;
+	            			vm.model.timeslotArray.push({starttime: timeformat});
+	            		});
+	            	}).
+	            	error(function (data, status, header, config) {
+	            		console.log("Error in retrieving available slots");
+	            	});
+	        	}
+	        	vm.promoobj.promocode='';
+				vm.promoobj.promocodeid='';
+				vm.promoobj.finalcost='';
+				vm.promoobj.discount='';
+				vm.model.apptCost = localVariables.bookNowobj.apptCost; 
+				vm.custInfoFormFields.promocode='';
+	        });
+
+		}else{
+
+			$("#booking1-dt").on("dp.update", function (e) {
         	vm.model.selectedDate = e.date;
         	vm.model.fromMonthDate = e.viewDate.format("YYYYMM");
         	if(vm.model.selectedLocation != 'Choose Location') {
-        		custApi.checkAvailableDatesInMonth(3, vm.model.fromMonthDate, vm.model.selectedLocation.pincodeid, vm.model.selectedLocation.zoneid, vm.model.physiotherapyId).
-				success(function (data, status, header, config) {
-					console.log("Available dates retrieved successfully");
-					
-					/* Enabling available dates */
-					var i=0;
-					var enableDatesArray = [];
-					var yr='';
-					var month='';
-					var day='';
-					var date='';
-					data.payload.dates.forEach(function(p) {
-						yr = p.substring(0,4);
-						month = p.substring(4,6);
-						day = p.substring(6,8);
-						date = yr + '/' + month + '/' + day;
-						enableDatesArray.push(new Date(date));
-					});				
-					/*$("#booking1-dt").data("DateTimePicker").enabledDates(enableDatesArray);*/
-					if(enableDatesArray.length != 0) {
-						$("#booking1-dt").data("DateTimePicker").enabledDates(enableDatesArray);
-						vm.flags.datesNotAvailable = false;
-						vm.flags.bookingErrorContainer = vm.flags.datesNotAvailable;
-					} else {
-						vm.flags.datesNotAvailable = true;
-						vm.flags.bookingErrorContainer = vm.flags.datesNotAvailable;
-						vm.model.bookingErrorMessageContainer = 'Dates not Available for currently selected Location';
-						$timeout(function () { vm.flags.bookingErrorContainer = false; vm.flags.datesNotAvailable = false}, 5000);
-						$("#booking1-dt").data("DateTimePicker").enabledDates([new Date('1970/1/1')]);
-					}
-				}).
-				error(function (data, status, header, config) {
-					console.log("Error in retrieving available dates");
-				});
-        	}
-        	vm.promoobj.promocode='';
-			vm.promoobj.promocodeid='';
-			vm.promoobj.finalcost='';
-			vm.promoobj.discount='';
-			vm.model.apptCost = localVariables.bookNowobj.apptCost;
-			vm.custInfoFormFields.promocode='';
-        });
-
-        /*
-        * Event called when date is changed 
-        */
-        $("#booking1-dt").on("dp.change", function (e) {
-        	vm.model.fromDate = e.date.format("YYYYMMDD");
-        	vm.model.selectedDate = e.date;
-        	/* For available date retrieve 'available time' slots */
-        	if(vm.model.selectedLocation != 'Choose Location') {
-        		custApi.fetchAvailableSlotsForDay(vm.model.fromDate, vm.model.selectedLocation.zoneid, vm.model.physiotherapyId, vm.model.selectedLocation.pincodeid).
-            	success(function (data, status, header, config) {
-            		console.log("Available slots retrieved successfully");
-            		console.log("Slots:");
-            		console.log(data);
-            		vm.model.timeslotArray = [];
-            		/* format time slot into hr:min am/pm */
-            		data.payload.appointmentslots.forEach(function(item) {
-            			var hours = item.st.substring(0,2);
-            			var mins = item.st.substring(2,4);
-            			var period = "";
-						if(hours > 12) {
-							hours = hours - 12;
-							period = "PM";
-						} else if(hours < 12) {
-							period = "AM";
-						} else if(hours == 12) {
-							period = "PM";
+	        		custApi.checkAvailableDatesInMonthClinic(3, vm.model.fromMonthDate, vm.model.clinic_id, vm.model.physiotherapyId).
+					success(function (data, status, header, config) {
+						console.log("Available dates retrieved successfully");
+						
+						/* Enabling available dates */
+						var i=0;
+						var enableDatesArray = [];
+						var yr='';
+						var month='';
+						var day='';
+						var date='';
+						data.payload.dates.forEach(function(p) {
+							yr = p.substring(0,4);
+							month = p.substring(4,6);
+							day = p.substring(6,8);
+							date = yr + '/' + month + '/' + day;
+							enableDatesArray.push(new Date(date));
+						});				
+						/*$("#booking1-dt").data("DateTimePicker").enabledDates(enableDatesArray);*/
+						if(enableDatesArray.length != 0) {
+							$("#booking1-dt").data("DateTimePicker").enabledDates(enableDatesArray);
+							vm.flags.datesNotAvailable = false;
+							vm.flags.bookingErrorContainer = vm.flags.datesNotAvailable;
+						} else {
+							vm.flags.datesNotAvailable = true;
+							vm.flags.bookingErrorContainer = vm.flags.datesNotAvailable;
+							vm.model.bookingErrorMessageContainer = 'Dates not Available for currently selected Location';
+							$timeout(function () { vm.flags.bookingErrorContainer = false; vm.flags.datesNotAvailable = false}, 5000);
+							$("#booking1-dt").data("DateTimePicker").enabledDates([new Date('1970/1/1')]);
 						}
-            			var timeformat = hours + ":" + mins + " " + period;
-            			vm.model.timeslotArray.push({starttime: timeformat});
-            		});
-            	}).
-            	error(function (data, status, header, config) {
-            		console.log("Error in retrieving available slots");
-            	});
-        	}
-        	vm.promoobj.promocode='';
-			vm.promoobj.promocodeid='';
-			vm.promoobj.finalcost='';
-			vm.promoobj.discount='';
-			vm.model.apptCost = localVariables.bookNowobj.apptCost; 
-			vm.custInfoFormFields.promocode='';
-        });
+					}).
+					error(function (data, status, header, config) {
+						console.log("Error in retrieving available dates");
+					});
+	        	}
+	        	vm.promoobj.promocode='';
+				vm.promoobj.promocodeid='';
+				vm.promoobj.finalcost='';
+				vm.promoobj.discount='';
+				vm.model.apptCost = localVariables.bookNowobj.apptCost;
+				vm.custInfoFormFields.promocode='';
+	        });
+
+	        /*
+	        * Event called when date is changed 
+	        */
+	        $("#booking1-dt").on("dp.change", function (e) {
+	        	vm.model.fromDate = e.date.format("YYYYMMDD");
+	        	vm.model.selectedDate = e.date;
+	        	/* For available date retrieve 'available time' slots */
+	        	if(vm.model.selectedLocation != 'Choose Location') {
+	        		custApi.fetchAvailableSlotsForDayClinic(vm.model.fromDate, vm.model.clinic_id, vm.model.physiotherapyId).
+	            	success(function (data, status, header, config) {
+	            		console.log("Available slots retrieved successfully");
+	            		console.log("Slots:");
+	            		console.log(data);
+	            		vm.model.timeslotArray = [];
+	            		/* format time slot into hr:min am/pm */
+	            		data.payload.appointmentslots.forEach(function(item) {
+	            			var hours = item.st.substring(0,2);
+	            			var mins = item.st.substring(2,4);
+	            			var period = "";
+							if(hours > 12) {
+								hours = hours - 12;
+								period = "PM";
+							} else if(hours < 12) {
+								period = "AM";
+							} else if(hours == 12) {
+								period = "PM";
+							}
+	            			var timeformat = hours + ":" + mins + " " + period;
+	            			vm.model.timeslotArray.push({starttime: timeformat});
+	            		});
+	            	}).
+	            	error(function (data, status, header, config) {
+	            		console.log("Error in retrieving available slots");
+	            	});
+	        	}
+	        	vm.promoobj.promocode='';
+				vm.promoobj.promocodeid='';
+				vm.promoobj.finalcost='';
+				vm.promoobj.discount='';
+				vm.model.apptCost = localVariables.bookNowobj.apptCost; 
+				vm.custInfoFormFields.promocode='';
+	        });
+
+		}
+        
 	}
 
 	function changeTimeSlot() {
@@ -550,54 +661,112 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 	    		var apptstarttime = moment(fromCurrentDate).format("YYYY-MM-DD hh:mm A");
 
 	    		/* Customer information object for taking new appointment */
-	    		if(vm.promoobj.promocodeid == '' || vm.promoobj.promocodeid == null) {
-	    			var apptObj = {
-		    			"customer": {
-							"cityid": localVariables.cityId,
-							"name": name,
-							"phone": vm.custInfoFormFields.mobile,
-							"email": vm.custInfoFormFields.email,
-							"pincode": vm.model.selectedLocation.pincodeid,
+
+	    		if(vm.model.clinic_id == undefined){
+	    			if(vm.promoobj.promocodeid == '' || vm.promoobj.promocodeid == null) {
+		    			var apptObj = {
+			    			"customer": {
+								"cityid": localVariables.cityId,
+								"name": name,
+								"phone": vm.custInfoFormFields.mobile,
+								"email": vm.custInfoFormFields.email,
+								"pincode": vm.model.selectedLocation.pincodeid,
+								"address": vm.custInfoFormFields.address,
+								"problem": vm.model.problemName,
+								"gender": vm.custInfoFormFields.gender,
+								"signMeUp": vm.custInfoFormFields.signup,
+								"is_package_assign":false
+							},
+							"apptslots": [apptstarttime],
+							"adminid": uid,
+							"comments": vm.custInfoFormFields.comments,
+							"zoneid": vm.model.selectedLocation.zoneid,
+							"serviceid": vm.model.physiotherapyId,
 							"address": vm.custInfoFormFields.address,
-							"problem": vm.model.problemName,
-							"gender": vm.custInfoFormFields.gender,
-							"signMeUp": vm.custInfoFormFields.signup
-						},
-						"apptslots": [apptstarttime],
-						"adminid": uid,
-						"comments": vm.custInfoFormFields.comments,
-						"zoneid": vm.model.selectedLocation.zoneid,
-						"serviceid": vm.model.physiotherapyId,
-						"address": vm.custInfoFormFields.address,
-						"usecustomeraddress": false,
-						"locality": vm.model.selectedLocation.localities,
-						"apptRootId": ""
-		    		};
-	    		} else {
-	    			var apptObj = {
-		    			"customer": {
-							"cityid": localVariables.cityId,
-							"name": name,
-							"phone": vm.custInfoFormFields.mobile,
-							"email": vm.custInfoFormFields.email,
-							"pincode": vm.model.selectedLocation.pincodeid,
+							"usecustomeraddress": false,
+							"locality": vm.model.selectedLocation.localities,
+							"apptRootId": ""
+			    		};
+		    		} else {
+		    			var apptObj = {
+			    			"customer": {
+								"cityid": localVariables.cityId,
+								"name": name,
+								"phone": vm.custInfoFormFields.mobile,
+								"email": vm.custInfoFormFields.email,
+								"pincode": vm.model.selectedLocation.pincodeid,
+								"address": vm.custInfoFormFields.address,
+								"problem": vm.model.problemName,
+								"gender": vm.custInfoFormFields.gender,
+								"signMeUp": vm.custInfoFormFields.signup,
+								"is_package_assign":false
+							},
+							"apptslots": [apptstarttime],
+							"adminid": uid,
+							"comments": vm.custInfoFormFields.comments,
+							"zoneid": vm.model.selectedLocation.zoneid,
+							"serviceid": vm.model.physiotherapyId,
 							"address": vm.custInfoFormFields.address,
-							"problem": vm.model.problemName,
-							"gender": vm.custInfoFormFields.gender,
-							"signMeUp": vm.custInfoFormFields.signup
-						},
-						"apptslots": [apptstarttime],
-						"adminid": uid,
-						"comments": vm.custInfoFormFields.comments,
-						"zoneid": vm.model.selectedLocation.zoneid,
-						"serviceid": vm.model.physiotherapyId,
-						"address": vm.custInfoFormFields.address,
-						"usecustomeraddress": false,
-						"locality": vm.model.selectedLocation.localities,
-						"apptRootId": "",
-						"promocode": vm.promoobj.promocode
-		    		};
+							"usecustomeraddress": false,
+							"locality": vm.model.selectedLocation.localities,
+							"apptRootId": "",
+							"promocode": vm.promoobj.promocode
+			    		};
+		    		}
+	    		}else{
+
+	    			if(vm.promoobj.promocodeid == '' || vm.promoobj.promocodeid == null) {
+		    			var apptObj = {
+			    			"customer": {
+								"cityid": localVariables.cityId,
+								"name": name,
+								"phone": vm.custInfoFormFields.mobile,
+								"email": vm.custInfoFormFields.email,
+								"address": vm.custInfoFormFields.address,
+								"problem": vm.model.problemName,
+								"gender": vm.custInfoFormFields.gender,
+								"signMeUp": vm.custInfoFormFields.signup,
+								"is_package_assign":false
+							},
+							"apptslots": [apptstarttime],
+							"adminid": uid,
+							"comments": vm.custInfoFormFields.comments,
+							"serviceid": vm.model.physiotherapyId,
+							"address": vm.custInfoFormFields.address,
+							"usecustomeraddress": false,
+							"apptRootId": "",
+							"clinic_id": vm.model.clinic_id,
+							"clinicBasePrice": vm.model.clinicPrice
+			    		};
+		    		} else {
+		    			var apptObj = {
+			    			"customer": {
+								"cityid": localVariables.cityId,
+								"name": name,
+								"phone": vm.custInfoFormFields.mobile,
+								"email": vm.custInfoFormFields.email,
+								"address": vm.custInfoFormFields.address,
+								"problem": vm.model.problemName,
+								"gender": vm.custInfoFormFields.gender,
+								"signMeUp": vm.custInfoFormFields.signup,
+								"is_package_assign":false
+							},
+							"apptslots": [apptstarttime],
+							"adminid": uid,
+							"comments": vm.custInfoFormFields.comments,
+							"serviceid": vm.model.physiotherapyId,
+							"address": vm.custInfoFormFields.address,
+							"usecustomeraddress": false,
+							"locality": vm.model.selectedLocation.localities,
+							"apptRootId": "",
+							"promocode": vm.promoobj.promocode,
+							"clinic_id": vm.model.clinic_id,
+							"clinicBasePrice": vm.model.clinicPrice
+
+			    		};
+		    		}
 	    		}
+	    		
 	    		
 	    		console.log(apptObj);
 
@@ -692,16 +861,31 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 
 		var apptslot = moment(new Date(fromCurrentDate.getTime())).format("YYYY-MM-DD hh:mm A");
 
-    	var promoobj = {
-    		'promocode': vm.custInfoFormFields.promocode,
-    		'apptid': '',
-    		'pincode': vm.model.selectedLocation.pincodeid,
-    		'cityid': localVariables.cityId,
-    		'custname': '',
-    		'problem': vm.model.problemName,
-    		"apptslots": [apptslot],
-    		'serviceid': vm.model.physiotherapyId
-    	};
+        if(vm.model.clinic_id == undefined){
+        	var promoobj = {
+	    		'promocode': vm.custInfoFormFields.promocode,
+	    		'apptid': '',
+	    		'pincode': vm.model.selectedLocation.pincodeid,
+	    		'cityid': localVariables.cityId,
+	    		'custname': '',
+	    		'problem': vm.model.problemName,
+	    		"apptslots": [apptslot],
+	    		'serviceid': vm.model.physiotherapyId
+	    	};
+        }else{
+        	var promoobj = {
+	    		'promocode': vm.custInfoFormFields.promocode,
+	    		'apptid': '',
+	    		'cityid': localVariables.cityId,
+	    		'custname': '',
+	    		'problem': vm.model.problemName,
+	    		"apptslots": [apptslot],
+	    		'serviceid': vm.model.physiotherapyId,
+	    		'clinicBasePrice': vm.model.clinicPrice
+	    	};
+        }
+		
+	
     	custApi.applyPromocode(promoobj, 3).
     	success(function (data, status, headers, config) {
     		console.log("successfully Applied Promocode");

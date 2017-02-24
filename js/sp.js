@@ -177,7 +177,7 @@ angular.module('myApp.controllers')
                             "customername": apt.customer.name,
                             "customercontact": apt.customer.phone,
                             "status": appointmentStateMap[apt.appointment.state],
-                            "servicelocation": apt.appointment.clinic_id
+                            "servicelocation": apt.appointment.clinic_name
                         }
                     );
                 });
@@ -242,6 +242,7 @@ angular.module('myApp.controllers')
         $scope.aptPackage.no_of_sessions = "";
         $scope.applypromocost= '';
         $scope.lastApptTime = "";
+        $scope.apptClinicId = '';
         
         spApi.getCustomerDetails(appointment.custid).success(function(data, status, headers, config){
             $scope.custOldPackage = {
@@ -361,6 +362,8 @@ angular.module('myApp.controllers')
                     //assign servicelocation name by using its Id. 
                     if($scope.adminNewAppointmentCust.appointment.clinic_id){
                         $scope.serviceLocationId = $scope.adminNewAppointmentCust.appointment.clinic_id;
+                        $scope.apptClinicId = $scope.adminNewAppointmentCust.appointment.clinic_id;
+
 
                         for(var i = 0;i < $scope.clinicArrData.length; i++){
                             if($scope.clinicArrData[i]._id == $scope.serviceLocationId){
@@ -474,9 +477,15 @@ angular.module('myApp.controllers')
     }
 
     $scope.showCustomer = function(appointment) {
+
         $scope.aptSlotCount = 0;
         $scope.aptSlotFlag = false;
         $scope.custPackageTotalAppt = 0;
+        $scope.apptClinicId = '';
+        $scope.apptCityId = '';
+        $scope.clinicBasePriceVal = 0;
+        $scope.clinicArray = [];
+
         spApi.getCustomerDetails(appointment.custid)
         .success(function(data, status, headers, config){
             $scope.custOldPackage = {
@@ -510,7 +519,41 @@ angular.module('myApp.controllers')
                         $scope.custPackageTotalAppt = data.payload.appointments[i].appointment.current_session_no;
                     }
                     appointmentHistory.push(data.payload.appointments[i].appointment);
+
+                    if(data.payload.appointments[i].appointment.clinic_id != undefined){
+                        $scope.apptClinicId = data.payload.appointments[i].appointment.clinic_id;
+                    }
+
+                    if(data.payload.appointments[i].appointment.cityid != undefined){
+                        $scope.apptCityId = data.payload.appointments[i].appointment.cityid;
+                    }
                 }
+
+                //api to fetch clinic data of given city:kalyani patil.
+               if($scope.apptCityId != undefined){
+
+                    var cityid = $scope.apptCityId;
+                    spApi.getClinics(cityid)
+                     .success(function(data, status, headers, config) {
+                        $scope.clinicArray = data.payload;
+
+                        //assign clinic base price by using its Id. 
+                        if($scope.apptClinicId != undefined || $scope.apptClinicId != ''){
+                          
+                            for(var i = 0;i < $scope.clinicArray.length; i++){
+                                if($scope.clinicArray[i]._id == $scope.apptClinicId){
+                                    $scope.clinicBasePriceVal = $scope.clinicArray[i].clinic_base_price;
+                                }
+                            }
+                        }
+                    
+                    })
+                    .error(function(data, status, headers, config) {
+                        $scope.checkSessionTimeout(data);
+                    });
+                }   
+
+
             } else {
                 console.log("error");
             }
@@ -702,7 +745,7 @@ angular.module('myApp.controllers')
 
     //API to get dates of given month:year have atleast one free slot for appointment.
     $scope.getSpMonthlyAppointmentAvailability = function() {
-
+      
         var pincode;
         var zoneid;
          if($scope.custReadList != undefined ) {
@@ -764,7 +807,13 @@ angular.module('myApp.controllers')
             var apiKeyInst = $cookies.get('u_apikey');
             var roleInst = $cookies.get('u_type');
 
-            var url = "/healyos-pdt/hrest/v1/appt/calmon/" + yyyymmDate + "?apikey=" + apiKeyInst + "&sid=" + sidInst + "&role=" + roleInst + "&pincode=" + pincode + "&zoneid=" + zoneid + "&serviceid=" + serviceId; //b24abc5e-ac43-86d4-5a83-aa1807fde79b";
+            if($scope.apptClinicId == undefined || $scope.apptClinicId == ''){
+            
+                 var url = "/healyos-pdt/hrest/v1/appt/calmon/" + yyyymmDate + "?apikey=" + apiKeyInst + "&sid=" + sidInst + "&role=" + roleInst + "&pincode=" + pincode + "&zoneid=" + zoneid + "&serviceid=" + serviceId; //b24abc5e-ac43-86d4-5a83-aa1807fde79b";
+            }else{
+                 var url = "/healyos-pdt/hrest/v1/appt/calmon/" + yyyymmDate + "?apikey=" + apiKeyInst + "&sid=" + sidInst + "&role=" + roleInst + "&serviceid=" + serviceId + "&clinic_id=" + $scope.apptClinicId; 
+
+            }
 
             var result = $http.get(url);
 
@@ -897,6 +946,8 @@ angular.module('myApp.controllers')
 * Fetches free time slots for sp using /zone/avail api
 */
     $scope.getSpInfo = function(zoneid, servid, pin) {
+
+
         var serviceDate = "";
         var dateInst = "";
         var intMonth = 0;
@@ -923,7 +974,7 @@ angular.module('myApp.controllers')
         yearObj = dateInst.getFullYear();
         serviceDate = yearObj + monthInst + dayObj + "";
 
-        spApi.getSpInfo(serviceDate, zoneid, servid, pin)
+        spApi.getSpInfo(serviceDate, zoneid, servid, pin,$scope.apptClinicId)
         .success(function(data, status, headers, config) {
             myJsonString = JSON.stringify(data);
             var getSpInfoObj = JSON.parse(myJsonString);
@@ -1081,6 +1132,20 @@ angular.module('myApp.controllers')
             $scope.use_sessions = $scope.use_sessions;
         }
 
+        var clinicPrice;
+        if($scope.clinicBasePriceVal <= 0 || $scope.clinicBasePriceVal == undefined){
+            clinicPrice = 0;
+        }else{
+            clinicPrice = $scope.clinicBasePriceVal;
+        }
+
+        var clinicId;
+        if($scope.apptClinicId == undefined || $scope.apptClinicId == ''){
+            clinicId = null;
+        }else{
+            clinicId = $scope.apptClinicId;
+        }
+
 
 
         var idObj = $cookies.get('u_id');
@@ -1117,6 +1182,8 @@ angular.module('myApp.controllers')
             "package_code":package_code,
             "package_id":package_id,
             "patientid":$scope.patientid,
+            "clinic_id":clinicId,
+            "clinicBasePrice":clinicPrice
 
         }
   if ($scope.spNewAppointment.addcharges == null || $scope.spNewAppointment.addcharges == undefined){
@@ -1630,11 +1697,13 @@ angular.module('myApp.controllers')
                     break;
                 }
             }
-        } else {
-            $timeout(function() {
-                console.log('function called recursively');
-                $scope.getLocalityFromPincode(pincode);
-            }, 200);
+        } else {  
+            if($scope.apptClinicId != undefined && $scope.apptClinicId != ''){
+                 $timeout(function() {
+                    console.log('function called recursively');
+                    $scope.getLocalityFromPincode(pincode);
+                }, 200);
+            }
         }
     }
 

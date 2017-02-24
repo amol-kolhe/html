@@ -49,19 +49,19 @@
                             <a ng-href="mailto:{{custReadList.email}}">{{custReadList.email}}</a>
                          </span>
         </div>
-        <div class="row middleRowContent">
+        <div class="row middleRowContent" ng-hide="apptClinicId != undefined && apptClinicId != ''">
             <span class="itemLabel2 col-xs-4">Residential Address</span>
             <span class="col-xs-8"><span class="colonSeparatorRight">:</span>{{custReadList.address}}</span>
         </div>
 
-        <div class="row middleRowContent">
+        <div class="row middleRowContent" ng-hide="apptClinicId != undefined && apptClinicId != ''">
             <span class="itemLabel2 col-xs-4">Location</span>
                         <span class="col-xs-8">
                         <span class="colonSeparatorRight">:</span>
                         {{custReadList.locality}}, {{custReadList.city}}, {{custReadList.state}}, {{custReadList.country}}</span>
         </div>
 
-        <div class="row middleRowContent">
+        <div class="row middleRowContent" ng-hide="apptClinicId != undefined && apptClinicId != ''">
             <span class="itemLabel2 col-xs-4">Pincode</span>
             <span class="col-xs-8"><span class="colonSeparatorRight">:</span>{{custReadList.pincode}}</span>
         </div>

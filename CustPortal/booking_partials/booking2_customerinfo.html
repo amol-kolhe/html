@@ -144,7 +144,7 @@
 
 			<div class="cust-info-form-group" ng-class="{'has-error-location': bookingCtrl.custInfoForm.address.$invalid && bookingCtrl.flags.custInfoFormSubmitted}">
 				<div class="left-inner-addon">
-				  	<span class="location_icon" ng-click="bookingCtrl.method.getlocation()">
+				  	<span class="location_icon" ng-click="bookingCtrl.method.getlocation()" ng-hide="bookingCtrl.model.clinicAddress != undefined">
 				  		<span class="locate-me-text">Locate me</span>
 				  		<i class="fa fa-map-marker"></i>
 				  	</span>
@@ -154,7 +154,7 @@
 					name="address" 
 					placeholder="Locate or Enter your Location"
 					class="cust-info-form-location" 
-					ng-required="true"/>
+					ng-required="true" ng-disabled="bookingCtrl.model.clinicAddress != undefined"/>
 				</div>
 				<span ng-if="bookingCtrl.custInfoForm.address.$invalid && bookingCtrl.flags.custInfoFormSubmitted">
 					<span class="validation-message-location" ng-if="bookingCtrl.custInfoForm.address.$error.required">Required</span>

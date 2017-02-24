@@ -362,7 +362,8 @@
                                     data-ng-class="{red3: adminNewAppointmentForm.adminSignInForCust.patientResidenceAddress.$invalid && adminNewAppointmentForm.adminSignInForCust.patientResidenceAddress.$dirty}"
                                     title="Enter Appointment Address"
                                     placeholder="Enter Appointment Address"
-                                    data-ng-required="true" >
+                                    data-ng-required="true" 
+                                    data-ng-disabled = "clinicAddress != ''">
 								</textarea>
                                 <br><span>{{150 - adminNewAppointmentCust.residenceAddress.length}} left</span>
                                 <br><span style="color:red" data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientResidenceAddress.$dirty && adminNewAppointmentForm.adminSignInForCust.patientResidenceAddress.$invalid">

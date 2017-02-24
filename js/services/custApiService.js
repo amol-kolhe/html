@@ -68,6 +68,11 @@ custApiService.factory('custApi', ['$http', '$cookies', function($http, $cookies
 	custApi.getCities = function(countryName) {
 		return $http.get(baseUrl + "/hrest/v1/zone/cities?apikey=" + custApi.getApiKey() + "&sid=" + custApi.getSid() + "&countrynm=" + countryName + '&time=' + new Date().getTime());
 	}
+
+	//API to get clinics for given city
+	custApi.getClinics = function(cityId) {
+		return $http.get(baseUrl + "/hrest/v1/zone/clinic?apikey=" + custApi.getApiKey() + "&sid=" + custApi.getSid() + "&cityid=" + cityId);
+	}
 	
 	//API to get zones for given city
 	custApi.getZones = function(cityId) {
@@ -108,9 +113,19 @@ custApiService.factory('custApi', ['$http', '$cookies', function($http, $cookies
 		return $http.get(baseUrl + "/hrest/v1/appt/calmon/" + yyyymmDate + "?apikey=" + custApi.getApiKey() + "&sid=" + custApi.getSid() + "&role=" + roleInst + "&pincode=" + pincode + "&zoneid=" + zoneid + "&serviceid=" + serviceId + '&time=' + new Date().getTime());
 	}
 
+	//API to get available dates in a month of a particular service for particular clinic
+	custApi.checkAvailableDatesInMonthClinic = function(roleInst, yyyymmDate, clinicId, serviceId) {
+		return $http.get(baseUrl + "/hrest/v1/appt/calmon/" + yyyymmDate + "?apikey=" + custApi.getApiKey() + "&sid=" + custApi.getSid() + "&role=" + roleInst + "&clinic_id=" + clinicId + "&serviceid=" + serviceId + '&time=' + new Date().getTime());
+	}
+
 	////API to get service provider info
 	custApi.fetchAvailableSlotsForDay = function(serviceDate, zoneid, servid, pin) {
 		return $http.get(baseUrl + "/hrest/v1/zone/avail?apikey=" + custApi.getApiKey() + "&sid=" + custApi.getSid() + "&date=" + serviceDate + "&zoneid=" + zoneid + "&servid=" + servid + "&pincode=" + pin + '&time=' + new Date().getTime());
+	}
+
+	////API to get service provider info
+	custApi.fetchAvailableSlotsForDayClinic = function(serviceDate, clinicId, servid) {
+		return $http.get(baseUrl + "/hrest/v1/zone/avail?apikey=" + custApi.getApiKey() + "&sid=" + custApi.getSid() + "&date=" + serviceDate + "&clinic_id=" + clinicId + "&servid=" + servid + '&time=' + new Date().getTime());
 	}
 
 	// API for Request a call back fucntionality

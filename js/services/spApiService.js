@@ -64,8 +64,15 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
     }
 
     //API to get service provider info
-    spApi.getSpInfo = function(serviceDate, zoneid, servid, pin) {
-        return $http.get(baseUrl + "/hrest/v1/zone/avail?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&date=" + serviceDate + "&zoneid=" + zoneid + "&servid=" + servid + "&pincode=" + pin);
+    spApi.getSpInfo = function(serviceDate, zoneid, servid, pin,clinic_id) {
+
+        if(clinic_id == undefined || clinic_id == 0){
+            return $http.get(baseUrl + "/hrest/v1/zone/avail?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&date=" + serviceDate + "&zoneid=" + zoneid + "&servid=" + servid + "&pincode=" + pin);
+
+        }else{
+            return $http.get(baseUrl + "/hrest/v1/zone/avail?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&date=" + serviceDate + "&servid=" + servid + "&clinic_id=" + clinic_id);
+        }
+        
     }
 
 

@@ -325,7 +325,7 @@ p.slider-subtext {
     border-right: 1px solid #f2f2f2;
 }
 
-.date-section, .book-now-button {
+.date-section, .book-now-button, .clinic-book-now-button {
     height: 61px;
     background: #fff;
     float: left;
@@ -394,6 +394,20 @@ p.slider-subtext {
     font-size: 1em;
     cursor: pointer;
     /*font-weight: bold;*/
+}
+.clinic-book-now-button {
+    border-radius: 30px 30px 30px 30px;
+    width: 250px;
+    background: #3ca1c7;
+    color: #fff;
+    padding: 21px 20px;
+    font-family: 'Montserrat-Regular', sans-serif;
+    font-size: 1em;
+    cursor: pointer;
+    text-align: center;
+    /* font-weight: bold; */
+    position: relative;
+    margin: -67% 0 0 94%;
 }
 .input-group .form-control {
 	height: 37px;
