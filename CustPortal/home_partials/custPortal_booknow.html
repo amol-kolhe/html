@@ -75,6 +75,24 @@
                 </div>
 
                 <div class="row middleRowContent">
+                     <div class="col-xs-6">
+                        <label>Customer Location: </label>
+                    </div>
+                    <div class="col-xs-6">
+                         <select 
+                            id="lCombo12"
+                            ng-model="cpc.selectedLocationClinic"
+                            ng-options="l.val for l in cpc.locationArr" style="width: 172px;">
+                            <option value="">Select Location</option>
+                        </select>
+                    </div>
+                </div>
+
+                 <div class="row middleRowContent">
+                    &nbsp;
+                </div>
+
+                <div class="row middleRowContent">
                     <div class="col-xs-6">
                         <label>Choose Clinic: </label>
                     </div>

@@ -115,6 +115,7 @@ angular.module('myApp.controllers')
         },
         response: null
     };
+    $scope.showResponse = false;
 
     $scope.initSpAppointments = function(timeSpan) {
         $scope.fetchSpAppointments(timeSpan);
@@ -377,7 +378,6 @@ angular.module('myApp.controllers')
                         $scope.serviceLocationLabel = 'At Home';
                     }
 
-
                 
                 })
                 .error(function(data, status, headers, config) {
@@ -520,9 +520,9 @@ angular.module('myApp.controllers')
                     }
                     appointmentHistory.push(data.payload.appointments[i].appointment);
 
-                    if(data.payload.appointments[i].appointment.clinic_id != undefined){
+                   /* if(data.payload.appointments[i].appointment.clinic_id != undefined){
                         $scope.apptClinicId = data.payload.appointments[i].appointment.clinic_id;
-                    }
+                    }*/
 
                     if(data.payload.appointments[i].appointment.cityid != undefined){
                         $scope.apptCityId = data.payload.appointments[i].appointment.cityid;
@@ -558,6 +558,8 @@ angular.module('myApp.controllers')
                 console.log("error");
             }
             $scope.custAptHistory = appointmentHistory;
+
+            //alert($scope.apptClinicId);
 
             var curr_session;
             if(data.payload.customer.use_sessions){
@@ -1382,7 +1384,7 @@ angular.module('myApp.controllers')
                 $scope.models.response.netTotalCharges = $scope.models.response.netTotalCharges + temp_add;
                 $scope.aptPackage.net_amount = $scope.models.response.netTotalCharges;
                 $scope.aptPackage.temp_net_amount = parseInt($scope.models.response.netTotalCharges / 2);
-                $scope.models.response.showResponse = true;
+                $scope.showResponse = true;
                 $scope.models.response.status = data.status;
             }
         }).
@@ -1406,7 +1408,7 @@ angular.module('myApp.controllers')
         $scope.aptPackage.additional_amount = "";
         $scope.models.calculator.package = 'Select Package';
         $scope.apptPackageError = "";
-        $scope.models.response.showResponse = false;
+        $scope.showResponse = false;
     }
 
     $scope.submitAptPayment = function() {
@@ -1628,7 +1630,7 @@ angular.module('myApp.controllers')
         $scope.aptPackage.additional_amount = 0;
         $scope.models.calculator.package = 'Select Package';
         $scope.apptPackageError = "";
-        $scope.models.response.showResponse = false;
+        $scope.showResponse = false;
     }
 
     hidePackageDialog = function() {

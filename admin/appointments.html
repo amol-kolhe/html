@@ -182,9 +182,9 @@
                         <th ng-click="sort('state')">State
                             <span class="glyphicon sort-icon" ng-show="sortKey=='state'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
                         </th>
-                        <th ng-click="sort('rating')">Rating
+                       <!-- <th ng-click="sort('rating')">Rating
                             <span class="glyphicon sort-icon" ng-show="sortKey=='rating'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
-                        </th>
+                        </th> -->
                         <th ng-click="sort('payment')">Payment
                             <span class="glyphicon sort-icon" ng-show="sortKey=='payment'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
                         </th>
@@ -211,13 +211,13 @@
                         <td style=""><a href="#" ng-click="fnFetchCust(apt);" title="Show Customer Details">{{apt.patient}}</a></td>
                         <td style="">{{apt.servicelocation}}</td>
                         <td style="">{{apt.state}}</td>
-                        <td style="" nowrap>
+                       <!-- <td style="" nowrap>
                             <span ng-class="apt.rating >= 1 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'"></span>
                             <span ng-class="apt.rating >= 2 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'"></span>
                             <span ng-class="apt.rating >= 3 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'"></span>
                             <span ng-class="apt.rating >= 4 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'"></span>
                             <span ng-class="apt.rating >= 5 ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'"></span>
-                        </td>
+                        </td>-->
                         <td style="">{{apt.payment}}</td>
                         <td style="display:none;">{{apt.gender}}</td>
                         <td style="display:none;">{{apt.service}}</td>

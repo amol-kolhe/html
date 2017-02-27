@@ -72,7 +72,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 		promocodeResultMessage: '',
 		clinic_id: '',
 		clinicPrice: '',
-		clinicAddress: ''
+		clinicAddress: '',
+		clinicName:''
 	};
 	
 	var localVariables = {
@@ -146,6 +147,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 
 			vm.model.clinicPrice = localVariables.bookNowobj.apptCost;
 			vm.model.clinicAddress = localVariables.bookNowobj.clinic_address;
+			vm.model.clinicName = localVariables.bookNowobj.clinic_name;
 
             //set clinic address as appointment address in case of clinic appointment booking:kalyani patil
 			if(vm.model.clinic_id != undefined){
@@ -722,6 +724,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 								"name": name,
 								"phone": vm.custInfoFormFields.mobile,
 								"email": vm.custInfoFormFields.email,
+								"pincode": vm.model.selectedLocation.pincodeid,
 								"address": vm.custInfoFormFields.address,
 								"problem": vm.model.problemName,
 								"gender": vm.custInfoFormFields.gender,
@@ -731,9 +734,11 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 							"apptslots": [apptstarttime],
 							"adminid": uid,
 							"comments": vm.custInfoFormFields.comments,
+							"zoneid": vm.model.selectedLocation.zoneid,
 							"serviceid": vm.model.physiotherapyId,
 							"address": vm.custInfoFormFields.address,
 							"usecustomeraddress": false,
+							"locality": vm.model.selectedLocation.localities,
 							"apptRootId": "",
 							"clinic_id": vm.model.clinic_id,
 							"clinicBasePrice": vm.model.clinicPrice
@@ -745,6 +750,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 								"name": name,
 								"phone": vm.custInfoFormFields.mobile,
 								"email": vm.custInfoFormFields.email,
+								"pincode": vm.model.selectedLocation.pincodeid,
 								"address": vm.custInfoFormFields.address,
 								"problem": vm.model.problemName,
 								"gender": vm.custInfoFormFields.gender,
@@ -754,6 +760,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 							"apptslots": [apptstarttime],
 							"adminid": uid,
 							"comments": vm.custInfoFormFields.comments,
+							"zoneid": vm.model.selectedLocation.zoneid,
 							"serviceid": vm.model.physiotherapyId,
 							"address": vm.custInfoFormFields.address,
 							"usecustomeraddress": false,

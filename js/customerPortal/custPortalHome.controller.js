@@ -176,6 +176,16 @@
 			"val": ""
 		};
 
+		vm.selectedLocationClinic = {
+			"zoneid": "",
+			"zonename": "",
+			"pin": "",
+			"pincodeid": "",
+			"localities": "",
+			"val": ""
+		};
+
+
 		vm.timeslotArray = [];
 		vm.timeslotArrayClinic = [];
 
@@ -347,7 +357,7 @@
 
 			if(vm.clinics != null && 
 				(vm.selectedDateClinic != undefined || vm.selectedDateClinic != "") &&
-				 (vm.timeslotClinic != "Select Time")) {
+				 (vm.timeslotClinic != "Select Time") && vm.selectedLocationClinic != "Select Location") {
 
                 for(var i = 0;i < $scope.clinicArr.length ; i++){
                 	//console.log($scope.clinicArr[i]);
@@ -361,7 +371,7 @@
                 }
 
 				var obj = {
-					location: $scope.clinicName,
+					location: vm.selectedLocationClinic,
 					date: vm.selectedDateClinic,
 					datesEnabled: enableDatesArray,
 					timeslot: vm.timeslotClinic,
@@ -369,7 +379,8 @@
 					cityid: cache.cityToIdMap["Pune"],
 					apptCost: $scope.clinicPrice,
 					clinic_id:vm.clinics,
-					clinic_address:$scope.clinicAddress
+					clinic_address:$scope.clinicAddress,
+					clinic_name:$scope.clinicName,
 				};
 				vm.flags.booknowSectionfieldsValid = true;
 				custportalGetSetService.setBooknowObj(obj);
@@ -458,6 +469,7 @@
 			vm.clinics = 'Select Clinic';
 			vm.timeslotClinic = 'Select Time';
 			vm.timeslotArrayClinic = [];
+			vm.selectedLocationClinic = [];
             
 			 ngDialog.openConfirm({
 		            template: 'ClinicDialog',
@@ -469,7 +481,6 @@
                    //console.log(vm.clinics);
                    //console.log(vm.selectedDateClinic);
                    //console.log(vm.timeslotClinic);
-
                    vm.redirectToClinicBooking();
                        
 		        },
