@@ -7559,7 +7559,7 @@ angular.module('myApp.controllers')
 				var con = confirm("Are you sure you want to deactivate this clinic.");
 			*/
 
-			if($scope.clinicAction.password == 'healyos1234'){
+			if($scope.clinicAction.password == 'paradox123'){
 				$scope.clinicAction.password = "";
 				rec.is_active = is_active;
 
