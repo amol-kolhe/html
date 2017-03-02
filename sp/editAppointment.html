@@ -6,7 +6,8 @@
                 <span>Appointment Details</span>
                 <span style="float:right;">    
                     <span>
-                        <span ng-show="(!adminNewAppointmentCust.customer.is_package_assign && adminNewAppointmentCust.appointment.state == 'Confirmed' && adminNewAppointmentCust.appointment.current_session_no == '0' && lastApptTime == adminNewAppointmentCust.appointment.starttime)"
+                        <span ng-show="(!adminNewAppointmentCust.customer.is_package_assign && adminNewAppointmentCust.appointment.state == 'Confirmed' && adminNewAppointmentCust.appointment.current_session_no == '0' && lastApptTime == adminNewAppointmentCust.appointment.starttime) &&
+                        adminNewAppointmentCust.appointment.clinic_id == undefined"
                             title="Select Package"
                             class="clickable glyphicon glyphicon-briefcase"
                             style="color:red;margin-right:15px; font-size: 15px;"
