@@ -4808,7 +4808,6 @@ angular.module('myApp.controllers')
 				existingWorkTimeSlots = [];
 				adminApi.getSpMonthlyWtimeAndOffSlots(dataObj)
 				.success(function(data, status, headers, config) {
-					console.log(data.payload);
 					$scope.SpWorkTime = data.payload.sp_monthlyWtimeAndOffSlots;
 					var record_1 = null;
 					record_1 = data.payload.sp_monthlyWtimeAndOffSlots;
@@ -4821,11 +4820,12 @@ angular.module('myApp.controllers')
 							});
 						}
 					});
+
 					var flags = [], output = [], l = existingWorkTimeSlots.length, i;
 					for( i=0; i<l; i++) {
-					    if( flags[existingWorkTimeSlots[i].st] && flags[existingWorkTimeSlots[i].et]) continue;
-					    flags[existingWorkTimeSlots[i].st] = true; flags[existingWorkTimeSlots[i].et] = true;
-					    output.push({"st": existingWorkTimeSlots[i].st, "et": existingWorkTimeSlots[i].et});
+					    if(flags[existingWorkTimeSlots[i].st, existingWorkTimeSlots[i].et]) continue;
+					    flags[existingWorkTimeSlots[i].st, existingWorkTimeSlots[i].et] = true;
+					    output.push({"st": existingWorkTimeSlots[i].st,"et": existingWorkTimeSlots[i].et});
 					}
 
 					existingWorkTimeSlots = output;
@@ -4940,8 +4940,7 @@ angular.module('myApp.controllers')
 							newWorkTimeSlots.push({"st" : st, "et" : et});
 						});
 					}
-					console.log(existingWorkTimeSlots);
-					console.log(newWorkTimeSlots);
+
 					if(existingWorkTimeSlots.length != 0){
 						existingWorkTimeSlots.forEach(function(item_4) {
 							newWorkTimeSlots.forEach(function(item_5) {
@@ -5198,7 +5197,8 @@ angular.module('myApp.controllers')
 			$scope.wrkHrErrorSlot = true;
 		}
 
-		// removing duplicate zone ids
+		//==================================================================FOR ZONE=================================================================================
+
 		var finalZoneWorkingTime = [];
 		for(var index = 0 ; index < zoneWorkingTime.length ; index++) {
 			var obj = {
@@ -5227,6 +5227,7 @@ angular.module('myApp.controllers')
 					finalObj.sp_zwtime = angular.copy(arrZwtime);
 					finalZoneWorkingTime.push(finalObj);
 				}
+				
 			} else if ((finalZoneWorkingTime != undefined) && (finalZoneWorkingTime.length == 0)){
 				var arrZwtime = [{}];
 
@@ -5239,6 +5240,83 @@ angular.module('myApp.controllers')
 			}
 		}
 
+		for(var cnt1 = 0 ; cnt1 < finalZoneWorkingTime.length ; cnt1++) {
+			var obj1 = null;
+			obj1 = $scope.AllData.sp_monthlyWtimeAndOffSlots;
+			for(var cnt2 = 0 ; cnt2 < obj1.length; cnt2++) {
+				if($scope.AllData.sp_monthlyWtimeAndOffSlots[cnt2].sp_zoneSpecificWtimeDetail != undefined){
+					var obj2 = null;
+					obj2 = $scope.AllData.sp_monthlyWtimeAndOffSlots[cnt2].sp_zoneSpecificWtimeDetail;
+					for(var cnt3 = 0 ; cnt3 < obj2.length; cnt3++) {
+						if($scope.AllData.sp_monthlyWtimeAndOffSlots[cnt2].sp_zoneSpecificWtimeDetail[cnt3].sp_zwtime != undefined){
+							var db_zone_id = null;
+							var db_zone_id = obj2[cnt3].sp_zoneid;
+							if (db_zone_id == finalZoneWorkingTime[cnt1].sp_zoneid) {
+								var obj3 = null;
+								obj3 = $scope.AllData.sp_monthlyWtimeAndOffSlots[cnt2].sp_zoneSpecificWtimeDetail[cnt3].sp_zwtime;
+								for(var cnt4 = 0 ; cnt4 < obj3.length; cnt4++) {
+									if(obj3[cnt4].st != "0000" && obj3[cnt4].et != "0000"){
+										var db_zone_st = null;
+										var db_zone_et = null;
+										var db_zone_st = obj3[cnt4].st;
+										var db_zone_et = obj3[cnt4].et;
+
+										var time_st = db_zone_st;
+										var hours_st = Number(time_st.match(/^(\d+)/)[1]);
+										var minutes_st = Number(time_st.match(/:(\d+)/)[1]);
+										var AMPM_st = time_st.match(/\s(.*)$/)[1];
+										if(AMPM_st == "PM" && hours_st<12) hours_st = hours_st+12;
+										if(AMPM_st == "AM" && hours_st==12) hours_st = hours_st-12;
+										var sHours_st = hours_st.toString();
+										var sMinutes_st = minutes_st.toString();
+										if(hours_st<10) sHours_st = "0" + sHours_st;
+										if(minutes_st<10) sMinutes_st = "0" + sMinutes_st;
+										db_zone_st = sHours_st+sMinutes_st;
+
+										var time_et = db_zone_et;
+										var hours_et = Number(time_et.match(/^(\d+)/)[1]);
+										var minutes_et = Number(time_et.match(/:(\d+)/)[1]);
+										var AMPM_et = time_et.match(/\s(.*)$/)[1];
+										if(AMPM_et == "PM" && hours_et<12) hours_et = hours_et+12;
+										if(AMPM_et == "AM" && hours_et==12) hours_et = hours_et-12;
+										var sHours_et = hours_et.toString();
+										var sMinutes_et = minutes_et.toString();
+										if(hours_et<10) sHours_et = "0" + sHours_et;
+										if(minutes_et<10) sMinutes_et = "0" + sMinutes_et;
+										db_zone_et = sHours_et+sMinutes_et;
+
+										finalZoneWorkingTime[cnt1].sp_zwtime.push({
+											"start_time": db_zone_st,
+											"end_time": db_zone_et
+										});
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		var flags = [], output = [], newoutput = [], l = finalZoneWorkingTime.length, i, j, selectedSlots = [];
+		for( i=0; i<l; i++) {
+			var l1 = finalZoneWorkingTime[i].sp_zwtime.length;
+			for( j=0; j<l1; j++) {
+			    if(flags[finalZoneWorkingTime[i].sp_zwtime[j].start_time, finalZoneWorkingTime[i].sp_zwtime[j].end_time]) continue;
+			    flags[finalZoneWorkingTime[i].sp_zwtime[j].start_time, finalZoneWorkingTime[i].sp_zwtime[j].end_time] = true;
+			    output.push({"start_time": finalZoneWorkingTime[i].sp_zwtime[j].start_time, "end_time": finalZoneWorkingTime[i].sp_zwtime[j].end_time});
+			    var dbWrkSlot = {};
+				dbWrkSlot.start_time = finalZoneWorkingTime[i].sp_zwtime[j].start_time;
+				dbWrkSlot.end_time = finalZoneWorkingTime[i].sp_zwtime[j].end_time;
+				selectedSlots.push(dbWrkSlot);
+			}
+			newoutput.push({"sp_zoneid":finalZoneWorkingTime[i].sp_zoneid, "sp_zwtime":output});
+		}
+
+		finalZoneWorkingTime = newoutput;
+
+		//==================================================================FOR CLINIC=================================================================================
+		
 		var finalClinicWorkingTime = [];
 		for(var index = 0 ; index < clinicWorkingTime.length ; index++) {
 			var obj = {
@@ -5278,6 +5356,85 @@ angular.module('myApp.controllers')
 				finalClinicWorkingTime.push(finalObj);
 			}
 		}
+
+		for(var cnt1 = 0 ; cnt1 < finalClinicWorkingTime.length ; cnt1++) {
+			var obj1 = null;
+			obj1 = $scope.AllData.sp_monthlyWtimeAndOffSlots;
+			for(var cnt2 = 0 ; cnt2 < obj1.length; cnt2++) {
+				if($scope.AllData.sp_monthlyWtimeAndOffSlots[cnt2].sp_clinicSpecificWtimeDetail != undefined){
+					var obj2 = null;
+					obj2 = $scope.AllData.sp_monthlyWtimeAndOffSlots[cnt2].sp_clinicSpecificWtimeDetail;
+					for(var cnt3 = 0 ; cnt3 < obj2.length; cnt3++) {
+						if($scope.AllData.sp_monthlyWtimeAndOffSlots[cnt2].sp_clinicSpecificWtimeDetail[cnt3].sp_cwtime != undefined){
+							var db_clinic_id = null;
+							var db_clinic_id = obj2[cnt3].sp_clinicid;
+							if (db_clinic_id == finalClinicWorkingTime[cnt1].sp_clinicid) {
+								var obj3 = null;
+								obj3 = $scope.AllData.sp_monthlyWtimeAndOffSlots[cnt2].sp_clinicSpecificWtimeDetail[cnt3].sp_cwtime;
+								for(var cnt4 = 0 ; cnt4 < obj3.length; cnt4++) {
+									if(obj3[cnt4].st != "0000" && obj3[cnt4].et != "0000"){
+										var db_clinic_st = null;
+										var db_clinic_et = null;
+										var db_clinic_st = obj3[cnt4].st;
+										var db_clinic_et = obj3[cnt4].et;
+
+										var time_clinic_st = db_clinic_st;
+										var hours_clinic_st = Number(time_clinic_st.match(/^(\d+)/)[1]);
+										var minutes_clinic_st = Number(time_clinic_st.match(/:(\d+)/)[1]);
+										var AMPM_clinic_st = time_clinic_st.match(/\s(.*)$/)[1];
+										if(AMPM_clinic_st == "PM" && hours_clinic_st<12) hours_clinic_st = hours_clinic_st+12;
+										if(AMPM_clinic_st == "AM" && hours_clinic_st==12) hours_clinic_st = hours_clinic_st-12;
+										var sHours_clinic_st = hours_clinic_st.toString();
+										var sMinutes_clinic_st = minutes_clinic_st.toString();
+										if(hours_clinic_st<10) sHours_clinic_st = "0" + sHours_clinic_st;
+										if(minutes_clinic_st<10) sMinutes_clinic_st = "0" + sMinutes_clinic_st;
+										db_clinic_st = sHours_clinic_st+sMinutes_clinic_st;
+
+										var time_clinic_et = db_clinic_et;
+										var hours_clinic_et = Number(time_clinic_et.match(/^(\d+)/)[1]);
+										var minutes_clinic_et = Number(time_clinic_et.match(/:(\d+)/)[1]);
+										var AMPM_clinic_et = time_clinic_et.match(/\s(.*)$/)[1];
+										if(AMPM_clinic_et == "PM" && hours_clinic_et<12) hours_clinic_et = hours_clinic_et+12;
+										if(AMPM_clinic_et == "AM" && hours_clinic_et==12) hours_clinic_et = hours_clinic_et-12;
+										var sHours_clinic_et = hours_clinic_et.toString();
+										var sMinutes_clinic_et = minutes_clinic_et.toString();
+										if(hours_clinic_et<10) sHours_clinic_et = "0" + sHours_clinic_et;
+										if(minutes_clinic_et<10) sMinutes_clinic_et = "0" + sMinutes_clinic_et;
+										db_clinic_et = sHours_clinic_et+sMinutes_clinic_et;
+
+										finalClinicWorkingTime[cnt1].sp_cwtime.push({
+											"start_time": db_clinic_st,
+											"end_time": db_clinic_et
+										});
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		var flags = [], output = [], newoutput = [], l = finalClinicWorkingTime.length, i, j;
+		for( i=0; i<l; i++) {
+			var l1 = finalClinicWorkingTime[i].sp_cwtime.length;
+			for( j=0; j<l1; j++) {
+			    if(flags[finalClinicWorkingTime[i].sp_cwtime[j].start_time, finalClinicWorkingTime[i].sp_cwtime[j].end_time]) continue;
+			    flags[finalClinicWorkingTime[i].sp_cwtime[j].start_time, finalClinicWorkingTime[i].sp_cwtime[j].end_time] = true;
+			    output.push({"start_time": finalClinicWorkingTime[i].sp_cwtime[j].start_time, "end_time": finalClinicWorkingTime[i].sp_cwtime[j].end_time});
+			    var dbWrkSlot = {};
+				dbWrkSlot.start_time = finalClinicWorkingTime[i].sp_cwtime[j].start_time;
+				dbWrkSlot.end_time = finalClinicWorkingTime[i].sp_cwtime[j].end_time;
+				selectedSlots.push(dbWrkSlot);
+			}
+			newoutput.push({"sp_clinicid":finalClinicWorkingTime[i].sp_clinicid, "sp_cwtime":output});
+		}
+
+		finalClinicWorkingTime = newoutput;
+
+		console.log(selectedSlots);
+		console.log(finalZoneWorkingTime);
+		console.log(finalClinicWorkingTime);
 
 		if (!($scope.dateErrorFlag)) {
 			var dataObj = {
@@ -5722,6 +5879,7 @@ angular.module('myApp.controllers')
 
 			adminApi.getSpMonthlyWtimeAndOffSlots(dataObj)
 			.success(function(data, status, headers, config) {
+				$scope.AllData = data.payload;
 				$scope.arrWTime = data.payload.sp_monthlyWtimeAndOffSlots;
 				$scope.table1ItemsPerPage = 5;
 				for(var i = 0 ; i < $scope.arrWTime.length ; i++) {
@@ -5946,6 +6104,7 @@ angular.module('myApp.controllers')
 
 			adminApi.getSpMonthlyWtimeAndOffSlots(dataObj)
 			.success(function(data, status, headers, config) {
+				$scope.AllData = data.payload;
 				$scope.arrWTime = data.payload.sp_monthlyWtimeAndOffSlots;
 
 				$scope.table1ItemsPerPage = 5;
@@ -7963,7 +8122,7 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.checkBoxSelected = function (wrkHrSlot, $index) {
-		console.log(wrkHrSlot.selectZoneIds);
+		//console.log(wrkHrSlot.selectZoneIds);
 		if ((wrkHrSlot.selected == true) && (wrkHrSlot.selectZoneIds != undefined) && (wrkHrSlot.selectZoneIds.length > 0) && ($scope.selectZoneIdsArr != undefined) && ($scope.selectZoneIdsArr.length > 0)) {
 			
 			var temporaryArray = angular.copy($scope.wrkHrsAllSlots);
