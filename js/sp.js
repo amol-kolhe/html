@@ -51,6 +51,9 @@ angular.module('myApp.controllers')
         package_id : "",
         package_code : "",
         no_of_sessions : "",
+        free_cancellation_ratio : "",
+        free_cancellation_days : "",
+        valid_days : "",
         min_sessions : "",
         max_sessions : "",
         net_amount : "",
@@ -1295,16 +1298,26 @@ angular.module('myApp.controllers')
     }
 
     $scope.submitAptPackage = function() {
-        if($scope.apptPackage.packageForm.additional_amount.$valid && $scope.apptPackage.packageForm.no_of_sessions.$valid && $scope.aptPackage.no_of_sessions >= $scope.aptPackage.min_sessions && $scope.aptPackage.no_of_sessions <= $scope.aptPackage.max_sessions)
+        if($scope.apptPackage.packageForm.free_cancellation_days.$valid && $scope.apptPackage.packageForm.valid_days.$valid && $scope.apptPackage.packageForm.additional_amount.$valid && $scope.apptPackage.packageForm.no_of_sessions.$valid && $scope.aptPackage.no_of_sessions >= $scope.aptPackage.min_sessions && $scope.aptPackage.no_of_sessions <= $scope.aptPackage.max_sessions)
         {
             if($scope.custReadList.custwallet.walletbalance >= $scope.aptPackage.net_amount)
             {
+                /*var free_cancellation_days = 0;
+                if($scope.aptPackage.no_of_sessions > 0 && $scope.aptPackage.free_cancellation_ratio > 0){
+                    free_cancellation_days = (($scope.aptPackage.no_of_sessions * $scope.aptPackage.free_cancellation_ratio) / 100);
+                    free_cancellation_days = Math.round(free_cancellation_days);
+                }*/
+                
                 var data = {
                     appt_id : $scope.adminNewAppointmentCust.appointment._id,
                     package_id: $scope.aptPackage.package_id,
                     package_code: $scope.aptPackage.package_code,
                     no_of_sessions: $scope.aptPackage.no_of_sessions,
-                    additional_amount: $scope.aptPackage.additional_amount
+                    additional_amount: $scope.aptPackage.additional_amount,
+                    //free_cancellation_ratio:  $scope.aptPackage.free_cancellation_ratio,
+                    free_cancellation_days:  $scope.aptPackage.free_cancellation_days,
+                    valid_days:  $scope.aptPackage.valid_days,
+                    spid: $scope.adminNewAppointmentCust.appointment.spid
                 }
 
                 spApi.updatePackage($scope.adminNewAppointmentCust.appointment.patientid, data)
@@ -1327,12 +1340,22 @@ angular.module('myApp.controllers')
                     
                     if($scope.custReadList.custwallet.walletbalance >= $scope.aptPackage.temp_net_amount)
                     {
+                        /*var free_cancellation_days = 0;
+                        if($scope.aptPackage.no_of_sessions > 0 && $scope.aptPackage.free_cancellation_ratio > 0){
+                            free_cancellation_days = (($scope.aptPackage.no_of_sessions * $scope.aptPackage.free_cancellation_ratio) / 100);
+                            free_cancellation_days = Math.round(free_cancellation_days);
+                        }*/
+
                         var data = {
                             appt_id : $scope.adminNewAppointmentCust.appointment._id,
                             package_id: $scope.aptPackage.package_id,
                             package_code: $scope.aptPackage.package_code,
                             no_of_sessions: $scope.aptPackage.no_of_sessions,
-                            additional_amount: $scope.aptPackage.additional_amount
+                            additional_amount: $scope.aptPackage.additional_amount,
+                            //free_cancellation_ratio:  $scope.aptPackage.free_cancellation_ratio,
+                            free_cancellation_days:  $scope.aptPackage.free_cancellation_days,
+                            valid_days:  $scope.aptPackage.valid_days,
+                            spid: $scope.adminNewAppointmentCust.appointment.spid
                         }
 
                         spApi.updatePackage($scope.adminNewAppointmentCust.appointment.patientid, data)
@@ -1365,7 +1388,24 @@ angular.module('myApp.controllers')
         }
     }
 
-    $scope.calculateCost = function() {
+    $scope.calculateCost = function(promo) {
+        if(promo != undefined){
+            $scope.models.calculator.package = promo.promocode;
+            $scope.aptPackage.package_id = promo._id;
+            $scope.aptPackage.package_code = promo.promocode;
+            $scope.aptPackage.min_sessions = promo.min_sessions;
+            $scope.aptPackage.max_sessions = promo.max_sessions;
+            $scope.aptPackage.no_of_sessions = promo.min_sessions;
+            $scope.aptPackage.free_cancellation_ratio = promo.free_cancellation_ratio;
+            $scope.aptPackage.valid_days = promo.valid_days;
+            $scope.cancellation_fee = promo.cancellation_fee;
+
+            $scope.aptPackage.free_cancellation_days = 0;
+            if($scope.aptPackage.no_of_sessions > 0 && $scope.aptPackage.free_cancellation_ratio > 0){
+                $scope.aptPackage.free_cancellation_days = (($scope.aptPackage.no_of_sessions * $scope.aptPackage.free_cancellation_ratio) / 100);
+            }
+        }
+
         var temp_add = null;
         if($scope.aptPackage.no_of_sessions > 0 && $scope.aptPackage.additional_amount > 0){
             temp_add = $scope.aptPackage.additional_amount * $scope.aptPackage.no_of_sessions;

@@ -390,7 +390,7 @@
                                         <li style="padding: 0" 
                                             ng-model = "aptPackage.package_code"
                                             ng-repeat="promo in models.packagecodes"
-                                            ng-click="((models.calculator.package = promo.promocode) && (aptPackage.package_id = promo._id) && (aptPackage.package_code = promo.promocode) && (aptPackage.min_sessions = promo.min_sessions) && (aptPackage.max_sessions = promo.max_sessions) && (aptPackage.no_of_sessions = promo.min_sessions)) && calculateCost()"
+                                            ng-click="calculateCost(promo)"
                                             ng-class="{active: models.calculator.package == promo.promocode}">
                                             <a href="#">
                                                 <span style="min-width: 130px; display: inline-block;">{{promo.promocode}}</span>
@@ -431,7 +431,7 @@
                             <span class="itemLabel2 col-xs-4">No. of Sessions <span class="colonSeparator">:</span></span>
                             <div class="col-xs-8">
                                 <input type="text"
-                                        ng-keyup="calculateCost()"
+                                        ng-keyup="calculateCost(undefined)"
                                         ng-model="aptPackage.no_of_sessions"
                                         class="clstxt3 form-control"
                                         ng-required = "true"
@@ -446,10 +446,46 @@
                             </div>
                         </div>
                         <div class="row middleRowContent">
+                            <span class="itemLabel2 col-xs-4">Free Cancellation<span class="colonSeparator">:</span></span>
+                            <div class="col-xs-8">
+                                    <input type="text"
+                                            ng-model="aptPackage.free_cancellation_days"
+                                            class="clstxt3 form-control"
+                                            ng-required = "true"
+                                            ng-pattern="/(^\d*$)/"
+                                            data-ng-blur = "freecancellationdays = true"
+                                            name="free_cancellation_days" 
+                                            style="min-width: 250px; max-height: 350px" />
+                                <span style="color: red;" ng-show="apptPackage.packageForm.free_cancellation_days.$invalid && freecancellationdays">
+                                Invalid content in Free Cancellation.
+                                </span>
+                                <!--<span ng-show="free_cancellation_days > 0">
+                                For {{free_cancellation_days | number:0}} Appointments Cancellation Is Free. From {{free_cancellation_days+1 | number:0}} Appointment Will Charge &#8377; {{cancellation_fee}} Per Appointment.
+                                </span>-->
+                            </div>
+                        </div>
+                        <div class="row middleRowContent">
+                            <span class="itemLabel2 col-xs-4">Valid Days <span class="colonSeparator">:</span></span>
+                            <div class="col-xs-8">
+                                <input type="text"
+                                        ng-model="aptPackage.valid_days"
+                                        class="clstxt3 form-control"
+                                        ng-required = "true"
+                                        ng-pattern="/(^\d*$)/"
+                                        data-ng-blur = "validdays = true"
+                                        name="valid_days" 
+                                        style="min-width: 250px; max-height: 350px" />
+                                <span style="color: red;"
+                                    ng-show="apptPackage.packageForm.valid_days.$invalid && validdays">
+                                    Invalid content in Valid Days.
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row middleRowContent">
                             <span class="itemLabel2 col-xs-4">Additional Amount (Per Appointment)<span class="colonSeparator">:</span></span>
                             <div class="col-xs-8">
                                 <input type="text"
-                                        ng-keyup="calculateCost()"
+                                        ng-keyup="calculateCost(undefined)"
                                         ng-model="aptPackage.additional_amount"
                                         class="clstxt3 form-control"
                                         ng-required = "true"
