@@ -61,6 +61,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 		$scope.users1.email = "";
 
 		$scope.actionableAppts = { count : 0 };
+		$scope.cancelActionableAppts = { count : 0 };
 
 		$scope.adminAptPayment = {refno : ""};
 		$scope.fetched = {Appointment : false};
@@ -85,15 +86,18 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 			{title: 'New Appointment', url: 'adminNewAppointment.html', clsclass: 'clsblack'},
 			{title: 'Customers', url: 'cust.html', clsclass: 'clsblack'},
 			// {title: 'Payment', url: 'payments.html', clsclass: 'clsblack'},
-			{title: 'Leave Management', url: 'reports.html', clsclass: 'clsgray'},
-			{title: 'Reports', url: 'reports.html', clsclass: 'clsgray'},
+			//{title: 'Leave Management', url: 'reports.html', clsclass: 'clsgray'},
+			//{title: 'Reports', url: 'reports.html', clsclass: 'clsgray'},
 			{title: 'Actionables', url: 'actionables.html', clsclass: 'clsgray'},
 			{title: 'Zone Management', url: 'zoneManagement.html', clsclass: 'clsgray'},
 			{title: 'Service Provider Management', url: 'spManagement.html', clsclass: 'clsgray'},
 			{title: 'Promotional Code Management', url: 'promotionalCodeMgmt.html', clsclass: 'clsgray'},
 			{title: 'Cost Calculator', url: 'costcalculator.html', clsclass: 'clsgray'},
 			{title: 'Clinics Management', url: 'clinicManagement.html', clsclass: 'clsgray'},
-			{title: 'Policy Management', url: 'policyManagement.html', clsclass: 'clsgray'}
+
+			{title: 'Policy Management', url: 'policyManagement.html', clsclass: 'clsgray'},
+			{title: 'Cancel Actionables', url: 'cancel_actionables.html', clsclass: 'clsgray'}
+
 			];
 
 		$scope.custMenus = [{title: "My Appointments", url: 'appointments.html'},

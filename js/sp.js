@@ -686,6 +686,8 @@ angular.module('myApp.controllers')
                 $scope.package_code = data.payload.customer.package_code;
                 $scope.package_id = data.payload.customer.package_id;
                 $scope.no_of_sessions = data.payload.customer.no_of_sessions;
+                $scope.package_created_on = data.payload.customer.package_created_on;
+                $scope.approved_valid_days = data.payload.customer.approved_valid_days;
                 $scope.patientid = data.payload.appointment.patientid;
                 if(data.payload.customer.additional_amount){
                     $scope.additional_amount = parseFloat(data.payload.customer.additional_amount);
@@ -1151,6 +1153,19 @@ angular.module('myApp.controllers')
             clinicId = $scope.apptClinicId;
         }
 
+        var package_created_on;
+        if($scope.package_created_on != 0 && $scope.package_created_on != undefined){
+            package_created_on = $scope.package_created_on;
+        }else{
+            package_created_on = 0;
+        }
+
+        var approved_valid_days;
+        if($scope.approved_valid_days != 0 && $scope.approved_valid_days != undefined){
+            approved_valid_days = $scope.approved_valid_days;
+        }else{
+            approved_valid_days = 0;
+        }
 
 
         var idObj = $cookies.get('u_id');
@@ -1169,7 +1184,9 @@ angular.module('myApp.controllers')
                 "no_of_sessions":no_of_sessions,
                 "is_package_assign":$scope.is_package_assign,
                 "additional_amount":$scope.additional_amount,
-                "use_sessions":$scope.use_sessions
+                "use_sessions":$scope.use_sessions,
+                "package_created_on":package_created_on,
+                "approved_valid_days":approved_valid_days
             },
             "apptslots": $scope.spNewAppointment.selectedTimeSlots,
             "adminid": idObj,

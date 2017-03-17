@@ -42,6 +42,8 @@ angular.module('myApp.controllers')
 		finalcost: "",
 		additionalSpAmntDesc:"",
 	};
+
+	$scope.cancelActionableCount = 0;
 	$scope.calculatedAptAmount = "";
 	$scope.aptSlotCount = 0;
     $scope.aptSlotFlag = false;
@@ -926,6 +928,13 @@ angular.module('myApp.controllers')
 		}else{
 			clinicBasePriceVal = 0;
 		}
+
+		/*var package_created_on;
+		if($scope.package_created_on != 0 && $scope.package_created_on != undefined){
+			package_created_on = $scope.package_created_on
+		}else{
+			package_created_on = 0;
+		}*/
 		
 		var idObj = $cookies.get('u_id');
 
@@ -1270,6 +1279,21 @@ angular.module('myApp.controllers')
         	clinicId = $scope.apptClinicId;
         }
 
+        var package_created_on;
+		if($scope.package_created_on != 0 && $scope.package_created_on != undefined){
+			package_created_on = $scope.package_created_on
+		}else{
+			package_created_on = 0;
+		}
+
+
+		var approved_valid_days;
+		if($scope.approved_valid_days != 0 && $scope.approved_valid_days != undefined){
+			approved_valid_days = $scope.approved_valid_days
+		}else{
+			approved_valid_days = 0;
+		}
+
 
 		var idObj = $cookies.get('u_id');
 		var dataObjSubmitAptForm = {
@@ -1286,7 +1310,9 @@ angular.module('myApp.controllers')
 				"no_of_sessions":no_of_sessions,
                 "is_package_assign":$scope.is_package_assign,
                 "additional_amount":$scope.additional_amount,
-                "use_sessions":$scope.use_sessions
+                "use_sessions":$scope.use_sessions,
+                "package_created_on":package_created_on,
+                "approved_valid_days":approved_valid_days
 			},
 			"apptslots": $scope.spNewAppointment.selectedTimeSlots,
 			// "apptstarttime": apptstarttime,
@@ -1560,6 +1586,8 @@ angular.module('myApp.controllers')
                 $scope.package_code = data.payload.customer.package_code;
                 $scope.package_id = data.payload.customer.package_id;
                 $scope.no_of_sessions = data.payload.customer.no_of_sessions;
+                $scope.package_created_on = data.payload.customer.package_created_on;
+                $scope.approved_valid_days = data.payload.customer.approved_valid_days;
                 $scope.patientid = data.payload.appointment.patientid;
                 if(data.payload.customer.additional_amount){
                     $scope.additional_amount = parseFloat(data.payload.customer.additional_amount);
@@ -3082,6 +3110,25 @@ angular.module('myApp.controllers')
 
 	$scope.searchActionableAppts();
 
+    $scope.searchCancelActionableRecords = function() {
+		adminApi.searchCancelActionableRecords()
+		.success(function(data, status, headers, config){
+			$scope.cancelActionableRecordsList = [];
+			for(var i = 0; i < data.payload.length; i++) {
+				var obj = data.payload[i];
+				$scope.cancelActionableRecordsList.push(obj);
+			}
+			$scope.cancelActionableAppts.count = $scope.cancelActionableRecordsList.length;
+			
+		})
+		.error(function(data, status, headers, config){
+			$scope.aptErrorMsg = data.error.message;
+			$scope.checkSessionTimeout(data);
+		});
+	}
+
+	$scope.searchCancelActionableRecords();
+
 	$scope.approveActionable = function(appt) {
 		var data = appt.appointment.approvalDetails;
 		data.requestedByIdString = data.requestedById;
@@ -3090,6 +3137,35 @@ angular.module('myApp.controllers')
 		adminApi.setActionable(appt.appointment._id, data)
 		.success(function(data, status, headers, config) {
 			$scope.searchActionableAppts();
+			alert("Action performed successfully!");
+		})
+		.error(function(data, status, headers, config) {
+			alert("Failed to perform action! " + data.error.message);
+			$scope.checkSessionTimeout(data);
+		})
+	}
+
+	$scope.approveCancelActionable = function(rec) {
+
+		var data = {
+			"_id": rec._id,
+			"customer_name": rec.customer_name,
+			"customer_id": rec.customer_id,
+			"service_provider_name": rec.service_provider_name,
+			"service_provider_id": rec.service_provider_id,
+			"package_id": rec.package_id,
+			"package_code": rec.package_code,
+			"approved_on":Math.floor(Date.now() / 1000),
+			"status":"approved",
+			"approved_free_cancellation_days":rec.propose_free_cancellation_days,
+			"approved_valid_days":rec.propose_valid_days,
+			"created_on":rec.created_on,
+			
+		};
+
+		adminApi.setCancelActionable(data)
+		.success(function(data, status, headers, config) {
+			$scope.searchCancelActionableRecords();
 			alert("Action performed successfully!");
 		})
 		.error(function(data, status, headers, config) {
@@ -6770,6 +6846,12 @@ angular.module('myApp.controllers')
 				item.noofappt = item.noofappt;
 				item.max_sessions = item.max_sessions;
 				item.min_sessions = item.min_sessions;
+				item.free_cancellation_percent = item.free_cancellation_ratio;
+                item.before_cancellation_time = item.before_cancellation_time;
+                item.valid_days = item.valid_days;
+                item.cancellation_fee = item.cancellation_fee;
+                item.no_show_fee = item.no_show_fee;
+
 			});
 		}).
 		error(function (data, status, headers, config) {
@@ -6831,11 +6913,18 @@ angular.module('myApp.controllers')
 				"validTillError": false,
 				"discountError": false,
 				"discTypeError": false,
+				"freecancellationpercentError":false,
 				"isRecValid": false,
 				"noofapptRequired": false,
 				"isNewPromo": true,
 				"max_sessions":1,
-				"min_sessions":1
+				"min_sessions":1,
+				"free_cancellation_percent:":0,
+				"before_cancellation_time":0,
+				"valid_days":0,
+				"cancellation_fee":0,
+				"no_show_fee":0
+			
 			}
 		);
 	}
@@ -6878,7 +6967,12 @@ angular.module('myApp.controllers')
 				"disctype":	rec.disctype,
 				"max_sessions":rec.max_sessions,
 				"min_sessions":rec.min_sessions,
-				"noofappt": rec.noofappt
+				"noofappt": rec.noofappt,
+				"free_cancellation_ratio":rec.free_cancellation_percent,
+				"before_cancellation_time":rec.before_cancellation_time,
+				"valid_days":rec.valid_days,
+				"cancellation_fee":rec.cancellation_fee,
+				"no_show_fee":rec.no_show_fee
 				
 			};
 			if(rec.isNewPromo == true) {
@@ -7016,6 +7110,41 @@ angular.module('myApp.controllers')
 			rec.minmaxcompareError = false;
 		}
 
+		if((rec.free_cancellation_percent == undefined || rec.free_cancellation_percent == "" || rec.free_cancellation_percent < 0)) {
+			rec.freecancellationpercentError = true;
+		}
+		else{
+			rec.freecancellationpercentError = false;
+		}
+
+		if((rec.before_cancellation_time == undefined || rec.before_cancellation_time == "" || rec.before_cancellation_time < 0)) {
+			rec.beforecancellationtimeError = true;
+		}
+		else{
+			rec.beforecancellationtimeError = false;
+		}
+
+		if((rec.valid_days == undefined || rec.valid_days == "" || rec.valid_days < 0)) {
+			rec.validdaysError = true;
+		}
+		else{
+			rec.validdaysError = false;
+		}
+
+		if((rec.cancellation_fee == undefined || rec.cancellation_fee == "" || rec.cancellation_fee < 0)) {
+			rec.cancellationfeeError = true;
+		}
+		else{
+			rec.cancellationfeeError = false;
+		}
+
+		if((rec.no_show_fee == undefined || rec.no_show_fee == "" || rec.no_show_fee < 0)) {
+			rec.noshowfeeError = true;
+		}
+		else{
+			rec.noshowfeeError = false;
+		}
+
 		if(rec.promoNameError == false && 
 			rec.promodescError == false && 
 			rec.validFromError == false &&
@@ -7024,7 +7153,12 @@ angular.module('myApp.controllers')
 			rec.noofapptRequired == false &&
 			rec.discTypeError == false &&
 			rec.maxsessionsError == false &&
-			rec.minsessionsError == false) {
+			rec.minsessionsError == false &&
+			rec.freecancellationpercentError == false &&
+			rec.beforecancellationtimeError == false &&
+			rec.validdaysError == false &&
+			rec.cancellationfeeError == false &&
+			rec.noshowfeeError == false) {
 			rec.isRecValid = true;
 			return true;
 		} else { rec.isRecValid = false; rec.action = 'edit'; return false; }

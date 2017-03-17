@@ -143,6 +143,10 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		return $http.get(baseUrl + "/hrest/v1/appt?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0&where=timespan=ALLANDstate=7");
 	};
 
+	adminApi.searchCancelActionableRecords = function() {
+		return $http.get(baseUrl + "/hrest/v1/appt/getCancelActionableRecords?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0&status=InProcess");
+	};
+
 	adminApi.searchTodaysAppointments = function(appointmentCriteria) {
 		return $http.get(baseUrl + "/hrest/v1/appt?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0&where=timespan=" + appointmentCriteria.timespan);
 	};
@@ -162,6 +166,11 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
     adminApi.setActionable = function(id, data) {
         return $http.post(baseUrl + '/hrest/v1/admin/approve/' + id + "?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0", data);
     };
+
+    adminApi.setCancelActionable = function(data) {
+        return $http.post(baseUrl + "/hrest/v1/admin/updateActionable?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0", data);
+    };
+
 
     // API support to get callMe list
     adminApi.callMeList = function(fromDate, toDate) {

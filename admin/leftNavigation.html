@@ -4,6 +4,7 @@
             <accordion-heading>
                 <div ng-click="onClickMenu(menu)" class="accordionMenu" id={{asas[$index]}} ng-class="{active_tab:isActiveTab(menu.title)}">{{menu.title}}
                     <span ng-if="menu.title == 'Actionables'" class="pull-right badge" ng-bind="actionableAppts.count"></span>
+                    <span ng-if="menu.title == 'Cancel Actionables'" class="pull-right badge" ng-bind="cancelActionableAppts.count"></span>
                 </div>
             </accordion-heading>
         </accordion-group>

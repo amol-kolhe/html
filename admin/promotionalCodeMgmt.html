@@ -40,6 +40,38 @@
 									<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='max_sessions'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
 								</span>
 							</th>
+
+							<th class="text-center" ng-click="sortPromoCode('free_cancellation_percent')">
+								<span class="1clsfleft">Cancellation %
+									<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='free_cancellation_percent'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+								</span>
+							</th>
+
+							<th class="text-center" ng-click="sortPromoCode('before_cancellation_time')">
+								<span class="1clsfleft">Before Cancellation Time
+									<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='before_cancellation_time'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+								</span>
+							</th>
+
+							<th class="text-center" ng-click="sortPromoCode('valid_days')">
+								<span class="1clsfleft">Valid Days
+									<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='valid_days'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+								</span>
+							</th>
+
+							<th class="text-center" ng-click="sortPromoCode('cancellation_fee')">
+								<span class="1clsfleft">Cancellation Fee
+									<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='cancellation_fee'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+								</span>
+							</th>
+
+							<th class="text-center" ng-click="sortPromoCode('no_show_fee')">
+								<span class="1clsfleft">No Show Fee
+									<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='no_show_fee'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+								</span>
+							</th>
+
+
 							<th class="text-center" ng-click="sortPromoCode('noofappt')">
 								<span class="1clsfleft">No. of appts 
 									<span style="color: red;" class="clickable" data-ng-show="(arrPromoCode.length > 0)" data-ng-click="scrollDiv('discountedCostNote');">##</span>
@@ -184,6 +216,88 @@
 									ng-required="true" 
 									ng-disabled="rec.is_promocode"/>
 							</td>
+
+							<td style="min-width:110px" class="promo-row-text text-center">
+								<span ng-if="rec.free_cancellation_percent > 0" ng-show = "rec.action != 'edit'">{{rec.free_cancellation_percent}}
+									<span ng-if="rec.free_cancellation_percent >= 0"> %</span>
+								</span>
+								<div>
+									<span ng-if="rec.freecancellationpercentError == true" style="color: red; font-size: 10px;">Enter Free Cancellation percent</span>
+								</div>
+								<input type="number"
+								   class="form-control disctype-input"
+								   ng-model="rec.free_cancellation_percent"
+								   ng-show="rec.action == 'edit'"
+								   required
+								/>
+								<span ng-show="rec.action == 'edit'"> %</span>
+							</td>
+
+							<td style="min-width:110px" class="promo-row-text text-center">
+								<span ng-if="rec.before_cancellation_time > 0" ng-show = "rec.action != 'edit'">{{rec.before_cancellation_time}}
+									<span ng-if="rec.before_cancellation_time >= 0"> hr</span>
+								</span>
+								<div>
+									<span ng-if="rec.beforecancellationtimeError == true" style="color: red; font-size: 10px;">Enter Before Cancellation Time</span>
+								</div>
+								<input type="number"
+								   class="form-control disctype-input"
+								   ng-model="rec.before_cancellation_time"
+								   ng-show="rec.action == 'edit'"
+								   required
+								/>
+								<span ng-show="rec.action == 'edit'"> hr</span>
+							</td>
+
+							<td style="min-width:130px" class="promo-row-text text-center">
+								<span ng-show = "rec.action != 'edit'">{{rec.valid_days}}</span>
+								<div>
+									<span ng-if="rec.validdaysError == true" style="color: red; font-size: 10px;">Valid number of days expected </span>
+								</div>
+								<input type="number" min="1" max="90" step="1" value="1" 
+									style="width: 50px; padding: 0 5px; display: inline-block;"
+									class="form-control"
+									ng-show="rec.action == 'edit'"
+									ng-model="rec.valid_days"
+									ng-required="true" 
+									/>
+							</td>
+
+							<td style="min-width:130px" class="promo-row-text text-center">
+								<span ng-if="rec.cancellation_fee > 0" ng-show = "rec.action != 'edit'">{{rec.cancellation_fee}}
+									<span ng-if="rec.cancellation_fee >= 0"> &#8377;</span>
+								</span>
+								<div>
+									<span ng-if="rec.cancellationfeeError == true" style="color: red; font-size: 10px;">Valid cancellation fee expected </span>
+								</div>
+								<input type="number"
+									style="width: 70px; padding: 0 5px; display: inline-block;"
+									class="form-control"
+									ng-show="rec.action == 'edit'"
+									ng-model="rec.cancellation_fee"
+									ng-required="true" 
+									/>
+
+								<span ng-show="rec.action == 'edit'"> &#8377;</span>
+							</td>
+
+							<td style="min-width:130px" class="promo-row-text text-center">
+								<span ng-if="rec.no_show_fee > 0" ng-show = "rec.action != 'edit'">{{rec.no_show_fee}}
+									<span ng-if="rec.no_show_fee >= 0"> &#8377;</span>
+								</span>
+								<div>
+									<span ng-if="rec.noshowfeeError == true" style="color: red; font-size: 10px;">Valid no show fee expected </span>
+								</div>
+								<input type="number" 
+									style="width: 70px; padding: 0 5px; display: inline-block;"
+									class="form-control"
+									ng-show="rec.action == 'edit'"
+									ng-model="rec.no_show_fee"
+									ng-required="true" 
+									/>
+								<span ng-show="rec.action == 'edit'"> &#8377;</span>
+							</td>
+
 							<td style="min-width:130px" class="promo-row-text text-center">
 								<span ng-show = "rec.action != 'edit'">{{rec.noofappt}}</span>
 								<div>
