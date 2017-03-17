@@ -238,6 +238,11 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		return $http.get(url);
 	};
 
+	//API support to Add New policy.
+	adminApi.addPolicy = function(policyobj) {
+		return $http.post(baseUrl + "/hrest/v1/admin/policy?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid(), policyobj);
+	};
+
 	//API support to Add New clinic.
 	adminApi.addClinic = function(clinicobj) {
 		return $http.post(baseUrl + "/hrest/v1/admin/clinic?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid(), clinicobj);
@@ -259,6 +264,11 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 			url += "&active=" + active;
 		}
 		return $http.get(url);
+	};
+
+	//API support to get all policy.
+	adminApi.getPolicy = function() {
+		return $http.get(baseUrl + "/hrest/v1/admin/policy?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0");
 	};
 
 	//API support to update the clinic

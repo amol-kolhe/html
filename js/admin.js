@@ -7424,6 +7424,50 @@ angular.module('myApp.controllers')
 		return false;
 	}
 
+	/************POLICY************************/
+
+ 	$('#summernote').summernote();
+	$scope.policyMgmt = {};
+	$scope.policyMgmt.arrayPolicy = [];
+
+	$scope.policyMgmt.getPolicy = function() {
+		$scope.policyMgmt.count = 0;
+
+		adminApi.getPolicy().
+		success(function (data, status, headers, config) {
+			var dataarray = [];
+			var dataarray = data.payload;
+			console.log("successfully received policy");
+			dataarray.forEach(function(item) {
+				$scope.policyMgmt.arrayPolicy.push(item);
+			});
+			$('.note-editable').html($scope.policyMgmt.arrayPolicy[0].policy_description);
+		}).
+		error(function (data, status, headers, config) {
+			console.log("Error in receiving clinics");
+		});
+	}
+
+	$scope.policyMgmt.savePolicy = function() {
+		var htmlString = $('.note-editable').html();
+
+		if(htmlString != '' && htmlString != undefined){
+			var obj = { "policy_html": htmlString };
+			adminApi.addPolicy(obj).
+			success(function (data, status, headers, config) {
+				//$scope.policyMgmt.getPolicy();
+				$scope.policyMgmt.policySuccessMsg = "You have successfully updated cancellation policy.";
+				$scope.policyMgmt.policyErrorMsg = "";
+				$('.note-editable').html(htmlString);
+				$(document).scrollTop(0,0);
+			}).
+			error(function (data, status, headers, config) {
+				$scope.policyMgmt.policySuccessMsg = "";
+				$scope.policyMgmt.policyErrorMsg = "Error while saving the cancellation policy.";
+			});
+		}
+	}
+
 	/* **********CLINIC********************** */
 
 	$scope.clinicMgmt = {};

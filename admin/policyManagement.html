@@ -1,0 +1,40 @@
+<div class="mainContent2" ng-controller="AdminCtrl" ng-init="initCache(); policyMgmt.getPolicy()">
+	<div style="padding:10px;">
+		<div class="row" ng-show="(policyMgmt.policySuccessMsg || policyMgmt.policyErrorMsg)">
+			<div class="alert alert-success alert-dismissible" role="alert" ng-show="policyMgmt.policySuccessMsg">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<strong>Well done!</strong> {{policyMgmt.policySuccessMsg}}
+			</div>
+			<div class="alert alert-danger alert-dismissible" role="alert" ng-show="policyMgmt.policyErrorMsg">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<strong>Oh snap!</strong> {{policyMgmt.policyErrorMsg}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="createClinic">
+			
+				<h3>Cancellation Policy</h3>
+				<br />
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-4">
+		        		<span class="clinic-label">Cancellation Policy Description</span>
+	        		</div>
+		        </div>
+
+		        <div class="row">
+		        	<div class="col-xs-12">
+						<div id="summernote">Hello Summernote</div>
+	        		</div>
+		        </div>
+
+		        <div class="row row-align">
+		        	<div class="col-xs-12 col-sm-2">
+		        		<button class="btn btn-primary btn-sm" type="button" ng-click="policyMgmt.savePolicy()">Save</button>
+	        		</div>
+		        </div>
+
+		    </div>
+		</div>
+	</div>
+</div>

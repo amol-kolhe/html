@@ -1403,6 +1403,7 @@ angular.module('myApp.controllers')
             $scope.aptPackage.free_cancellation_days = 0;
             if($scope.aptPackage.no_of_sessions > 0 && $scope.aptPackage.free_cancellation_ratio > 0){
                 $scope.aptPackage.free_cancellation_days = (($scope.aptPackage.no_of_sessions * $scope.aptPackage.free_cancellation_ratio) / 100);
+                $scope.aptPackage.free_cancellation_days = Math.round($scope.aptPackage.free_cancellation_days);
             }
         }
 
