@@ -54,6 +54,10 @@
 				url: '/aboutus',
 				templateUrl: './CustPortal/other_pages/aboutus.html'
 			}).
+			state('homepages.policy', {
+				url: '/policy',
+				templateUrl: './CustPortal/other_pages/policy.html'
+			}).
 			state('booking', {
 				url: '/booking',
 				templateUrl: './CustPortal/booking_partials/booking_parent.html',

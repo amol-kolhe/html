@@ -14,7 +14,8 @@ function innerPageController($timeout, $http, custApi, $cookies, $scope, $state,
 		getAllLocations: getAllLocations,
 		locationSelected: locationSelected,
 		redirectToBooking1: redirectToBooking1,
-		toggleFaq: toggleFaq
+		toggleFaq: toggleFaq,
+		getPolicy: getPolicy
 	};
 	vm.model = {
 		locationArr: [],
@@ -27,7 +28,8 @@ function innerPageController($timeout, $http, custApi, $cookies, $scope, $state,
 		fromDate: '',
 		selectedDate: '',
 		comments: '',
-		apptCost: ''
+		apptCost: '',
+		arrayPolicy: []
 	};
 	var localmethods = {
 		initDatePicker: initDatePicker,
@@ -41,6 +43,21 @@ function innerPageController($timeout, $http, custApi, $cookies, $scope, $state,
 	};
 	
 	/* *******Function Definitions**************** */
+
+	function getPolicy() {
+		custApi.getPolicy().
+		success(function (data, status, headers, config) {
+			var dataarray = [];
+			var dataarray = data.payload;
+			console.log("successfully received policy");
+			dataarray.forEach(function(item) {
+				vm.model.arrayPolicy.push(item);
+			});
+		}).
+		error(function (data, status, headers, config) {
+			console.log("Error in receiving clinics");
+		});
+	}
 
 	/*
 	* Function to initialize controller

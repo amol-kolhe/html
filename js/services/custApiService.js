@@ -38,6 +38,11 @@ custApiService.factory('custApi', ['$http', '$cookies', function($http, $cookies
 		}
 		return utype;
 	};
+
+	//API support to get all policy.
+	custApi.getPolicy = function() {
+		return $http.get(baseUrl + "/hrest/v1/admin/policy?apikey=" + custApi.getApiKey() + "&sid=" + custApi.getSid() + "&role=0");
+	};
 	
 	custApi.searchAppointments = function(appointmentCriteria, isAdvancedSearch) {
 		var url = baseUrl + "/hrest/v1/appt?apikey=" + custApi.getApiKey() + "&sid=" + custApi.getSid() + "&role=1&where=" + createCustomerSearchAppointmentsQuery(appointmentCriteria, isAdvancedSearch);

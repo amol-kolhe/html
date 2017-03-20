@@ -1,0 +1,27 @@
+<div class="container-fluid inner-page-contactus-banner-image" ng-init="innerPageCtrl.method.getPolicy()">
+</div>
+<div class="container">
+	<div class="contactus-heading inner-page-banner-heading">
+		Policy
+	</div>
+</div>
+
+<div class="container">
+	<div class="workwithus-main-container">
+		<div class="workwithus-main-content">
+			<div class="workwithus-section1-content">
+				<div class="workwithus-heading">Cancellation Policy</div>
+				<br /><br />
+				<div class="workwithus-text" ng-bind-html="innerPageCtrl.model.arrayPolicy[0].policy_description">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	// ViewContent
+	// Track key page views (ex: product page, landing page or article)
+	try {
+		fbq('track', 'ViewContent');
+	} catch(err) {}
+</script>
