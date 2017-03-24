@@ -782,3 +782,49 @@
     <div ng-include="'documentation.html'"></div>
 
 </div>
+
+
+ <script type="text/ng-template" id="AptReason">
+           <!-- <form name="Form" data-ng-submit="confirm('OK')">-->
+               <form role="form" name="CancelRequestForm" novalidate>
+                <div style="margin:10px; padding:10px">
+                    <div class="row">
+                        <div>
+                            <span>Choose who requested the change</span>
+                        </div>
+                        <div ng-init="RequestedBy=['Physio','Customer']">
+                            <select class="input-width clstxt2 form-control" name="RequestedBy"
+                                    data-ng-model = "CancelRequest.changerequestby"
+                                        data-ng-class = "{red2: CancelRequestForm.RequestedBy.$invalid && CancelRequestForm.RequestedBy.$dirty}"
+                                        title = "Requested By"
+                                        ng-options="requester for requester in RequestedBy"
+                                        data-ng-required = "true">
+                                    <option value="">Requested By</option>
+                                  
+                                </select>
+                                 
+                                 <div ng-show="submitted && CancelRequestForm.$invalid">
+                                    <span style = "color:red" data-ng-show = "CancelRequestForm.RequestedBy.$invalid">
+                                        <span data-ng-show = "CancelRequestForm.RequestedBy.$error.required"> Choose requested by </span>
+                                    </span>
+                                 </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                    <div>
+                        <span>Please provide some Reason</span>
+                    </div>
+                    <div>
+                        <textarea cols="30" rows="3" ng-model="CancelRequest.reason"></textarea>
+                    </div>
+                    
+                    </div>
+                    <div style="margin-top:10px; padding:10px;">
+                        <button type="submit" class="ngdialog-button ngdialog-button-primary" ng-click="submitted=true;CancelRequestForm.$valid && confirm('OK')">Ok</button>
+                        <button ng-click="closeThisDialog('Cancel')" type="button" class="ngdialog-button ngdialog-button-secondary">Cancel</button>
+                    </div>
+                    </div>
+                </div>
+            </form>
+    </script>

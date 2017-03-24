@@ -4,7 +4,7 @@
             <span>Actionable items requested by Physio</span>
             <span class="pull-right clickable glyphicon glyphicon-refresh" title="Refresh the actionable items" ng-click="searchCancelActionableRecords()"></span>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive" style="overflow-x:auto">
             <table class="table table-striped table-hover table-condensed">
                 <thead>
                     <tr>
@@ -23,10 +23,18 @@
                         <th ng-click="sort2('no_of_sessions')">No. Of Session
                             <span class="glyphicon sort-icon" ng-show="sorting.by=='no_of_sessions'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
                         </th>
-                        <th ng-click="sort2('propose_free_cancellation_days')">Free Cancellation Days
+
+                         <th ng-click="sort2('default_free_cancellation_days')">Def. No. Of Free Cancellation
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='default_free_cancellation_days'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
+                        <th ng-click="sort2('default_valid_days')">Def. Package Validity
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='default_valid_days'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
+
+                        <th ng-click="sort2('propose_free_cancellation_days')">Req. No. Of Free Cancellation
                             <span class="glyphicon sort-icon" ng-show="sorting.by=='propose_free_cancellation_days'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
                         </th>
-                        <th ng-click="sort2('propose_valid_days')">Valid days
+                        <th ng-click="sort2('propose_valid_days')">Req. Package Validity
                             <span class="glyphicon sort-icon" ng-show="sorting.by=='propose_valid_days'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
                         </th>
 
@@ -37,17 +45,17 @@
                     <tr dir-paginate="rec in cancelActionableRecordsList|orderBy:sorting.by:sorting.reverse|filter:search|itemsPerPage:10"
                         pagination-id="cancelActionablesId">
                      
-                        <td>
+                        <td style="min-width:100px">
                        
                             {{rec.service_provider_name}}
                      
                         </td>
-                        <td>
+                        <td style="min-width:150px">
                           
                             {{rec.customer_name}}
                             
                         </td>
-                        <td>
+                        <td style="min-width:120px">
                          
                             {{rec.package_code}}
                            
@@ -55,6 +63,16 @@
                         <td>
                         
                              {{rec.no_of_sessions}}
+                            
+                        </td>
+                        <td>
+                         
+                            {{rec.default_free_cancellation_days}}
+                           
+                        </td>
+                        <td>
+                        
+                             {{rec.default_valid_days}}
                             
                         </td>
                         <td>
@@ -69,7 +87,7 @@
                                     ng-required="true" 
                             />
                         </td>
-                        <td style="max-width:150px;" class="promo-row-text">
+                        <td>
                             <span ng-show = "rec.action != 'edit'">
                                 <span style="word-break: break-word;">{{rec.propose_valid_days}}</span>
                             </span>
@@ -82,7 +100,7 @@
                             />
                         </td>
                       
-                        <td>
+                        <td style="min-width:100px">
                            
                             <span class="glyphicon glyphicon-ok clickable"
                                   style="color: #00F900;

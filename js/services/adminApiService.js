@@ -123,8 +123,8 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		return $http.put(baseUrl + '/hrest/v1/appt/' + id + "?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0", data);
 	};
 
-	adminApi.deleteAppointmentDetails = function(id) {
-        return $http.delete(baseUrl + '/hrest/v1/appt/' + id + "?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0");
+	adminApi.deleteAppointmentDetails = function(id, changeRequestBy) {
+        return $http.delete(baseUrl + '/hrest/v1/appt/' + id + "?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0&changeRequestBy=" + changeRequestBy);
     };
 
 	adminApi.searchAppointments = function(appointmentCriteria, isAdvancedSearch) {

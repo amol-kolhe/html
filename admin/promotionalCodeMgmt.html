@@ -15,10 +15,10 @@
 							<th class="text-center" ng-click="sortPromoCode('promodesc')"><span class="1clsfleft">Promo Description</span>
 								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='promodesc'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
 							</th>
-							<th class="text-center" ng-click="sortPromoCode('validfrom')"><span class="1clsfleft">Valid From</span>
+							<th class="text-center" ng-click="sortPromoCode('validfrom')"><span class="1clsfleft">Active From</span>
 								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='validfrom'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
 							</th>
-							<th class="text-center" ng-click="sortPromoCode('validtill')"><span class="1clsfleft">Valid Till</span>
+							<th class="text-center" ng-click="sortPromoCode('validtill')"><span class="1clsfleft">Active Till</span>
 								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='validtill'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
 							</th>
 							<th class="text-center" ng-click="sortPromoCode('active')"><span class="1clsfleft">Is Active?</span>
@@ -41,20 +41,27 @@
 								</span>
 							</th>
 
+							<th class="text-center" ng-click="sortPromoCode('noofappt')">
+								<span class="1clsfleft">No. of appts 
+									<span style="color: red;" class="clickable" data-ng-show="(arrPromoCode.length > 0)" data-ng-click="scrollDiv('discountedCostNote');">##</span>
+									<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='noofappt'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+								</span>
+							</th>
+
 							<th class="text-center" ng-click="sortPromoCode('free_cancellation_percent')">
-								<span class="1clsfleft">Cancellation %
+								<span class="1clsfleft">Allowd Free Cancellation
 									<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='free_cancellation_percent'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
 								</span>
 							</th>
 
 							<th class="text-center" ng-click="sortPromoCode('before_cancellation_time')">
-								<span class="1clsfleft">Before Cancellation Time
+								<span class="1clsfleft">Appt. Cancellation Cutoff
 									<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='before_cancellation_time'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
 								</span>
 							</th>
 
 							<th class="text-center" ng-click="sortPromoCode('valid_days')">
-								<span class="1clsfleft">Valid Days
+								<span class="1clsfleft">Package Validity
 									<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='valid_days'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
 								</span>
 							</th>
@@ -72,12 +79,7 @@
 							</th>
 
 
-							<th class="text-center" ng-click="sortPromoCode('noofappt')">
-								<span class="1clsfleft">No. of appts 
-									<span style="color: red;" class="clickable" data-ng-show="(arrPromoCode.length > 0)" data-ng-click="scrollDiv('discountedCostNote');">##</span>
-									<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='noofappt'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
-								</span>
-							</th>
+							
 							<th class="text-center" class="text-center">
 								<span title="Add new promocode" class="clickable glyphicon glyphicon-plus" data-ng-click="addNewPromoCode();"></span>
 							</th>
@@ -217,6 +219,20 @@
 									ng-disabled="rec.is_promocode"/>
 							</td>
 
+							<td style="min-width:130px" class="promo-row-text text-center">
+								<span ng-show = "rec.action != 'edit'">{{rec.noofappt}}</span>
+								<div>
+									<span ng-if="rec.noofapptRequired == true || rec.noofapptRequired == true" style="color: red; font-size: 10px;">Valid number of appointments expected</span>
+								</div>
+								<input type="number" min="1" max="90" step="1" value="1" 
+									style="width: 50px; padding: 0 5px; display: inline-block;"
+									class="form-control"
+									ng-show="rec.action == 'edit'"
+									ng-model="rec.noofappt"
+									ng-required="true"
+									ng-disabled="!rec.is_promocode" />
+							</td>
+
 							<td style="min-width:110px" class="promo-row-text text-center">
 								<span ng-if="rec.free_cancellation_percent > 0" ng-show = "rec.action != 'edit'">{{rec.free_cancellation_percent}}
 									<span ng-if="rec.free_cancellation_percent >= 0"> %</span>
@@ -228,7 +244,7 @@
 								   class="form-control disctype-input"
 								   ng-model="rec.free_cancellation_percent"
 								   ng-show="rec.action == 'edit'"
-								   required
+								   ng-disabled="rec.is_promocode"
 								/>
 								<span ng-show="rec.action == 'edit'"> %</span>
 							</td>
@@ -244,7 +260,7 @@
 								   class="form-control disctype-input"
 								   ng-model="rec.before_cancellation_time"
 								   ng-show="rec.action == 'edit'"
-								   required
+								   ng-disabled="rec.is_promocode"
 								/>
 								<span ng-show="rec.action == 'edit'"> hr</span>
 							</td>
@@ -260,6 +276,7 @@
 									ng-show="rec.action == 'edit'"
 									ng-model="rec.valid_days"
 									ng-required="true" 
+									ng-disabled="rec.is_promocode"
 									/>
 							</td>
 
@@ -276,6 +293,7 @@
 									ng-show="rec.action == 'edit'"
 									ng-model="rec.cancellation_fee"
 									ng-required="true" 
+									ng-disabled="rec.is_promocode"
 									/>
 
 								<span ng-show="rec.action == 'edit'"> &#8377;</span>
@@ -294,23 +312,12 @@
 									ng-show="rec.action == 'edit'"
 									ng-model="rec.no_show_fee"
 									ng-required="true" 
+									ng-disabled="rec.is_promocode"
 									/>
 								<span ng-show="rec.action == 'edit'"> &#8377;</span>
 							</td>
 
-							<td style="min-width:130px" class="promo-row-text text-center">
-								<span ng-show = "rec.action != 'edit'">{{rec.noofappt}}</span>
-								<div>
-									<span ng-if="rec.noofapptRequired == true || rec.noofapptRequired == true" style="color: red; font-size: 10px;">Valid number of appointments expected</span>
-								</div>
-								<input type="number" min="1" max="90" step="1" value="1" 
-									style="width: 50px; padding: 0 5px; display: inline-block;"
-									class="form-control"
-									ng-show="rec.action == 'edit'"
-									ng-model="rec.noofappt"
-									ng-required="true"
-									ng-disabled="!rec.is_promocode" />
-							</td>
+							
 							<td style="min-width:80px" class="promo-row-text text-center">
 								<span class="glyphicon glyphicon-pencil clickable" 
 									style="color: blue;" title="Edit this record" 

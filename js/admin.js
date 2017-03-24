@@ -3487,7 +3487,38 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.cancelAppointment = function(id) {
-		var res = confirm("This will cancel the appointment.\nDo you want to continue?");
+
+		var cancelRequestInfo ={"reason":"","changerequestby":""};
+        $scope.CancelRequest = { reason : "",changerequestby : ""};
+
+        ngDialog.openConfirm({
+            template: 'AptReason',
+            showClose:false,
+			scope: $scope 
+        }).then(function(value)
+        {
+            cancelRequestInfo.reason=$scope.CancelRequest.reason;
+            cancelRequestInfo.changerequestby=$scope.CancelRequest.changerequestby;
+           // console.log(cancelRequestInfo);
+            adminApi.deleteAppointmentDetails(id ,  cancelRequestInfo.changerequestby)
+			.success(function(data, status, headers, config){
+				alert("Appointment cancelled successfully");
+				$scope.hideEditAptMode();
+				$scope.searchAppointments(true);
+			})
+			.error(function(data, status, headers, config){
+				alert(data.error.message);
+				$scope.checkSessionTimeout(data);
+			});
+
+          
+        },
+        function(value) {
+        	console.log("Fail " + $scope.CancelRequest.reason );
+        });
+
+
+        /*var res = confirm("This will cancel the appointment.\nDo you want to continue?");
 		if(res == true) {
 			adminApi.deleteAppointmentDetails(id)
 			.success(function(data, status, headers, config){
@@ -3499,7 +3530,9 @@ angular.module('myApp.controllers')
 				alert(data.error.message);
 				$scope.checkSessionTimeout(data);
 			});
-		}
+		}*/
+
+
 	}
 
 	$scope.resetSelectedLocation = function() {
@@ -7110,35 +7143,35 @@ angular.module('myApp.controllers')
 			rec.minmaxcompareError = false;
 		}
 
-		if((rec.free_cancellation_percent == undefined || rec.free_cancellation_percent == "" || rec.free_cancellation_percent < 0)) {
+		if((rec.free_cancellation_percent < 0)) {
 			rec.freecancellationpercentError = true;
 		}
 		else{
 			rec.freecancellationpercentError = false;
 		}
 
-		if((rec.before_cancellation_time == undefined || rec.before_cancellation_time == "" || rec.before_cancellation_time < 0)) {
+		if((rec.before_cancellation_time < 0)) {
 			rec.beforecancellationtimeError = true;
 		}
 		else{
 			rec.beforecancellationtimeError = false;
 		}
 
-		if((rec.valid_days == undefined || rec.valid_days == "" || rec.valid_days < 0)) {
+		if((rec.valid_days < 0)) {
 			rec.validdaysError = true;
 		}
 		else{
 			rec.validdaysError = false;
 		}
 
-		if((rec.cancellation_fee == undefined || rec.cancellation_fee == "" || rec.cancellation_fee < 0)) {
+		if((rec.cancellation_fee < 0)) {
 			rec.cancellationfeeError = true;
 		}
 		else{
 			rec.cancellationfeeError = false;
 		}
 
-		if((rec.no_show_fee == undefined || rec.no_show_fee == "" || rec.no_show_fee < 0)) {
+		if((rec.no_show_fee < 0)) {
 			rec.noshowfeeError = true;
 		}
 		else{
