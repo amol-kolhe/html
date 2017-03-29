@@ -45,6 +45,7 @@ function innerPageController($timeout, $http, custApi, $cookies, $scope, $state,
 	/* *******Function Definitions**************** */
 
 	function getPolicy() {
+		vm.model.arrayPolicy = [];
 		custApi.getPolicy().
 		success(function (data, status, headers, config) {
 			var dataarray = [];

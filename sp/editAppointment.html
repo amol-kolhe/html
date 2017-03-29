@@ -364,7 +364,7 @@
             <span>Package Details</span>
         </div>
         <div class="bodyContainer">
-            <p>Please submit the package details.</p>
+            <p style="font-weight: bold;">Highlighted fields(<span style="color: red">*</span>) need an admin approval.</p>
             <form name="apptPackage.packageForm">
                 <div class="row">
                     <div class="col-sm-6 col-xs-12">
@@ -446,7 +446,7 @@
                             </div>
                         </div>
                         <div class="row middleRowContent">
-                            <span class="itemLabel2 col-xs-4">Free Cancellation<span class="colonSeparator">:</span></span>
+                            <span class="itemLabel2 col-xs-4">Free Cancellation<span style="color: red">*</span><span class="colonSeparator">:</span></span>
                             <div class="col-xs-8">
                                     <input type="text"
                                             ng-model="aptPackage.free_cancellation_days"
@@ -465,7 +465,7 @@
                             </div>
                         </div>
                         <div class="row middleRowContent">
-                            <span class="itemLabel2 col-xs-4">Valid Days <span class="colonSeparator">:</span></span>
+                            <span class="itemLabel2 col-xs-4">Valid Days<span style="color: red">*</span><span class="colonSeparator">:</span></span>
                             <div class="col-xs-8">
                                 <input type="text"
                                         ng-model="aptPackage.valid_days"
@@ -510,6 +510,14 @@
                                 </span>
                             </div>
                         </div>
+                        <div class="row middleRowContent">
+                            <span class="itemLabel2 col-xs-4"></span>
+                            <div class="col-xs-8">
+                                <label>
+                                    <input type="checkbox" ng-model="aptPackage.iaccept" ng-true-value="false" ng-false-value="true"> The customer accept <a title='Terms and Conditions' class='clickable' style='margin-right: 15px; font-size: 15px;' ng-click='requestPolicy()'>Terms &amp; Conditions</a>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-sm-6 col-xs-12">
                         <div class="row middleRowContent">
@@ -539,8 +547,7 @@
                     </div>
                 </div>
                 <div class="footerBar">
-                    <button class="btn btn-primary btn-sm" 
-                        ng-click="submitAptPackage()"> Save 
+                    <button ng-disabled="aptPackage.iaccept" class="btn btn-primary btn-sm" ng-click="submitAptPackage()"> Save 
                     </button>
                     <button class="btn btn-default btn-sm" ng-click="cancelAptPackage()">Cancel</button>
                 </div>

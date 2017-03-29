@@ -22,6 +22,7 @@ angular.module('myApp.controllers')
     $scope.spInfo = false;
     var availableDate = [];
     $scope.locationArr = [];
+    $scope.arrayPolicy = [];
     $scope.customerLocality = '';
     $scope.custProb = "";
     $scope.custResAddr = "";
@@ -59,6 +60,7 @@ angular.module('myApp.controllers')
         net_amount : "",
         temp_net_amount : "",
         additional_amount : 0,
+        iaccept : true,
     };
     $scope.walletFlag = false;
     $scope.test = "";
@@ -1892,6 +1894,30 @@ angular.module('myApp.controllers')
         },
         function(value) {
             console.log("Fail wallet transaction.");
+        });
+    }
+
+    $scope.requestPolicy = function() {
+        $scope.policytext = null;
+        spApi.getPolicy().
+        success(function (data, status, headers, config) {
+            var dataarray = [];
+            var dataarray = data.payload;
+            dataarray.forEach(function(item) {
+                $scope.policytext = item.policy_description;
+            });
+            ngDialog.open({
+                template: $scope.policytext,
+                showClose:true,
+                scope: $scope,
+                plain: true,
+                closeByDocument: true,
+                closeByEscape: true,
+                width: '80%'
+            });
+        }).
+        error(function (data, status, headers, config) {
+            console.log("Error in receiving clinics");
         });
     }
 

@@ -28,6 +28,11 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         return spid;
 	};
 
+    //API support to get all policy.
+    spApi.getPolicy = function() {
+        return $http.get(baseUrl + "/hrest/v1/admin/policy?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=0");
+    };
+
     spApi.getCities = function(countryName) {
         return $http.get(baseUrl + "/hrest/v1/zone/cities?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&countrynm=" + countryName);
     }
