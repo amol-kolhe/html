@@ -24,17 +24,19 @@
                             <span class="glyphicon sort-icon" ng-show="sorting.by=='no_of_sessions'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
                         </th>
 
-                         <th ng-click="sort2('default_free_cancellation_days')">Def. No. Of Free Cancellation
+                         <th ng-click="sort2('default_free_cancellation_days')">Free Cancellation (Sessions)
                             <span class="glyphicon sort-icon" ng-show="sorting.by=='default_free_cancellation_days'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
                         </th>
-                        <th ng-click="sort2('default_valid_days')">Def. Package Validity
+      
+                        <th ng-click="sort2('propose_free_cancellation_days')">Req. Free Cancellation (Sessions)
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='propose_free_cancellation_days'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
+
+                         <th ng-click="sort2('default_valid_days')">Package Validity (Days)
                             <span class="glyphicon sort-icon" ng-show="sorting.by=='default_valid_days'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
                         </th>
 
-                        <th ng-click="sort2('propose_free_cancellation_days')">Req. No. Of Free Cancellation
-                            <span class="glyphicon sort-icon" ng-show="sorting.by=='propose_free_cancellation_days'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
-                        </th>
-                        <th ng-click="sort2('propose_valid_days')">Req. Package Validity
+                        <th ng-click="sort2('propose_valid_days')">Req. Package Validity (Days)
                             <span class="glyphicon sort-icon" ng-show="sorting.by=='propose_valid_days'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
                         </th>
 
@@ -70,11 +72,7 @@
                             {{rec.default_free_cancellation_days}}
                            
                         </td>
-                        <td>
-                        
-                             {{rec.default_valid_days}}
-                            
-                        </td>
+                       
                         <td>
                             <span ng-show = "rec.action != 'edit'">
                              {{rec.propose_free_cancellation_days}}
@@ -87,6 +85,13 @@
                                     ng-required="true" 
                             />
                         </td>
+
+                        <td>
+                        
+                             {{rec.default_valid_days}}
+                            
+                        </td>
+
                         <td>
                             <span ng-show = "rec.action != 'edit'">
                                 <span style="word-break: break-word;">{{rec.propose_valid_days}}</span>

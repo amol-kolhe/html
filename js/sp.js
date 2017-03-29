@@ -1334,7 +1334,8 @@ angular.module('myApp.controllers')
                     //free_cancellation_ratio:  $scope.aptPackage.free_cancellation_ratio,
                     free_cancellation_days:  $scope.aptPackage.free_cancellation_days,
                     valid_days:  $scope.aptPackage.valid_days,
-                    spid: $scope.adminNewAppointmentCust.appointment.spid
+                    spid: $scope.adminNewAppointmentCust.appointment.spid,
+                    session_price: $scope.models.response.perApptCharges
                 }
 
                 spApi.updatePackage($scope.adminNewAppointmentCust.appointment.patientid, data)
