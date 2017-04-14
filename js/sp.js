@@ -91,6 +91,7 @@ angular.module('myApp.controllers')
         no_of_sessions : "",
         is_package_assign : "",
     };
+
     $scope.custLeftPackageSeesion = 0;
     $scope.apptPaymentErrorMsg = "";
     $scope.costPaid = "0";
@@ -190,6 +191,8 @@ angular.module('myApp.controllers')
             }
             $scope.spAppointmentList = appList;
 
+            console.log($scope.spAppointmentList);
+
             if($scope.spApts.time == "past") {
                 $scope.spSearch = "";
             }
@@ -249,6 +252,7 @@ angular.module('myApp.controllers')
         $scope.applypromocost= '';
         $scope.lastApptTime = "";
         $scope.apptClinicId = '';
+
         
         spApi.getCustomerDetails(appointment.custid).success(function(data, status, headers, config){
             $scope.custOldPackage = {
@@ -326,6 +330,11 @@ angular.module('myApp.controllers')
         $scope.editAptId = appointment.refNo == undefined ? appointment.refno : appointment.refNo;
         slideUp('#aptDocumentation');
         var id = appointment.id == undefined ? appointment._id : appointment.id;
+
+        if(id == undefined){
+            var id = appointment.apptid;
+        }
+
         spApi.getAppointmentDetails(id)
         .success(function(data, status, headers, config){
             if(fromView == "customer") {
@@ -402,6 +411,8 @@ angular.module('myApp.controllers')
             } else {
                 $scope.costPaid = 0;
             }*/
+
+
             if($scope.adminNewAppointmentCust.appointment.finalcost > 0){
                 $scope.costPaid = $scope.adminNewAppointmentCust.appointment.finalcost;
                 if($scope.adminNewAppointmentCust.appointment.additionalcharge > 0 && $scope.adminNewAppointmentCust.appointment.additionalcharge != undefined){
@@ -1953,6 +1964,79 @@ angular.module('myApp.controllers')
         	console.log("Fail " + $scope.CancelRequest.reason );
         });
     }
+
+
+     $scope.requestPackageCancel = function() {
+
+        $scope.fetchFutureAppointments($scope.adminNewAppointmentCust.appointment.patientid);
+
+        ngDialog.openConfirm({
+            template: 'AptPkgCancellation',
+            showClose:false,
+            scope: $scope 
+        }).then(function(value)
+        {
+            //alert($scope.futureApptSelectedDate);
+
+            console.log($scope.futureApptList);
+
+            if($scope.futureApptList.length > 0 && $scope.futureApptSelectedDate != 'undefined'){
+           
+                for(var i = 0; i < $scope.futureApptList.length; i++){
+
+                    var cancelRequestInfo ={"reason":"","changerequestby":""};
+
+                    if(($scope.futureApptList[i].startTime >= $scope.futureApptSelectedDate) && ($scope.futureApptList[i].status != "Cancelled") && ($scope.futureApptList[i].status != "Waiting Approval")){
+                            
+                            if($scope.futureApptList[i].startTime == $scope.futureApptSelectedDate){
+                                cancelRequestInfo.reason="Package Cancellation";
+                            }else{
+                                cancelRequestInfo.reason="Package Cancellation ";
+                            }
+
+                            cancelRequestInfo.changerequestby="Customer";
+                            
+                            spApi.requestAppointmentChange($scope.futureApptList[i].apptid, "cancel",cancelRequestInfo)
+                            .success(function(data, status, headers, config) {
+                               // alert("Appointment cancellation request sent successfully!");
+                              
+                            })
+                            .error(function(data, status, headers, config) {
+                                var error = data.error.message;
+                                //alert("Failed to make appointment cancellation request! " + error);
+                                $scope.checkSessionTimeout(data);
+                            });
+                           
+                    }           
+                    
+                }
+
+                alert("Package cancellation request sent successfully!");
+
+            } 
+
+        },
+        function(value) {
+            console.log("Fail API");
+        });
+    }
+
+    $scope.getValue = function(value) {
+        $scope.futureApptSelectedDate = value;
+    }
+
+    $scope.fetchFutureAppointments = function(patientid) {
+
+        spApi.fetchFutureAppointments(patientid)
+            .success(function(data, status, headers, config) {
+                $scope.futureApptList = data.payload;  
+                console.log($scope.futureApptList);
+               
+            })
+            .error(function(data, status, headers, config) {
+                console.log("Failed to fetch future appointments!");
+            });
+    }    
 
     $scope.requestApptRescheduleClicked = function() {
         $scope.flags.showRescheduleAppt = true;

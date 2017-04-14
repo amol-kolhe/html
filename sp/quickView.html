@@ -9,7 +9,7 @@
                         <div>
                             <span>Choose who requested the change</span>
                         </div>
-                        <div ng-init="RequestedBy=['Physio','Customer']">
+                        <div ng-init="RequestedBy=['Physio','Customer','Patient Transfer','Appointment Swap']">
                             <select class="input-width clstxt2 form-control" name="RequestedBy"
 									data-ng-model = "CancelRequest.changerequestby"
 										data-ng-class = "{red2: CancelRequestForm.RequestedBy.$invalid && CancelRequestForm.RequestedBy.$dirty}"
@@ -37,6 +37,58 @@
                     </div>
                     
                     </div>
+                    <div style="margin-top:10px; padding:10px;">
+                        <button type="submit" class="ngdialog-button ngdialog-button-primary" ng-click="submitted=true;CancelRequestForm.$valid && confirm('OK')">Ok</button>
+                        <button ng-click="closeThisDialog('Cancel')" type="button" class="ngdialog-button ngdialog-button-secondary">Cancel</button>
+                    </div>
+                    </div>
+                </div>
+            </form>
+    </script>
+
+    <script type="text/ng-template" id="AptPkgCancellation">
+           <!-- <form name="Form" data-ng-submit="confirm('OK')">-->
+               <form role="form" name="CancelRequestForm" novalidate>
+                <div style="margin:10px; padding:10px">
+                    <div class="row">
+                        <div>
+                            <span><h4>Future Appointments</h4></span>
+                        </div>
+                        <div "appointmentsTable table-responsive">
+                            <table class="table table-condensed">
+                                <th>Date</th>
+                                <th>Ref.No.</th>
+                                <th>SP Name</th>
+                                <th>Status</th>
+                                <tbody>
+                                    <tr dir-paginate="apt in futureApptList|orderBy:'-startTime':!reverse|filter:search|itemsPerPage:10"
+                                        pagination-id="custFutureAptId">
+                                        <td>
+                                            <input id="{{apt.startTime}}" type="radio" 
+                                            ng-model="selectedFutureApptTime" name="groupAppt"
+                                            value="{{apt.startTime}}" ng-change='getValue(selectedFutureApptTime)'>{{"   "+apt.startTime_date}}</input>
+
+                                        </td>
+                                        <td>
+                                            <code><a href="#" ng-click="showAppointment(apt, 'appointment');closeThisDialog('Cancel')" title="Show Appointment Details">{{apt.refno}}</a></code>
+                                        </td>
+                                        <td>{{apt.serviceProviderName}}</td>
+                                        <td>{{apt.status}}</td>
+                                       
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                            <dir-pagination-controls
+                                max-size="5"
+                                pagination-id="custFutureAptId"
+                                direction-links="true"
+                                boundary-links="true" >
+                            </dir-pagination-controls>
+                        </div>
+                    </div>
+
                     <div style="margin-top:10px; padding:10px;">
                         <button type="submit" class="ngdialog-button ngdialog-button-primary" ng-click="submitted=true;CancelRequestForm.$valid && confirm('OK')">Ok</button>
                         <button ng-click="closeThisDialog('Cancel')" type="button" class="ngdialog-button ngdialog-button-secondary">Cancel</button>

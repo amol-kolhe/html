@@ -3084,6 +3084,7 @@ angular.module('myApp.controllers')
 		adminApi.searchActionableAppts()
 		.success(function(data, status, headers, config){
 			$scope.actionableApptsList = [];
+			var temp_date = null;
 			for(var i = 0; i < data.payload.length; i++) {
 				var obj = data.payload[i];
 				if(obj.appointment.approvalDetails.length == 1) {
@@ -3098,7 +3099,13 @@ angular.module('myApp.controllers')
 					}
 					obj.appointment.approvalDetails = tmpApprovalDetails;
 				}
-				$scope.actionableApptsList.push(obj);
+				if(obj.appointment.approvalDetails.reason == 'Package Cancellation'){
+					$scope.actionableApptsList.push(obj);
+				}else if(obj.appointment.approvalDetails.reason != 'Package Cancellation '){
+					$scope.actionableApptsList.push(obj);
+				}
+
+				//$scope.actionableApptsList.push(obj);
 			}
 			$scope.actionableAppts.count = $scope.actionableApptsList.length;
 		})

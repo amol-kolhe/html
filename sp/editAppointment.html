@@ -5,6 +5,15 @@
             <div class="headBar">
                 <span>Appointment Details</span>
                 <span style="float:right;">    
+
+                     <span>
+                        <span 
+                            title="Cancel Package"
+                            class="clickable glyphicon glyphicon-th-list"
+                            style="margin-right:15px; font-size: 15px;"
+                            ng-click="requestPackageCancel()"></span>
+                    </span>
+
                     <span>
                         <span ng-show="(!adminNewAppointmentCust.customer.is_package_assign && adminNewAppointmentCust.appointment.state == 'Confirmed' && adminNewAppointmentCust.appointment.current_session_no == '0' && lastApptTime == adminNewAppointmentCust.appointment.starttime) &&
                         adminNewAppointmentCust.appointment.clinic_id == undefined"

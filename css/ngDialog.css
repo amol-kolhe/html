@@ -105,6 +105,10 @@
   cursor: pointer;
 }
 
+.ngdialog-theme-default .ngdialog-content{
+  width :580px !important;
+} 
+
 html.ngdialog-open,
 body.ngdialog-open {
   overflow: hidden;

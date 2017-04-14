@@ -63,6 +63,11 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         return $http.get(baseUrl + '/hrest/v1/appt/' + id + "?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2");
     };
 
+     spApi.fetchFutureAppointments = function(patientid) {
+        return $http.get(baseUrl + "/hrest/v1/appt/fetchfutureappt?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2&patientid=" + patientid);
+    };
+
+
     //API to get services
     spApi.getServices = function() {
         return $http.get(baseUrl + "/hrest/v1/services/package?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid());
