@@ -4,14 +4,18 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 
 		$scope.signInForm1 = {};
 		$scope.signInForm2 = {};
+		$scope.signInForm3 = {};
 		$scope.signInForm = {};
 		$scope.spSignIn = {};
 		$scope.adminSignIn = {};
 		$scope.patientSignIn = {};
+		$scope.financeSignIn = {};
 		$scope.adminLogoutSuccess = "";
 		$scope.adminLogoutError = "";
 		$scope.spLogoutSuccess = "";
 		$scope.spLogoutError = "";
+		$scope.financeLogoutSuccess = "";
+		$scope.financeLogoutError = "";
 		$scope.adminNewAppointmentForm = {};
 		$scope.users1 = {};
 		$scope.users2 = {};
@@ -34,7 +38,8 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 		$scope.users2.disableFlagEmail = false;
 		$scope.sessionFlag = {
 			adminSessionTimeoutFlag: false,
-			spSessionTimeoutFlag: false
+			spSessionTimeoutFlag: false,
+			financeSessionTimeoutFlag: false
 		};
 
 		$scope.notification = {
@@ -108,6 +113,10 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 			{title: "Cost Calculator", url: 'costcalculator.html'}
 			];
 
+		$scope.financeMenus = [{title: "Package Cancellations", url: 'quickView.html'},
+			{title: "Reports", url: 'reportFilters.html'}
+			];
+
 		if($cookies.get('u_sid') != undefined) {
 			$scope.users1.disableFlag = false;
 			$scope.boolFlag = false;
@@ -128,6 +137,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 			result.success(function(data, status, headers, config) {
 				if(data.error == undefined) {
 					var typeObj = data.payload.type;
+					
 					if(typeObj == 0) {
 						$cookies.put('u_type', typeObj);
 						$scope.activeTab = 'Home';
@@ -150,6 +160,16 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 						$scope.pageSource = 'quickView.html';
 						$scope.pageSource1 = "leftNavigation.html";
 						$scope.pageSource2 = 'spInfoBar.html';
+					} else if(typeObj == 3) {
+						$cookies.put('u_type', typeObj);
+						$scope.activeTab = 'Package Cancellations';
+						$scope.pageSource = 'quickView.html';
+						$scope.pageSource1 = "leftNavigation.html";
+						$scope.pageSource2 = 'financeInfoBar.html';
+						/*if(data.payload.currentTime) {
+							$scope.notification.servertime = data.payload.currentTime;
+							$scope.notification.isSetupDone = false;
+						}*/
 					}
 				}
 			});
@@ -182,6 +202,11 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
                     $scope.pageSource = 'quickView.html';
                     $scope.pageSource1 = "leftNavigation.html";
                     $scope.pageSource2 = 'spInfoBar.html';
+                } else if($cookies.get('u_type') == 3){
+                    $scope.activeTab = 'Package Cancellations';
+					$scope.pageSource = 'quickView.html';
+					$scope.pageSource1 = "leftNavigation.html";
+					$scope.pageSource2 = 'financeInfoBar.html';
                 }
             }
         }
@@ -541,6 +566,139 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 			}
 		}
 
+		$scope.financeSignInFormReset = function () {
+			$scope.financeSignIn.uname = "";
+			$scope.financeSignIn.password = "";
+			$scope.financeSignIn.errorResult = "";
+
+			$scope.signInForm3.financeSignInForm.$setPristine();
+			$scope.signInForm3.financeSignInForm.$setUntouched();
+		}
+
+		$scope.financeSignInFormSubmit = function() {
+			if($scope.signInForm3.financeSignInForm.$valid) {
+				var dataObj = {
+					"username": $scope.financeSignIn.uname,
+					"password": $scope.financeSignIn.password
+				};
+				
+				var url = "/healyos-pdt/hrest/v1/admin/login?apikey=f4205eb9-d441-499d-a045-734c34ccbf7a";
+				//var url = "http://localhost:8080/healyos-pdt/hrest/admin/login?apikey=f4205eb9-d441-499d-a045-734c34ccbf7a";
+				//var url = "/api/hrest/admin/login?apikey=f4205eb9-d441-499d-a045-734c34ccbf7a";
+
+				var result = $http.post(url, dataObj);
+
+				result.success(function(data, status, headers, config) {
+					if(data.error == undefined) {
+						$scope.financeSignIn.errorResult = "";
+						var sidObj = data.sid;
+						var emailObj = data.payload.email;
+						var idObj = data.payload.id;
+                        var name = data.payload.fullname;
+                        /*if(data.payload.currentTime) {
+                        	$scope.notification.servertime = data.payload.currentTime;
+                        	$scope.notification.isSetupDone = false;
+                        }
+                        console.log("s_id: "+data.sid);*/
+						$cookies.put('u_sid', sidObj);
+						$cookies.put('u_apikey', 'f4205eb9-d441-499d-a045-734c34ccbf7a');
+						$cookies.put('u_email', emailObj);
+						$cookies.put('u_id', idObj);
+                        $cookies.put('u_name', name);
+                        $cookies.put('u_type', 3);
+
+						/*$scope.activeTab = 'Home';
+						$scope.pageSource = 'home.html';
+						$scope.pageSource1 = "";
+						$scope.pageSource2 = 'financeInfoBar.html';*/
+
+						$scope.activeTab = 'Package Cancellations';
+						$scope.pageSource = 'quickView.html';
+						$scope.pageSource1 = "leftNavigation.html";
+						$scope.pageSource2 = 'financeInfoBar.html';
+
+						$scope.userTabsFlg = true;
+					}
+				});
+
+				result.error(function(data, status, headers, config) {
+					$scope.financeSignIn.errorResult = data.error.message;
+				});
+			}
+		}
+
+		$scope.$on('logOutFinance', function(event, args) {
+			var sidObj = $cookies.get('u_sid');
+			var apiKeyObj = $cookies.get('u_apikey');
+
+			var url = "/healyos-pdt/hrest/v1/session/logout?apikey=" + apiKeyObj + "&sid=" + sidObj;
+
+			var result = $http.post(url);
+
+			result.success(function(data, status, headers, config) {
+				if(data.error == undefined) {
+					if($cookies.get('u_sid') != undefined) {
+						$cookies.remove('u_sid');
+					}
+					if($cookies.get('u_apikey') != undefined) {
+						$cookies.remove('u_apikey');
+					}
+					if($cookies.get('u_email') != undefined) {
+						$cookies.remove('u_email');
+					}
+					if($cookies.get('u_type') != undefined) {
+						$cookies.remove('u_type');
+					}
+					if($cookies.get('u_id') != undefined) {
+						$cookies.remove('u_id');
+					}
+                    if($cookies.get('u_name') != undefined) {
+						$cookies.remove('u_name');
+					}
+
+                    $scope.userTabsFlg = false;
+					$scope.activeTab = 'Home';
+					$scope.pageSource = 'home.html';
+					$scope.pageSource1 = "";
+					$scope.pageSource2 = "";
+
+					$scope.financeLogoutSuccess = "You have logged out successfully!";
+					$scope.financeLogoutError = "";
+                    
+                    //To reaload the cookies, default value and cache reload the page
+                    $window.location.reload();
+				}
+			});
+
+			result.error(function(data, status, headers, config) {
+				if($cookies.get('u_sid') != undefined) {
+					$cookies.remove('u_sid');
+				}
+				if($cookies.get('u_apikey') != undefined) {
+					$cookies.remove('u_apikey');
+				}
+				if($cookies.get('u_email') != undefined) {
+					$cookies.remove('u_email');
+				}
+				if($cookies.get('u_type') != undefined) {
+					$cookies.remove('u_type');
+				}
+                if($cookies.get('u_name') != undefined) {
+					$cookies.remove('u_name');
+				}
+
+                $scope.userTabsFlg = false;
+				$scope.activeTab = 'Home';
+				$scope.pageSource = 'home.html';
+				$scope.pageSource1 = "";
+				$scope.pageSource2 = "";
+
+				console.log("error response: " + data.error.message);
+				$scope.financeLogoutSuccess = "";
+				$scope.financeLogoutError = data.error.message;
+			});
+		});
+
 		$scope.adminSignInFormReset = function () {
 			$scope.adminSignIn.uname = "";
 			$scope.adminSignIn.password = "";
@@ -646,6 +804,16 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 			$scope.pageSource1 = "";
 			$scope.pageSource2 = "";
             $timeout(function () { $scope.sessionFlag.spSessionTimeoutFlag = false; }, 7000);
+		});
+
+		$scope.$on('navigatetoHomeFinance', function(event, args) {
+			$scope.sessionFlag.financeSessionTimeoutFlag = true;
+			$scope.userTabsFlg = false;
+			$scope.activeTab = 'Home';
+			$scope.pageSource = 'home.html';
+			$scope.pageSource1 = "";
+			$scope.pageSource2 = "";
+            $timeout(function () { $scope.sessionFlag.financeSessionTimeoutFlag = false; }, 7000);
 		});
 
 		$scope.$on('logOutAdmin', function(event, args) {
@@ -959,7 +1127,15 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 
     $scope.initAccordion = function() {
         setWorkingArea();
-        $scope.activeTab = "My Appointments";
+        
+        if($cookies.get('u_type')!=undefined) 
+        {
+        	$scope.activeTab = "My Appointments";
+            if($cookies.get('u_type') == 3){
+                $scope.activeTab = 'Package Cancellations';
+            }
+        }
+        
         if( isThisMobileDevice() ) {
             setTimeout(function(){
                 handleNavigationMenus();

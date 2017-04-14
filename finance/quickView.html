@@ -1,0 +1,181 @@
+<div class="mainContent2" ng-controller="FinanceCtrl" ng-init="financeMgmt.InitFinanceParams(); financeMgmt.getFinance();">
+	<script type="text/ng-template" id="ReviseRate">
+        <form role="form" name="ReviseRateTransForm" novalidate>
+            <div style="margin:10px; padding:10px">
+                <div class="row middleRowContent">
+                    <div class="col-xs-4">
+                        <label>Revise Rate: </label>
+                    </div>
+                    <div class="col-xs-8">
+                        <input type="text" 
+                            placeholder="amount" 
+                            class="form-control" 
+                            style="max-width: 300px;"
+                            ng-model="financeMgmt.revise_amount"
+                            ng-pattern="/^\d+(\.\d{1,2})?$/"
+                            ng-required = "true" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="margin-top:10px; padding:10px;">
+                        <button type="submit" class="ngdialog-button ngdialog-button-primary" ng-click="submitted=true;ReviseRateTransForm.$valid && confirm('OK')">Ok</button>
+                        <button ng-click="closeThisDialog('Cancel')" type="button" class="ngdialog-button ngdialog-button-secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </script>
+
+	<div style="padding:10px;">
+		<div class="row" ng-show="(financeMgmt.financeSuccessMsg || financeMgmt.financeErrorMsg)">
+			<div class="alert alert-success alert-dismissible" role="alert" ng-show="financeMgmt.financeSuccessMsg">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<strong>Well done!</strong> {{financeMgmt.financeSuccessMsg}}
+			</div>
+			<div class="alert alert-danger alert-dismissible" role="alert" ng-show="financeMgmt.financeErrorMsg">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<strong>Oh snap!</strong> {{financeMgmt.financeErrorMsg}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="panel panel-default" style="border: 1px solid #ddd">
+				<div class="panel-heading">
+					<span style="font-weight: bold;font-size: 20px">Package Cancellation Management</span>
+					<span class="pull-right clickable glyphicon glyphicon-refresh" title="Refresh the actionable items" ng-click="financeMgmt.getFinance();"></span>
+				</div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th ng-click="financeMgmt.sortFinance('created_on')"><span class="1clsfleft">Created On</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='created_on'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('customer_id')"><span class="1clsfleft">Customer</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='customer_id'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('service_provider_id')"><span class="1clsfleft">Service Provider</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='service_provider_id'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('package_code')"><span class="1clsfleft">Package</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='package_code'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('no_of_sessions')"><span class="1clsfleft">No. Of Sessions</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='no_of_sessions'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('approved_free_cancellation_days')"><span class="1clsfleft">Rate</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='approved_free_cancellation_days'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('approved_valid_days')"><span class="1clsfleft">Used Sessions</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='approved_valid_days'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr dir-paginate="rec in financeMgmt.arrayFinance|orderBy:financeSortKey:financeReverse|filter:search|itemsPerPage:4"
+								pagination-id="arrFinanceId">
+							<td>
+								<span style="word-break: break-word;">{{rec.created_on * 1000 | date:'dd-MM-yyyy hh:mm a'}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.customer_name}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.service_provider_name}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.package_code}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.no_of_sessions}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.package_rate}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.used_sessions}}</span>
+							</td>
+							<td>
+								<span class="clickable glyphicon glyphicon-retweet" style="color: blue" title="Show Revise Rate" ng-click="financeMgmt.showReviseRate(rec);"></span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<dir-pagination-controls
+					max-size="5"
+					pagination-id="arrFinanceId"
+					direction-links="true"
+					boundary-links="true" >
+				</dir-pagination-controls>
+			</div>
+		</div>
+		<div class="row" ng-show="(financeMgmt.reviseRateDetails)">
+			<div class="panel panel-default" style="border: 1px solid #ddd">
+				<div class="panel-heading">
+					<span style="font-weight: bold;font-size: 16px">Revise Rate Details</span>
+					<span class="pull-right clickable glyphicon glyphicon-remove" title="Cancel" ng-click="financeMgmt.reviseRateDetails=false"></span>
+				</div>
+				<table class="table">
+					<tbody>
+						<tr>
+							<th style="background-color: #EAFAF1" width="20%">
+								<span style="word-break: break-word;">Customer</span>
+							</th>
+							<td width="30%">
+								<span style="word-break: break-word;">{{financeMgmt.customer_name}}</span>
+							</td>
+							<th style="background-color: #EAFAF1" width="20%">
+								<span style="word-break: break-word;">No. Of Sessions</span>
+							</th>
+							<td width="30%">
+								<span style="word-break: break-word;">{{financeMgmt.no_of_sessions}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Service Provider</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;">{{financeMgmt.service_provider_name}}</span>
+							</td>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Used Sessions</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;">{{financeMgmt.used_sessions}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Package</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;">{{financeMgmt.package_code}}</span>
+							</td>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Existing Rate</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;">{{financeMgmt.package_rate}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #ABEBC6">
+								<span style="word-break: break-word;font-size: 16px">Revise Rate</span>
+							</th>
+							<th style="background-color: #ABEBC6">
+								<span style="word-break: break-word;font-size: 16px">{{financeMgmt.revise_amount}}</span>
+							</td>
+							<th style="background-color: #ABEBC6">
+								<span style="word-break: break-word;font-size: 16px">Cost Difference</span>
+							</th>
+							<th style="background-color: #ABEBC6">
+								<span style="word-break: break-word;font-size: 16px">{{financeMgmt.cost_difference}}</span>
+								<button class="btn btn-danger btn-sm pull-right" style="margin-top: -2px" type="button" ng-click="financeMgmt.debitWallet();"><span title="Debit From Wallet" class="clickable glyphicon glyphicon-minus"></span> Debit Wallet</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

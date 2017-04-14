@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Healyos pdt.</title>
+	
+	<script src="../js/angular.min.js" type="text/javascript"></script>
+	<!--<script src="../js/jquery-1.9.1.js" type="text/javascript"></script>-->
+    <script src="../js/jquery-2.1.1.js"></script>
+    <script src="../js/jquery-ui-1.11.1.js"></script>
+    <script src="../js/jquery-ui.multidatespicker.js"></script>
+    
+	<link rel="stylesheet" href="../css/pepper-ginder-custom.css" />
+    <link rel="stylesheet" href="../css/mdp.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/summernote/0.5.1/summernote.css" />
+
+    <script src="../js/lib/angular-facebook.js" type="text/javascript"></script>
+    <script src="../js/utils/common.js" type="text/javascript"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/summernote/0.5.1/summernote.min.js" type="text/javascript"></script>
+    <script src="../js/app.js" type="text/javascript"></script>
+    <script src="../js/utils/utility.js" type="text/javascript"></script>
+	<script src="../js/general.js" type="text/javascript"></script>
+	<script src="../js/moment.js" type="text/javascript"></script>
+	<script src="../js/services/financeApiService.js" type="text/javascript"></script>
+    <script src="../js/finance.js" type="text/javascript"></script>
+	<script src="../js/costcalculator.js" type="text/javascript"></script>
+
+	<script src="../js/angular-cookies.js" type="text/javascript"></script>
+	<script src="../js/angular-cookies.min.js" type="text/javascript"></script>
+	<script src="../js/angular-cookies.min.js.map" type="text/javascript"></script>
+
+	<script src="../js/callMeTimeDir.js" type="text/javascript"></script>
+	
+	<script src="../js/ngDialog.js" type="text/javascript"></script>
+	<script src="../js/ngDialog.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="../css/ngDialog.css" />
+	<link rel="stylesheet" href="../css/ngDialog-theme-default.css" />
+	<link rel="stylesheet" href="../css/ngDialog-theme-plain.css" />
+	<link rel="stylesheet" href="../css/ngDialog-custom-width.css" />
+
+	<script src="../js/dirPagination.js" type="text/javascript"></script>
+
+	<script src="../js/moment-with-locales.js" type="text/javascript"></script>
+	<script src="../js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../js/datetimepicker.js"></script>
+    <script type="text/javascript" src="../js/datetimepicker.templates.js"></script>
+	
+    <!-- <script src="../js/ui-bootstrap-tpls-0.12.0.js"></script> -->
+	<script src="../js/ui-bootstrap-tpls-0.13.4.js" type="text/javascript"></script>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+	<link href="../css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/datetimepicker.css" />
+
+	<link rel="stylesheet" type="text/css" href="../css/main.css" id="cssLink" />
+ 	<link rel="stylesheet" type="text/css" href="../css/override.css" />   
+ 	<link rel="stylesheet" type="text/css" href="../css/appointment.css" />
+
+    <script type="text/javascript" src="../js/lodash.js"></script>
+    <script type="text/javascript" src="../js/angularjs-dropdown-multiselect.js"></script>
+
+    <script type="text/javascript" src="../js/acute.selector.js"></script>
+    <link href="../css/acute.select.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+		if( isThisMobileDevice() ) {
+			controlCss = "../css/android.css";
+			document.getElementById("cssLink").setAttribute("href", controlCss);
+		}
+    </script>
+	
+</head>
+<body style="background: none;" ng-app="myApp">
+    <div class="loading-dialog" data-loading></div>
+
+    <div id="" ng-controller="TabsCtrl">
+		<div ng-include="'header.html'"></div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12" style="margin-bottom: 10px;" id="infoHeader">
+                    <ng-include src="pageSource2"></ng-include>
+                </div>
+            </div>
+            <div class="row">
+                <div class="hidden-xs hidden-sm col-md-2 col-lg-2 navMenu" ng-show="userTabsFlg" id="menuListing">
+                    <ng-include src="pageSource1"></ng-include>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10" id="workArea" style="overflow: auto; padding-bottom: 10px;">
+                    <ng-include src="pageSource"></ng-include>
+                </div>
+            </div>
+        </div>
+	</div>
+    <div ng-include="'footer.html'"></div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../js/bootstrap.min.js"></script>
+</body>
+</html> 
