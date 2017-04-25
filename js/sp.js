@@ -1977,10 +1977,9 @@ angular.module('myApp.controllers')
         }).then(function(value)
         {
             //alert($scope.futureApptSelectedDate);
-
             console.log($scope.futureApptList);
 
-            if($scope.futureApptList.length > 0 && $scope.futureApptSelectedDate != 'undefined'){
+            if($scope.futureApptList.length > 0 && $scope.futureApptSelectedDate != undefined){
            
                 for(var i = 0; i < $scope.futureApptList.length; i++){
 
@@ -2005,14 +2004,16 @@ angular.module('myApp.controllers')
                                 var error = data.error.message;
                                 //alert("Failed to make appointment cancellation request! " + error);
                                 $scope.checkSessionTimeout(data);
-                            });
-                           
+                            });                           
                     }           
                     
                 }
-
                 alert("Package cancellation request sent successfully!");
 
+            }
+            if($scope.futureApptSelectedDate == undefined){
+                    alert("Please Select Confirmed Appointment For Package cancellation");
+                    $scope.requestPackageCancel();
             } 
 
         },

@@ -33,7 +33,14 @@
                         <span>Please provide some Reason</span>
                     </div>
                     <div>
-                        <textarea cols="30" rows="3" ng-model="CancelRequest.reason"></textarea>
+                        <textarea cols="30" rows="3" ng-model="CancelRequest.reason"
+                        name="reason" data-ng-class = "{red2: CancelRequestForm.reason.$invalid && CancelRequestForm.reason.$dirty}" data-ng-required = "true"></textarea>
+
+                        <div ng-show="submitted && CancelRequestForm.$invalid">
+                                    <span style = "color:red" data-ng-show = "CancelRequestForm.reason.$invalid">
+                                        <span data-ng-show = "CancelRequestForm.reason.$error.required"> Please Enter Appropriate Reason </span>
+                                    </span>
+                        </div>
                     </div>
                     
                     </div>
