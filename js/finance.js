@@ -78,21 +78,21 @@ angular.module('myApp.controllers')
 				
 				var ms = moment(cancelled_on,"DD/MM/YYYY HH:mm:ss").diff(moment(created_on,"DD/MM/YYYY HH:mm:ss"));
 				var duration = moment.duration(ms);
-				var hrs = duration.asHours();
+				var hrs = duration.asHours();*/
 
 				if(item.package_cancellation != undefined){
 					if(item.package_cancellation.used_sessions == 0){
-						if(hrs > 24){
+						//if(hrs > 24){
 							$scope.financeMgmt.arrayFinance.push(item);
-						}
+						//}
 					}
 				}else{
-					if(hrs > 24){
+					//if(hrs > 24){
 						$scope.financeMgmt.arrayFinance.push(item);
-					}
-				}*/
+					//}
+				}
 				
-				$scope.financeMgmt.arrayFinance.push(item);
+				//$scope.financeMgmt.arrayFinance.push(item);
 			});
 		}).
 		error(function (data, status, headers, config) {
