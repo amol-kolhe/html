@@ -129,10 +129,20 @@
                 </div>
             </div> <!-- End of wallet details -->
 
-            <div class="row" ng-show="custOldPackage.package_code">
+            <div class="row" ng-show="custOldPackage.is_package_assign">
                 <div class="col-xs-12">
                     <div class="headBar">
-                        <span>Package Details</span>
+                         <span>Package Details</span>
+                         <span style="float:right;">    
+
+                             <span>
+                                <span 
+                                    title="Cancel Package"
+                                    class="clickable glyphicon glyphicon-th-list"
+                                    style="margin-right:15px; font-size: 15px;"
+                                    ng-click="requestPackageCancel()"></span>
+                            </span> 
+                        </span>
                     </div>
                     <div class="bodyContainer">
                         <form name="sessionsForm">

@@ -68,6 +68,7 @@ angular.module('myApp.controllers')
     $scope.custTotalAppt = 0;
     $scope.custPackageTotalAppt = 0;
     $scope.apptPayment.paymentForm = "";
+    $scope.reasonForPkgCancel = "";
     $scope.aptPayment = {
         currency : "INR",
         type : "Wallet",
@@ -155,6 +156,13 @@ angular.module('myApp.controllers')
         } else {
             console.log("SP name is undefined!");
         }
+
+        if(($cookies.get('u_sid') != undefined)) {
+            $scope.spId = $cookies.get('u_sid');
+        } else {
+            console.log("SP id is undefined!");
+        }
+
     }
 
     $scope.fetchSpAppointments = function(timeSpan) {
@@ -287,17 +295,13 @@ angular.module('myApp.controllers')
                     }
                     appointmentHistory.push(data.payload.appointments[i].appointment);
                     
-                    var j = 0;
-                    j = i - 1;
-                    
                     if(i!=0){
-                        if(parseInt(data.payload.appointments[i].appointment.starttime) > parseInt(data.payload.appointments[j].appointment.starttime)){
+                        if(data.payload.appointments[i].appointment.state == "Confirmed" && parseInt(data.payload.appointments[i].appointment.starttime) > parseInt($scope.lastApptTime)){
                             $scope.lastApptTime = data.payload.appointments[i].appointment.starttime;
-                        }    
+                        }
                     }else{
                         $scope.lastApptTime = data.payload.appointments[i].appointment.starttime;
                     }
-                    
                 }
             } else {
                 console.log("error");
@@ -501,9 +505,11 @@ angular.module('myApp.controllers')
         $scope.apptCityId = '';
         $scope.clinicBasePriceVal = 0;
         $scope.clinicArray = [];
+        $scope.patientidForPkgCancel = '';
 
         spApi.getCustomerDetails(appointment.custid)
         .success(function(data, status, headers, config){
+            console.log(data);
             $scope.custOldPackage = {
                 package_id : data.payload.customer.package_id,
                 package_code : data.payload.customer.package_code,
@@ -511,6 +517,7 @@ angular.module('myApp.controllers')
                 is_package_assign : data.payload.customer.is_package_assign,
             };
             $scope.currentOpenView = "CUSTOMER";
+            $scope.patientidForPkgCancel = data.payload.customer._id;
             $scope.custReadList = data.payload.customer;
             $scope.customerId = data.payload.customer.healyoscustid;
             $scope.obj.custid = data.payload.customer._id;
@@ -1968,7 +1975,17 @@ angular.module('myApp.controllers')
 
      $scope.requestPackageCancel = function() {
 
-        $scope.fetchFutureAppointments($scope.adminNewAppointmentCust.appointment.patientid);
+
+
+        if($scope.patientidForPkgCancel != undefined) {
+            $scope.fetchFutureAppointments($scope.patientidForPkgCancel);
+        }else{
+            $scope.fetchFutureAppointments($scope.adminNewAppointmentCust.appointment.patientid);
+        }
+
+
+
+        $scope.CancelPkgRequest = { reasonForPkgCancel : ""};
 
         ngDialog.openConfirm({
             template: 'AptPkgCancellation',
@@ -1977,44 +1994,82 @@ angular.module('myApp.controllers')
         }).then(function(value)
         {
             //alert($scope.futureApptSelectedDate);
-            console.log($scope.futureApptList);
+            //alert($scope.futureApptList.length);
+            //alert($scope.CancelPkgRequest.reasonForPkgCancel);
 
-            if($scope.futureApptList.length > 0 && $scope.futureApptSelectedDate != undefined){
-           
-                for(var i = 0; i < $scope.futureApptList.length; i++){
+            $scope.spId = $cookies.get('u_id');
 
-                    var cancelRequestInfo ={"reason":"","changerequestby":""};
+            var con = confirm("Are you sure you want to cancel package ?");
 
-                    if(($scope.futureApptList[i].startTime >= $scope.futureApptSelectedDate) && ($scope.futureApptList[i].status != "Cancelled") && ($scope.futureApptList[i].status != "Waiting Approval")){
-                            
-                            if($scope.futureApptList[i].startTime == $scope.futureApptSelectedDate){
-                                cancelRequestInfo.reason="Package Cancellation";
-                            }else{
-                                cancelRequestInfo.reason="Package Cancellation ";
-                            }
+            //console.log($scope.futureApptList);
+            if(con){   
+                if($scope.futureApptList.length > 0 && $scope.futureApptSelectedDate != undefined){
+               
+                    for(var i = 0; i < $scope.futureApptList.length; i++){
 
-                            cancelRequestInfo.changerequestby="Customer";
-                            
-                            spApi.requestAppointmentChange($scope.futureApptList[i].apptid, "cancel",cancelRequestInfo)
-                            .success(function(data, status, headers, config) {
-                               // alert("Appointment cancellation request sent successfully!");
-                              
-                            })
-                            .error(function(data, status, headers, config) {
-                                var error = data.error.message;
-                                //alert("Failed to make appointment cancellation request! " + error);
-                                $scope.checkSessionTimeout(data);
-                            });                           
-                    }           
-                    
+                        var cancelRequestInfo ={"reason":"","changerequestby":"","reasonForPkgCancel":""};
+
+                        if(($scope.futureApptList[i].startTime >= $scope.futureApptSelectedDate) && ($scope.futureApptList[i].status != "Cancelled") && ($scope.futureApptList[i].status != "Waiting Approval")){
+                                
+                                if($scope.futureApptList[i].startTime == $scope.futureApptSelectedDate){
+                                    cancelRequestInfo.reason="Package Cancellation";
+                                }else{
+                                    cancelRequestInfo.reason="Package Cancellation ";
+                                }
+
+                                cancelRequestInfo.changerequestby="Customer";
+                                if($scope.CancelPkgRequest.reasonForPkgCancel != undefined){
+                                    cancelRequestInfo.reasonForPkgCancel=$scope.CancelPkgRequest.reasonForPkgCancel;
+                                } 
+                                
+                                spApi.requestAppointmentChange($scope.futureApptList[i].apptid, "cancel",cancelRequestInfo)
+                                .success(function(data, status, headers, config) {
+                                   // alert("Appointment cancellation request sent successfully!");
+                                  
+                                })
+                                .error(function(data, status, headers, config) {
+                                    var error = data.error.message;
+                                    //alert("Failed to make appointment cancellation request! " + error);
+                                    $scope.checkSessionTimeout(data);
+                                });                           
+                        }           
+                        
+                    }
+                    alert("Package cancellation request sent successfully!");                   
+
                 }
-                alert("Package cancellation request sent successfully!");
 
-            }
-            if($scope.futureApptSelectedDate == undefined){
+                if($scope.futureApptSelectedDate == undefined && $scope.futureApptList.length > 0){
                     alert("Please Select Confirmed Appointment For Package cancellation");
                     $scope.requestPackageCancel();
-            } 
+                }
+
+
+                if($scope.futureApptList.length == 0){
+
+                    var cancelRequestInfo ={"reason":"pkg cancel","changerequestby":"","reasonForPkgCancel":"","patientid":"","spid":""};
+
+                    cancelRequestInfo.changerequestby="Customer";
+                    if($scope.CancelPkgRequest.reasonForPkgCancel != undefined){
+                        cancelRequestInfo.reasonForPkgCancel=$scope.CancelPkgRequest.reasonForPkgCancel;
+                    }
+
+                    cancelRequestInfo.patientid = $scope.patientidForPkgCancel;
+                    cancelRequestInfo.spid = $scope.spId;
+
+                    spApi.requestAppointmentChange("0000", "cancel",cancelRequestInfo)
+                    .success(function(data, status, headers, config) {
+                                           
+                    })
+                    .error(function(data, status, headers, config) {
+                        var error = data.error.message;
+                        $scope.checkSessionTimeout(data);
+                    });
+
+                }
+                
+
+            }
 
         },
         function(value) {
@@ -2022,16 +2077,35 @@ angular.module('myApp.controllers')
         });
     }
 
-    $scope.getValue = function(value) {
+    $scope.getValue = function(value,starttime) {
         $scope.futureApptSelectedDate = value;
+        $scope.apptStatus = "";
+
+        for(var i = 0; i < $scope.futureApptList.length; i++){
+            if(($scope.futureApptList[i].startTime == $scope.futureApptSelectedDate)){
+                $scope.apptStatus = $scope.futureApptList[i].status;
+            }
+        }
+
+        if($scope.apptStatus != "Cancelled"){
+            for(var i = 0; i < $scope.futureApptList.length; i++){
+                if(($scope.futureApptList[i].startTime >= $scope.futureApptSelectedDate) && ($scope.futureApptList[i].status != "Cancelled") && ($scope.futureApptList[i].status != "Waiting Approval")){
+                  $("."+$scope.futureApptList[i].refno+"").css({"background-color": "#ff9999"});                                                   
+                }                                  
+            }
+        }
+      
     }
+
 
     $scope.fetchFutureAppointments = function(patientid) {
 
         spApi.fetchFutureAppointments(patientid)
             .success(function(data, status, headers, config) {
                 $scope.futureApptList = data.payload;  
-                console.log($scope.futureApptList);
+                $scope.futureApptListCount = $scope.futureApptList.length;
+                //console.log($scope.futureApptList);
+                //alert($scope.futureApptListCount);
                
             })
             .error(function(data, status, headers, config) {

@@ -29,6 +29,9 @@
                         <th ng-click="sort2('appointment.approvalDetails.reason')">Reason
                             <span class="glyphicon sort-icon" ng-show="sorting.by=='appointment.approvalDetails.reason'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
                         </th>
+                        <th ng-click="sort2('appointment.approvalDetails.reasonForPkgCancel')">Pkg Cancellation Reason
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='appointment.approvalDetails.reasonForPkgCancel'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -50,6 +53,9 @@
                         <td>{{apt.appointment.approvalDetails.changerequestby}}</td>
                         <td style="max-width:150px;" class="promo-row-text">
                             <span style="word-break: break-word;">{{apt.appointment.approvalDetails.reason}}</span>
+                        </td>
+                        <td style="max-width:150px;" class="promo-row-text">
+                            <span style="word-break: break-word;">{{apt.appointment.approvalDetails.reasonForPkgCancel}}</span>
                         </td>
                         <td>
                             <span class="glyphicon glyphicon-ok clickable"

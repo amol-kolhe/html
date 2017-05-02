@@ -55,25 +55,45 @@
 
     <script type="text/ng-template" id="AptPkgCancellation">
            <!-- <form name="Form" data-ng-submit="confirm('OK')">-->
-               <form role="form" name="CancelRequestForm" novalidate>
+               <form role="form" name="CancelRequestForm" novalidate id="AptPkg">
                 <div style="margin:10px; padding:10px">
                     <div class="row">
                         <div>
-                            <span><h4>Future Appointments</h4></span>
+                            <span><h4><b>Package Cancellation</b></h4></span>
                         </div>
+                    </div>
+
+                    <div class="row">
+                            <div>
+                                <span><b>Please provide Reason For Package Cancellation</b></span>
+                            </div>
+                            <div>
+                                <textarea cols="40" rows="2" ng-model="CancelPkgRequest.reasonForPkgCancel"
+                                name="reasonForPkgCancel" data-ng-class = "{red2: CancelRequestForm.reasonForPkgCancel.$invalid && CancelRequestForm.reasonForPkgCancel.$dirty}" data-ng-required = "true"></textarea>
+
+                                <div ng-show="submitted && CancelRequestForm.$invalid">
+                                    <span style = "color:red" data-ng-show = "CancelRequestForm.reasonForPkgCancel.$invalid">
+                                        <span data-ng-show = "CancelRequestForm.reasonForPkgCancel.$error.required"> Please Enter Appropriate Reason </span>
+                                    </span>
+                                </div>
+                              
+                            </div>
+                    </div>
+
+                    <div class="row">
                         <div "appointmentsTable table-responsive">
-                            <table class="table table-condensed">
+                            <table class="table table-condensed" ng-show = "futureApptListCount > 0">
                                 <th>Date</th>
                                 <th>Ref.No.</th>
                                 <th>SP Name</th>
                                 <th>Status</th>
                                 <tbody>
                                     <tr dir-paginate="apt in futureApptList|orderBy:'-startTime':!reverse|filter:search|itemsPerPage:10"
-                                        pagination-id="custFutureAptId">
+                                        pagination-id="custFutureAptId"  class="{{apt.refno}}">
                                         <td>
                                             <input id="{{apt.startTime}}" type="radio" 
                                             ng-model="selectedFutureApptTime" name="groupAppt"
-                                            value="{{apt.startTime}}" ng-change='getValue(selectedFutureApptTime)'>{{"   "+apt.startTime_date}}</input>
+                                            value="{{apt.startTime}}" ng-change='getValue(selectedFutureApptTime,{{apt.startTime}})'>{{"   "+apt.startTime_date}}</input>
 
                                         </td>
                                         <td>
