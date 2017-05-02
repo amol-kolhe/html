@@ -61,10 +61,19 @@ angular.module('myApp.controllers')
 		success(function (data, status, headers, config) {
 			var arrStoreTrue = [];
 			var arrStoreTrue = data.payload;
-			console.log("successfully received package cancellation request.");
-			
+			console.log("successfully safnajfnajfreceived package cancellation request hiiiii.");
+
 			arrStoreTrue.forEach(function(item) {
-				var created_on = moment(new Date(item.created_on * 1000)).format("DD/MM/YYYY HH:mm:ss");
+
+				financeApi.getFetchCust(item.customer_id)
+				.success(function(custData, custStatus, custHeaders, custConfig) {
+					item.wallet_balance = custData.payload.customer.custwallet.walletbalance;
+				})
+				.error(function(data, status, headers, config) {
+					item.walletBalance = 0;
+				});
+
+				/*var created_on = moment(new Date(item.created_on * 1000)).format("DD/MM/YYYY HH:mm:ss");
 				var cancelled_on = moment(new Date(item.cancelled_on * 1000)).format("DD/MM/YYYY HH:mm:ss");
 				
 				var ms = moment(cancelled_on,"DD/MM/YYYY HH:mm:ss").diff(moment(created_on,"DD/MM/YYYY HH:mm:ss"));
@@ -81,8 +90,9 @@ angular.module('myApp.controllers')
 					if(hrs > 24){
 						$scope.financeMgmt.arrayFinance.push(item);
 					}
-				}
+				}*/
 				
+				$scope.financeMgmt.arrayFinance.push(item);
 			});
 		}).
 		error(function (data, status, headers, config) {

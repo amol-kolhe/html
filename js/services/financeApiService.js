@@ -48,6 +48,10 @@ financeApiService.factory('financeApi', ['$http', '$cookies', function($http, $c
 		return $http.put(baseUrl + "/hrest/v1/admin/updatePackageTransaction/" + id + "?apikey=" + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + "&role=3",dataObj);
 	}
 
+	financeApi.getFetchCust = function(custID) {
+		return $http.get(baseUrl + '/hrest/v1/admin/cust/' + custID + "?apikey=" + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + "&role=3");
+	};
+
 	return financeApi;
 }]);
 

@@ -46,6 +46,11 @@
 				<table class="table">
 					<thead>
 						<tr>
+							<th colspan="4" style="border:1px solid #ddd"></th>
+							<th colspan="3" style="text-align: center;border:1px solid #ddd">Sessions</th>
+							<th colspan="3" style="border:1px solid #ddd"></th>
+						</tr>
+						<tr>
 							<th ng-click="financeMgmt.sortFinance('created_on')"><span class="1clsfleft">Created On</span>
 								<span class="glyphicon sort-icon" ng-show="financeSortKey=='created_on'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 							</th>
@@ -58,14 +63,20 @@
 							<th ng-click="financeMgmt.sortFinance('package_code')"><span class="1clsfleft">Package</span>
 								<span class="glyphicon sort-icon" ng-show="financeSortKey=='package_code'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 							</th>
-							<th ng-click="financeMgmt.sortFinance('no_of_sessions')"><span class="1clsfleft">No. Of Sessions</span>
+							<th ng-click="financeMgmt.sortFinance('no_of_sessions')"><span class="1clsfleft">Sign Up</span>
 								<span class="glyphicon sort-icon" ng-show="financeSortKey=='no_of_sessions'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('approved_valid_days')"><span class="1clsfleft">Used</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='approved_valid_days'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('remaining_sessions')"><span class="1clsfleft">Remaining</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='remaining_sessions'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 							</th>
 							<th ng-click="financeMgmt.sortFinance('approved_free_cancellation_days')"><span class="1clsfleft">Rate</span>
 								<span class="glyphicon sort-icon" ng-show="financeSortKey=='approved_free_cancellation_days'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 							</th>
-							<th ng-click="financeMgmt.sortFinance('approved_valid_days')"><span class="1clsfleft">Used Sessions</span>
-								<span class="glyphicon sort-icon" ng-show="financeSortKey=='approved_valid_days'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							<th style="text-align: right;" ng-click="financeMgmt.sortFinance('wallet_balance')"><span class="1clsfleft">Wallet Balance</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='wallet_balance'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 							</th>
 							<th>Action</th>
 						</tr>
@@ -85,16 +96,22 @@
 							<td>
 								<span style="word-break: break-word;">{{rec.package_code}}</span>
 							</td>
-							<td>
+							<td style="text-align: center;">
 								<span style="word-break: break-word;">{{rec.no_of_sessions}}</span>
 							</td>
-							<td>
-								<span style="word-break: break-word;">{{rec.package_rate}}</span>
-							</td>
-							<td>
+							<td style="text-align: center;">
 								<span style="word-break: break-word;">{{rec.used_sessions}}</span>
 							</td>
+							<td style="text-align: center;">
+								<span style="word-break: break-word;">{{rec.no_of_sessions - rec.used_sessions}}</span>
+							</td>
 							<td>
+								<span style="word-break: break-word;">&#8377; {{rec.package_rate}}</span>
+							</td>
+							<td style="text-align: right;">
+								<span style="word-break: break-word;">&#8377; {{rec.wallet_balance}}</span>
+							</td>
+							<td style="text-align: center;">
 								<span class="clickable glyphicon glyphicon-retweet" style="color: blue" title="Show Revise Rate" ng-click="financeMgmt.showReviseRate(rec);"></span>
 							</td>
 						</tr>
