@@ -107,17 +107,19 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 
 		$scope.custMenus = [{title: "My Appointments", url: 'appointments.html'},
 			{title: "New Appointment", url: 'custNewAppointment.html'}
-			];
+		];
 			
 		$scope.spMenus = [{title: "My Appointments", url: 'quickView.html'},
 			{title: "Cost Calculator", url: 'costcalculator.html'}
-			];
+		];
 
-		$scope.financeMenus = [{title: "Package Cancellations", url: 'quickView.html'},
-			{title: "Reports", url: 'reportFilters.html'},
-			{title: "Patient Wallet", url: 'patientWallet.html'}
-			];
-
+		$scope.financeMenus = [
+			{title: "Package Cancellations", url: 'quickView.html'},
+			{title: "Collection", url: 'collection.html'},
+			{title: "Patient Wallet", url: 'patientWallet.html'},
+			{title: "Report", url: 'reportFilters.html'}
+		];
+		
 		if($cookies.get('u_sid') != undefined) {
 			$scope.users1.disableFlag = false;
 			$scope.boolFlag = false;

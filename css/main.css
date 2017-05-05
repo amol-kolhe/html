@@ -629,3 +629,273 @@ label.selectsp {
     min-width: 100px;
     display: inline-block;
 }
+
+.row-selected {
+    background: #FF0000;
+    color: #FFFFFF; 
+}
+
+/*********** Check Box Zero Start************/
+
+.checkboxZero {
+    width: 80px;
+    height: 30px;
+    background: #333;
+    border-radius: 50px;
+    position: relative;
+}
+
+.checkboxZero:before {
+    content: 'On';
+    position: absolute;
+    top: 5px;
+    left: 13px;
+    height: 2px;
+    color: #26ca28;
+    font-size: 16px;
+}
+
+.checkboxZero:after {
+    content: 'Off';
+    position: absolute;
+    top: 5px;
+    left: 46px;
+    height: 2px;
+    color: #111;
+    font-size: 16px;
+    color: #ddd;
+}
+
+.checkboxZero label {
+    display: block;
+    width: 30px;
+    height: 20px;
+    border-radius: 50px;
+
+    transition: all .5s ease;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    z-index: 1;
+    left: 7px;
+    background: #ddd;
+}
+
+.checkboxZero input[type=checkbox]:checked + label {
+    left: 42px;
+    background: #26ca28;
+}
+
+/*********** Check Box Zero End************/
+
+/*********** Check Box One Start************/
+
+.checkboxOne {
+    width: 80px;
+    height: 30px;
+    background: #333;
+    border-radius: 50px;
+    position: relative;
+}
+
+.checkboxOne:before {
+    content: 'On';
+    position: absolute;
+    top: 5px;
+    left: 13px;
+    height: 2px;
+    color: #26ca28;
+    font-size: 16px;
+}
+
+.checkboxOne:after {
+    content: 'Off';
+    position: absolute;
+    top: 5px;
+    left: 46px;
+    height: 2px;
+    color: #111;
+    font-size: 16px;
+    color: #ddd;
+}
+
+.checkboxOne label {
+    display: block;
+    width: 30px;
+    height: 20px;
+    border-radius: 50px;
+
+    transition: all .5s ease;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    z-index: 1;
+    left: 7px;
+    background: #ddd;
+}
+
+.checkboxOne input[type=checkbox]:checked + label {
+    left: 42px;
+    background: #26ca28;
+}
+
+/*********** Check Box One End************/
+
+/*********** Check Box Two Start************/
+
+.checkboxTwo {
+    width: 80px;
+    height: 30px;
+    background: #333;
+    border-radius: 50px;
+    position: relative;
+}
+
+.checkboxTwo:before {
+    content: 'On';
+    position: absolute;
+    top: 5px;
+    left: 13px;
+    height: 2px;
+    color: #26ca28;
+    font-size: 16px;
+}
+
+.checkboxTwo:after {
+    content: 'Off';
+    position: absolute;
+    top: 5px;
+    left: 46px;
+    height: 2px;
+    color: #111;
+    font-size: 16px;
+    color: #ddd;
+}
+
+.checkboxTwo label {
+    display: block;
+    width: 30px;
+    height: 20px;
+    border-radius: 50px;
+
+    transition: all .5s ease;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    z-index: 1;
+    left: 7px;
+    background: #ddd;
+}
+
+.checkboxTwo input[type=checkbox]:checked + label {
+    left: 42px;
+    background: #26ca28;
+}
+
+/*********** Check Box Two End************/
+
+/*********** Check Box Three Start************/
+
+.checkboxThree {
+    width: 80px;
+    height: 30px;
+    background: #333;
+    border-radius: 50px;
+    position: relative;
+}
+
+.checkboxThree:before {
+    content: 'On';
+    position: absolute;
+    top: 5px;
+    left: 13px;
+    height: 2px;
+    color: #26ca28;
+    font-size: 16px;
+}
+
+.checkboxThree:after {
+    content: 'Off';
+    position: absolute;
+    top: 5px;
+    left: 46px;
+    height: 2px;
+    color: #111;
+    font-size: 16px;
+    color: #ddd;
+}
+
+.checkboxThree label {
+    display: block;
+    width: 30px;
+    height: 20px;
+    border-radius: 50px;
+
+    transition: all .5s ease;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    z-index: 1;
+    left: 7px;
+    background: #ddd;
+}
+
+.checkboxThree input[type=checkbox]:checked + label {
+    left: 42px;
+    background: #26ca28;
+}
+
+/*********** Check Box Three End************/
+
+/*********** Check Box Four Start************/
+
+.checkboxFour {
+    width: 80px;
+    height: 30px;
+    background: #333;
+    border-radius: 50px;
+    position: relative;
+}
+
+.checkboxFour:before {
+    content: 'On';
+    position: absolute;
+    top: 5px;
+    left: 13px;
+    height: 2px;
+    color: #26ca28;
+    font-size: 16px;
+}
+
+.checkboxFour:after {
+    content: 'Off';
+    position: absolute;
+    top: 5px;
+    left: 46px;
+    height: 2px;
+    color: #111;
+    font-size: 16px;
+    color: #ddd;
+}
+
+.checkboxFour label {
+    display: block;
+    width: 30px;
+    height: 20px;
+    border-radius: 50px;
+
+    transition: all .5s ease;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    z-index: 1;
+    left: 7px;
+    background: #ddd;
+}
+
+.checkboxFour input[type=checkbox]:checked + label {
+    left: 42px;
+    background: #26ca28;
+}
+
+/*********** Check Box Four End************/

@@ -60,6 +60,20 @@ financeApiService.factory('financeApi', ['$http', '$cookies', function($http, $c
 		return $http.get(baseUrl + '/hrest/v1/admin/walletHistory/' + custID + "?apikey=" + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + "&role=3");
 	};
 
+	financeApi.getCollection = function() {
+		var url = baseUrl + "/hrest/v1/finance/collection?apikey=" + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + '&role=3';
+		return $http.get(url);
+	}
+
+	financeApi.updateCollection = function(id, dataObj) {
+		return $http.put(baseUrl + "/hrest/v1/finance/updateCollection/" + id + "?apikey=" + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + "&role=3",dataObj);
+	}
+
+	financeApi.getCollected = function() {
+		var url = baseUrl + "/hrest/v1/finance/collected?apikey=" + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + '&role=3';
+		return $http.get(url);
+	}
+
 	return financeApi;
 }]);
 

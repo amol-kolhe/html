@@ -46,46 +46,56 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th colspan="4" style="border:1px solid #ddd"></th>
-							<th colspan="3" style="text-align: center;border:1px solid #ddd">Sessions</th>
-							<th colspan="3" style="border:1px solid #ddd"></th>
-						</tr>
-						<tr>
-							<th ng-click="financeMgmt.sortFinance('created_on')"><span class="1clsfleft">Created On</span>
+							<th rowspan="2" ng-click="financeMgmt.sortFinance('created_on')"><span class="1clsfleft">Created On</span>
 								<span class="glyphicon sort-icon" ng-show="financeSortKey=='created_on'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 							</th>
-							<th ng-click="financeMgmt.sortFinance('customer_id')"><span class="1clsfleft">Customer</span>
+							<th rowspan="2" ng-click="financeMgmt.sortFinance('customer_id')"><span class="1clsfleft">Customer</span>
 								<span class="glyphicon sort-icon" ng-show="financeSortKey=='customer_id'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 							</th>
-							<th ng-click="financeMgmt.sortFinance('service_provider_id')"><span class="1clsfleft">Service Provider</span>
+							<th rowspan="2" ng-click="financeMgmt.sortFinance('service_provider_id')"><span class="1clsfleft">Service Provider</span>
 								<span class="glyphicon sort-icon" ng-show="financeSortKey=='service_provider_id'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 							</th>
-							<th ng-click="financeMgmt.sortFinance('package_code')"><span class="1clsfleft">Package</span>
+							<th rowspan="2" ng-click="financeMgmt.sortFinance('package_code')"><span class="1clsfleft">Package</span>
 								<span class="glyphicon sort-icon" ng-show="financeSortKey=='package_code'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 							</th>
-							<th ng-click="financeMgmt.sortFinance('no_of_sessions')"><span class="1clsfleft">Sign Up</span>
+							<th colspan="3" style="text-align: center;border:1px solid #ddd">Sessions</th>
+							<th rowspan="2" ng-click="financeMgmt.sortFinance('approved_free_cancellation_days')"><span class="1clsfleft">Rate</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='approved_free_cancellation_days'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th rowspan="2" ng-click="financeMgmt.sortFinance('wallet_balance')"><span class="1clsfleft">Wallet Balance</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='wallet_balance'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th rowspan="2">Action</th>
+						</tr>
+						<tr>
+							<th style="border-left: 1px solid #ddd" ng-click="financeMgmt.sortFinance('no_of_sessions')"><span class="1clsfleft">Sign Up</span>
 								<span class="glyphicon sort-icon" ng-show="financeSortKey=='no_of_sessions'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 							</th>
 							<th ng-click="financeMgmt.sortFinance('approved_valid_days')"><span class="1clsfleft">Used</span>
 								<span class="glyphicon sort-icon" ng-show="financeSortKey=='approved_valid_days'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 							</th>
-							<th ng-click="financeMgmt.sortFinance('remaining_sessions')"><span class="1clsfleft">Remaining</span>
+							<th style="border-right: 1px solid #ddd" ng-click="financeMgmt.sortFinance('remaining_sessions')"><span class="1clsfleft">Remaining</span>
 								<span class="glyphicon sort-icon" ng-show="financeSortKey=='remaining_sessions'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 							</th>
-							<th ng-click="financeMgmt.sortFinance('approved_free_cancellation_days')"><span class="1clsfleft">Rate</span>
-								<span class="glyphicon sort-icon" ng-show="financeSortKey=='approved_free_cancellation_days'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
-							</th>
-							<th style="text-align: right;" ng-click="financeMgmt.sortFinance('wallet_balance')"><span class="1clsfleft">Wallet Balance</span>
-								<span class="glyphicon sort-icon" ng-show="financeSortKey=='wallet_balance'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
-							</th>
-							<th>Action</th>
+						</tr>
+						<tr>
+							<td><input style="width: 90px;" ng-model="search.created_on" /></td>
+							<td><input style="width: 90px;" ng-model="search.customer_name" /></td>
+							<td><input style="width: 90px;" ng-model="search.service_provider_name" /></td>
+							<td><input style="width: 90px;" ng-model="search.package_code" /></td>
+							<td><input style="width: 90px;" ng-model="search.no_of_sessions" /></td>
+							<td><input style="width: 90px;" ng-model="search.used_sessions" /></td>
+							<td><input style="width: 90px;" ng-model="search.remaining_sessions" /></td>
+							<td><input style="width: 90px;" ng-model="search.package_rate" /></td>
+							<td><input style="width: 90px;" ng-model="search.wallet_balance" /></td>
+							<td>&nbsp;</td>
 						</tr>
 					</thead>
 					<tbody>
 						<tr dir-paginate="rec in financeMgmt.arrayFinance|orderBy:financeSortKey:financeReverse|filter:search|itemsPerPage:4"
 								pagination-id="arrFinanceId">
 							<td>
-								<span style="word-break: break-word;">{{rec.created_on * 1000 | date:'dd-MM-yyyy hh:mm a'}}</span>
+								<span style="word-break: break-word;">{{rec.created_on}}</span>
 							</td>
 							<td>
 								<span style="word-break: break-word;">{{rec.customer_name}}</span>
@@ -96,19 +106,19 @@
 							<td>
 								<span style="word-break: break-word;">{{rec.package_code}}</span>
 							</td>
-							<td style="text-align: center;">
+							<td>
 								<span style="word-break: break-word;">{{rec.no_of_sessions}}</span>
 							</td>
-							<td style="text-align: center;">
+							<td>
 								<span style="word-break: break-word;">{{rec.used_sessions}}</span>
 							</td>
-							<td style="text-align: center;">
-								<span style="word-break: break-word;">{{rec.no_of_sessions - rec.used_sessions}}</span>
+							<td>
+								<span style="word-break: break-word;">{{rec.remaining_sessions}}</span>
 							</td>
 							<td>
 								<span style="word-break: break-word;">&#8377; {{rec.package_rate}}</span>
 							</td>
-							<td style="text-align: right;">
+							<td>
 								<span style="word-break: break-word;">&#8377; {{rec.wallet_balance}}</span>
 							</td>
 							<td style="text-align: center;">

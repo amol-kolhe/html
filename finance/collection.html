@@ -1,0 +1,648 @@
+<span class="pull-right">
+	<button ng-class="{'btn btn-primary btn-sm':flag,'btn btn-default btn-sm':!flag}" class="btn btn-default btn-sm" type="button" ng-click="flag=false">Collection</button>
+	<button ng-class="{'btn btn-default btn-sm':flag,'btn btn-primary btn-sm':!flag}" class="btn btn-primary btn-sm" type="button" ng-click="flag=true">Collected</button>
+</span><br /><br />
+<div ng-if="!flag" class="mainContent2" ng-controller="FinanceCtrl" ng-init="financeMgmt.InitFinanceParams(); financeMgmt.getCollection();">
+	<div style="padding:10px;">
+		<div class="row" ng-show="(financeMgmt.financeSuccessMsg || financeMgmt.financeErrorMsg)">
+			<div class="alert alert-success alert-dismissible" role="alert" ng-show="financeMgmt.financeSuccessMsg">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<strong>Well done!</strong> {{financeMgmt.financeSuccessMsg}}
+			</div>
+			<div class="alert alert-danger alert-dismissible" role="alert" ng-show="financeMgmt.financeErrorMsg">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<strong>Oh snap!</strong> {{financeMgmt.financeErrorMsg}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="panel panel-default" style="border: 1px solid #ddd">
+				<div class="panel-heading">
+					<span style="font-weight: bold;font-size: 20px">Collection Management</span>
+					<span class="pull-right clickable glyphicon glyphicon-refresh" title="Refresh the actionable items" ng-click="financeMgmt.getCollection();"></span>
+				</div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th ng-click="financeMgmt.sortFinance('trans_date')"><span class="1clsfleft">Actual Date</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_date'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('customer_name')"><span class="1clsfleft">Customer</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='customer_name'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('service_provider_name')"><span class="1clsfleft">Service Provider</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='service_provider_name'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('trans_description')"><span class="1clsfleft">Description</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_description'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<!--<th ng-click="financeMgmt.sortFinance('trans_type')"><span class="1clsfleft">Type</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_type'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>-->
+							<th ng-click="financeMgmt.sortFinance('trans_mode')"><span class="1clsfleft">Mode</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_mode'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('trans_amount')"><span class="1clsfleft">Amount</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_amount'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<!--<th ng-click="financeMgmt.sortFinance('is_received')"><span class="1clsfleft">Is Received?</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='is_received'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>-->
+							<th>Action</th>
+						</tr>
+						<tr>
+							<td><input class="form-control" style="width: 100px;" ng-model="search.trans_date" /></td>
+							<td><input class="form-control" style="width: 100px;" ng-model="search.customer_name" /></td>
+							<td><input class="form-control" style="width: 100px;" ng-model="search.service_provider_name" /></td>
+							<td><input class="form-control" style="width: 100px;" ng-model="search.trans_description" /></td>
+							<!--<td><input style="width: 90px;" ng-model="search.trans_type" /></td>-->
+							<td><input class="form-control" style="width: 100px;" ng-model="search.trans_mode" /></td>
+							<td><input class="form-control" style="width: 100px;" ng-model="search.trans_amount" /></td>
+							<!--<td>&nbsp;</td>-->
+							<td>&nbsp;</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr dir-paginate="rec in financeMgmt.arrayCollection|orderBy:financeSortKey:financeReverse|filter:search|itemsPerPage:4"
+								pagination-id="arrFinanceId" ng-class="rec.alert_to_finance?'row-selected':''">
+							<td>
+								<span style="word-break: break-word;">{{rec.trans_date}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.customer_name}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.service_provider_name}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.trans_description}}</span>
+							</td>
+							<!--<td>
+								<span style="word-break: break-word;">{{rec.trans_type}}</span>
+							</td>-->
+							<td>
+								<span style="word-break: break-word;">{{rec.trans_mode}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">&#8377; {{rec.trans_amount|number}}</span>
+							</td>
+							<!--<td>
+								<span style="word-break: break-word;" ng-if="rec.is_received">YES</span>
+								<span style="word-break: break-word;" ng-if="!rec.is_received">NO</span>
+							</td>-->
+							<td style="text-align: center;">
+								<i class="clickable fa fa-money fa-2x" title="Collect Money" ng-click="financeMgmt.collectionForm(rec);"></i>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<dir-pagination-controls
+					max-size="5"
+					pagination-id="arrFinanceId"
+					direction-links="true"
+					boundary-links="true" >
+				</dir-pagination-controls>
+			</div>
+		</div>
+		<div class="row" ng-show="(financeMgmt.showCollectionForm)">
+			<div class="panel panel-default" style="border: 1px solid #ddd">
+				<div class="panel-heading">
+					<span style="font-weight: bold;font-size: 16px">Collection Details</span>
+					<span class="pull-right clickable glyphicon glyphicon-remove" title="Cancel" ng-click="financeMgmt.showCollectionForm=false"></span>
+				</div>
+				<table class="table">
+					<tbody>
+						<tr>
+							<th style="background-color: #EAFAF1" width="20%">
+								<span style="word-break: break-word;">Customer</span>
+							</th>
+							<td width="30%">
+								<span style="word-break: break-word;">{{financeMgmt.customer_name}}</span>
+							</td>
+							<th style="background-color: #EAFAF1" width="20%">
+								<span style="word-break: break-word;">Date</span>
+							</th>
+							<td width="30%">
+								<span style="word-break: break-word;">{{financeMgmt.trans_date}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Service Provider</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;">{{financeMgmt.service_provider_name}}</span>
+							</td>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Mode</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;">{{financeMgmt.trans_mode}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Description</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;">{{financeMgmt.trans_description}}</span>
+							</td>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Amount</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;font-weight: bolder;font-size: 16px">{{financeMgmt.trans_amount|number}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th colspan="4" style="background-color: #ECECEC">
+								<span style="font-weight: bold;font-size: 16px">Payment Details</span>
+							</th>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Money Deposited By SP</span>
+							</th>
+							<td colspan="3">
+								<div class="checkboxZero">
+							  		<input type="checkbox" style="visibility: hidden" ng-model="financeMgmt.money_deposited_by_sp" id="checkboxZeroInput" name="" />
+								  	<label for="checkboxZeroInput"></label>
+							  	</div>
+								<!--<span><input type="checkbox" ng-model="financeMgmt.money_deposited_by_sp" /></span>-->
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Cash</span>
+							</th>
+							<td colspan="3">
+								<div class="checkboxOne">
+							  		<input type="checkbox" style="visibility: hidden" ng-model="financeMgmt.is_cash" id="checkboxOneInput" name="" />
+								  	<label for="checkboxOneInput"></label>
+							  	</div>
+								<!--<span><input type="checkbox" ng-model="financeMgmt.is_cash" /></span>-->
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_cash">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px;">Cash Amount</span>
+							</th>
+							<td colspan="3">
+								<span><input class="form-control" type="text" ng-model="financeMgmt.cash_amount" /></span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Cheque</span>
+							</th>
+							<td colspan="3">
+								<div class="checkboxTwo">
+							  		<input type="checkbox" style="visibility: hidden" ng-model="financeMgmt.is_cheque" id="checkboxTwoInput" name="" />
+								  	<label for="checkboxTwoInput"></label>
+							  	</div>
+								<!--<span><input type="checkbox" ng-model="financeMgmt.is_cheque" /></span>-->
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_cheque">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px">Cheque Number</span>
+							</th>
+							<td colspan="3">
+								<span><input class="form-control" type="text" ng-model="financeMgmt.cheque_number" /></span>
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_cheque">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px">Bank & Branch Name</span>
+							</th>
+							<td colspan="3">
+								<span><input class="form-control" type="text" ng-model="financeMgmt.cheque_bank_details" /></span>
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_cheque">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px">Cheque Amount</span>
+							</th>
+							<td colspan="3">
+								<span><input class="form-control" type="text" ng-model="financeMgmt.cheque_amount" /></span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Online</span>
+							</th>
+							<td colspan="3">
+								<div class="checkboxThree">
+							  		<input type="checkbox" style="visibility: hidden" ng-model="financeMgmt.is_online" id="checkboxThreeInput" name="" />
+								  	<label for="checkboxThreeInput"></label>
+							  	</div>
+								<!--<span><input type="checkbox" ng-model="financeMgmt.is_online" /></span>-->
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_online">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px">Online Transaction ID</span>
+							</th>
+							<td colspan="3">
+								<span><input class="form-control" type="text" ng-model="financeMgmt.online_transaction_id" /></span>
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_online">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px">Online Amount</span>
+							</th>
+							<td colspan="3">
+								<span><input class="form-control" type="text" ng-model="financeMgmt.online_amount" /></span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Paytm</span>
+							</th>
+							<td colspan="3">
+								<div class="checkboxFour">
+							  		<input type="checkbox" style="visibility: hidden" ng-model="financeMgmt.is_paytm" id="checkboxFourInput" name="" />
+								  	<label for="checkboxFourInput"></label>
+							  	</div>
+								<!--<span><input type="checkbox" ng-model="financeMgmt.is_paytm" /></span>-->
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_paytm">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px">Paytm Transaction ID</span>
+							</th>
+							<td colspan="3">
+								<span><input class="form-control" type="text" ng-model="financeMgmt.paytm_transaction_id" /></span>
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_paytm">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px">Paytm Amount</span>
+							</th>
+							<td colspan="3">
+								<span><input class="form-control" type="text" ng-model="financeMgmt.paytm_amount" /></span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Receipt Number</span>
+							</th>
+							<td colspan="3">
+								<span><input class="form-control" type="text" ng-model="financeMgmt.healyos_receipt_number" /></span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">&nbsp;</span>
+							</th>
+							<td colspan="3">
+								<span style="font-weight: bold">Total Amount Need To Be Collect Is <p style="font-weight: bold;font-size: 20px">&#8377; {{financeMgmt.trans_amount|number}}</p></span>
+								<span style="font-weight: bold"><p>
+								Cash : &#8377; {{financeMgmt.cash_amount|number}} &nbsp;&nbsp;&nbsp;
+								Cheque : &#8377; {{financeMgmt.cheque_amount|number}} &nbsp;&nbsp;&nbsp;
+								Online : &#8377; {{financeMgmt.online_amount|number}} &nbsp;&nbsp;&nbsp;
+								Paytm : &#8377; {{financeMgmt.paytm_amount|number}} &nbsp;&nbsp;&nbsp;</p></span>
+								<span style="font-weight: bold">Total Amount You Are Collecting Is <p style="font-weight: bold;font-size: 20px">&#8377; {{(financeMgmt.cash_amount -- financeMgmt.cheque_amount -- financeMgmt.online_amount -- financeMgmt.paytm_amount|number)}}</p></span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">&nbsp;</span>
+							</th>
+							<td colspan="3">
+								<span>
+									<button class="btn btn-primary btn-sm" type="button" ng-click="financeMgmt.updateCollection(financeMgmt.rec)">Save</button>
+								</span>
+								<span>
+									<button class="btn btn-default btn-sm" type="button" ng-click="financeMgmt.InitFinanceParams();">Cancel</button>
+								</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div ng-if="flag" class="mainContent2" ng-controller="FinanceCtrl" ng-init="financeMgmt.InitFinanceParams(); financeMgmt.getCollected();">
+	<div style="padding:10px;">
+		<div class="row">
+			<div class="panel panel-default" style="border: 1px solid #ddd">
+				<div class="panel-heading">
+					<span style="font-weight: bold;font-size: 20px">Collection Management</span>
+					<span class="pull-right clickable glyphicon glyphicon-refresh" title="Refresh the actionable items" ng-click="financeMgmt.getCollected();"></span>
+				</div>
+				<div id="exportable">
+				<table class="table">
+					<thead>
+						<tr>
+							<th ng-click="financeMgmt.sortFinance('trans_date')"><span class="1clsfleft">Actual Date</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_date'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('collected_date')"><span class="1clsfleft">Collected Date</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='collected_date'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('customer_name')"><span class="1clsfleft">Customer</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='customer_name'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('service_provider_name')"><span class="1clsfleft">Service Provider</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='service_provider_name'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('trans_description')"><span class="1clsfleft">Description</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_description'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('trans_mode')"><span class="1clsfleft">Mode</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_mode'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('trans_amount')"><span class="1clsfleft">Actual Amount</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_amount'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th ng-click="financeMgmt.sortFinance('collected_amount')"><span class="1clsfleft">Collected Amount</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_amount'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
+							<th>Action</th>
+						</tr>
+						<tr>
+							<td><input class="form-control" style="width: 100px;" ng-model="search.trans_date" /></td>
+							<td><input class="form-control" style="width: 100px;" ng-model="search.collected_date" /></td>
+							<td><input class="form-control" style="width: 100px;" ng-model="search.customer_name" /></td>
+							<td><input class="form-control" style="width: 100px;" ng-model="search.service_provider_name" /></td>
+							<td><input class="form-control" style="width: 100px;" ng-model="search.trans_description" /></td>
+							<td><input class="form-control" style="width: 100px;" ng-model="search.trans_mode" /></td>
+							<td><input class="form-control" style="width: 100px;" ng-model="search.trans_amount" /></td>
+							<td><input class="form-control" style="width: 100px;" ng-model="search.collected_amount" /></td>
+							<td>&nbsp;</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr dir-paginate="rec in financeMgmt.arrayCollected|orderBy:financeSortKey:financeReverse|filter:search|itemsPerPage:4"
+								pagination-id="arrCollectedId" ng-class="rec.alert_to_finance?'row-selected':''">
+							<td>
+								<span style="word-break: break-word;">{{rec.trans_date}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.collected_date}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.customer_name}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.service_provider_name}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.trans_description}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.trans_mode}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">&#8377; {{rec.trans_amount|number}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">&#8377; {{rec.collected_amount|number}}</span>
+							</td>
+							<td style="text-align: center;">
+								<i class="clickable fa fa-search-plus fa-2x" title="Collected Details" ng-click="financeMgmt.collectedForm(rec);"></i>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+				<dir-pagination-controls
+					max-size="5"
+					pagination-id="arrCollectedId"
+					direction-links="true"
+					boundary-links="true" >
+				</dir-pagination-controls>
+			</div>
+		</div>
+		<div class="row" ng-show="(financeMgmt.showCollectedForm)">
+			<div class="panel panel-default" style="border: 1px solid #ddd">
+				<div class="panel-heading">
+					<span style="font-weight: bold;font-size: 16px">Collected Details</span>
+					<span class="pull-right clickable glyphicon glyphicon-remove" title="Cancel" ng-click="financeMgmt.showCollectedForm=false"></span>
+				</div>
+				<table class="table">
+					<tbody>
+						<tr>
+							<th style="background-color: #EAFAF1" width="20%">
+								<span style="word-break: break-word;">Customer</span>
+							</th>
+							<td width="30%">
+								<span style="word-break: break-word;">{{financeMgmt.customer_name}}</span>
+							</td>
+							<th style="background-color: #EAFAF1" width="20%">
+								<span style="word-break: break-word;">Service Provider</span>
+							</th>
+							<td width="30%">
+								<span style="word-break: break-word;">{{financeMgmt.service_provider_name}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Mode</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;">{{financeMgmt.trans_mode}}</span>
+							</td>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Description</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;">{{financeMgmt.trans_description}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Actual Date</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;">{{financeMgmt.trans_date}}</span>
+							</td>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Collected Date</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;">{{financeMgmt.collected_date}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Actual Amount</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;font-weight: bolder;font-size: 16px">{{financeMgmt.trans_amount|number}}</span>
+							</td>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Collected Amount</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;font-weight: bolder;font-size: 16px">{{financeMgmt.collected_amount|number}}</span>
+							</td>
+						</tr>
+						<tr ng-if="(financeMgmt.is_outstanding_clear && financeMgmt.outstanding_amount > 0)">
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Outstanding Amount</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;font-weight: bolder;font-size: 16px">{{financeMgmt.outstanding_amount|number}}</span>
+							</td>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Outstanding Cleared On</span>
+							</th>
+							<td>
+								<span style="word-break: break-word;font-weight: bolder;font-size: 16px">{{financeMgmt.outstanding_clear_time}}</span>
+							</td>
+						</tr>
+						<tr ng-if="(!financeMgmt.is_outstanding_clear && financeMgmt.outstanding_amount > 0)">
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Outstanding Amount</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;font-weight: bolder;font-size: 16px">{{financeMgmt.outstanding_amount|number}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th colspan="4" style="background-color: #ECECEC">
+								<span style="font-weight: bold;font-size: 16px">Payment Details</span>
+							</th>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Money Deposited By SP</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;" ng-if="financeMgmt.money_deposited_by_sp">Yes</span>
+								<span style="word-break: break-word;" ng-if="!financeMgmt.money_deposited_by_sp">No</span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Cash</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;" ng-if="financeMgmt.is_cash">Yes</span>
+								<span style="word-break: break-word;" ng-if="!financeMgmt.is_cash">No</span>
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_cash">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px;">Cash Amount</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;">{{financeMgmt.cash_amount|number}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Cheque</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;" ng-if="financeMgmt.is_cheque">Yes</span>
+								<span style="word-break: break-word;" ng-if="!financeMgmt.is_cheque">No</span>
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_cheque">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px">Cheque Number</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;">{{financeMgmt.cheque_number}}</span>
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_cheque">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px">Bank & Branch Name</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;">{{financeMgmt.cheque_bank_details}}</span>
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_cheque">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px">Cheque Amount</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;">{{financeMgmt.cheque_amount|number}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Online</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;" ng-if="financeMgmt.is_online">Yes</span>
+								<span style="word-break: break-word;" ng-if="!financeMgmt.is_online">No</span>
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_online">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px">Online Transaction ID</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;">{{financeMgmt.online_transaction_id}}</span>
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_online">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px">Online Amount</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;">{{financeMgmt.online_amount|number}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Paytm</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;" ng-if="financeMgmt.is_paytm">Yes</span>
+								<span style="word-break: break-word;" ng-if="!financeMgmt.is_paytm">No</span>
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_paytm">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px">Paytm Transaction ID</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;">{{financeMgmt.paytm_transaction_id}}</span>
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_paytm">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px">Paytm Amount</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;">{{financeMgmt.paytm_amount|number}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Receipt Number</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;">{{financeMgmt.healyos_receipt_number}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">&nbsp;</span>
+							</th>
+							<td colspan="3">
+								<span style="font-weight: bold">Total Amount Need To Be Collect Is <p style="font-weight: bold;font-size: 20px">&#8377; {{financeMgmt.trans_amount|number}}</p></span>
+								<span style="font-weight: bold"><p>
+								Cash : &#8377; {{financeMgmt.cash_amount|number}} &nbsp;&nbsp;&nbsp;
+								Cheque : &#8377; {{financeMgmt.cheque_amount|number}} &nbsp;&nbsp;&nbsp;
+								Online : &#8377; {{financeMgmt.online_amount|number}} &nbsp;&nbsp;&nbsp;
+								Paytm : &#8377; {{financeMgmt.paytm_amount|number}} &nbsp;&nbsp;&nbsp;</p></span>
+								<span style="font-weight: bold">Total Amount You Are Collecting Is <p style="font-weight: bold;font-size: 20px">&#8377; {{(financeMgmt.cash_amount -- financeMgmt.cheque_amount -- financeMgmt.online_amount -- financeMgmt.paytm_amount|number)}}</p></span>
+								<span style="font-weight: bold">Outstanding Amount Is <p style="font-weight: bold;font-size: 20px">&#8377; {{financeMgmt.outstanding_amount|number}}</p></span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
