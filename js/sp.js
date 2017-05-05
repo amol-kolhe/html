@@ -61,6 +61,7 @@ angular.module('myApp.controllers')
         temp_net_amount : "",
         additional_amount : 0,
         iaccept : true,
+        isretrofit : false,
     };
     $scope.walletFlag = false;
     $scope.test = "";
@@ -1335,6 +1336,8 @@ angular.module('myApp.controllers')
     }
 
     $scope.submitAptPackage = function() {
+
+        alert($scope.aptPackage.isretrofit);
         if($scope.apptPackage.packageForm.free_cancellation_days.$valid && $scope.apptPackage.packageForm.valid_days.$valid && $scope.apptPackage.packageForm.additional_amount.$valid && $scope.apptPackage.packageForm.no_of_sessions.$valid && $scope.aptPackage.no_of_sessions >= $scope.aptPackage.min_sessions && $scope.aptPackage.no_of_sessions <= $scope.aptPackage.max_sessions)
         {
             if($scope.custReadList.custwallet.walletbalance >= $scope.aptPackage.net_amount)
@@ -1355,7 +1358,8 @@ angular.module('myApp.controllers')
                     free_cancellation_days:  $scope.aptPackage.free_cancellation_days,
                     valid_days:  $scope.aptPackage.valid_days,
                     spid: $scope.adminNewAppointmentCust.appointment.spid,
-                    session_price: $scope.models.response.perApptCharges
+                    session_price: $scope.models.response.perApptCharges,
+                    isretrofit:$scope.aptPackage.isretrofit,
                 }
 
                 spApi.updatePackage($scope.adminNewAppointmentCust.appointment.patientid, data)
@@ -1393,7 +1397,8 @@ angular.module('myApp.controllers')
                             //free_cancellation_ratio:  $scope.aptPackage.free_cancellation_ratio,
                             free_cancellation_days:  $scope.aptPackage.free_cancellation_days,
                             valid_days:  $scope.aptPackage.valid_days,
-                            spid: $scope.adminNewAppointmentCust.appointment.spid
+                            spid: $scope.adminNewAppointmentCust.appointment.spid,
+                            isretrofit:$scope.aptPackage.isretrofit,
                         }
 
                         spApi.updatePackage($scope.adminNewAppointmentCust.appointment.patientid, data)
@@ -1424,6 +1429,8 @@ angular.module('myApp.controllers')
             $scope.apptPackageError = "No. of Sessions must be in a range of package.";
             $scope.walletFlag = false;
         }
+
+        $scope.aptPackage.isretrofit = false;
     }
 
     $scope.calculateCost = function(promo) {
@@ -2090,7 +2097,8 @@ angular.module('myApp.controllers')
         if($scope.apptStatus != "Cancelled"){
             for(var i = 0; i < $scope.futureApptList.length; i++){
                 if(($scope.futureApptList[i].startTime >= $scope.futureApptSelectedDate) && ($scope.futureApptList[i].status != "Cancelled") && ($scope.futureApptList[i].status != "Waiting Approval")){
-                  $("."+$scope.futureApptList[i].refno+"").css({"background-color": "#ff9999"});                                                   
+                  $("."+$scope.futureApptList[i].refno+"").css({"background-color": "#ff0000"});   
+                  $("."+$scope.futureApptList[i].refno+"").css({"color": "#ffffff"});                                                
                 }                                  
             }
         }

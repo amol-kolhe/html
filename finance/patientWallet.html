@@ -1,0 +1,132 @@
+<div class="mainContent2" ng-controller="FinanceCtrl" ng-init="financeMgmt.InitFinanceParams();financeMgmt.fetchPatientWithWallet();">
+	
+<div style="padding:10px;">
+ 	<div class="row">
+		<div class="panel panel-default" style="border: 1px solid #ddd">
+			<div class="panel-heading">
+				<span style="font-weight: bold;font-size: 20px">Patient Wallet Information</span>
+				<span class="pull-right clickable glyphicon glyphicon-refresh" title="Refresh the actionable items" ng-click="financeMgmt.fetchPatientWithWallet();"></span>
+			</div>
+			<table class="table">
+				<thead>
+					
+					<tr>
+						<th ng-click="financeMgmt.sortFinance('name')"><span class="1clsfleft">Customer Name</span>
+							<span class="glyphicon sort-icon" ng-show="financeSortKey=='name'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+						</th>
+						<th ng-click="financeMgmt.sortFinance('custwallet.walletbalance')"><span class="1clsfleft">Customer Wallet Amount</span>
+							<span class="glyphicon sort-icon" ng-show="financeSortKey=='custwallet.walletbalance'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+						</th>
+						
+						<th>Action</th>
+					</tr>
+
+					<tr>
+						<td> <input type="text" ng-model="search.name"> </td>
+						<td> <input type="text" ng-model="search.custwallet.walletbalance"> </td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr dir-paginate="rec in financeMgmt.arrayCustomerWithWallet|orderBy:financeSortKey:financeReverse|filter:search|itemsPerPage:5"
+							pagination-id="arrFinanceId">
+						<td>
+							<span style="word-break: break-word;">{{rec.name}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">{{rec.custwallet.walletbalance}}</span>
+						</td>
+						
+						<td>
+							<span class="clickable glyphicon glyphicon glyphicon-eye-open" style="color: blue" title="Show Customer Transactions" ng-click="financeMgmt.getWalletHistory(rec);"></span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<dir-pagination-controls
+				max-size="5"
+				pagination-id="arrFinanceId"
+				direction-links="true"
+				boundary-links="true" >
+			</dir-pagination-controls>
+		</div>
+	</div>
+
+	<div class="row" ng-show="financeMgmt.walletTransactionDetails">
+		<div class="panel panel-default" style="border: 1px solid #ddd">
+			<div class="panel-heading">
+				<span style="font-weight: bold;font-size: 20px">Wallet History for {{financeMgmt.customerName}}</span>
+				<span class="pull-right clickable glyphicon glyphicon glyphicon-remove" title="Refresh the actionable items" ng-click="financeMgmt.fetchPatientWithWallet();"></span>
+			</div>
+			<table class="table">
+				<thead>
+					
+					<tr>
+						<th ng-click="financeMgmt.sortFinance('transactiontime')"><span class="1clsfleft">Transaction Date</span>
+							<span class="glyphicon sort-icon" ng-show="financeSortKey=='transactiontime'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+						</th>
+						<th ng-click="financeMgmt.sortFinance('wallettranstype')"><span class="1clsfleft">Transaction Type</span>
+							<span class="glyphicon sort-icon" ng-show="financeSortKey=='wallettranstype'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+						</th>
+					
+						<th ng-click="financeMgmt.sortFinance('wallettransamount')"><span class="1clsfleft">Credit</span>
+							<span class="glyphicon sort-icon" ng-show="financeSortKey=='wallettransamount'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+						</th>
+
+						<th ng-click="financeMgmt.sortFinance('wallettransamount')"><span class="1clsfleft">Debit</span>
+							<span class="glyphicon sort-icon" ng-show="financeSortKey=='wallettransamount'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+						</th>
+
+						<th ng-click="financeMgmt.sortFinance('asOfBalance')"><span class="1clsfleft">As Of Balance</span>
+							<span class="glyphicon sort-icon" ng-show="financeSortKey=='asOfBalance'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+						</th>
+
+
+
+					
+					</tr>
+
+					<tr>
+						<td> <input type="text" ng-model="searchWallet.transactiontime"> </td>
+						<td> <input type="text" ng-model="searchWallet.wallettranstype"> </td>
+						<td> <input type="text" ng-model="searchWallet.creditAmnt"> </td>
+						<td> <input type="text" ng-model="searchWallet.debitAmnt"> </td>
+						<td> <input type="text" ng-model="searchWallet.asOfBalance"> </td>
+					</tr>
+
+				</thead>
+				<tbody>
+					<tr dir-paginate="rec in financeMgmt.arrayWalletData|orderBy:financeSortKey:financeReverse|filter:searchWallet|itemsPerPage:10"
+							pagination-id="arrFinanceWalletId">
+						<td>
+							<span style="word-break: break-word;">{{rec.transactiontime * 1000 | date:'dd-MM-yyyy hh:mm a'}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">{{rec.wallettranstype}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;" ng-show="rec.wallettranstype == 'credit'">&#8377; {{rec.creditAmnt}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;" ng-show="rec.wallettranstype == 'debit'">&#8377; {{rec.debitAmnt}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">&#8377; {{rec.asOfBalance}}</span>
+						</td>
+					
+
+						
+						
+					</tr>
+				</tbody>
+			</table>
+			<dir-pagination-controls
+				max-size="10"
+				pagination-id="arrFinanceWalletId"
+				direction-links="true"
+				boundary-links="true" >
+			</dir-pagination-controls>
+		</div>
+	</div>
+</div>
+
+</div>

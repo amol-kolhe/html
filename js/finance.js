@@ -53,6 +53,10 @@ angular.module('myApp.controllers')
 	$scope.financeMgmt.cost_difference = null;
 	$scope.financeMgmt.reviseRateDetails = false;
 	$scope.financeMgmt.arrayFinance = [];
+	$scope.financeMgmt.arrayCustomerWithWallet = [];
+	$scope.financeMgmt.arrayWalletHistory = [];
+	$scope.financeMgmt.walletTransactionDetails = false;
+	$scope.financeMgmt.asOfBalance = 0;
 
 	$scope.financeMgmt.getFinance = function() {
 		$scope.financeMgmt.arrayFinance = [];
@@ -183,6 +187,64 @@ angular.module('myApp.controllers')
             $scope.financeMgmt.financeErrorMsg = "Wallet updation failed.";
         }
     }
+
+    $scope.financeMgmt.fetchPatientWithWallet = function(){
+    	$scope.financeMgmt.walletTransactionDetails = false;
+
+    	financeApi.fetchPatientWithWallet()
+			.success(function(custData, custStatus, custHeaders, custConfig) {
+				//console.log(custData);
+
+				$scope.financeMgmt.arrayCustomerWithWallet = custData.payload;
+				console.log($scope.financeMgmt.arrayCustomerWithWallet);
+
+			})
+			.error(function(data, status, headers, config) {
+				item.walletBalance = 0;
+			});
+
+    }
+
+     $scope.financeMgmt.getWalletHistory = function(rec){
+     	$scope.financeMgmt.walletTransactionDetails = true;
+     	$scope.financeMgmt.customerName = rec.name;
+
+         financeApi.getWalletHistory(rec._id)
+			.success(function(Data, Status, Headers, Config) {
+		
+				$scope.financeMgmt.arrayWalletHistory = Data.payload;
+				//console.log($scope.financeMgmt.arrayWalletHistory);
+
+				var arrayWalletHistory = Data.payload;
+				$scope.financeMgmt.arrayWalletData = [];
+				$scope.asOfBalance = 0;
+
+
+				arrayWalletHistory.forEach(function(item) {
+					$scope.debitAmnt = 0;
+				    $scope.creditAmnt = 0;
+
+					if(item.wallettranstype == 'credit'){
+						$scope.asOfBalance = $scope.asOfBalance + item.wallettransamount;
+						$scope.creditAmnt = item.wallettransamount;
+					}else{
+						$scope.asOfBalance = $scope.asOfBalance - item.wallettransamount;
+						$scope.debitAmnt = item.wallettransamount;
+					}
+					
+					item.asOfBalance = $scope.asOfBalance;
+					item.creditAmnt = $scope.creditAmnt;
+					item.debitAmnt = $scope.debitAmnt;
+					$scope.financeMgmt.arrayWalletData.push(item);
+				});
+
+				console.log($scope.financeMgmt.arrayWalletData);
+
+			})
+			.error(function(data, status, headers, config) {
+				item.walletBalance = 0;
+			});
+     }
 
 	$scope.financeMgmt.InitFinanceParams = function(){
 		$scope.financeMgmt._id = null;
