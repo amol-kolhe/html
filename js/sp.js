@@ -109,6 +109,11 @@ angular.module('myApp.controllers')
         showRescheduleAppt : false
     };
 
+    $scope.arrayCustomerWithWallet = [];
+    $scope.arrayWalletHistory = [];
+    $scope.walletTransactionDetails = false;
+    $scope.asOfBalance = 0;
+
     $scope.packageLabel = "Select Package";
     $scope.models = {
         calculator: {
@@ -124,6 +129,7 @@ angular.module('myApp.controllers')
         response: null
     };
     $scope.showResponse = false;
+    
 
     $scope.initSpAppointments = function(timeSpan) {
         $scope.fetchSpAppointments(timeSpan);
@@ -526,6 +532,7 @@ angular.module('myApp.controllers')
                 $scope.custReadList.age = "-";
                 $scope.custReadList.birthdate = "-";
             }
+            $scope.custReadList.custwallet.description='';
             $scope.getLocalityFromPincode($scope.custReadList.pincode);
             var appointmentHistory = [];
             if(typeof data.payload.appointments[0] != 'undefined'){
@@ -1337,7 +1344,7 @@ angular.module('myApp.controllers')
 
     $scope.submitAptPackage = function() {
 
-        alert($scope.aptPackage.isretrofit);
+        //alert($scope.aptPackage.isretrofit);
         if($scope.apptPackage.packageForm.free_cancellation_days.$valid && $scope.apptPackage.packageForm.valid_days.$valid && $scope.apptPackage.packageForm.additional_amount.$valid && $scope.apptPackage.packageForm.no_of_sessions.$valid && $scope.aptPackage.no_of_sessions >= $scope.aptPackage.min_sessions && $scope.aptPackage.no_of_sessions <= $scope.aptPackage.max_sessions)
         {
             if($scope.custReadList.custwallet.walletbalance >= $scope.aptPackage.net_amount)
@@ -1883,7 +1890,8 @@ angular.module('myApp.controllers')
                 var data = {
                     "walletAmount": $scope.custReadList.custwallet.amount,
                     "walletTransType": "credit",
-                    "currency":"INR"
+                    "currency":"INR",
+                    "description":"Package Assignment"
                 }
                 spApi.walletTransact($scope.custReadList._id, data)
                 .success(function(data, status, headers, config) {
@@ -2120,6 +2128,95 @@ angular.module('myApp.controllers')
                 console.log("Failed to fetch future appointments!");
             });
     }    
+
+     $scope.fetchPatientWithWallet = function(){
+        $scope.walletTransactionDetails = false;
+
+        spApi.fetchPatientWithWallet()
+            .success(function(custData, custStatus, custHeaders, custConfig) {
+                //console.log(custData);
+
+                $scope.arrayCustomerWithWallet = custData.payload;
+                console.log($scope.arrayCustomerWithWallet);
+
+            })
+            .error(function(data, status, headers, config) {
+                item.walletBalance = 0;
+            });
+
+    }
+
+    $scope.getWalletHistory = function(rec){
+        $scope.walletTransactionDetails = true;
+        $scope.customerName = rec.name;
+
+         spApi.getWalletHistory(rec._id)
+            .success(function(Data, Status, Headers, Config) {
+        
+                $scope.arrayWalletHistory = Data.payload;
+                //console.log($scope.arrayWalletHistory);
+
+                var arrayWalletHistory = Data.payload;
+                $scope.arrayWalletData = [];
+                $scope.asOfBalance = 0;
+
+
+                arrayWalletHistory.forEach(function(item) {
+                    $scope.debitAmnt = 0;
+                    $scope.creditAmnt = 0;
+
+                    if(item.wallettranstype == 'credit'){
+                        $scope.asOfBalance = $scope.asOfBalance + item.wallettransamount;
+                        $scope.creditAmnt = item.wallettransamount;
+                    }else{
+                        $scope.asOfBalance = $scope.asOfBalance - item.wallettransamount;
+                        $scope.debitAmnt = item.wallettransamount;
+                    }
+
+                    item.trans_date = moment(new Date(item.transactiontime * 1000)).format("DD-MM-YYYY hh:mm A");        
+                    item.asOfBalance = $scope.asOfBalance;
+                    item.creditAmnt = $scope.creditAmnt;
+                    item.debitAmnt = $scope.debitAmnt;
+                    $scope.arrayWalletData.push(item);
+                });
+
+                console.log($scope.arrayWalletData);
+
+            })
+            .error(function(data, status, headers, config) {
+                item.walletBalance = 0;
+            });
+    }
+
+    $scope.getCollection = function() {
+        $scope.arrayCollection = [];
+
+        spApi.getCollection().
+        success(function (data, status, headers, config) {
+            var arrStoreTrue = [];
+            var arrStoreTrue = data.payload;
+            console.log("successfully received collections request.");
+            arrStoreTrue.forEach(function(item) {
+                if($cookies.get('u_id') == item.service_provider_id && item.trans_type != "debit"){
+                    var today = moment(new Date()).format('YYYYMMDD');
+                   /* var alert_date = moment(new Date(item.trans_date * 1000)).add(item.finance_alert_days, 'days').format("YYYYMMDD");
+                    item.alert_to_finance = false;
+                    if(today >= alert_date){
+                        item.alert_to_finance = true;
+                    }*/
+                    item.orignal_trans_date = item.trans_date;
+                    item.trans_date = moment(new Date(item.trans_date * 1000)).format("DD-MM-YYYY hh:mm A");
+                    $scope.arrayCollection.push(item);
+                }
+         
+            });
+            //console.log($scope.arrayCollection);
+        }).
+        error(function (data, status, headers, config) {
+            console.log("Error in receiving package cancellation request.");
+        });
+    };
+
 
     $scope.requestApptRescheduleClicked = function() {
         $scope.flags.showRescheduleAppt = true;
@@ -2459,6 +2556,7 @@ angular.module('myApp.controllers')
     }
 
     $scope.onWalletTransact = function(transType) {
+
         if(transType == "debit") {
             $scope.custReadList.custwallet.response = {
                 status: "error",
@@ -2473,7 +2571,8 @@ angular.module('myApp.controllers')
         var data = {
             "walletAmount": $scope.custReadList.custwallet.amount,
             "walletTransType": transType,
-            "currency":"INR"
+            "currency":"INR",
+            "description":$scope.custReadList.custwallet.description
         }
 
         spApi.walletTransact($scope.custReadList._id, data)

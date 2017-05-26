@@ -1,7 +1,5 @@
-
 angular.module('myApp.controllers')
-.controller('FinanceCtrl', function($scope, $http, $cookies, ngDialog, $rootScope, financeApi, $timeout, $location, $interval){
-	
+.controller('FinanceCtrl', function($scope, $http, $cookies, ngDialog, $animate, uiGridConstants, uiGridSelectionService, uiGridExporterService, $rootScope, financeApi, $timeout, $location, $interval){
 	$scope.financeInfoBarForm = {};
 	$scope.financeEmail = "";
 	$scope.financeName = "";
@@ -79,6 +77,14 @@ angular.module('myApp.controllers')
 	$scope.financeMgmt.arrayWalletHistory = [];
 	$scope.financeMgmt.walletTransactionDetails = false;
 	$scope.financeMgmt.asOfBalance = 0;
+	$scope.financeMgmt.fromDate = "";
+	$scope.financeMgmt.tillDate = "";
+	$scope.financeMgmt.validDateRange = true;
+	$scope.financeMgmt.dateValid = true;
+
+	$scope.from_date="";
+	$scope.till_date="";
+
 	
 	$scope.financeMgmt.getFinance = function() {
 		$scope.financeMgmt.arrayFinance = [];
@@ -182,7 +188,8 @@ angular.module('myApp.controllers')
             	var data = {
 	                "walletAmount": $scope.financeMgmt.cost_difference,
 	                "walletTransType": "debit",
-	                "currency":"INR"
+	                "currency":"INR",
+	                "description":"Package Cancellation"
 	            }
 	            financeApi.walletTransact($scope.financeMgmt.customer_id, data)
 	            .success(function(data, status, headers, config) {
@@ -267,7 +274,8 @@ angular.module('myApp.controllers')
 						$scope.asOfBalance = $scope.asOfBalance - item.wallettransamount;
 						$scope.debitAmnt = item.wallettransamount;
 					}
-					
+
+					item.trans_date = moment(new Date(item.transactiontime * 1000)).format("DD-MM-YYYY hh:mm A");				
 					item.asOfBalance = $scope.asOfBalance;
 					item.creditAmnt = $scope.creditAmnt;
 					item.debitAmnt = $scope.debitAmnt;
@@ -467,13 +475,233 @@ angular.module('myApp.controllers')
 				}
 				item.collected_amount = item.collected_amount;
 
+				item.outstanding_amount = item.outstanding_amount;
+				item.outstanding_clear_time = item.outstanding_clear_time;
+
 				$scope.financeMgmt.arrayCollected.push(item);
 			});
+
+			console.log($scope.financeMgmt.arrayCollected);
+			console.log(arrStoreTrue);
 		}).
 		error(function (data, status, headers, config) {
 			console.log("Error in receiving package cancellation request.");
 		});
 	};
+
+
+
+    $scope.financeMgmt.initReports = function() {
+		$scope.sortKey = 'starttime';
+		$scope.reverse = false;
+
+		var current_date = moment().unix();
+		var formatted_cur_date = moment(new Date(current_date * 1000)).format("YYYY-MM-DD");
+
+		var days = 7;
+		var date = new Date();
+		var weekly_date_before = Math.round((date.setTime(date.getTime() - (days * 24 * 60 * 60 * 1000)))/1000);
+		var formatted_weekly_date_before = moment(new Date(weekly_date_before * 1000)).format("YYYY-MM-DD");
+		
+		$scope.financeMgmt.fromDate = formatted_weekly_date_before; 
+		$scope.financeMgmt.tillDate = formatted_cur_date;
+		$('#aptFromDate').val($scope.financeMgmt.fromDate);
+		$('#aptTillDate').val($scope.financeMgmt.tillDate);
+
+		$scope.financeMgmt.arrayCollectedReport = [];
+
+	    financeApi.getCollectedReport(weekly_date_before,current_date).
+		success(function (data, status, headers, config) {
+			var arrStoreTrue = [];
+			var arrStoreTrue = data.payload;
+
+			console.log("successfully received collected request.");
+			arrStoreTrue.forEach(function(item) {
+				
+				item.trans_date = moment(new Date(item.actual_trans_date * 1000)).format("DD-MM-YYYY hh:mm A");
+				item.collected_date = moment(new Date(item.created_date * 1000)).format("DD-MM-YYYY hh:mm A");
+				item.trans_description = item.actual_trans_description;
+				item.trans_mode = item.actual_trans_mode;
+				item.trans_amount = item.actual_trans_amount;
+				item.collected_amount = 0;
+				if(item.cash_amount != undefined){
+					if(item.cash_amount > 0){
+						item.collected_amount = parseInt(item.collected_amount) + parseInt(item.cash_amount);
+					}
+				}
+				if(item.cheque_amount != undefined){
+					if(item.cheque_amount > 0){
+						item.collected_amount = parseInt(item.collected_amount) + parseInt(item.cheque_amount);
+					}
+				}
+				if(item.online_amount != undefined){
+					if(item.online_amount > 0){
+						item.collected_amount = parseInt(item.collected_amount) + parseInt(item.online_amount);
+					}
+				}
+				if(item.paytm_amount != undefined){
+					if(item.paytm_amount > 0){
+						item.collected_amount = parseInt(item.collected_amount) + parseInt(item.paytm_amount);
+					}
+				}
+				item.collected_amount = item.collected_amount;
+
+				item.outstanding_amount = item.outstanding_amount;
+				if(item.outstanding_clear_time > 0){
+					item.outstanding_clear_time = moment(new Date(item.outstanding_clear_time * 1000)).format("DD-MM-YYYY hh:mm A");
+				}
+				
+				item.healyos_receipt_number = item.healyos_receipt_number;
+				$scope.financeMgmt.arrayCollectedReport.push(item);
+			});
+			
+			//console.log($scope.financeMgmt.arrayCollectedReport);
+			$scope.initGrigOptions(formatted_weekly_date_before,formatted_cur_date);
+			$scope.gridOptions.data = $scope.financeMgmt.arrayCollectedReport;
+
+			//console.log("hi\n"+ $scope.gridOptions.data);
+		}).
+		error(function (data, status, headers, config) {
+			console.log("Error in receiving collection report request.");
+		});
+
+	}
+
+
+	$scope.financeMgmt.generateReport = function() {
+		
+		var fromDt = getEpochDate($('#aptFromDate').val());
+		var tillDt = getEpochDate($('#aptTillDate').val());
+	  	var from_date = moment(new Date(fromDt * 1000)).format("DD-MM-YYYY");
+		var to_date = moment(new Date(tillDt * 1000)).format("DD-MM-YYYY");
+
+    	var date1 = new Date(fromDt * 1000);
+    	var date2 = new Date(tillDt * 1000);
+    	var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds    
+    	var diffDays = Math.round(Math.abs((date1.getTime() - date2.getTime())/(oneDay)));
+
+    	$scope.financeMgmt.validDateRange = true;
+		$scope.financeMgmt.dateValid = true;
+
+    	if(date1.getTime() > date2.getTime()){
+    		$scope.financeMgmt.dateValid = false;
+    	}
+
+    	if(diffDays <= 31){
+    		
+			$scope.financeMgmt.arrayCollectedReport = [];
+
+		    financeApi.getCollectedReport(fromDt,tillDt).
+			success(function (data, status, headers, config) {
+				var arrStoreTrue = [];
+				var arrStoreTrue = data.payload;
+
+				console.log("successfully received collected request.");
+				arrStoreTrue.forEach(function(item) {
+					
+					item.trans_date = moment(new Date(item.actual_trans_date * 1000)).format("DD-MM-YYYY hh:mm A");
+					item.collected_date = moment(new Date(item.created_date * 1000)).format("DD-MM-YYYY hh:mm A");
+					item.trans_description = item.actual_trans_description;
+					item.trans_mode = item.actual_trans_mode;
+					item.trans_amount = item.actual_trans_amount;
+					item.collected_amount = 0;
+					if(item.cash_amount != undefined){
+						if(item.cash_amount > 0){
+							item.collected_amount = parseInt(item.collected_amount) + parseInt(item.cash_amount);
+						}
+					}
+					if(item.cheque_amount != undefined){
+						if(item.cheque_amount > 0){
+							item.collected_amount = parseInt(item.collected_amount) + parseInt(item.cheque_amount);
+						}
+					}
+					if(item.online_amount != undefined){
+						if(item.online_amount > 0){
+							item.collected_amount = parseInt(item.collected_amount) + parseInt(item.online_amount);
+						}
+					}
+					if(item.paytm_amount != undefined){
+						if(item.paytm_amount > 0){
+							item.collected_amount = parseInt(item.collected_amount) + parseInt(item.paytm_amount);
+						}
+					}
+					item.collected_amount = item.collected_amount;
+
+					item.outstanding_amount = item.outstanding_amount;
+					if(item.outstanding_clear_time > 0){
+						item.outstanding_clear_time = moment(new Date(item.outstanding_clear_time * 1000)).format("DD-MM-YYYY hh:mm A");
+					}
+					item.healyos_receipt_number = item.healyos_receipt_number;
+
+					$scope.financeMgmt.arrayCollectedReport.push(item);
+				});
+				
+				//console.log($scope.financeMgmt.arrayCollectedReport);
+				$scope.initGrigOptions(from_date,to_date);
+				$scope.gridOptions.data = $scope.financeMgmt.arrayCollectedReport;
+
+				//console.log("hi\n"+ $scope.gridOptions.data);
+			}).
+			error(function (data, status, headers, config) {
+				console.log("Error in receiving collection report request.");
+			});
+		}else{
+	
+			$scope.financeMgmt.validDateRange = false;
+		}
+			
+    };
+
+
+	$scope.initGrigOptions = function(fromdate,tilldate) {
+
+		var from_date=fromdate;
+		var till_date=tilldate;
+
+		//alert(from_date);
+		//alert(till_date);
+
+	    $scope.gridOptions = {
+		    columnDefs: [
+		      { field: 'customer_name' },
+		      //{ field: 'service_provider_name', visible: false},
+		      { field: 'service_provider_name' },
+		      { field: 'trans_description' },
+		      { field: 'trans_mode' },
+		      { field: 'trans_date' },
+		      { field: 'collected_date' },
+		      { field: 'trans_amount' },
+		      { field: 'collected_amount' },
+		      { field: 'outstanding_amount' },
+		      { field: 'outstanding_clear_time' },
+		      { field: 'healyos_receipt_number' },
+		    ],
+		    enableGridMenu: true,
+		    enableSelectAll: true,
+		    exporterCsvFilename: 'Collection_Report.csv',
+		    exporterPdfDefaultStyle: {fontSize: 9},
+		    exporterPdfTableStyle: {margin: [ 0, 0, 0, 0 ]},
+		    exporterPdfTableHeaderStyle: {fontSize: 10, bold: true, italics: true, color: 'red'},
+		    exporterPdfHeader: { text: "Collection Report", style: 'headerStyle' },
+		    exporterPdfFooter: function ( currentPage, pageCount ) {
+		      return { text: currentPage.toString() + ' of ' + pageCount.toString(), style: 'footerStyle' };
+		    },
+		    exporterPdfCustomFormatter: function ( docDefinition ) {
+		      docDefinition.styles.headerStyle = { fontSize: 22, bold: true, alignment: 'center' };
+		      docDefinition.styles.footerStyle = { fontSize: 10, bold: true, alignment: 'right' };
+		      return docDefinition;
+		    },
+		    exporterPdfOrientation: 'landscape',
+		    exporterPdfPageSize: 'LETTER',
+		    exporterPdfMaxGridWidth: 600,
+		    exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
+		    onRegisterApi: function(gridApi){
+		      $scope.gridApi = gridApi;
+		    }
+	  	};
+
+  	}
+
 
 	$scope.financeMgmt.collectedForm = function(rec) {
 		$scope.financeMgmt.InitFinanceParams();
@@ -511,13 +739,24 @@ angular.module('myApp.controllers')
 		}
 	};
 
-	/*$scope.financeMgmt.exportData = function () {
-        var blob = new Blob([document.getElementById('exportable').innerHTML], {
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
-        });
-        saveAs(blob, "Report.xls");
-    };*/
+	$timeout(function(){
+		$('.dateTimePicker').datetimepicker({
+			format: 'YYYY-MM-DD'
+		});
+		$('.datetimepicker2').datetimepicker({
+			format: 'YYYY-MM-DD'
+		});
+		$('#datetimepicker4').datetimepicker({
+			format: 'YYYY-MM-DD'
+		});
+		$('#datetimepicker5').datetimepicker({
+			format: 'YYYY-MM-DD'
+		});
+	}, 200);
 
+
+    $scope.initGrigOptions($scope.from_date,$scope.till_date);
 
 	$scope.initFinance();
+	
 });

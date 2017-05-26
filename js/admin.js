@@ -1101,6 +1101,7 @@ angular.module('myApp.controllers')
 				}
 				$scope.getLocalityFromPincode($scope.custReadList.pincode);
 				$scope.custReadListview = true;
+				$scope.custReadList.custwallet.description='';
 			}else{
 				console.log("error");
 			}
@@ -2783,7 +2784,8 @@ angular.module('myApp.controllers')
 											var d = null;
 											d = $scope.wrkHrsAllSlots.indexOf(item_6);
 											if(d != -1) {
-												$scope.wrkHrsAllSlots.splice(d, 1);
+												//$scope.wrkHrsAllSlots.splice(d, 1);
+												item_6.selected = true;
 											}
 										}
 									}
@@ -4922,6 +4924,7 @@ angular.module('myApp.controllers')
 						"sp_workingDate": tempDateArray
 					};
 				existingWorkTimeSlots = [];
+				existingWorkTimeSlotsForClinic = [];
 				adminApi.getSpMonthlyWtimeAndOffSlots(dataObj)
 				.success(function(data, status, headers, config) {
 					$scope.SpWorkTime = data.payload.sp_monthlyWtimeAndOffSlots;
@@ -4935,6 +4938,21 @@ angular.module('myApp.controllers')
 								existingWorkTimeSlots.push({"st" : item_2.st, "et" : item_2.et});
 							});
 						}
+
+						//taking clinic specific existing time slots.
+						if(item_1.sp_clinicSpecificWtimeDetail != undefined){
+							record_3 = item_1.sp_clinicSpecificWtimeDetail;
+							record_3.forEach(function(item_3) {
+								record_4 = item_3.sp_cwtime;
+								clinicId = item_3.sp_clinicid;
+								record_4.forEach(function(item_4) {
+									existingWorkTimeSlotsForClinic.push({"st" : item_4.st, "et" : item_4.et, "clinicId":clinicId});
+								});
+
+							});
+						}
+
+						
 					});
 
 					var flags = [], output = [], l = existingWorkTimeSlots.length, i;
@@ -4945,6 +4963,16 @@ angular.module('myApp.controllers')
 					}
 
 					existingWorkTimeSlots = output;
+
+
+					var flags1 = [], output1 = [], l1 = existingWorkTimeSlotsForClinic.length, i1;
+					for( i1=0; i1<l1; i1++) {
+					    if(flags1[existingWorkTimeSlotsForClinic[i1].st, existingWorkTimeSlotsForClinic[i1].et]) continue;
+					    flags1[existingWorkTimeSlotsForClinic[i1].st, existingWorkTimeSlotsForClinic[i1].et] = true;
+					    output1.push({"st": existingWorkTimeSlotsForClinic[i1].st,"et": existingWorkTimeSlotsForClinic[i1].et,"clinicId":existingWorkTimeSlotsForClinic[i1].clinicId});
+					}
+
+					existingWorkTimeSlotsForClinic = output1;
 
 					if(serviceLocation != undefined && serviceLocation != 0){
 						$scope.wrkHrsAllSlots = [];
@@ -5057,9 +5085,14 @@ angular.module('myApp.controllers')
 						});
 					}
 
+					//console.log(existingWorkTimeSlots);
+					//console.log(newWorkTimeSlots);
+					//console.log(existingWorkTimeSlotsForClinic);
+
 					if(existingWorkTimeSlots.length != 0){
 						existingWorkTimeSlots.forEach(function(item_4) {
 							newWorkTimeSlots.forEach(function(item_5) {
+
 								if(item_4.st != undefined && item_4.et != undefined){
 									if((item_5.st >= item_4.st && item_5.st < item_4.et) || (item_5.et > item_4.st && item_5.et < item_4.et)){
 										var first = item_5.st.slice(0,2);
@@ -5073,7 +5106,26 @@ angular.module('myApp.controllers')
 													var d = null;
 													d = $scope.wrkHrsAllSlots.indexOf(item_6);
 													if(d != -1) {
-														$scope.wrkHrsAllSlots.splice(d, 1);
+														//$scope.wrkHrsAllSlots.splice(d, 1);
+														item_6.selected = true;
+
+														if(existingWorkTimeSlotsForClinic.length != 0){
+															existingWorkTimeSlotsForClinic.forEach(function(item_7){
+																if((item_5.st >= item_7.st && item_5.st < item_7.et) || (item_5.et > item_7.st && item_5.et < item_7.et)){
+																	var first1 = item_5.st.slice(0,2);
+																	var middle1 = item_5.st.slice(2,4);
+																	var delimeter1 = ":";
+																	var result1 = first1+delimeter1+middle1;
+																	if(label_split[0] == result1){																		
+																	
+																		console.log(result1);
+																	}
+
+																}
+															
+															});
+														}
+
 													}
 												}
 											}
@@ -8489,7 +8541,8 @@ angular.module('myApp.controllers')
 		var data = {
 			"walletAmount": $scope.custReadList.custwallet.amount,
 			"walletTransType": transType,
-			"currency":"INR"
+			"currency":"INR",
+			"description":$scope.custReadList.custwallet.description
 		}
 
 		adminApi.walletTransact($scope.custReadList._id, data)

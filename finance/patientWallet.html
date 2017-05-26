@@ -46,7 +46,8 @@
 				max-size="5"
 				pagination-id="arrFinanceId"
 				direction-links="true"
-				boundary-links="true" >
+				boundary-links="true" 
+				style="padding-left: 10px;">
 			</dir-pagination-controls>
 		</div>
 	</div>
@@ -61,8 +62,8 @@
 				<thead>
 					
 					<tr>
-						<th ng-click="financeMgmt.sortFinance('transactiontime')"><span class="1clsfleft">Transaction Date</span>
-							<span class="glyphicon sort-icon" ng-show="financeSortKey=='transactiontime'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+						<th ng-click="financeMgmt.sortFinance('trans_date')"><span class="1clsfleft">Transaction Date</span>
+							<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_date'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 						</th>
 						<th ng-click="financeMgmt.sortFinance('wallettranstype')"><span class="1clsfleft">Transaction Type</span>
 							<span class="glyphicon sort-icon" ng-show="financeSortKey=='wallettranstype'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
@@ -86,7 +87,7 @@
 					</tr>
 
 					<tr>
-						<td> <input type="text" ng-model="searchWallet.transactiontime"> </td>
+						<td> <input type="text" ng-model="searchWallet.trans_date"> </td>
 						<td> <input type="text" ng-model="searchWallet.wallettranstype"> </td>
 						<td> <input type="text" ng-model="searchWallet.creditAmnt"> </td>
 						<td> <input type="text" ng-model="searchWallet.debitAmnt"> </td>
@@ -98,7 +99,7 @@
 					<tr dir-paginate="rec in financeMgmt.arrayWalletData|orderBy:financeSortKey:financeReverse|filter:searchWallet|itemsPerPage:10"
 							pagination-id="arrFinanceWalletId">
 						<td>
-							<span style="word-break: break-word;">{{rec.transactiontime * 1000 | date:'dd-MM-yyyy hh:mm a'}}</span>
+							<span style="word-break: break-word;">{{rec.trans_date}}</span>
 						</td>
 						<td>
 							<span style="word-break: break-word;">{{rec.wallettranstype}}</span>
@@ -123,7 +124,8 @@
 				max-size="10"
 				pagination-id="arrFinanceWalletId"
 				direction-links="true"
-				boundary-links="true" >
+				boundary-links="true" 
+				style="padding-left: 10px;">
 			</dir-pagination-controls>
 		</div>
 	</div>

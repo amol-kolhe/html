@@ -110,7 +110,9 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 		];
 			
 		$scope.spMenus = [{title: "My Appointments", url: 'quickView.html'},
-			{title: "Cost Calculator", url: 'costcalculator.html'}
+			{title: "Cost Calculator", url: 'costcalculator.html'},
+			{title: "Patient Wallet", url: 'patientWallet.html'},
+			{title: "Collection Transactions", url: 'collectionInfo.html'}
 		];
 
 		$scope.financeMenus = [

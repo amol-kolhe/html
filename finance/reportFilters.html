@@ -1,3 +1,151 @@
-<div class="mainContent2" ng-controller="FinanceCtrl" ng-init="">
-	<span><h1>Report Filter Screen Coming Soon...</h1></span>
+<div class="mainContent2" ng-controller="FinanceCtrl">
+	<span><h3>Weekly Reports</h3></span>
+
+	<form class="form-inline"  data-ng-init="financeMgmt.initReports()">
+              
+        <div class="form-group" style="position:relative;">
+            From Date: <input type="text"
+                ng-model="financeMgmt.fromDate"
+                name = "fromDate"
+                id="aptFromDate"
+                value = "{{financeMgmt.fromDate}}"
+                title="From Date"
+                class="dateTimePicker aptSelectionInput form-control"/>
+            To Date:   <input type="text"
+                ng-model="financeMgmt.tillDate"
+                name="tillDate"
+                id="aptTillDate"
+                value = "{{financeMgmt.tillDate}}"
+                title="Till Date"
+                class="dateTimePicker aptSelectionInput form-control"/>
+            <button style="cursor:pointer;"
+                    data-ng-click="financeMgmt.generateReport()"
+                    class="btn btn-primary btn-sm">
+                Find Reports
+            </button>
+        </div>
+ 	
+        <!--<div style="padding:10px;">
+		 	<div class="row">
+				<div class="panel panel-default" style="border: 1px solid #ddd">
+					<table class="table">
+						<thead style="background-color: #ECECEC;">						
+							<tr>
+								<th ng-click="financeMgmt.sortFinance('customer_name')"><span class="1clsfleft">Customer</span>
+									<span class="glyphicon sort-icon" ng-show="financeSortKey=='customer_name'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+								</th>
+								<th ng-click="financeMgmt.sortFinance('service_provider_name')"><span class="1clsfleft">Service Provider</span>
+									<span class="glyphicon sort-icon" ng-show="financeSortKey=='service_provider_name'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+								</th>
+								<th ng-click="financeMgmt.sortFinance('trans_description')"><span class="1clsfleft">Description</span>
+									<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_description'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+								</th>
+								<th ng-click="financeMgmt.sortFinance('trans_mode')"><span class="1clsfleft">Mode</span>
+									<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_mode'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+								</th>
+								<th ng-click="financeMgmt.sortFinance('trans_date')"><span class="1clsfleft">Transaction Date</span>
+									<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_date'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+								</th>
+								<th ng-click="financeMgmt.sortFinance('collected_date')"><span class="1clsfleft">Collected Date</span>
+									<span class="glyphicon sort-icon" ng-show="financeSortKey=='collected_date'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+								</th>
+								<th ng-click="financeMgmt.sortFinance('trans_amount')"><span class="1clsfleft">Transaction Amount</span>
+									<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_amount'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+								</th>
+								<th ng-click="financeMgmt.sortFinance('collected_amount')"><span class="1clsfleft">Collected Amount</span>
+									<span class="glyphicon sort-icon" ng-show="financeSortKey=='collected_amount'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+								</th>
+								<th ng-click="financeMgmt.sortFinance('outstanding_amount')"><span class="1clsfleft">Outstanding Amount</span>
+									<span class="glyphicon sort-icon" ng-show="financeSortKey=='outstanding_amount'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+								</th>
+								<th ng-click="financeMgmt.sortFinance('outstanding_clear_time')"><span class="1clsfleft">Outstanding cleared Date</span>
+									<span class="glyphicon sort-icon" ng-show="financeSortKey=='outstanding_clear_time'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+								</th>
+								<th ng-click="financeMgmt.sortFinance('healyos_receipt_number')"><span class="1clsfleft">Receipt No.</span>
+									<span class="glyphicon sort-icon" ng-show="financeSortKey=='healyos_receipt_number'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+								</th>
+		
+							</tr>
+
+							<tr>
+								<td> <input type="text" ng-model="searchWallet.customer_name" style="width: 90px;"> </td>
+								<td> <input type="text" ng-model="searchWallet.service_provider_name" style="width: 90px;"> </td>
+								<td> <input type="text" ng-model="searchWallet.trans_description" style="width: 90px;"> </td>
+								<td> <input type="text" ng-model="searchWallet.trans_mode" style="width: 50px;"> </td>
+								<td> <input type="text" ng-model="searchWallet.trans_date" style="width: 90px;"> </td>
+								<td> <input type="text" ng-model="searchWallet.collected_date" style="width: 90px;"> </td>
+								<td> <input type="text" ng-model="searchWallet.trans_amount" style="width: 50px;"> </td>
+								<td> <input type="text" ng-model="searchWallet.collected_amount" style="width: 50px;"> </td>
+								<td> <input type="text" ng-model="searchWallet.outstanding_amount" style="width: 50px;"> </td>
+								<td> <input type="text" ng-model="searchWallet.outstanding_clear_time" style="width: 50px;"> </td>
+								<td> <input type="text" ng-model="searchWallet.healyos_receipt_number" style="width: 50px;"> </td>
+								
+							
+							</tr>
+
+						</thead>
+						<tbody>
+							<tr dir-paginate="rec in financeMgmt.arrayCollectedReport|orderBy:financeSortKey:financeReverse|filter:searchWallet|itemsPerPage:10"
+									pagination-id="arrFinanceWalletId">
+								<td>
+									<span style="word-break: break-word;">{{rec.customer_name}}</span>
+								</td>
+								<td>
+									<span style="word-break: break-word;">{{rec.service_provider_name}}</span>
+								</td>
+								<td>
+									<span style="word-break: break-word;">{{rec.trans_description}}</span>
+								</td>
+								<td>
+									<span style="word-break: break-word;">{{rec.trans_mode}}</span>
+								</td>
+								<td>
+									<span style="word-break: break-word;">{{rec.trans_date}}</span>
+								</td>
+								<td>
+									<span style="word-break: break-word;">{{rec.collected_date}}</span>
+								</td>
+								<td>
+									<span style="word-break: break-word;">{{rec.trans_amount}}</span>
+								</td>
+								<td>
+									<span style="word-break: break-word;">{{rec.collected_amount}}</span>
+								</td>
+								<td>
+									<span style="word-break: break-word;">{{rec.outstanding_amount}}</span>
+								</td>
+								<td>
+									<span style="word-break: break-word;">{{rec.outstanding_clear_time}}</span>
+								</td>
+								<td>
+									<span style="word-break: break-word;">{{rec.healyos_receipt_number}}</span>
+								</td>
+
+								
+							</tr>
+						</tbody>
+					</table>
+					<dir-pagination-controls
+						max-size="10"
+						pagination-id="arrFinanceWalletId"
+						direction-links="true"
+						boundary-links="true" 
+						style="padding-left: 10px;">
+					</dir-pagination-controls>
+				</div>
+			</div>
+		</div>-->
+		<div ng-hide="!financeMgmt.validDateRange || !financeMgmt.dateValid">
+			<div ui-grid="gridOptions" ui-grid-selection ui-grid-exporter class="grid"></div>
+	  	</div>
+	  	<div ng-show="!financeMgmt.validDateRange">
+	  		<span style="color: red"> *Please enter correct date range... </span>
+	  	</div>
+	  	<div ng-show="!financeMgmt.dateValid">
+	  		<span style="color: red"> *From Date should not greater than To Date... </span>
+	  	</div>
+	
+	</form>
+
+
 </div>

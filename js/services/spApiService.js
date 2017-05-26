@@ -129,6 +129,20 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         return $http.get(url);
     };
 
+    spApi.fetchPatientWithWallet = function() {
+        return $http.get(baseUrl + '/hrest/v1/admin/cust/fetchPatientWithWallet?apikey=' + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2");
+    }
+
+    spApi.getWalletHistory = function(custID) {
+        return $http.get(baseUrl + '/hrest/v1/admin/walletHistory/' + custID + "?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2");
+    };
+
+    spApi.getCollection = function() {
+        var url = baseUrl + "/hrest/v1/finance/collection?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + '&role=2';
+        return $http.get(url);
+    }
+
+
     //API support to get all promocodes.
     spApi.getPackage = function(active, is_promocode) {
         var url = baseUrl + "/hrest/v1/admin/packagecode?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + '&time=' + new Date().getTime() + '&role=2';

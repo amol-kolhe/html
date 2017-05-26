@@ -74,6 +74,11 @@ financeApiService.factory('financeApi', ['$http', '$cookies', function($http, $c
 		return $http.get(url);
 	}
 
+	financeApi.getCollectedReport = function(fromDate,tillDate) {
+		var url = baseUrl + "/hrest/v1/finance/collectedReport?apikey=" + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + '&role=3' + '&fromDate=' + fromDate + '&tillDate=' + tillDate;
+		return $http.get(url);
+	}
+
 	return financeApi;
 }]);
 

@@ -1,0 +1,81 @@
+<div class="mainContent2" ng-controller="SpCtrl" ng-init="getCollection();">
+	
+<div style="padding:10px;">
+ 	<div class="row">
+		<div class="panel panel-default" style="border: 1px solid #ddd">
+			<div class="panel-heading">
+				<span style="font-weight: bold;font-size: 20px">Collection Information</span>
+				<span class="pull-right clickable glyphicon glyphicon-refresh" title="Refresh the actionable items" ng-click="getCollection();"></span>
+			</div>
+			<table class="table">
+				<thead>
+					
+					<tr>
+						<th ng-click="sort('trans_date')"><span class="1clsfleft">Actual Date</span>
+							 <span class="glyphicon sort-icon" ng-show="sortKey=='trans_date'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+						<th ng-click="sort('customer_name')"><span class="1clsfleft">Customer</span>
+							<span class="glyphicon sort-icon" ng-show="sortKey=='customer_name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+						<th ng-click="sort('service_provider_name')"><span class="1clsfleft">Service Provider</span>
+							<span class="glyphicon sort-icon" ng-show="sortKey=='service_provider_name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+						<th ng-click="sort('trans_description')"><span class="1clsfleft">Description</span>
+							<span class="glyphicon sort-icon" ng-show="sortKey=='trans_description'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+						<th ng-click="sort('trans_mode')"><span class="1clsfleft">Mode</span>
+							<span class="glyphicon sort-icon" ng-show="sortKey=='trans_mode'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+						<th ng-click="sort('trans_amount')"><span class="1clsfleft">Amount</span>
+							<span class="glyphicon sort-icon" ng-show="sortKey=='trans_amount'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+						
+					</tr>
+
+					<tr>
+						<td><input class="form-control" style="width: 100px;" ng-model="search.trans_date" /></td>
+						<td><input class="form-control" style="width: 100px;" ng-model="search.customer_name" /></td>
+						<td><input class="form-control" style="width: 100px;" ng-model="search.service_provider_name" /></td>
+						<td><input class="form-control" style="width: 100px;" ng-model="search.trans_description" /></td>
+						<!--<td><input style="width: 90px;" ng-model="search.trans_type" /></td>-->
+						<td><input class="form-control" style="width: 100px;" ng-model="search.trans_mode" /></td>
+						<td><input class="form-control" style="width: 100px;" ng-model="search.trans_amount" /></td>
+			   		</tr>
+			   		
+				</thead>
+				<tbody>
+					<tr dir-paginate="rec in arrayCollection|orderBy:sortKey:!reverse|filter:search|itemsPerPage:5"
+							pagination-id="arrFinanceId">
+						<td>
+							<span style="word-break: break-word;">{{rec.trans_date}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">{{rec.customer_name}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">{{rec.service_provider_name}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">{{rec.trans_description}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">{{rec.trans_mode}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">{{rec.trans_amount}}</span>
+						</td>
+						
+					</tr>
+				</tbody>
+			</table>
+			<dir-pagination-controls
+				max-size="5"
+				pagination-id="arrFinanceId"
+				direction-links="true"
+				boundary-links="true" >
+			</dir-pagination-controls>
+		</div>
+	</div>
+</div>
+
+</div>
