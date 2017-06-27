@@ -218,49 +218,57 @@ angular.module('myApp.controllers')
 			"selected": false,
 			"label": 	"07:30 - 09:00",
 			"selectZoneIds": [],
-			"selectClinicIds": []
+			"selectClinicIds": [],
+			"disabled": false,
 		},
 		{
 			"selected": false,
 			"label": 	"09:00 - 10:30",
 			"selectZoneIds": [],
-			"selectClinicIds": []
+			"selectClinicIds": [],
+			"disabled": false,
 		},
 		{
 			"selected": false,
 			"label": 	"10:30 - 12:00",
 			"selectZoneIds": [],
-			"selectClinicIds": []
+			"selectClinicIds": [],
+			"disabled": false,
 		},
 		{
 			"selected": false,
 			"label": 	"12:00 - 13:30",
 			"selectZoneIds": [],
-			"selectClinicIds": []
+			"selectClinicIds": [],
+			"disabled": false,
 		},
 		{
 			"selected": false,
 			"label": 	"15:00 - 16:30",
 			"selectZoneIds": [],
-			"selectClinicIds": []
+			"selectClinicIds": [],
+			"disabled": false,
 		},
 		{
 			"selected": false,
 			"label": 	"16:30 - 18:00",
 			"selectZoneIds": [],
-			"selectClinicIds": []
+			"selectClinicIds": [],
+			"disabled": false,
 		},
 		{
 			"selected": false,
 			"label": 	"18:00 - 19:30",
 			"selectZoneIds": [],
-			"selectClinicIds": []
+			"selectClinicIds": [],
+			"disabled": false,
 		},
 		{
 			"selected": false,
 			"label": 	"19:30 - 21:00",
 			"selectZoneIds": [],
-			"selectClinicIds": []
+			"selectClinicIds": [],
+			"disabled": false,
 		}
 	];
 
@@ -2800,49 +2808,57 @@ angular.module('myApp.controllers')
 						"selected": false,
 						"label": 	"07:30 - 09:00",
 						"selectZoneIds": [],
-						"selectClinicIds": []
+						"selectClinicIds": [],
+						"disabled": false,
 					},
 					{
 						"selected": false,
 						"label": 	"09:00 - 10:30",
 						"selectZoneIds": [],
-						"selectClinicIds": []
+						"selectClinicIds": [],
+						"disabled": false,
 					},
 					{
 						"selected": false,
 						"label": 	"10:30 - 12:00",
 						"selectZoneIds": [],
-						"selectClinicIds": []
+						"selectClinicIds": [],
+						"disabled": false,
 					},
 					{
 						"selected": false,
 						"label": 	"12:00 - 13:30",
 						"selectZoneIds": [],
-						"selectClinicIds": []
+						"selectClinicIds": [],
+						"disabled": false,
 					},
 					{
 						"selected": false,
 						"label": 	"15:00 - 16:30",
 						"selectZoneIds": [],
-						"selectClinicIds": []
+						"selectClinicIds": [],
+						"disabled": false,
 					},
 					{
 						"selected": false,
 						"label": 	"16:30 - 18:00",
 						"selectZoneIds": [],
-						"selectClinicIds": []
+						"selectClinicIds": [],
+						"disabled": false,
 					},
 					{
 						"selected": false,
 						"label": 	"18:00 - 19:30",
 						"selectZoneIds": [],
-						"selectClinicIds": []
+						"selectClinicIds": [],
+						"disabled": false,
 					},
 					{
 						"selected": false,
 						"label": 	"19:30 - 21:00",
 						"selectZoneIds": [],
-						"selectClinicIds": []
+						"selectClinicIds": [],
+						"disabled": false,
 					}
 				];
 			}
@@ -4716,7 +4732,7 @@ angular.module('myApp.controllers')
 		arrayDates = [];
 		for(var dateObjIndex = currentDay ; dateObjIndex <= lastDay ; dateObjIndex.setDate(dateObjIndex.getDate() + 1)) {
 
-			if((dateObjIndex.getDay() != 0) && (dateObjIndex.getDay() >= 1 && dateObjIndex.getDay() <= 6)) {
+			if(dateObjIndex.getDay() >= 0 && dateObjIndex.getDay() <= 6) {
 				var year = dateObjIndex.getFullYear();
 
 				var intMonth = dateObjIndex.getMonth() + 1;
@@ -4808,7 +4824,7 @@ angular.module('myApp.controllers')
 
 		arrayDates = [];
 		for(var dateObjIndex = currentDay ; dateObjIndex <= lastDay ; dateObjIndex.setDate(dateObjIndex.getDate() + 1)) {
-			if((dateObjIndex.getDay() != 0) && (dateObjIndex.getDay() >= 1 && dateObjIndex.getDay() <= 6)) {
+			if((dateObjIndex.getDay() >= 0 && dateObjIndex.getDay() <= 6)) {
 				var year = dateObjIndex.getFullYear();
 
 				var intMonth = dateObjIndex.getMonth() + 1;
@@ -4925,6 +4941,10 @@ angular.module('myApp.controllers')
 					};
 				existingWorkTimeSlots = [];
 				existingWorkTimeSlotsForClinic = [];
+				existingWorkTimeSlotsForZone = [];
+				$scope.clinicNameStr = '';
+				$scope.zoneName = '';
+				$scope.zoneNameList = [];
 				adminApi.getSpMonthlyWtimeAndOffSlots(dataObj)
 				.success(function(data, status, headers, config) {
 					$scope.SpWorkTime = data.payload.sp_monthlyWtimeAndOffSlots;
@@ -4945,8 +4965,44 @@ angular.module('myApp.controllers')
 							record_3.forEach(function(item_3) {
 								record_4 = item_3.sp_cwtime;
 								clinicId = item_3.sp_clinicid;
+
+								for (var i = 0; i < clinic_rec.length; i++){
+									if(clinic_rec[i]._id == clinicId){
+										if(serviceLocation == "0" || serviceLocation == undefined){
+											$scope.clinicNameStr=clinic_rec[i].clinic_name;
+										}			
+									}
+								}
 								record_4.forEach(function(item_4) {
-									existingWorkTimeSlotsForClinic.push({"st" : item_4.st, "et" : item_4.et, "clinicId":clinicId});
+									existingWorkTimeSlotsForClinic.push({"st" : item_4.st, "et" : item_4.et, "clinicId":clinicId, "clinicName":$scope.clinicNameStr});
+								});
+
+							});
+						}
+
+						//taking zone specific existing time slots.
+						if(item_1.sp_zoneSpecificWtimeDetail != undefined){
+							record_5 = item_1.sp_zoneSpecificWtimeDetail;
+							record_5.forEach(function(item_5) {
+								record_6 = item_5.sp_zwtime;
+								zoneId = item_5.sp_zoneid;
+								for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
+									for(var j = 0 ; j < $scope.arrSpRecords[i].zones.length ; j++) {
+										if($scope.arrSpRecords[i].zones[j].id == zoneId){
+											if(serviceLocation != "0" && serviceLocation != undefined){
+												$scope.zoneName = $scope.arrSpRecords[i].zones[j].name;
+
+												if(!$scope.zoneNameList.includes($scope.zoneName)){
+													$scope.zoneNameList.push($scope.zoneName);
+												}
+												
+											}	
+										}
+
+									}
+								}
+								record_6.forEach(function(item_6) {
+									existingWorkTimeSlotsForZone.push({"st" : item_6.st, "et" : item_6.et, "zoneId":zoneId});
 								});
 
 							});
@@ -4964,15 +5020,24 @@ angular.module('myApp.controllers')
 
 					existingWorkTimeSlots = output;
 
-
 					var flags1 = [], output1 = [], l1 = existingWorkTimeSlotsForClinic.length, i1;
 					for( i1=0; i1<l1; i1++) {
 					    if(flags1[existingWorkTimeSlotsForClinic[i1].st, existingWorkTimeSlotsForClinic[i1].et]) continue;
 					    flags1[existingWorkTimeSlotsForClinic[i1].st, existingWorkTimeSlotsForClinic[i1].et] = true;
-					    output1.push({"st": existingWorkTimeSlotsForClinic[i1].st,"et": existingWorkTimeSlotsForClinic[i1].et,"clinicId":existingWorkTimeSlotsForClinic[i1].clinicId});
+					    output1.push({"st": existingWorkTimeSlotsForClinic[i1].st,"et": existingWorkTimeSlotsForClinic[i1].et,"clinicId":existingWorkTimeSlotsForClinic[i1].clinicId,"clinicName":existingWorkTimeSlotsForClinic[i1].clinicName});
 					}
 
 					existingWorkTimeSlotsForClinic = output1;
+
+
+					var flags2 = [], output2 = [], l2 = existingWorkTimeSlotsForZone.length, i2;
+					for( i2=0; i2<l2; i2++) {
+					    if(flags2[existingWorkTimeSlotsForZone[i2].st, existingWorkTimeSlotsForZone[i2].et]) continue;
+					    flags2[existingWorkTimeSlotsForZone[i2].st, existingWorkTimeSlotsForZone[i2].et] = true;
+					    output2.push({"st": existingWorkTimeSlotsForZone[i2].st,"et": existingWorkTimeSlotsForZone[i2].et,"zoneId":existingWorkTimeSlotsForZone[i2].zoneId});
+					}
+
+					existingWorkTimeSlotsForZone = output2;
 
 					if(serviceLocation != undefined && serviceLocation != 0){
 						$scope.wrkHrsAllSlots = [];
@@ -5007,7 +5072,7 @@ angular.module('myApp.controllers')
 									newSt = slot_start_time.split(":").join("");
 									newEt = slot_end_time.split(":").join("");
 									newWorkTimeSlots.push({"st" : newSt, "et" : newEt});
-									$scope.wrkHrsAllSlots.push({"selected": false, "label":slot_start_time+" - "+slot_end_time, "selectZoneIds": [], "selectClinicIds": []});
+									$scope.wrkHrsAllSlots.push({"selected": false, "label":slot_start_time+" - "+slot_end_time, "selectZoneIds": [], "selectClinicIds": [], "disabled": false});
 
 									//slot_start_time_str = $scope.addMinutes(slot_end_time, 1000);
 
@@ -5026,49 +5091,58 @@ angular.module('myApp.controllers')
 								"selected": false,
 								"label": 	"07:30 - 09:00",
 								"selectZoneIds": [],
-								"selectClinicIds": []
+								"selectClinicIds": [],
+								"disabled": false,
+
 							},
 							{
 								"selected": false,
 								"label": 	"09:00 - 10:30",
 								"selectZoneIds": [],
-								"selectClinicIds": []
+								"selectClinicIds": [],
+								"disabled": false,
 							},
 							{
 								"selected": false,
 								"label": 	"10:30 - 12:00",
 								"selectZoneIds": [],
-								"selectClinicIds": []
+								"selectClinicIds": [],
+								"disabled": false,
 							},
 							{
 								"selected": false,
 								"label": 	"12:00 - 13:30",
 								"selectZoneIds": [],
-								"selectClinicIds": []
+								"selectClinicIds": [],
+								"disabled": false,
 							},
 							{
 								"selected": false,
 								"label": 	"15:00 - 16:30",
 								"selectZoneIds": [],
-								"selectClinicIds": []
+								"selectClinicIds": [],
+								"disabled": false,
 							},
 							{
 								"selected": false,
 								"label": 	"16:30 - 18:00",
 								"selectZoneIds": [],
-								"selectClinicIds": []
+								"selectClinicIds": [],
+								"disabled": false,
 							},
 							{
 								"selected": false,
 								"label": 	"18:00 - 19:30",
 								"selectZoneIds": [],
-								"selectClinicIds": []
+								"selectClinicIds": [],
+								"disabled": false,
 							},
 							{
 								"selected": false,
 								"label": 	"19:30 - 21:00",
 								"selectZoneIds": [],
-								"selectClinicIds": []
+								"selectClinicIds": [],
+								"disabled": false,
 							}
 						];
 
@@ -5087,7 +5161,8 @@ angular.module('myApp.controllers')
 
 					//console.log(existingWorkTimeSlots);
 					//console.log(newWorkTimeSlots);
-					//console.log(existingWorkTimeSlotsForClinic);
+					console.log(existingWorkTimeSlotsForClinic);
+					//console.log(existingWorkTimeSlotsForZone);
 
 					if(existingWorkTimeSlots.length != 0){
 						existingWorkTimeSlots.forEach(function(item_4) {
@@ -5109,21 +5184,61 @@ angular.module('myApp.controllers')
 														//$scope.wrkHrsAllSlots.splice(d, 1);
 														item_6.selected = true;
 
-														if(existingWorkTimeSlotsForClinic.length != 0){
-															existingWorkTimeSlotsForClinic.forEach(function(item_7){
-																if((item_5.st >= item_7.st && item_5.st < item_7.et) || (item_5.et > item_7.st && item_5.et < item_7.et)){
-																	var first1 = item_5.st.slice(0,2);
-																	var middle1 = item_5.st.slice(2,4);
-																	var delimeter1 = ":";
-																	var result1 = first1+delimeter1+middle1;
-																	if(label_split[0] == result1){																		
-																	
-																		console.log(result1);
-																	}
+														if(serviceLocation == "0" || serviceLocation == undefined){
+															if(existingWorkTimeSlotsForClinic.length != 0){
+																existingWorkTimeSlotsForClinic.forEach(function(item_7){
+																	if((item_5.st >= item_7.st && item_5.st < item_7.et) || (item_5.et > item_7.st && item_5.et < item_7.et)){
+																		var first1 = item_5.st.slice(0,2);
+																		var middle1 = item_5.st.slice(2,4);
+																		var delimeter1 = ":";
+																		var result1 = first1+delimeter1+middle1;
+																		if(label_split[0] == result1){																		
+																		
+																			//console.log(result1);
+																			item_6.selected = true;
+																			item_6.disabled = true;
 
-																}
-															
-															});
+																			var clinicObj1 = {
+																				"sp_clinicid": "",
+																				"sp_clinicname": "",
+																				"sp_cwtime": {
+																					"start_time": "",
+																					"end_time": ""
+																				}
+																			};
+
+																			clinicObj1.sp_clinicid = item_7.clinicId;
+																			clinicObj1.sp_clinicname = item_7.clinicName;
+																			item_6.selectClinicIds.push(clinicObj1);
+
+																		}
+
+																	}
+																
+																});
+															}
+														}
+
+														if(serviceLocation != "0" && serviceLocation != undefined){
+															if(existingWorkTimeSlotsForZone.length != 0){
+																existingWorkTimeSlotsForZone.forEach(function(item_8){
+																	if((item_5.st >= item_8.st && item_5.st < item_8.et) || (item_5.et > item_8.st && item_5.et < item_8.et)){
+																		var first2 = item_5.st.slice(0,2);
+																		var middle2 = item_5.st.slice(2,4);
+																		var delimeter2 = ":";
+																		var result2 = first2+delimeter2+middle2;
+																		if(label_split[0] == result2){																		
+																		
+																			//console.log(result2);
+																			item_6.selected = true;
+																			item_6.disabled = true;
+
+																		}
+
+																	}
+																
+																});
+															}
 														}
 
 													}
@@ -5135,6 +5250,8 @@ angular.module('myApp.controllers')
 							});
 						});
 					}
+
+					console.log($scope.wrkHrsAllSlots);
 
 					$scope.selectZoneIdsArr = [];
 					for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
@@ -5251,49 +5368,57 @@ angular.module('myApp.controllers')
 				"selected": false,
 				"label": 	"07:30 - 09:00",
 				"selectZoneIds": [],
-				"selectClinicIds": []
+				"selectClinicIds": [],
+				"disabled": false,
 			},
 			{
 				"selected": false,
 				"label": 	"09:00 - 10:30",
 				"selectZoneIds": [],
-				"selectClinicIds": []
+				"selectClinicIds": [],
+				"disabled": false,
 			},
 			{
 				"selected": false,
 				"label": 	"10:30 - 12:00",
 				"selectZoneIds": [],
-				"selectClinicIds": []
+				"selectClinicIds": [],
+				"disabled": false,
 			},
 			{
 				"selected": false,
 				"label": 	"12:00 - 13:30",
 				"selectZoneIds": [],
-				"selectClinicIds": []
+				"selectClinicIds": [],
+				"disabled": false,
 			},
 			{
 				"selected": false,
 				"label": 	"15:00 - 16:30",
 				"selectZoneIds": [],
-				"selectClinicIds": []
+				"selectClinicIds": [],
+				"disabled": false,
 			},
 			{
 				"selected": false,
 				"label": 	"16:30 - 18:00",
 				"selectZoneIds": [],
-				"selectClinicIds": []
+				"selectClinicIds": [],
+				"disabled": false,
 			},
 			{
 				"selected": false,
 				"label": 	"18:00 - 19:30",
 				"selectZoneIds": [],
-				"selectClinicIds": []
+				"selectClinicIds": [],
+				"disabled": false,
 			},
 			{
 				"selected": false,
 				"label": 	"19:30 - 21:00",
 				"selectZoneIds": [],
-				"selectClinicIds": []
+				"selectClinicIds": [],
+				"disabled": false,
 			}
 		];
 
@@ -5338,7 +5463,8 @@ angular.module('myApp.controllers')
 
 		if ($scope.wrkHrsAllSlots != undefined && $scope.wrkHrsAllSlots.length > 0) {
 			for(var i = 0 ; i < $scope.wrkHrsAllSlots.length ; i++) {
-				if($scope.wrkHrsAllSlots[i].selected == true) {
+				console.log($scope.wrkHrsAllSlots[i]);
+				if($scope.wrkHrsAllSlots[i].selected == true && $scope.wrkHrsAllSlots[i].disabled == false) {
 					var strSlot = $scope.wrkHrsAllSlots[i].label;
 					strSlot = strSlot.replace(/:/g, "");
 					var arrSlots = strSlot.split("-");
@@ -5408,7 +5534,7 @@ angular.module('myApp.controllers')
 			}
 		}
 
-		for(var cnt1 = 0 ; cnt1 < finalZoneWorkingTime.length ; cnt1++) {
+		/*for(var cnt1 = 0 ; cnt1 < finalZoneWorkingTime.length ; cnt1++) {
 			var obj1 = null;
 			obj1 = $scope.AllData.sp_monthlyWtimeAndOffSlots;
 			for(var cnt2 = 0 ; cnt2 < obj1.length; cnt2++) {
@@ -5481,7 +5607,7 @@ angular.module('myApp.controllers')
 			newoutput.push({"sp_zoneid":finalZoneWorkingTime[i].sp_zoneid, "sp_zwtime":output});
 		}
 
-		finalZoneWorkingTime = newoutput;
+		finalZoneWorkingTime = newoutput;*/
 
 		//==================================================================FOR CLINIC=================================================================================
 		
@@ -5525,7 +5651,7 @@ angular.module('myApp.controllers')
 			}
 		}
 
-		for(var cnt1 = 0 ; cnt1 < finalClinicWorkingTime.length ; cnt1++) {
+		/*for(var cnt1 = 0 ; cnt1 < finalClinicWorkingTime.length ; cnt1++) {
 			var obj1 = null;
 			obj1 = $scope.AllData.sp_monthlyWtimeAndOffSlots;
 			for(var cnt2 = 0 ; cnt2 < obj1.length; cnt2++) {
@@ -5598,7 +5724,7 @@ angular.module('myApp.controllers')
 			newoutput.push({"sp_clinicid":finalClinicWorkingTime[i].sp_clinicid, "sp_cwtime":output});
 		}
 
-		finalClinicWorkingTime = newoutput;
+		finalClinicWorkingTime = newoutput;*/
 
 		console.log(selectedSlots);
 		console.log(finalZoneWorkingTime);
@@ -5846,7 +5972,7 @@ angular.module('myApp.controllers')
 
 		arrayLeaveDates = [];
 		for(var dateObjIndex = currentDay ; dateObjIndex <= lastDay ; dateObjIndex.setDate(dateObjIndex.getDate() + 1)) {
-			if((dateObjIndex.getDay() != 0) && (dateObjIndex.getDay() >= 1 && dateObjIndex.getDay() <= 6)) {
+			if((dateObjIndex.getDay() >= 0 && dateObjIndex.getDay() <= 6)) {
 				var year = dateObjIndex.getFullYear();
 
 				var intMonth = dateObjIndex.getMonth() + 1;

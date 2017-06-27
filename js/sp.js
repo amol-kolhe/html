@@ -129,6 +129,7 @@ angular.module('myApp.controllers')
         response: null
     };
     $scope.showResponse = false;
+    $scope.spIdForWallet = "";
     
 
     $scope.initSpAppointments = function(timeSpan) {
@@ -1491,6 +1492,17 @@ angular.module('myApp.controllers')
         });
     }
 
+    $scope.setFreeCancellationNo = function() {
+
+        var noOfSessions = $scope.aptPackage.no_of_sessions;
+        var cancellationPercent = $scope.aptPackage.free_cancellation_ratio;
+
+        if($scope.aptPackage.no_of_sessions > 0 && $scope.aptPackage.free_cancellation_ratio > 0){
+            $scope.aptPackage.free_cancellation_days = ((noOfSessions * $scope.aptPackage.free_cancellation_ratio) / 100);
+            $scope.aptPackage.free_cancellation_days = Math.round($scope.aptPackage.free_cancellation_days);
+        }
+    }
+
     $scope.cancelAptPackage = function() {
         hidePackageDialog();
         try {
@@ -1879,6 +1891,8 @@ angular.module('myApp.controllers')
     }
 
     $scope.requestApptWalletTrans = function() {
+
+        //alert($scope.models.response.netTotalCharges);
         
         ngDialog.openConfirm({
             template: 'AptWallet',
@@ -1886,7 +1900,7 @@ angular.module('myApp.controllers')
             scope: $scope 
         }).then(function(value)
         {
-            if($scope.custReadList.custwallet.amount > 0){
+            if($scope.custReadList.custwallet.amount == $scope.models.response.netTotalCharges){
                 var data = {
                     "walletAmount": $scope.custReadList.custwallet.amount,
                     "walletTransType": "credit",
@@ -2131,6 +2145,8 @@ angular.module('myApp.controllers')
 
      $scope.fetchPatientWithWallet = function(){
         $scope.walletTransactionDetails = false;
+        $scope.currentDate = moment(new Date()).format('DD-MM-YYYY');
+        $scope.currentDateWallet = moment(new Date()).format('DD-MM-YYYY');
 
         spApi.fetchPatientWithWallet()
             .success(function(custData, custStatus, custHeaders, custConfig) {
@@ -2149,6 +2165,7 @@ angular.module('myApp.controllers')
     $scope.getWalletHistory = function(rec){
         $scope.walletTransactionDetails = true;
         $scope.customerName = rec.name;
+        $scope.spIdForWallet = rec._id;
 
          spApi.getWalletHistory(rec._id)
             .success(function(Data, Status, Headers, Config) {
@@ -2158,6 +2175,7 @@ angular.module('myApp.controllers')
 
                 var arrayWalletHistory = Data.payload;
                 $scope.arrayWalletData = [];
+                $scope.arrayWalletDataTrans = [];
                 $scope.asOfBalance = 0;
 
 
@@ -2178,14 +2196,61 @@ angular.module('myApp.controllers')
                     item.creditAmnt = $scope.creditAmnt;
                     item.debitAmnt = $scope.debitAmnt;
                     $scope.arrayWalletData.push(item);
+                    $scope.arrayWalletDataTrans.push(item);
                 });
 
-                console.log($scope.arrayWalletData);
+                //console.log($scope.arrayWalletData);
 
             })
             .error(function(data, status, headers, config) {
                 item.walletBalance = 0;
             });
+    }
+
+
+    $scope.generateWalletTransactions = function() {
+
+        alert($scope.spIdForWallet);
+        var arrayWalletDataTemp = [];
+
+        var fromDtWallet = getEpochDate($('#aptFromDateWallet').val());
+        var tillDtWallet = getEpochDate($('#aptTillDateWallet').val());
+        var fromDateWallet = moment(new Date(fromDtWallet * 1000)).format("DD-MM-YYYY");
+        var toDateWallet = moment(new Date(tillDtWallet * 1000)).format("DD-MM-YYYY");
+
+        alert(fromDtWallet);
+        alert(tillDtWallet);
+
+        arrayWalletDataTemp = $scope.arrayWalletDataTrans;
+        $scope.currentDateWallet = toDateWallet;
+
+        $scope.arrayWalletData = [];
+        $scope.asOfBalance = 0;
+
+        arrayWalletDataTemp.forEach(function(item) {
+
+            if((item.transactiontime >= fromDtWallet) && (tillDtWallet >= item.transactiontime)){
+                $scope.debitAmnt = 0;
+                $scope.creditAmnt = 0;
+
+                if(item.wallettranstype == 'credit'){
+                    $scope.asOfBalance = $scope.asOfBalance + item.wallettransamount;
+                    $scope.creditAmnt = item.wallettransamount;
+                }else{
+                    $scope.asOfBalance = $scope.asOfBalance - item.wallettransamount;
+                    $scope.debitAmnt = item.wallettransamount;
+                }
+
+                item.trans_date = moment(new Date(item.transactiontime * 1000)).format("DD-MM-YYYY hh:mm A");               
+                item.asOfBalance = $scope.asOfBalance;
+                item.creditAmnt = $scope.creditAmnt;
+                item.debitAmnt = $scope.debitAmnt;
+                $scope.arrayWalletData.push(item);
+            }
+        });
+
+        console.log($scope.arrayWalletData);
+
     }
 
     $scope.getCollection = function() {
@@ -2638,6 +2703,12 @@ angular.module('myApp.controllers')
 
       
     }
+
+    $timeout(function(){
+        $('.dateTimePicker').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+    });
 
     $scope.removeTimeSlot = function() {
 

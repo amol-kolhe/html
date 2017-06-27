@@ -118,8 +118,9 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 		$scope.financeMenus = [
 			{title: "Package Cancellations", url: 'quickView.html'},
 			{title: "Collection", url: 'collection.html'},
-			{title: "Patient Wallet", url: 'patientWallet.html'},
-			{title: "Report", url: 'reportFilters.html'}
+			{title: "Collection Report", url: 'reportFilters.html'},
+			{title: "Patient Wallet", url: 'patientWallet.html'}
+			
 		];
 		
 		if($cookies.get('u_sid') != undefined) {

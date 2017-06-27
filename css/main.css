@@ -646,7 +646,7 @@ label.selectsp {
 }
 
 .checkboxZero:before {
-    content: 'On';
+    content: 'Yes';
     position: absolute;
     top: 5px;
     left: 13px;
@@ -656,7 +656,7 @@ label.selectsp {
 }
 
 .checkboxZero:after {
-    content: 'Off';
+    content: 'No';
     position: absolute;
     top: 5px;
     left: 46px;
@@ -668,7 +668,7 @@ label.selectsp {
 
 .checkboxZero label {
     display: block;
-    width: 30px;
+    width: 35px;
     height: 20px;
     border-radius: 50px;
 
@@ -699,7 +699,7 @@ label.selectsp {
 }
 
 .checkboxOne:before {
-    content: 'On';
+    content: 'Yes';
     position: absolute;
     top: 5px;
     left: 13px;
@@ -709,7 +709,7 @@ label.selectsp {
 }
 
 .checkboxOne:after {
-    content: 'Off';
+    content: 'No';
     position: absolute;
     top: 5px;
     left: 46px;
@@ -721,7 +721,7 @@ label.selectsp {
 
 .checkboxOne label {
     display: block;
-    width: 30px;
+    width: 35px;
     height: 20px;
     border-radius: 50px;
 
@@ -752,7 +752,7 @@ label.selectsp {
 }
 
 .checkboxTwo:before {
-    content: 'On';
+    content: 'Yes';
     position: absolute;
     top: 5px;
     left: 13px;
@@ -762,7 +762,7 @@ label.selectsp {
 }
 
 .checkboxTwo:after {
-    content: 'Off';
+    content: 'No';
     position: absolute;
     top: 5px;
     left: 46px;
@@ -774,7 +774,7 @@ label.selectsp {
 
 .checkboxTwo label {
     display: block;
-    width: 30px;
+    width: 35px;
     height: 20px;
     border-radius: 50px;
 
@@ -805,7 +805,7 @@ label.selectsp {
 }
 
 .checkboxThree:before {
-    content: 'On';
+    content: 'Yes';
     position: absolute;
     top: 5px;
     left: 13px;
@@ -815,7 +815,7 @@ label.selectsp {
 }
 
 .checkboxThree:after {
-    content: 'Off';
+    content: 'No';
     position: absolute;
     top: 5px;
     left: 46px;
@@ -827,7 +827,7 @@ label.selectsp {
 
 .checkboxThree label {
     display: block;
-    width: 30px;
+    width: 35px;
     height: 20px;
     border-radius: 50px;
 
@@ -858,7 +858,7 @@ label.selectsp {
 }
 
 .checkboxFour:before {
-    content: 'On';
+    content: 'Yes';
     position: absolute;
     top: 5px;
     left: 13px;
@@ -868,7 +868,7 @@ label.selectsp {
 }
 
 .checkboxFour:after {
-    content: 'Off';
+    content: 'No';
     position: absolute;
     top: 5px;
     left: 46px;
@@ -880,7 +880,7 @@ label.selectsp {
 
 .checkboxFour label {
     display: block;
-    width: 30px;
+    width: 35px;
     height: 20px;
     border-radius: 50px;
 

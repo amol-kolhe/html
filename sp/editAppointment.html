@@ -6,14 +6,6 @@
                 <span>Appointment Details</span>
                 <span style="float:right;">    
 
-                     <span>
-                        <span 
-                            title="Cancel Package"
-                            class="clickable glyphicon glyphicon-th-list"
-                            style="margin-right:15px; font-size: 15px;"
-                            ng-click="requestPackageCancel();getCollection()"></span>
-                    </span>
-
                     <span>
                         <span ng-show="(!adminNewAppointmentCust.customer.is_package_assign && adminNewAppointmentCust.appointment.state == 'Confirmed' && adminNewAppointmentCust.appointment.current_session_no == '0' && lastApptTime == adminNewAppointmentCust.appointment.starttime) &&
                         adminNewAppointmentCust.appointment.clinic_id == undefined"
@@ -445,7 +437,7 @@
                                         class="clstxt3 form-control"
                                         ng-required = "true"
                                         ng-pattern="/(^\d*$)/"
-                                        data-ng-blur = "noofsessions = true"
+                                        data-ng-blur = "noofsessions = true;setFreeCancellationNo()"
                                         name="no_of_sessions" 
                                         style="min-width: 250px; max-height: 350px" />
                                 <span style="color: red;"
@@ -527,7 +519,7 @@
                                     <input type="checkbox" ng-model="aptPackage.isretrofit"> Is Retrofit?
                                 </label>
                             </div>
-                        </div>
+                        </div> 
 
                         <div class="row middleRowContent">
                             <span class="itemLabel2 col-xs-4"></span>

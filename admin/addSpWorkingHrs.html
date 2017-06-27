@@ -172,11 +172,11 @@
                                     <input type="checkbox"
                                            ng-model="wrkHrSlot.selected"
                                            data-ng-click="checkBoxSelected(wrkHrSlot, $index);"
-                                           />
-                                    <span>{{wrkHrSlot.label}}</span>
+                                           ng-disabled="wrkHrSlot.disabled" />
+                                    <span ng-disabled="wrkHrSlot.disabled">{{wrkHrSlot.label}}</span>
                                 </td>
                                 <td>
-                                    <table colspan="2" style="border: 0;" data-ng-show="wrkHrSlot.selected">
+                                    <table colspan="2" style="border: 0;" data-ng-show="wrkHrSlot.selected && !wrkHrSlot.disabled">
                                         <tr class="imgContainer">
                                             <td style="padding: 5px;" ng-repeat="zone in wrkHrSlot.selectZoneIds track by $index">
                                                 <div class="ellipsisZoneName">
@@ -190,6 +190,26 @@
                                                 <div class="ellipsisClinicName">
                                                     {{clinic.sp_clinicname}}
                                                 </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <table colspan="2" style="border: 0;" data-ng-show="clinicNameStr != '' && wrkHrSlot.disabled">
+                                        <tr class="imgContainer">
+                                            <td style="padding: 5px;" ng-repeat="clinic in wrkHrSlot.selectClinicIds track by $index">
+                                                <div class="ellipsisZoneName">
+                                                    {{clinic.sp_clinicname}}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <table colspan="2" style="border: 0;" data-ng-show="zoneName != '' && wrkHrSlot.disabled">
+                                        <tr class="imgContainer">
+                                            <td style="padding: 5px;" ng-repeat="zoneName in zoneNameList track by $index">
+                                                <div class="ellipsisZoneName">
+                                                    {{zoneName}}
                                                 </div>
                                             </td>
                                         </tr>

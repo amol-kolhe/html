@@ -4,7 +4,7 @@
  	<div class="row">
 		<div class="panel panel-default" style="border: 1px solid #ddd">
 			<div class="panel-heading">
-				<span style="font-weight: bold;font-size: 20px">Patient Wallet Information</span>
+				<span style="font-weight: bold;font-size: 20px">Patient Wallet Summary As Of {{currentDate}}</span>
 				<span class="pull-right clickable glyphicon glyphicon-refresh" title="Refresh the actionable items" ng-click="fetchPatientWithWallet();"></span>
 			</div>
 			<table class="table">
@@ -18,7 +18,7 @@
 							<span class="glyphicon sort-icon" ng-show="sortKey=='custwallet.walletbalance'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
 						</th>
 						
-						<th>Action</th>
+						<th>View Details</th>
 					</tr>
 
 					<tr>
@@ -55,9 +55,32 @@
 	<div class="row" ng-show="walletTransactionDetails">
 		<div class="panel panel-default" style="border: 1px solid #ddd">
 			<div class="panel-heading">
-				<span style="font-weight: bold;font-size: 20px">Wallet History for {{customerName}}</span>
+				<span style="font-weight: bold;font-size: 20px">Wallet History for {{customerName}} As Of {{currentDateWallet}}</span>
 				<span class="pull-right clickable glyphicon glyphicon glyphicon-remove" title="Refresh the actionable items" ng-click="fetchPatientWithWallet();"></span>
 			</div>
+
+			<div class="form-group" style="position:relative;padding-left: 10px;padding-top: 10px;">
+	            From Date: <input type="text"
+	                ng-model="fromDateWallet"
+	                name = "fromDateWallet"
+	                id="aptFromDateWallet"
+	                value = "{{fromDateWallet}}"
+	                title="From Date"
+	                class="dateTimePicker aptSelectionInput"/>
+	            To Date:   <input type="text"
+	                ng-model="tillDateWallet"
+	                name="tillDateWallet"
+	                id="aptTillDateWallet"
+	                value = "{{tillDateWallet}}"
+	                title="Till Date"
+	                class="dateTimePicker aptSelectionInput"/>
+	            <button style="cursor:pointer;"
+	                    data-ng-click="generateWalletTransactions()"
+	                    class="btn btn-primary btn-sm">
+	                Find Wallet History
+	            </button>
+        	</div>
+
 			<table class="table">
 				<thead>
 					
@@ -65,8 +88,9 @@
 						<th ng-click="sort('trans_date')"><span class="1clsfleft">Transaction Date</span>
 							 <span class="glyphicon sort-icon" ng-show="sortKey=='trans_date'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
 						</th>
-						<th ng-click="sort('wallettranstype')"><span class="1clsfleft">Transaction Type</span>
-							 <span class="glyphicon sort-icon" ng-show="sortKey=='transactiontime'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+
+						<th ng-click="sort('description')"><span class="1clsfleft">Description</span>
+							 <span class="glyphicon sort-icon" ng-show="sortKey=='description'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
 						</th>
 					
 						<th ng-click="sort('wallettransamount')"><span class="1clsfleft">Credit</span>
@@ -85,7 +109,7 @@
 
 					<tr>
 						<td> <input type="text" ng-model="searchWallet.trans_date"> </td>
-						<td> <input type="text" ng-model="searchWallet.wallettranstype"> </td>
+						<td> <input type="text" ng-model="searchWallet.description"> </td>
 						<td> <input type="text" ng-model="searchWallet.creditAmnt"> </td>
 						<td> <input type="text" ng-model="searchWallet.debitAmnt"> </td>
 						<td> <input type="text" ng-model="searchWallet.asOfBalance"> </td>
@@ -99,7 +123,7 @@
 							<span style="word-break: break-word;">{{rec.trans_date}}</span>
 						</td>
 						<td>
-							<span style="word-break: break-word;">{{rec.wallettranstype}}</span>
+							<span style="word-break: break-word;">{{rec.description}}</span>
 						</td>
 						<td>
 							<span style="word-break: break-word;" ng-show="rec.wallettranstype == 'credit'">&#8377; {{rec.creditAmnt}}</span>
@@ -110,10 +134,7 @@
 						<td>
 							<span style="word-break: break-word;">&#8377; {{rec.asOfBalance}}</span>
 						</td>
-					
 
-						
-						
 					</tr>
 				</tbody>
 			</table>

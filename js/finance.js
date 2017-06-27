@@ -81,6 +81,7 @@ angular.module('myApp.controllers')
 	$scope.financeMgmt.tillDate = "";
 	$scope.financeMgmt.validDateRange = true;
 	$scope.financeMgmt.dateValid = true;
+	$scope.financeMgmt.spIdForWallet = "";
 
 	$scope.from_date="";
 	$scope.till_date="";
@@ -233,6 +234,8 @@ angular.module('myApp.controllers')
 
     $scope.financeMgmt.fetchPatientWithWallet = function(){
     	$scope.financeMgmt.walletTransactionDetails = false;
+    	$scope.financeMgmt.currentDate = moment(new Date()).format('DD-MM-YYYY');
+        $scope.financeMgmt.currentDateWallet = moment(new Date()).format('DD-MM-YYYY');
 
     	financeApi.fetchPatientWithWallet()
 			.success(function(custData, custStatus, custHeaders, custConfig) {
@@ -252,6 +255,8 @@ angular.module('myApp.controllers')
      	$scope.financeMgmt.walletTransactionDetails = true;
      	$scope.financeMgmt.customerName = rec.name;
 
+     	$scope.financeMgmt.spIdForWallet = rec._id;
+
          financeApi.getWalletHistory(rec._id)
 			.success(function(Data, Status, Headers, Config) {
 		
@@ -260,6 +265,7 @@ angular.module('myApp.controllers')
 
 				var arrayWalletHistory = Data.payload;
 				$scope.financeMgmt.arrayWalletData = [];
+				$scope.financeMgmt.arrayWalletDataTrans = [];
 				$scope.asOfBalance = 0;
 
 
@@ -280,9 +286,10 @@ angular.module('myApp.controllers')
 					item.creditAmnt = $scope.creditAmnt;
 					item.debitAmnt = $scope.debitAmnt;
 					$scope.financeMgmt.arrayWalletData.push(item);
+					$scope.financeMgmt.arrayWalletDataTrans.push(item);
 				});
 
-				console.log($scope.financeMgmt.arrayWalletData);
+				//console.log($scope.financeMgmt.arrayWalletData);
 
 			})
 			.error(function(data, status, headers, config) {
@@ -651,6 +658,54 @@ angular.module('myApp.controllers')
 		}
 			
     };
+
+    
+    $scope.financeMgmt.generateWalletTransactions = function() {
+
+    	alert($scope.financeMgmt.spIdForWallet);
+    	var arrayWalletDataTemp = [];
+
+    	var fromDtWallet = getEpochDate($('#aptFromDateWallet').val());
+		var tillDtWallet = getEpochDate($('#aptTillDateWallet').val());
+	  	var fromDateWallet = moment(new Date(fromDtWallet * 1000)).format("DD-MM-YYYY");
+		var toDateWallet = moment(new Date(tillDtWallet * 1000)).format("DD-MM-YYYY");
+
+		alert(fromDtWallet);
+		alert(tillDtWallet);
+
+		arrayWalletDataTemp = $scope.financeMgmt.arrayWalletDataTrans;
+		$scope.financeMgmt.currentDateWallet = toDateWallet;
+
+		console.log(arrayWalletDataTemp);
+
+		$scope.financeMgmt.arrayWalletData = [];
+
+		arrayWalletDataTemp.forEach(function(item) {
+
+			if((item.transactiontime >= fromDtWallet) && (tillDtWallet >= item.transactiontime)){
+				$scope.debitAmnt = 0;
+			    $scope.creditAmnt = 0;
+
+				if(item.wallettranstype == 'credit'){
+					$scope.asOfBalance = $scope.asOfBalance + item.wallettransamount;
+					$scope.creditAmnt = item.wallettransamount;
+				}else{
+					$scope.asOfBalance = $scope.asOfBalance - item.wallettransamount;
+					$scope.debitAmnt = item.wallettransamount;
+				}
+
+				item.trans_date = moment(new Date(item.transactiontime * 1000)).format("DD-MM-YYYY hh:mm A");				
+				item.asOfBalance = $scope.asOfBalance;
+				item.creditAmnt = $scope.creditAmnt;
+				item.debitAmnt = $scope.debitAmnt;
+				$scope.financeMgmt.arrayWalletData.push(item);
+			}
+		});
+
+		console.log($scope.financeMgmt.arrayWalletData);
+
+    }
+
 
 
 	$scope.initGrigOptions = function(fromdate,tilldate) {
