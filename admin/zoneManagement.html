@@ -28,8 +28,9 @@
                     name = "zoneCity"
                     data-ng-model = "zoneCitySelected"
                     title = "Select city"
-                    data-ng-options="city.id as city.name for city in zoneCity"
+                    data-ng-options="city._id as city.city_name for city in arrayActiveCity"
                     data-ng-required = "true">
+                    <option value="">Select City</option>
             </select>
         </div>
         <div class="col-xs-12 col-sm-3">
@@ -39,6 +40,7 @@
 
     <!-- create new zone section -->
     <div class="createZone" ng-if="zoneMgmt.addNewZoneSection == true || zoneMgmt.editZoneSection == true">
+        
         <div class="row">
             <div class="col-xs-12 col-sm-3 hide-mobile">
                 <label>Zone Name</label>
@@ -55,6 +57,7 @@
                 </div>            
             </div>
         </div>
+       
 
         <div class="row">
             <div class="col-xs-12 col-sm-3">
@@ -110,6 +113,33 @@
                 </div>            
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 hide-mobile">
+                <label>Zone Price</label>
+            </div>
+        </div>
+
+         <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="show-mobile">
+                    <label>Zone Price</label>
+                </div>
+                <input type="number" 
+                class="form-control"
+                name="zonePrice"
+                ng-model="zoneMgmt.temppojo.zoneprice"
+                value="{{zoneMgmt.temppojo.zoneprice}}" 
+                placeholder="Zone Price"
+                required />
+                <div ng-if="zoneMgmt.temppojo.isZonePriceError == true" style="color: red; font-size: 10px;">Enter valid Zone Price
+                </div>
+            </div>
+        </div>
+
+
+
+
         <div class="row" style="margin-left: 1px; margin-top: 10px;">
             <div class="col-xs-12 col-sm-3">
                 <button class="btn btn-primary btn-sm" type="button" ng-click="zoneMgmt.saveZone(zoneMgmt.temppojo, $index)">Save</button> 
@@ -139,17 +169,26 @@
                                     <th ng-click="sortZone('locality')"><span class="clsfleft">Locality</span>
                                     </th>
 
+                                     <th ng-click="sortZone('locality')"><span class="clsfleft">City</span>
+                                    </th>
+
                                     <th>
-                                        
+                                        Action
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr>
+                                    <td> <input type="text" ng-model="search.zonename"> </td>
+                                    <td> <input type="text" ng-model="search.pincodes.pin"> </td>
+                                    <td> <input type="text" ng-model="search.city"> </td>
+                                </tr>
                                 <tr dir-paginate="rec in zoneMgmt.arrZone|orderBy:zoneMgmt.zoneSortKey:zoneMgmt.zoneReverse|filter:search|itemsPerPage:5"
                                     pagination-id="zoneMgmtId">
                                     <td width="200">
                                         <span ng-show = "rec.action != 'edit'">{{rec.zonename}}</span>
                                     </td>
+
                                     <td width="680">
                                         <div class="localities-display">
                                             <div ng-show = "rec.action != 'edit'" 
@@ -158,6 +197,11 @@
                                             </div>
                                         </div>                                        
                                     </td>
+
+                                    <td width="200">
+                                        <span ng-show = "rec.action != 'edit'">{{rec.city}}</span>
+                                    </td>
+
                                     <td width="60">
                                         <span class="glyphicon glyphicon-pencil clickable" style="color: blue;" title="Edit this record" ng-click="zoneMgmt.addNewZone('editZone', rec, $index)" data-ng-hide="rec.action == 'edit'"></span>
                                         <span class="glyphicon glyphicon-trash clickable" style="color: red;" title="Delete this record" ng-click="rec.action = 'delete'; zoneMgmt.removeZone(rec, $index);" data-ng-hide="rec.action == 'edit'"></span>

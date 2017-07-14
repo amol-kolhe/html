@@ -42,7 +42,7 @@
                                      data-ng-class = "{red2: adminNewAppointmentForm.adminSignInForCust.patientCity.$invalid && adminNewAppointmentForm.adminSignInForCust.patientCity.$dirty}"
                                      title = "Select customer city"
                                      data-ng-change="custPin(users1.city);getServiceLocation(users1.city)"
-                                     ng-options="city.id as city.name for city in custCities1"
+                                     ng-options="city._id as city.city_name for city in arrayActiveCity"
                                      data-ng-required = "true"
                                      data-ng-disabled = "users1.disableFlag">
                                         <option value="">Select customer city</option>

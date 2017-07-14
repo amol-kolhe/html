@@ -1,0 +1,299 @@
+<div class="mainContent2" ng-controller="AdminCtrl" ng-init="initCache(); cityMgmt.getCity()">
+	<script type="text/ng-template" id="ClinicAction">
+	    <form role="form" name="ClinicActionTransForm" novalidate>
+	        <div style="margin:10px; padding:10px">
+	            <div class="row middleRowContent">
+	                <div class="col-xs-3">
+	                    <label>Password: </label>
+	                </div>
+	                <div class="col-xs-9">
+	                    <input class="form-control" type="password"
+                            name="clinicPassword"
+                            data-ng-model="clinicAction.password"
+                            title="Enter the password here"
+                            placeholder="Enter password"
+                            data-ng-required="true"/>
+	                </div>
+	            </div>
+	            <div class="row">
+	                <div style="margin-top:10px; padding:10px;">
+	                    <button type="submit" class="ngdialog-button ngdialog-button-primary" ng-click="submitted=true;ClinicActionTransForm.$valid && confirm('OK')">Ok</button>
+	                    <button ng-click="closeThisDialog('Cancel')" type="button" class="ngdialog-button ngdialog-button-secondary">Cancel</button>
+	                </div>
+	            </div>
+	        </div>
+	    </form>
+	</script>
+	<div style="padding:10px;">
+		<div class="row" ng-show="(clinicMgmt.clinicSuccessMsg || clinicMgmt.clinicErrorMsg)">
+			<div class="alert alert-success alert-dismissible" role="alert" ng-show="clinicMgmt.clinicSuccessMsg">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<strong>Well done!</strong> {{clinicMgmt.clinicSuccessMsg}}
+			</div>
+			<div class="alert alert-danger alert-dismissible" role="alert" ng-show="clinicMgmt.clinicErrorMsg">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<strong>Oh snap!</strong> {{clinicMgmt.clinicErrorMsg}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="createClinic" ng-if="clinicMgmt.clinicAddEditSection==true">
+				<h3 ng-hide="cityMgmt.editMode">Add New City</h3>
+				<h3 ng-show="cityMgmt.editMode">Update City</h3>
+		        <br />
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2">
+		        		<span class="clinic-label">Registration ID</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<input type="text" class="form-control" name="city_id" ng-model="cityMgmt.temppojo.city_id" value="{{cityMgmt.temppojo.city_id}}" placeholder="Registration ID" required />
+	        		</div>
+	        		<div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="cityMgmt.city_id_error">
+		        			{{cityMgmt.city_id_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2">
+		        		<span class="clinic-label">Name</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<input type="text" class="form-control" name="city_name" ng-model="cityMgmt.temppojo.city_name" value="{{cityMgmt.temppojo.city_name}}" placeholder="City Name" required />
+	        		</div>
+	        		<div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="cityMgmt.city_name_error">
+		        			{{cityMgmt.city_name_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2">
+		        		<span class="clinic-label">Country</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<select class = "input-width"
+		                    name = "country"
+		                    data-ng-model = "cityMgmt.temppojo.country"
+		                    title = "Select country"
+		                    data-ng-options="country.name as country.name for country in clinicCountry"
+		                    data-ng-required = "true"
+		                    style = "width: 100%;height:30px">
+		            	</select>
+	        		</div>
+	        		<div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="cityMgmt.city_country_error">
+		        			{{cityMgmt.city_country_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2">
+		        		<span class="clinic-label">State</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<select class = "input-width"
+		                    name = "state"
+		                    data-ng-model = "cityMgmt.temppojo.state"
+		                    title = "Select state"
+		                    data-ng-options="state.name as state.name for state in clinicState"
+		                    data-ng-required = "true"
+		                    style = "width: 100%;height:30px">
+		            	</select>
+	        		</div>
+	        		<div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="cityMgmt.city_state_error">
+		        			{{cityMgmt.city_state_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2">
+		        		<span class="clinic-label">Price</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<input type="number" class="form-control" name="price" ng-model="cityMgmt.temppojo.price" value="{{cityMgmt.temppojo.price}}" placeholder="Price" required />
+	        		</div>
+	        		<div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="cityMgmt.price_error">
+		        			{{cityMgmt.price_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
+
+		        <div class="row row-align">
+		        	<div class="col-xs-12 col-sm-2">
+		        		&nbsp;
+	        		</div>
+		        	<div class="col-xs-12 col-sm-1">
+						<button class="btn btn-primary btn-sm" type="button" ng-click="cityMgmt.saveCity(cityMgmt.temppojo, $index)">Save</button>
+					</div>
+					<div class="col-xs-12 col-sm-1">
+						<button class="btn btn-default btn-sm" type="button" ng-click="clinicMgmt.cancelClinicEdit();">Cancel</button>
+					</div>
+		        </div>
+
+		    </div>
+		</div>
+		<br />
+		<!--<div class="row">
+			<div class="col-md-12">
+				<div class="table-responsive" style="overflow-x:auto">
+					<table class="table table-striped table-hover table-condensed">
+						<thead>
+						<tr>
+							<th class="text-center" ng-click="clinicMgmt.clinicMgmt.sortClinic('created_on')"><span class="1clsfleft">Created On</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='createdon'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="clinicMgmt.sortClinic('clinic_id')"><span class="1clsfleft">Code</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_id'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="clinicMgmt.sortClinic('clinic_name')"><span class="1clsfleft">Name</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_name'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="clinicMgmt.sortClinic('clinic_description')"><span class="1clsfleft">Description</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_description'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="clinicMgmt.sortClinic('clinic_address')"><span class="1clsfleft">Address</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_address'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="clinicMgmt.sortClinic('clinic_start_time')"><span class="1clsfleft">Start Time</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_start_time'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="clinicMgmt.sortClinic('clinic_end_time')"><span class="1clsfleft">End Time</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_end_time'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="clinicMgmt.sortClinic('clinic_time_slot_duration')"><span class="1clsfleft">Time Slot Duration</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_time_slot_duration'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="clinicMgmt.sortClinic('clinic_base_price')">
+								<span class="1clsfleft">Base Price</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_base_price'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="clinicMgmt.sortClinic('clinic_capacity')">
+								<span class="1clsfleft">Capacity</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_capacity'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="clinicMgmt.sortClinic('is_active')">
+								<span class="1clsfleft">Is Active?</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='is_active'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr dir-paginate="rec in clinicMgmt.arrayClinic|orderBy:clinicSortKey:clinicReverse|filter:search|itemsPerPage:10"
+							pagination-id="arrClinicId">
+							<td style="min-width:105px" class="promo-row-text">
+							   <span ng-if="rec.created_on != ''">{{rec.created_on * 1000 | date:'yyyy-MM-dd hh:mm a'}}</span>
+							</td>
+							<td style="min-width:155px" class="promo-row-text">
+								<span style="word-break: break-word;">{{rec.clinic_id}}</span>
+							</td>
+							<td style="min-width:210px" class="promo-row-text">
+								<span style="word-break: break-word;">{{rec.clinic_name}}</span>
+							</td>
+							<td style="min-width:100px" class="promo-row-text">
+								<span style="word-break: break-word;">{{rec.clinic_description}}</span>
+							</td>
+							<td style="min-width:100px" class="promo-row-text">
+								<span style="word-break: break-word;">{{rec.clinic_address}}</span>
+							</td>
+							<td style="min-width:100px" class="promo-row-text">
+								<span style="word-break: break-word;">{{rec.clinic_start_time}}</span>
+							</td>
+							<td style="min-width:100px" class="promo-row-text">
+								<span style="word-break: break-word;">{{rec.clinic_end_time}}</span>
+							</td>
+							<td style="min-width:100px" class="promo-row-text">
+								<span style="word-break: break-word;">{{rec.clinic_time_slot_duration}}</span>
+							</td>
+							<td style="min-width:100px" class="promo-row-text">
+								<span style="word-break: break-word;">{{rec.clinic_base_price}}</span>
+							</td>
+							<td style="min-width:100px" class="promo-row-text">
+								<span style="word-break: break-word;">{{rec.clinic_capacity}}</span>
+							</td>
+							<td style="min-width:100px; vertical-align: middle;" class="promo-text text-center" class="promo-row-text">
+								<span ng-if="rec.is_active">YES</span>
+								<span ng-if="!rec.is_active">NO</span>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<dir-pagination-controls
+					max-size="5"
+					pagination-id="arrClinicId"
+					direction-links="true"
+					boundary-links="true" >
+				</dir-pagination-controls>
+			</div>
+		</div>-->
+		<div class="row">
+			<div class="panel panel-default" style="border: 1px solid #ddd">
+				<div class="panel-heading"><span style="font-weight: bold;font-size: 20px">City Management</span><button class="btn btn-primary btn-sm pull-right" style="margin-top: -2px" type="button" ng-click="clinicMgmt.addNewClinic('add')">Add City <span title="Add new City" class="clickable glyphicon glyphicon-plus"></span></button>
+				</div>
+				<table class="table">
+					<thead>
+						<tr>
+							<!--<th>Code</th>
+							<th>Name</th>
+							<th>Description</th>
+							<th>Address</th>
+							<th>Start Time</th>
+							<th>End Time</th>
+							<th>Time Slot Duration</th>
+							<th>Base Price</th>
+							<th>Capacity</th>
+							<th>Is Active?</th>
+							<th>Action</th>-->
+
+							<th ng-click="clinicMgmt.sortClinic('clinic_id')"><span class="1clsfleft">Code</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_id'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th ng-click="clinicMgmt.sortClinic('clinic_name')"><span class="1clsfleft">Name</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='clinic_name'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th ng-click="clinicMgmt.sortClinic('is_active')">
+								<span class="1clsfleft">Is Active?</span>
+								<span class="glyphicon sort-icon" ng-show="clinicSortKey=='is_active'" ng-class="{'glyphicon-chevron-up':clinicReverse,'glyphicon-chevron-down':!clinicReverse}"></span>
+							</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr dir-paginate="rec in cityMgmt.arrayCity|orderBy:clinicSortKey:clinicReverse|filter:search|itemsPerPage:10"
+								pagination-id="arrClinicId">
+							<td>
+								<span style="word-break: break-word;">{{rec.clinic_id}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.clinic_name}}</span>
+							</td>
+							<td>
+								<span ng-if="rec.is_active">YES</span>
+								<span ng-if="!rec.is_active">NO</span>
+							</td>
+							<td>
+								<span class="glyphicon glyphicon-pencil clickable" style="color: blue;" title="Edit Clinic" ng-click="clinicMgmt.addNewClinic('edit', rec, $index)" data-ng-hide="cityMgmt.editMode"></span>
+                                <span class="glyphicon glyphicon-ban-circle clickable" style="color: red;" title="Deactivate Clinic" ng-click="clinicMgmt.actionClinic(false, rec, $index);" data-ng-hide="cityMgmt.editMode" ng-if="rec.is_active"></span>
+                                <span class="glyphicon glyphicon-ok-circle clickable" style="color: green;" title="Activate Clinic" ng-click="clinicMgmt.actionClinic(true, rec, $index);" data-ng-hide="cityMgmt.editMode" ng-if="!rec.is_active"></span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<dir-pagination-controls
+					max-size="5"
+					pagination-id="arrClinicId"
+					direction-links="true"
+					boundary-links="true" >
+				</dir-pagination-controls>
+			</div>
+		</div>
+	</div>
+</div>

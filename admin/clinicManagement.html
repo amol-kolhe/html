@@ -134,7 +134,7 @@
 	        		</div>
 		        </div>
 
-		        <div class="row">
+		       <div class="row">
 		        	<div class="col-xs-12 col-sm-2">
 		        		<span class="clinic-label">City</span>
 	        		</div>
@@ -143,10 +143,10 @@
 		                    name = "clinic_city"
 		                    data-ng-model = "clinicMgmt.temppojo.clinic_city"
 		                    title = "Select city"
-		                    data-ng-change="custPin(clinicCitySelected)"
-		                    data-ng-options="city.id as city.name for city in clinicCity"
+		                    data-ng-change="custPin(clinicMgmt.temppojo.clinic_city);populateCityBasedZones();"
+		                    data-ng-options="city._id as city.city_name for city in arrayActiveCity"
 		                    data-ng-required = "true"
-		                    ng-init="custPin(clinicCitySelected)"
+		                    ng-init="custPin(clinicMgmt.temppojo.clinic_city)"
 		                    style = "width: 100%;height:30px">
 		            	</select>
 	        		</div>

@@ -43,6 +43,8 @@ angular.module('myApp.controllers')
 		additionalSpAmntDesc:"",
 	};
 
+	$scope.cityMgmt = {};
+
 	$scope.cancelActionableCount = 0;
 	$scope.calculatedAptAmount = "";
 	$scope.aptSlotCount = 0;
@@ -379,6 +381,7 @@ angular.module('myApp.controllers')
 			name: ""
 		}
 	];
+
 
 	$scope.clinicCountry = [
 		{
@@ -978,7 +981,8 @@ angular.module('myApp.controllers')
             "additionalcharge": $scope.adminNewAppointmentCust.addcharges,
             "additionalchargedesc":$scope.adminNewAppointmentCust.addchargedesc,
             "clinic_id":serviceLocation,
-            "clinicBasePrice":clinicBasePriceVal
+            "clinicBasePrice":clinicBasePriceVal,
+            "zoneBasePrice":$scope.zoneBasePrice
 		}
 
 		if($scope.users1.uuid != undefined && $scope.users1.uuid != "") {
@@ -1342,7 +1346,8 @@ angular.module('myApp.controllers')
             "package_id":package_id,
             "patientid":$scope.patientid,
             "clinic_id":clinicId,
-            "clinicBasePrice":clinicPrice
+            "clinicBasePrice":clinicPrice,
+            "zoneBasePrice":$scope.baseCost
 		}
 
   		if ($scope.spNewAppointment.addcharges == null || $scope.spNewAppointment.addcharges == undefined){
@@ -1575,6 +1580,7 @@ angular.module('myApp.controllers')
 				$scope.locality = locality;
 				$scope.appointmentCityId = data.payload.appointment.cityid;
 				$scope.costFollowUp = data.payload.appointment.cost;
+				$scope.baseCost = data.payload.appointment.cost;
 				$scope.currFollowUp = data.payload.appointment.currency;
                 if (data.payload.appointment.additionalcharge != null && data.payload.appointment.additionalcharge != undefined){
                 $scope.spNewAppointment.addcharges = data.payload.appointment.additionalcharge;
@@ -2020,16 +2026,19 @@ angular.module('myApp.controllers')
 		if($scope.adminNewAppointmentCust.zone == undefined && $scope.service == undefined && $scope.adminNewAppointmentCust.pincode == undefined) {
 			$scope.getSpInfo($scope.zoneId, $scope.serviceIdInst, $scope.custPincode, spid);
 		}
-		else {
+		else {			
 			var pincodeid = cache.pincodeToPincodeIdMap[$scope.adminNewAppointmentCust.pincode];
 			if($scope.activeTab == "New Appointment") {
+			
 				if($scope.adminNewAppointmentCust.selectSp == true && $scope.spNewAppointment.spNames != undefined && $scope.spNewAppointment.spNames != "") {
 					$scope.getSpInfo($scope.adminNewAppointmentCust.zone, $scope.service, pincodeid, $scope.spNewAppointment.spNames);
 				} else {
 					$scope.getSpInfo($scope.adminNewAppointmentCust.zone, $scope.service, pincodeid);
 				}
 			} else {
-				$scope.getSpInfo($scope.adminNewAppointmentCust.zone, $scope.service, pincodeid, spid);
+				
+				//$scope.getSpInfo($scope.adminNewAppointmentCust.zone, $scope.service, pincodeid, spid);
+				$scope.getSpInfo($scope.zoneId, $scope.serviceIdInst, $scope.custPincode, spid);
 			}
 		}
 	}
@@ -2194,6 +2203,15 @@ angular.module('myApp.controllers')
 		.success(function(data, status, headers, config) {
 			myJsonString = JSON.stringify(data);
 			var custpinobj = JSON.parse(myJsonString);
+
+			data.payload.forEach(function(item) {
+				item.pincodes.forEach(function(innerItem) {
+					$scope.clinicZone.push({id: item.zoneid, name: item.zonename+" - "+innerItem.pin});
+				});
+			});
+			cache.zoneIdToNameMap = buildZoneIdToNameMap(data.payload);
+			cache.pincodeIdToPincodeNameMap = buildPincodeIdToPincodeNameMap(data.payload);
+			cache.pincodeToPincodeIdMap = buildPincodeToPincodeIdMap(data.payload);
 			
 			for(var i = 0; i < custpinobj.payload.length; i++) {
 				var result1 =  custpinobj.payload[i];
@@ -2472,6 +2490,24 @@ angular.module('myApp.controllers')
 	
 	$scope.custDetails = true;
 	$scope.showNext = function (item){
+		//console.log($scope.selectedLocation.zonename);
+		//console.log($scope.selectedLocation.zoneid);
+		//console.log($scope.users1.city);
+		var zoneId = $scope.selectedLocation.zoneid;
+		var cityId = $scope.users1.city;
+		$scope.zoneBasePrice = 0;
+		//console.log($scope.arrayAllZones);
+
+		$scope.arrayAllZones.forEach(function(item) {
+			if(item.zoneid == zoneId && item.cityid == cityId){
+				if(item.price > 0 && item.price != undefined){
+					$scope.zoneBasePrice = item.price;
+				}				
+			}
+		});
+
+		//console.log(zoneBasePrice);
+
 		$(".btn.btn-default.btn-sm").eq(1).attr("disabled", true);
 		$(".btn.btn-default.btn-sm").eq(1).css({"color": "#333"});
 		$(".btn.btn-default.btn-sm.pull-left").on( "click", function() {
@@ -2548,7 +2584,9 @@ angular.module('myApp.controllers')
 					}
 					
 				}else{
-					$scope.originalCost = $scope.originalPrice;
+					//$scope.originalCost = $scope.originalPrice;
+					$scope.originalCost = $scope.zoneBasePrice;
+					
 				}
 
 				if($scope.clinicAddress != ""){
@@ -2975,7 +3013,7 @@ angular.module('myApp.controllers')
 
 			adminApi.getZones(cache.cityToIdMap["Pune"])
 			.success(function(data, status, headers, config){
-				$rootScope.zonesList = buildZonesList(data.payload);
+				//$rootScope.zonesList = buildZonesList(data.payload);
 				data.payload.forEach(function(item) {
 					item.pincodes.forEach(function(innerItem) {
 						$scope.clinicZone.push({id: item.zoneid, name: item.zonename+" - "+innerItem.pin});
@@ -2984,7 +3022,7 @@ angular.module('myApp.controllers')
 				cache.zoneIdToNameMap = buildZoneIdToNameMap(data.payload);
 				cache.pincodeIdToPincodeNameMap = buildPincodeIdToPincodeNameMap(data.payload);
 				cache.pincodeToPincodeIdMap = buildPincodeToPincodeIdMap(data.payload);
-				$scope.initAddNewSp();
+				//$scope.initAddNewSp();
 			})
 			.error(function(data, status, headers, config){
 				$scope.aptErrorMsg = "Failed to fetch services as part of init.";
@@ -2995,6 +3033,83 @@ angular.module('myApp.controllers')
 			$scope.aptErrorMsg = "Failed to fetch services as part of init.";
 			$scope.checkSessionTimeout(data);
 		});
+
+		$scope.arrayActiveCity = [];
+		adminApi.getCity(true).
+		success(function (data, status, headers, config) {
+			var arrStoreTrue = [];
+			var arrStoreTrue = data.payload;
+			console.log("successfully received cities");
+			arrStoreTrue.forEach(function(item) {
+				$scope.arrayActiveCity.push(item);
+			});
+		}).
+		error(function (data, status, headers, config) {
+			console.log("Error in receiving cities");
+		});
+
+
+		$scope.arrayAllZones = [];
+		adminApi.getAllActiveZones().
+		success(function (data, status, headers, config) {
+			var arrZones = [];
+			var arrZones = data.payload;
+			$rootScope.zonesList = buildZonesList(data.payload);
+			console.log("successfully received zones");
+			arrZones.forEach(function(item) {
+				$scope.arrayAllZones.push(item);
+			});
+		}).
+		error(function (data, status, headers, config) {
+			console.log("Error in receiving zones");
+		});
+
+		$scope.arrayAllSps = [];
+		adminApi.getAllSps().
+		success(function (data, status, headers, config) {
+			$scope.spNamesArr = data.payload.spList;
+			$scope.arrayAllSps = angular.copy(data.payload.spList);
+			$scope.arrayAllSps.cityId = data.payload.cityId;
+
+			for(var i = 0 ; i < $scope.arrayAllSps.length ; i++) {
+				$scope.arrayAllSps[i].primaryZones = [];
+				$scope.arrayAllSps[i].secondaryZones = [];
+
+				for(var j = 0 ; j < $scope.arrayAllSps[i].zones.length ; j++) {
+					if ($scope.arrayAllSps[i].zones[j].zonerole == 1) {
+						$scope.arrayAllSps[i].primaryZones.push($scope.arrayAllSps[i].zones[j].name);
+					} else if ($scope.arrayAllSps[i].zones[j].zonerole == 2) {
+						$scope.arrayAllSps[i].secondaryZones.push($scope.arrayAllSps[i].zones[j].name);
+					}
+				}
+			}
+
+			for(var i = 0 ; i < $scope.spNamesArr.length ; i++) {
+				if($scope.obj.followupSpid == $scope.spNamesArr[i]._id) {
+					$scope.spNewAppointment.spNames = $scope.spNamesArr[i]._id;
+					break;
+				}
+			}
+		}).
+		error(function (data, status, headers, config) {
+			console.log("Error in receiving Sps");
+		});
+
+		$scope.arrayAllActiveClinics = [];
+		adminApi.getClinic(true).
+		success(function (data, status, headers, config) {
+			var arrStoreTrue = [];
+			var arrStoreTrue = data.payload;
+			console.log("successfully received clinics");
+			$scope.arrayAllActiveClinics.push({"_id":"0", "clinic_name":"Home"});
+			arrStoreTrue.forEach(function(item) {
+				$scope.arrayAllActiveClinics.push(item);
+			});
+		}).
+		error(function (data, status, headers, config) {
+			console.log("Error in receiving clinics");
+		});
+
 	}
 
 	$scope.spawnNotification = function(record) {
@@ -4100,6 +4215,7 @@ angular.module('myApp.controllers')
 	$scope.getSps = function (value) {
 
 		var cityId = "";
+		$scope.arrSpRecords.cityId = "";
 
 		if(value == undefined || value == "" || value.length < 1) {
 			cityId = $scope.appointmentCityId;
@@ -4114,8 +4230,10 @@ angular.module('myApp.controllers')
 		if(cityId != undefined && cityId != "" && cityId.length > 0) {
 			adminApi.getSps(cityId)
 			.success(function(data, status, headers, config) {
+
 				$scope.spNamesArr = data.payload.spList;
 				$scope.arrSpRecords = angular.copy(data.payload.spList);
+				
 				$scope.arrSpRecords.cityId = data.payload.cityId;
 
 				for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
@@ -4261,7 +4379,7 @@ angular.module('myApp.controllers')
 		}
 	}
 
-	$scope.initAddNewSp = function() {
+	/*$scope.initAddNewSp = function() {
 		$timeout(function(){
             spAllZonesOptions = angular.copy($rootScope.zonesList);
             spNonDeletedZones = [];
@@ -4273,11 +4391,65 @@ angular.module('myApp.controllers')
 			$scope.spPrimaryZonesOptions = angular.copy(spNonDeletedZones);
 			$scope.spSecondaryZonesOptions = angular.copy(spNonDeletedZones);
 		}, 900);
+	}*/
+
+	$scope.populateCityBasedZones = function() {
+		$scope.spPrimaryZonesOptions = [];
+		$scope.spSecondaryZonesOptions = [];
+		$scope.displaySpPrimaryZones = [];
+		$scope.displaySpSecondaryZones = [];
+		$scope.spPrimaryZones = [];
+		$scope.spSecondaryZones = [];
+		$scope.spCityBasedLocations = [];
+
+		$timeout(function(){
+            spAllZonesOptions = angular.copy($rootScope.zonesList);
+            spNonDeletedZones = [];
+           
+            for (var i = 0 ; i < spAllZonesOptions.length ;i++){
+                if ((spAllZonesOptions[i].deleted == false) && (spAllZonesOptions[i].cityid == $scope.spDetails.spCity)){
+                    spNonDeletedZones.push(spAllZonesOptions[i]);
+                    console.log("zonelist id" + spAllZonesOptions[i].cityid);
+                    console.log("selected id" + $scope.spDetails.spCity);
+                    console.log(spAllZonesOptions[i]);
+                }
+            }
+
+			$scope.spPrimaryZonesOptions = angular.copy(spNonDeletedZones);
+			$scope.spSecondaryZonesOptions = angular.copy(spNonDeletedZones);
+			
+		}, 900);
+
 	}
+
+	$scope.populateCityBasedSps = function(cityId) {
+		$scope.cityIdValue = cityId;
+		$scope.cityBasedSps =[];
+		$scope.arrayAllSps.forEach(function(item) {
+			if(item.cityId == cityId){
+				$scope.cityBasedSps.push(item);
+			}
+		});
+
+		$scope.cityBasedLocations =[];
+		$scope.cityBasedLocations.push({"_id":"0", "clinic_name":"Home"});
+		$scope.arrayAllActiveClinics.forEach(function(item) {
+			if(item.clinic_city == cityId){
+				$scope.cityBasedLocations.push(item);
+			}
+		});
+
+
+	}
+
+	$scope.resetCity = function() {
+		$scope.SpWrkHrs.spCity = $scope.cityIdValue;
+	}
+
 
 	$scope.populatePrimaryZones = function (item, eventName) {
 		if (eventName == "onItemSelect" && item != undefined) {
-			$scope.spPrimaryZonesOptions = angular.copy($rootScope.zonesList);
+			//$scope.spPrimaryZonesOptions = angular.copy($rootScope.zonesList);
 
 			// Remove secondary zone selected items from primary zones
 			for(var i = 0 ; i < $scope.spPrimaryZonesOptions.length ; i++) {
@@ -4288,7 +4460,7 @@ angular.module('myApp.controllers')
 				}
 			}
 		} else if (eventName == "onItemDeselect" && item != undefined) {
-			$scope.spPrimaryZonesOptions = angular.copy($rootScope.zonesList);
+			//$scope.spPrimaryZonesOptions = angular.copy($rootScope.zonesList);
 
 			for(var i = 0 ; i < $scope.spPrimaryZonesOptions.length ; i++) {
 				for(var j = 0 ; j < $scope.spSecondaryZones.length ; j++) {
@@ -4298,7 +4470,7 @@ angular.module('myApp.controllers')
 				}
 			}
 		} else if (eventName == "onSelectAll" && item == undefined) {
-			$scope.spPrimaryZonesOptions = angular.copy($rootScope.zonesList);
+			//$scope.spPrimaryZonesOptions = angular.copy($rootScope.zonesList);
 
 			// Remove secondary zone selected items from primary zones
 			for(var i = 0 ; i < $scope.spPrimaryZonesOptions.length ; i++) {
@@ -4309,13 +4481,13 @@ angular.module('myApp.controllers')
 				}
 			}
 		} else if (eventName == "onDeselectAll" && item == undefined) {
-			$scope.spPrimaryZonesOptions = angular.copy($rootScope.zonesList);
+			//$scope.spPrimaryZonesOptions = angular.copy($rootScope.zonesList);
 		}
 	}
 
 	$scope.populateSecondaryZones = function (item, eventName) {
 		if (eventName == "onItemSelect" && item != undefined) {
-			$scope.spSecondaryZonesOptions = angular.copy($rootScope.zonesList);
+			//$scope.spSecondaryZonesOptions = angular.copy($rootScope.zonesList);
 
 			// Remove primary zone selected items from secondary zones
 			for(var i = 0 ; i < $scope.spSecondaryZonesOptions.length ; i++) {
@@ -4326,7 +4498,7 @@ angular.module('myApp.controllers')
 				}
 			}
 		} else if (eventName == "onItemDeselect" && item != undefined) {
-			$scope.spSecondaryZonesOptions = angular.copy($rootScope.zonesList);
+			//$scope.spSecondaryZonesOptions = angular.copy($rootScope.zonesList);
 
 			// Remove primary zone selected items from secondary zones
 			for(var i = 0 ; i < $scope.spSecondaryZonesOptions.length ; i++) {
@@ -4337,7 +4509,7 @@ angular.module('myApp.controllers')
 				}
 			}
 		} else if (eventName == "onSelectAll" && item == undefined) {
-			$scope.spSecondaryZonesOptions = angular.copy($rootScope.zonesList);
+			//$scope.spSecondaryZonesOptions = angular.copy($rootScope.zonesList);
 
 			// Remove primary zone selected items from secondary zones
 			for(var i = 0 ; i < $scope.spSecondaryZonesOptions.length ; i++) {
@@ -4348,7 +4520,7 @@ angular.module('myApp.controllers')
 				}
 			}
 		} else if (eventName == "onDeselectAll" && item == undefined) {
-			$scope.spSecondaryZonesOptions = angular.copy($rootScope.zonesList);
+			//$scope.spSecondaryZonesOptions = angular.copy($rootScope.zonesList);
 		}
 	}
 
@@ -4425,15 +4597,24 @@ angular.module('myApp.controllers')
 			sp_dob = $scope.spDob;
 		}
 
+		var cityName= '';
+		$scope.arrayActiveCity.forEach(function(item) {
+			if(item._id == $scope.spDetails.spCity){
+				cityName = item.city_name;
+			}
+		});
+
 		var spDetailsObj = {
-			"sp_servingCityId": $scope.spDetails.workCity,
+			//"sp_servingCityId": $scope.spDetails.workCity,
+			"sp_servingCityId": $scope.spDetails.spCity,
 			"sp_name": $scope.spDetails.spName,
 			"sp_qualification": $scope.spDetails.qualification,
 			"sp_email": $scope.spDetails.spEmail,
 			"sp_alternateEmail": sp_alternateEmail,
 			"sp_address": $scope.spDetails.spAddress,
 			"sp_pincode": $scope.spDetails.spPincode,
-			"sp_city": $scope.spDetails.spCity,
+			"sp_city": cityName,
+			"sp_cityid": $scope.spDetails.spCity,
 			"sp_state": $scope.spDetails.spState,
 			"sp_country": $scope.spDetails.spCountry,
 			"sp_mobile": $scope.spDetails.spMobile,
@@ -4521,15 +4702,24 @@ angular.module('myApp.controllers')
 			sp_dob = $scope.spDob;
 		}
 
+		var cityName= '';
+		$scope.arrayActiveCity.forEach(function(item) {
+			if(item._id == $scope.spDetails.spCity){
+				cityName = item.city_name;
+			}
+		});
+
 		var spDetailsObj = {
-			"sp_servingCityId": $scope.spDetails.workCity,
+			//"sp_servingCityId": $scope.spDetails.workCity,
+			"sp_servingCityId": $scope.spDetails.spCity,
 			"sp_name": $scope.spDetails.spName,
 			"sp_qualification": $scope.spDetails.qualification,
 			"sp_email": $scope.spDetails.spEmail,
 			"sp_alternateEmail": sp_alternateEmail,
 			"sp_address": $scope.spDetails.spAddress,
 			"sp_pincode": $scope.spDetails.spPincode,
-			"sp_city": $scope.spDetails.spCity,
+			"sp_city": cityName,
+			"sp_cityid": $scope.spDetails.spCity,
 			"sp_state": $scope.spDetails.spState,
 			"sp_country": $scope.spDetails.spCountry,
 			"sp_mobile": $scope.spDetails.spMobile,
@@ -4864,7 +5054,8 @@ angular.module('myApp.controllers')
 
 	$scope.initDatePicker = function () {
 		$scope.initSelectAllDaysExceptSunday();
-		$scope.spChangeAddSpWrkHoursResetValues($scope.SpWrkHrs.spNamesId, $scope.SpWrkHrs.spServiceLocationId, $scope.arrayClinic);
+		//$scope.spChangeAddSpWrkHoursResetValues($scope.SpWrkHrs.spNamesId, $scope.SpWrkHrs.spServiceLocationId, $scope.arrayClinic);
+		$scope.spChangeAddSpWrkHoursResetValues($scope.SpWrkHrs.spNamesId, $scope.SpWrkHrs.spServiceLocationId, $scope.arrayAllActiveClinics);
 		$timeout(function () {
 			var d = moment(new Date()).format('YYYY-MM-DD');
 			$('#datetimepicker9').multiDatesPicker({
@@ -4876,14 +5067,16 @@ angular.module('myApp.controllers')
 					$timeout(function () {
 						$scope.selectAllDaysExceptSunday();
 						$scope.populateBusySlotsTable1();
-						$scope.spChangeAddSpWrkHoursResetValues($scope.SpWrkHrs.spNamesId, $scope.SpWrkHrs.spServiceLocationId, $scope.arrayClinic);
+						//$scope.spChangeAddSpWrkHoursResetValues($scope.SpWrkHrs.spNamesId, $scope.SpWrkHrs.spServiceLocationId, $scope.arrayClinic);
+						$scope.spChangeAddSpWrkHoursResetValues($scope.SpWrkHrs.spNamesId, $scope.SpWrkHrs.spServiceLocationId, $scope.arrayAllActiveClinics);
 					}, 50);
 				},
 				onSelect: function (date, obj) {
 					$timeout(function () {
 						$scope.selectAllDaysExceptSunday(date);
 						$scope.populateBusySlotsTable1();
-						$scope.spChangeAddSpWrkHoursResetValues($scope.SpWrkHrs.spNamesId, $scope.SpWrkHrs.spServiceLocationId, $scope.arrayClinic);
+						//$scope.spChangeAddSpWrkHoursResetValues($scope.SpWrkHrs.spNamesId, $scope.SpWrkHrs.spServiceLocationId, $scope.arrayClinic);
+						$scope.spChangeAddSpWrkHoursResetValues($scope.SpWrkHrs.spNamesId, $scope.SpWrkHrs.spServiceLocationId, $scope.arrayAllActiveClinics);
 					}, 50);
 				}
 			});
@@ -4898,6 +5091,8 @@ angular.module('myApp.controllers')
 			$scope.initDatePicker();
 			$scope.initPopulateBusySlotsTable1();
 		}, 100);
+
+		$scope.resetCity();
 	}
 
 	$scope.checkSpWrkHrsButton = function () {
@@ -4961,7 +5156,7 @@ angular.module('myApp.controllers')
 
 						//taking clinic specific existing time slots.
 						if(item_1.sp_clinicSpecificWtimeDetail != undefined){
-							record_3 = item_1.sp_clinicSpecificWtimeDetail;
+;							record_3 = item_1.sp_clinicSpecificWtimeDetail;
 							record_3.forEach(function(item_3) {
 								record_4 = item_3.sp_cwtime;
 								clinicId = item_3.sp_clinicid;
@@ -4986,11 +5181,11 @@ angular.module('myApp.controllers')
 							record_5.forEach(function(item_5) {
 								record_6 = item_5.sp_zwtime;
 								zoneId = item_5.sp_zoneid;
-								for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
-									for(var j = 0 ; j < $scope.arrSpRecords[i].zones.length ; j++) {
-										if($scope.arrSpRecords[i].zones[j].id == zoneId){
+								for(var i = 0 ; i < $scope.arrayAllSps.length ; i++) {
+									for(var j = 0 ; j < $scope.arrayAllSps[i].zones.length ; j++) {
+										if($scope.arrayAllSps[i].zones[j].id == zoneId){
 											if(serviceLocation != "0" && serviceLocation != undefined){
-												$scope.zoneName = $scope.arrSpRecords[i].zones[j].name;
+												$scope.zoneName = $scope.arrayAllSps[i].zones[j].name;
 
 												if(!$scope.zoneNameList.includes($scope.zoneName)){
 													$scope.zoneNameList.push($scope.zoneName);
@@ -5048,7 +5243,6 @@ angular.module('myApp.controllers')
 						var slot_start_time_str = null;
 						var slot_end_time = null;
 						var newWorkTimeSlots = [];
-
 						for (var i = 0; i < clinic_rec.length; i++){
 							if(clinic_rec[i]._id == serviceLocation){
 								clinic_time_slot_duration = clinic_rec[i].clinic_time_slot_duration;
@@ -5161,7 +5355,7 @@ angular.module('myApp.controllers')
 
 					//console.log(existingWorkTimeSlots);
 					//console.log(newWorkTimeSlots);
-					console.log(existingWorkTimeSlotsForClinic);
+					//console.log(existingWorkTimeSlotsForClinic);
 					//console.log(existingWorkTimeSlotsForZone);
 
 					if(existingWorkTimeSlots.length != 0){
@@ -5251,14 +5445,14 @@ angular.module('myApp.controllers')
 						});
 					}
 
-					console.log($scope.wrkHrsAllSlots);
+					//console.log($scope.wrkHrsAllSlots);
 
 					$scope.selectZoneIdsArr = [];
-					for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
-						if ((spId != undefined) && (spId != null) && (spId.length > 0) && (spId == $scope.arrSpRecords[i]._id)) {
+					for(var i = 0 ; i < $scope.arrayAllSps.length ; i++) {
+						if ((spId != undefined) && (spId != null) && (spId.length > 0) && (spId == $scope.arrayAllSps[i]._id)) {
 							if(serviceLocation == undefined || serviceLocation == 0){
-								if (($scope.arrSpRecords[i].zones != undefined) && ($scope.arrSpRecords[i].zones.length > 0)) {
-									for(var j = 0 ; j < $scope.arrSpRecords[i].zones.length ; j++) {
+								if (($scope.arrayAllSps[i].zones != undefined) && ($scope.arrayAllSps[i].zones.length > 0)) {
+									for(var j = 0 ; j < $scope.arrayAllSps[i].zones.length ; j++) {
 										var zoneObj1 = {
 											"sp_zoneid": "",
 											"sp_zonename": "",
@@ -5268,8 +5462,8 @@ angular.module('myApp.controllers')
 											}
 										};
 
-										zoneObj1.sp_zoneid = $scope.arrSpRecords[i].zones[j].id;
-										zoneObj1.sp_zonename = $scope.arrSpRecords[i].zones[j].name;
+										zoneObj1.sp_zoneid = $scope.arrayAllSps[i].zones[j].id;
+										zoneObj1.sp_zonename = $scope.arrayAllSps[i].zones[j].name;
 										zoneObj1.sp_zwtime.start_time = "";
 										zoneObj1.sp_zwtime.end_time = "";
 										$scope.selectZoneIdsArr.push(zoneObj1);
@@ -5293,8 +5487,8 @@ angular.module('myApp.controllers')
 												}
 											};
 
-											zoneObj.sp_zoneid = $scope.arrSpRecords[i].zones[j].id;
-											zoneObj.sp_zonename = $scope.arrSpRecords[i].zones[j].name;
+											zoneObj.sp_zoneid = $scope.arrayAllSps[i].zones[j].id;
+											zoneObj.sp_zonename = $scope.arrayAllSps[i].zones[j].name;
 											zoneObj.sp_zwtime.start_time = start_time;
 											zoneObj.sp_zwtime.end_time = end_time;
 
@@ -5460,6 +5654,8 @@ angular.module('myApp.controllers')
 		} else if (wrkDates != undefined && wrkDates.length < 1) {
 			$scope.dateErrorFlag = true;
 		}
+
+		console.log($scope.wrkHrsAllSlots);
 
 		if ($scope.wrkHrsAllSlots != undefined && $scope.wrkHrsAllSlots.length > 0) {
 			for(var i = 0 ; i < $scope.wrkHrsAllSlots.length ; i++) {
@@ -5730,13 +5926,17 @@ angular.module('myApp.controllers')
 		console.log(finalZoneWorkingTime);
 		console.log(finalClinicWorkingTime);
 
+		//alert($scope.SpWrkHrs.spCity);
+		//alert("Hi"+$scope.cityIdValue);
+
 		if (!($scope.dateErrorFlag)) {
 			var dataObj = {
 				"sp_id": $scope.SpWrkHrs.spNamesId,
 				"sp_workingDate": wrkDates,
 				"sp_workTime": selectedSlots,
 				"spZoneAllocatedWTime": finalZoneWorkingTime,
-				"spClinicAllocatedWTime": finalClinicWorkingTime
+				"spClinicAllocatedWTime": finalClinicWorkingTime,
+				"cityId": $scope.cityIdValue
 			};
 
 			adminApi.addSpWrkHrs(dataObj)
@@ -7167,8 +7367,14 @@ angular.module('myApp.controllers')
 		rec.min_val=rec.min_sessions;
 		rec.max_val=rec.max_sessions;
 		rec.appt_val=rec.noofappt;
+		$scope.promoCityName = "";
 
-
+		$scope.arrayActiveCity.forEach(function(item) {
+			console.log(item);
+			if(item._id == rec.promoCity){
+				$scope.promoCityName = item.city_name;
+			}
+		});
 
 		var isRecordValid = $scope.validatePromoCode(rec);
 		if(isRecordValid == true) {
@@ -7190,7 +7396,9 @@ angular.module('myApp.controllers')
 				"before_cancellation_time":rec.before_cancellation_time,
 				"valid_days":rec.valid_days,
 				"cancellation_fee":rec.cancellation_fee,
-				"no_show_fee":rec.no_show_fee
+				"no_show_fee":rec.no_show_fee,
+				"cityId":rec.promoCity,
+				"city":$scope.promoCityName
 				
 			};
 			if(rec.isNewPromo == true) {
@@ -7492,7 +7700,8 @@ angular.module('myApp.controllers')
 			// "apptstarttime": myEpochfromtime,
 			// "apptendtime": myEpochtotime,
 			"serviceid": $scope.service,
-			"clinicBasePrice":clinicBasePriceVal
+			"clinicBasePrice":clinicBasePriceVal,
+			"zoneBasePrice":$scope.zoneBasePrice
 		};
 
 		adminApi.applyPromocode(dataObj).
@@ -7679,6 +7888,13 @@ angular.module('myApp.controllers')
 			clinicBasePriceVal = 0;
 		}
 
+		var zoneBasePrice;
+		if($scope.adminNewAppointmentCust.appointment.cost != 0 && $scope.adminNewAppointmentCust.appointment.cost != undefined){
+			zoneBasePrice = $scope.adminNewAppointmentCust.appointment.cost;
+		}else{
+			zoneBasePrice = 0;
+		}
+
 		var dataObj = {
 			"promocode": $scope.aptPayment.promocode,
 			"apptid": "",
@@ -7689,7 +7905,8 @@ angular.module('myApp.controllers')
 			"patientid": $scope.adminNewAppointmentCust.appointment.patientid,
 			"apptslots": [apptslot],
 			"serviceid": $scope.editAptModel.service,
-			"clinicBasePrice": clinicBasePriceVal
+			"clinicBasePrice": clinicBasePriceVal,
+			"zoneBasePrice" : zoneBasePrice
 		};
 
 		adminApi.applyPromocode(dataObj).
@@ -7953,6 +8170,84 @@ angular.module('myApp.controllers')
 		}
 	}
 
+
+	/* **********CITY********************** */
+
+	$scope.clinicMgmt.arrayCity = [];
+
+	$scope.cityMgmt.getCity = function() {
+		$scope.cityMgmt.editMode = false;
+		$scope.cityMgmt.InitCityParams();
+		$scope.cityMgmt.arrayCity = [];
+
+		adminApi.getCity(true).
+		success(function (data, status, headers, config) {
+			var arrStoreTrue = [];
+			var arrStoreTrue = data.payload;
+			console.log("successfully received cities");
+			arrStoreTrue.forEach(function(item) {
+				$scope.cityMgmt.arrayCity.push(item);
+			});
+		}).
+		error(function (data, status, headers, config) {
+			console.log("Error in receiving cities");
+		});
+
+		adminApi.getCity(false).
+		success(function (data, status, headers, config) {
+			var arrStoreTrue = [];
+			var arrStoreTrue = data.payload;
+			console.log("successfully received cities");
+			arrStoreTrue.forEach(function(item) {
+				$scope.cityMgmt.arrayCity.push(item);
+			});
+		}).
+		error(function (data, status, headers, config) {
+			console.log("Error in receiving cities");
+		});
+
+	};
+
+
+
+	$scope.cityMgmt.saveCity = function(rec, index) {
+		console.log(rec);
+		$scope.cityMgmt.InitCityParams();
+		var validCity = true;
+		validCity = $scope.cityMgmt.validateCity(rec, validCity);
+		if(validCity){
+			if(rec._id == null || rec._id == "" || rec._id == undefined) {
+				adminApi.addCity(rec).
+				success(function (data, status, headers, config) {
+					$scope.cityMgmt.InitCityParams();
+					$scope.cityMgmt.editMode = false;
+					$scope.clinicMgmt.clinicAddEditSection = false;
+					$scope.clinicMgmt.getClinic();
+					$scope.clinicMgmt.clinicSuccessMsg = "You have successfully added new city.";
+					$scope.clinicMgmt.clinicErrorMsg = "";
+				}).
+				error(function (data, status, headers, config) {
+					$scope.clinicMgmt.clinicSuccessMsg = "";
+					$scope.clinicMgmt.clinicErrorMsg = "Error while saving the new city setting.";
+				});
+			}else{
+				adminApi.updateCity(rec._id, rec).
+				success(function (data, status, headers, config) {
+					$scope.cityMgmt.InitCityParams();
+					$scope.cityMgmt.editMode = false;
+					$scope.clinicMgmt.clinicAddEditSection = false;
+					$scope.clinicMgmt.getClinic();
+					$scope.clinicMgmt.clinicSuccessMsg = "You have successfully updated the city setting.";
+					$scope.clinicMgmt.clinicErrorMsg = "";
+				}).
+				error(function (data, status, headers, config) {
+					$scope.clinicMgmt.clinicSuccessMsg = "";
+					$scope.clinicMgmt.clinicErrorMsg = "Error while updating the city setting.";
+				});
+			}
+		}
+	}
+
 	$scope.clinicMgmt.InitClinicParams = function(){
 		$scope.clinicMgmt.clinic_id_error = null;
 		$scope.clinicMgmt.clinic_name_error = null;
@@ -7971,6 +8266,18 @@ angular.module('myApp.controllers')
 		$scope.clinicMgmt.clinicSuccessMsg = "";
 		$scope.clinicMgmt.clinicErrorMsg = "";
 	}
+
+
+	$scope.cityMgmt.InitCityParams = function(){
+		$scope.clinicMgmt.city_id_error = null;
+		$scope.clinicMgmt.city_name_error = null;
+		$scope.clinicMgmt.city_country_error = null;
+		$scope.clinicMgmt.city_state_error = null;
+		
+		$scope.clinicMgmt.citySuccessMsg = "";
+		$scope.clinicMgmt.cityErrorMsg = "";
+	}
+
 
 	$scope.clinicMgmt.validateClinic = function(rec, validClinic){
 		
@@ -8041,6 +8348,32 @@ angular.module('myApp.controllers')
 		return validClinic;
 	}
 
+
+	$scope.cityMgmt.validateCity = function(rec, validCity){
+		
+		if(rec.city_id == ""){
+			validCity = false;
+			$scope.cityMgmt.city_id_error = "Registration ID cannot be blank.";
+		}
+		
+		if(rec.city_name == ""){
+			validCity = false;
+			$scope.cityMgmt.city_name_error = "Clinic name cannot be blank.";
+		}
+		
+		if(rec.country == "" || rec.country == undefined){
+			validCity = false;
+			$scope.cityMgmt.city_country_error = "Country cannot be blank.";
+		}
+		
+		if(rec.state == "" || rec.state == undefined){
+			validCity = false;
+			$scope.cityMgmt.city_state_error = "State cannot be blank.";
+		}
+		
+		return validCity;
+	}
+
 	$scope.clinicMgmt.emptyClinicArr = {
 		"clinic_id" : "",
 		"clinic_name" : "",
@@ -8055,6 +8388,15 @@ angular.module('myApp.controllers')
 		"clinic_time_slot_duration" : 0,
 		"clinic_start_time" : "",
 		"clinic_end_time" : "",
+		"is_active" : true
+	};
+
+	$scope.cityMgmt.emptyClinicArr = {
+		"city_id" : "",
+		"city_name" : "",		
+		"country" : $scope.clinicCountrySelected,
+		"state" : $scope.clinicStateSelected,
+		"price" : 0,
 		"is_active" : true
 	};
 
@@ -8091,6 +8433,41 @@ angular.module('myApp.controllers')
 			$scope.clinicMgmt.clinicAddEditSection = true;
 			$scope.clinicMgmt.editMode = true;
 		}
+	};
+
+	$scope.cityMgmt.addNewCity = function(action, rec, index) {
+		$scope.clinicMgmt.InitCityParams();
+		$scope.clinicMgmt.clinicIndex;
+		if(action == 'add') {
+			$scope.cityMgmt.temppojo = {};
+			angular.copy($scope.cityMgmt.emptyClinicArr, $scope.cityMgmt.temppojo);
+			$scope.clinicMgmt.clinicAddEditSection = true;
+			$scope.cityMgmt.editMode = false;
+		}
+
+		/*if(action == 'edit') {
+			$scope.clinicMgmt.temppojo = {};
+			$scope.clinicMgmt.clinicIndex = index;
+			$scope.clinicMgmt.clinicRecord = rec;
+			
+			angular.copy(rec, $scope.clinicMgmt.temppojo);
+			var start_time_array = null;
+			start_time_array = rec.clinic_start_time.split(":");
+			var start_time = new Date();
+			start_time.setHours(start_time_array[0]);
+			start_time.setMinutes(start_time_array[1]);
+			$scope.clinicMgmt.temppojo.clinic_start_time = start_time;
+
+			var end_time_array = null;
+			end_time_array = rec.clinic_end_time.split(":");
+			var end_time = new Date();
+			end_time.setHours(end_time_array[0]);
+			end_time.setMinutes(end_time_array[1]);
+			$scope.clinicMgmt.temppojo.clinic_end_time = end_time;
+
+			$scope.clinicMgmt.clinicAddEditSection = true;
+			$scope.clinicMgmt.editMode = true;
+		}*/
 	};
 
 	/* Function to cancel clinic editing */
@@ -8217,14 +8594,17 @@ angular.module('myApp.controllers')
 				"isPinError" : false,
 				"isLocalityError": false
 			}
-		],				
+		],	
+		"price": "",			
 		"action" : "edit",
 		"isNewZone"	: true,
 		"isZoneNameError" : false,
-		"isZoneRecValid" : false
+		"isZoneRecValid" : false,
+		"isZonePriceError" : false
 	};	
 	/* Function to Add new Zone */
 	$scope.zoneMgmt.addNewZone = function(action, rec, index) {
+		console.log(rec);
 		$scope.zoneMgmt.zoneIndex;
 		if(action == 'addnew') {
 			$scope.zoneMgmt.temppojo = {};
@@ -8278,6 +8658,10 @@ angular.module('myApp.controllers')
 		if(!rec.zonename || !(/^[a-zA-Z-. ]*$/).test(rec.zonename)) {
 			$scope.zoneMgmt.temppojo.isZoneNameError = true;
 		} else { $scope.zoneMgmt.temppojo.isZoneNameError = false; }
+
+		if(!rec.zoneprice || rec.zoneprice < 0) {
+			$scope.zoneMgmt.temppojo.isZonePriceError = true;
+		} else { $scope.zoneMgmt.temppojo.isZonePriceError = false; }
 		
 		rec.pincodes.forEach(function (i) {
 			if(!i.pin) {
@@ -8293,7 +8677,7 @@ angular.module('myApp.controllers')
 
 		if($scope.zoneMgmt.temppojo.isZoneNameError == false &&
 			isPinError == false &&
-			isLocalityError == false) {
+			isLocalityError == false && $scope.zoneMgmt.temppojo.isZonePriceError == false) {
 			rec.isZoneRecValid = true;
 			return true;
 		} else {
@@ -8314,15 +8698,24 @@ angular.module('myApp.controllers')
 					pinarray.push(pincodeObj);
 				}
 			});
+
+			var cityName = "";
+			$scope.arrayActiveCity.forEach(function(itemCity) {
+				if(itemCity._id == $scope.zoneCitySelected){
+					cityName = itemCity.city_name;
+				}
+			});
+
 			var obj = {
 			    "zonename": rec.zonename,
 			    "countryid": $scope.zoneCountry.id,
 			    "country": $scope.zoneCountry.name,
 			    "stateid": $scope.zoneState.id,
 			    "state": $scope.zoneState.name,
-			    "cityid": $scope.zoneCity.id,
-			    "city": $scope.zoneCity.name,
-			    "pincodes": pinarray
+			    "cityid": $scope.zoneCitySelected,
+			    "city": cityName,
+			    "pincodes": pinarray,
+			    "price": $scope.zoneMgmt.temppojo.zoneprice
 			};
 			if(rec._id == null || rec._id == "" || rec._id == undefined) {
 				adminApi.addNewZone(obj).
@@ -8408,31 +8801,30 @@ angular.module('myApp.controllers')
 		$scope.manageSp.showSpForm = true;
 
 		$scope.selectedSpId = rec._id;
+		if ((rec._id != undefined) && (rec._id.length > 0) && ($scope.arrayAllSps.length > 0)) {
+			for(var i = 0 ; i < $scope.arrayAllSps.length ; i++) {
+				if(rec._id == $scope.arrayAllSps[i]._id) {
+					$scope.selectedSpId = $scope.arrayAllSps[i]._id;
+					console.log($scope.arrayAllSps[i].cityid);
+					$scope.spDetails.spName = $scope.arrayAllSps[i].name;
+					$scope.spDetails.qualification = $scope.arrayAllSps[i].qualification;
+					$scope.spDetails.spEmail = $scope.arrayAllSps[i].email;
+					$scope.spDetails.spAlternateEmail = $scope.arrayAllSps[i].alternateemail;
+					$scope.spDetails.spAddress = $scope.arrayAllSps[i].address;
+					$scope.spDetails.spPincode = $scope.arrayAllSps[i].pincode;
+					$scope.spDetails.spCity = $scope.arrayAllSps[i].cityId;
+					$scope.spDetails.spState = $scope.arrayAllSps[i].state;
+					$scope.spDetails.spCountry = $scope.arrayAllSps[i].country;
+					$scope.spDetails.spMobile = $scope.arrayAllSps[i].phonemobile;
+					$scope.spDetails.spAlternateContact = $scope.arrayAllSps[i].phonealternate;
 
-		if ((rec._id != undefined) && (rec._id.length > 0) && ($scope.arrSpRecords.length > 0)) {
-			for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
-				if(rec._id == $scope.arrSpRecords[i]._id) {
-					$scope.selectedSpId = $scope.arrSpRecords[i]._id;
-
-					$scope.spDetails.spName = $scope.arrSpRecords[i].name;
-					$scope.spDetails.qualification = $scope.arrSpRecords[i].qualification;
-					$scope.spDetails.spEmail = $scope.arrSpRecords[i].email;
-					$scope.spDetails.spAlternateEmail = $scope.arrSpRecords[i].alternateemail;
-					$scope.spDetails.spAddress = $scope.arrSpRecords[i].address;
-					$scope.spDetails.spPincode = $scope.arrSpRecords[i].pincode;
-					$scope.spDetails.spCity = $scope.arrSpRecords[i].city;
-					$scope.spDetails.spState = $scope.arrSpRecords[i].state;
-					$scope.spDetails.spCountry = $scope.arrSpRecords[i].country;
-					$scope.spDetails.spMobile = $scope.arrSpRecords[i].phonemobile;
-					$scope.spDetails.spAlternateContact = $scope.arrSpRecords[i].phonealternate;
-
-					if ($scope.arrSpRecords[i].gender == "Male") {
+					if ($scope.arrayAllSps[i].gender == "Male") {
 						$scope.spDetails.spGender = "male";
-					} else if ($scope.arrSpRecords[i].gender == "Female") {
+					} else if ($scope.arrayAllSps[i].gender == "Female") {
 						$scope.spDetails.spGender = "female";
 					}
 
-					var d = $scope.arrSpRecords[i].dateofbirth + "";
+					var d = $scope.arrayAllSps[i].dateofbirth + "";
 					var year = d.substring(0,4);
 					var month = d.substring(4,6);
 					var day = d.substring(6,8);
@@ -8448,15 +8840,15 @@ angular.module('myApp.controllers')
 
 					var primaryZoneId = [];
 					var secondaryZoneId = [];
-					for (var j = 0 ; j < $scope.arrSpRecords[i].zones.length ; j++) {
-						if($scope.arrSpRecords[i].zones[j].zonerole == 1) {
-							$scope.spPrimaryZones.push({"id":$scope.arrSpRecords[i].zones[j].id});
-							$scope.populateSecondaryZones($scope.arrSpRecords[i].zones[j].id, "onItemSelect");
-							primaryZoneId.push($scope.arrSpRecords[i].zones[j].id);
-						} else if($scope.arrSpRecords[i].zones[j].zonerole == 2) {
-							$scope.spSecondaryZones.push({"id":$scope.arrSpRecords[i].zones[j].id});
-							$scope.populatePrimaryZones($scope.arrSpRecords[i].zones[j].id, "onItemSelect");
-							secondaryZoneId.push($scope.arrSpRecords[i].zones[j].id);
+					for (var j = 0 ; j < $scope.arrayAllSps[i].zones.length ; j++) {
+						if($scope.arrayAllSps[i].zones[j].zonerole == 1) {
+							$scope.spPrimaryZones.push({"id":$scope.arrayAllSps[i].zones[j].id});
+							$scope.populateSecondaryZones($scope.arrayAllSps[i].zones[j].id, "onItemSelect");
+							primaryZoneId.push($scope.arrayAllSps[i].zones[j].id);
+						} else if($scope.arrayAllSps[i].zones[j].zonerole == 2) {
+							$scope.spSecondaryZones.push({"id":$scope.arrayAllSps[i].zones[j].id});
+							$scope.populatePrimaryZones($scope.arrayAllSps[i].zones[j].id, "onItemSelect");
+							secondaryZoneId.push($scope.arrayAllSps[i].zones[j].id);
 						}
 					}
 
@@ -8518,7 +8910,7 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.checkBoxSelected = function (wrkHrSlot, $index) {
-		//console.log(wrkHrSlot.selectZoneIds);
+		console.log($scope.wrkHrsAllSlots);
 		if ((wrkHrSlot.selected == true) && (wrkHrSlot.selectZoneIds != undefined) && (wrkHrSlot.selectZoneIds.length > 0) && ($scope.selectZoneIdsArr != undefined) && ($scope.selectZoneIdsArr.length > 0)) {
 			
 			var temporaryArray = angular.copy($scope.wrkHrsAllSlots);

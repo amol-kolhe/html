@@ -160,7 +160,8 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         var url = baseUrl + "/hrest/v1/appt/calculateapptcharges" +
             "?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2" +
             "&serviceid=" + obj.serviceid +
-            "&massnoofappt=" + obj.massnoofappt;
+            "&massnoofappt=" + obj.massnoofappt+
+            "&zoneBasePrice=" + obj.zoneBasePrice;
         if(obj.promocode) {
             url += "&promocode=" + obj.promocode;
         }

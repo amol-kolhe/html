@@ -1,4 +1,4 @@
-<div class="mainContent2" ng-controller="AdminCtrl" ng-init="getPromoCodes()">
+<div class="mainContent2" ng-controller="AdminCtrl" ng-init="getPromoCodes();initCache();">
 	<div style="padding:10px;">
 		<div class="row">
 			<div class="col-md-12">
@@ -8,6 +8,9 @@
 						<tr>
 							<th class="text-center" ng-click="sortPromoCode('createdon')"><span class="1clsfleft">Created On</span>
 								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='createdon'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
+							</th>
+							<th class="text-center" ng-click="sortPromoCode('city')"><span class="1clsfleft">City</span>
+								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='city'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
 							</th>
 							<th class="text-center" ng-click="sortPromoCode('promocode')"><span class="1clsfleft">Promo Code</span>
 								<span class="glyphicon sort-icon" ng-show="promoCodeSortKey=='promocode'" ng-class="{'glyphicon-chevron-up':promoCodeReverse,'glyphicon-chevron-down':!promoCodeReverse}"></span>
@@ -91,6 +94,24 @@
 							<td style="min-width:105px" class="promo-row-text">
 							   <span ng-if="rec.createdon != ''">{{rec.createdon * 1000 | date:'yyyy-MM-dd hh:mm a'}}</span>
 							</td>
+
+							<td style="min-width:155px" class="promo-row-text">
+								<span ng-show = "rec.action != 'edit'" style="word-break: break-word;">{{rec.city}}</span>
+								<div>
+									<div ng-if="rec.promoNameError == true" style="color: red; font-size: 10px;">Enter valid City</div>
+								</div>
+								 <select class = "input-width clstxt2 form-control"
+	                                name = "promoCity"
+	                                data-ng-model = "rec.promoCity"
+	                                data-ng-class = "{red1: addNewSpForm.adminFormForNewSp.spCity.$invalid && addNewSpForm.adminFormForNewSp.spCity.$dirty}"
+	                                title = "Select promocode city"
+	                                data-ng-options="city._id as city.city_name for city in arrayActiveCity"
+	                                ng-show="rec.action == 'edit'"
+	                                data-ng-required = "true">
+	                            <option value="">Select City</option>
+                        		</select>
+							</td>
+
 							<td style="min-width:155px" class="promo-row-text">
 								<span ng-show = "rec.action != 'edit'" style="word-break: break-word;">{{rec.promocode}}</span>
 								<div>
@@ -105,6 +126,7 @@
 								   required
 								/>
 							</td>
+
 							<td style="min-width:210px" class="promo-row-text">
 								<span ng-show = "rec.action != 'edit'" style="word-break: break-word;">{{rec.promodesc}}</span>
 								<div>

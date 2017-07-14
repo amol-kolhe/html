@@ -100,6 +100,8 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 			{title: 'Cost Calculator', url: 'costcalculator.html', clsclass: 'clsgray'},
 			{title: 'Clinics Management', url: 'clinicManagement.html', clsclass: 'clsgray'},
 
+			{title: 'City Management', url: 'cityManagement.html', clsclass: 'clsgray'},
+
 			{title: 'Policy Management', url: 'policyManagement.html', clsclass: 'clsgray'},
 			{title: 'Cancel Actionables', url: 'cancel_actionables.html', clsclass: 'clsgray'}
 

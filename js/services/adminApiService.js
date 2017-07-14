@@ -45,6 +45,11 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		return $http.get(baseUrl + "/hrest/v1/zone/map?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&cityid=" + cityId);
 	}
 
+	//API to get all zones
+	adminApi.getAllActiveZones = function() {
+		return $http.get(baseUrl + "/hrest/v1/zone/zones?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid());
+	}
+
 	//API to get clinics for given city
 	adminApi.getClinics = function(cityId) {
 		return $http.get(baseUrl + "/hrest/v1/zone/clinic?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&cityid=" + cityId);
@@ -193,6 +198,11 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		return $http.get(baseUrl + "/hrest/v1/admin/" + cityId + "/sps?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0");
 	};
 
+	// API support to get all sp list
+	adminApi.getAllSps = function () {
+		return $http.get(baseUrl + "/hrest/v1/admin/getAllSps?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0");
+	};
+
 	// API support to get sp list
 	adminApi.getClinicSps = function (clinic_id) {
 		return $http.get(baseUrl + "/hrest/v1/admin/" + clinic_id + "/clinicsps?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0");
@@ -257,6 +267,11 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		return $http.post(baseUrl + "/hrest/v1/admin/clinic?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid(), clinicobj);
 	};
 
+	//API support to Add New city.
+	adminApi.addCity = function(cityobj) {
+		return $http.post(baseUrl + "/hrest/v1/admin/city?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid(), cityobj);
+	};
+
 	//API support to get all city wise clinic.
 	adminApi.getCityClinic = function(clinic_city) {
 		var url = baseUrl + "/hrest/v1/admin/cityClinic?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + '&role=0';
@@ -275,6 +290,17 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		return $http.get(url);
 	};
 
+
+	//API support to get all clinic.
+	adminApi.getCity = function(active) {
+		var url = baseUrl + "/hrest/v1/admin/city?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + '&role=0';
+		if(active != undefined) {
+			url += "&active=" + active;
+		}
+		return $http.get(url);
+	};
+
+
 	//API support to get all policy.
 	adminApi.getPolicy = function() {
 		return $http.get(baseUrl + "/hrest/v1/admin/policy?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0");
@@ -283,6 +309,11 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 	//API support to update the clinic
 	adminApi.updateClinic = function(id, dataObj) {
 		return $http.put(baseUrl + "/hrest/v1/admin/updateClinic/" + id + "?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0",dataObj);
+	}
+
+	//API support to update the city
+	adminApi.updateCity = function(id, dataObj) {
+		return $http.put(baseUrl + "/hrest/v1/admin/updateCity/" + id + "?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0",dataObj);
 	}
 
 	//APIsupport to delet promocodes

@@ -514,6 +514,7 @@ angular.module('myApp.controllers')
         $scope.clinicBasePriceVal = 0;
         $scope.clinicArray = [];
         $scope.patientidForPkgCancel = '';
+        $scope.packageValidTillDate = '';
 
         spApi.getCustomerDetails(appointment.custid)
         .success(function(data, status, headers, config){
@@ -608,6 +609,22 @@ angular.module('myApp.controllers')
                 else
                     $scope.custLeftPackageSeesion = 0
             }
+
+            if(data.payload.customer.package_created_on && data.payload.customer.approved_valid_days){
+                var packageCreatedOn = data.payload.customer.package_created_on;
+                var approvedValidDays = data.payload.customer.approved_valid_days;
+
+                var packageCreatedOnDate = moment(new Date(packageCreatedOn * 1000)).format("YYYY-MM-DD hh:mm A");                
+
+                //var result = new Date(packageCreatedOn);
+                //var date = result.setDate(result.getDate() + parseInt(5));
+                var myDate = new Date(new Date(packageCreatedOnDate).getTime()+(parseInt(approvedValidDays)*24*60*60*1000));
+                var validTill = moment(myDate).format("YYYY-MM-DD");
+
+                $scope.packageValidTillDate = validTill; 
+                
+            }
+
         })
         .error(function(data, status, headers, config){
             $scope.aptErrorMsg = data.error.message;
@@ -693,6 +710,7 @@ angular.module('myApp.controllers')
                 $scope.locality = data.payload.appointment.locality;
                 $scope.costFollowUp = data.payload.appointment.cost;
                 $scope.currFollowUp = data.payload.appointment.currency;
+                $scope.baseCost = data.payload.appointment.cost;
 
                 $scope.custReadList.pincode = $scope.custPincode; // new code
                 $scope.custReadList.zoneid = $scope.zoneId; // new code
@@ -966,6 +984,7 @@ angular.module('myApp.controllers')
     };
 
     $scope.callSpInfo = function() {
+
         if($scope.custReadList != undefined && $scope.serviceIdInst != undefined) {
             if ($scope.currentOpenView == 'NEW_APPOINTMENT'){
                 $scope.getSpInfo($scope.custReadList.zoneid, $scope.serviceIdInst, $scope.custReadList.pincode);
@@ -1234,7 +1253,8 @@ angular.module('myApp.controllers')
             "package_id":package_id,
             "patientid":$scope.patientid,
             "clinic_id":clinicId,
-            "clinicBasePrice":clinicPrice
+            "clinicBasePrice":clinicPrice,
+            "zoneBasePrice":$scope.baseCost
 
         }
   if ($scope.spNewAppointment.addcharges == null || $scope.spNewAppointment.addcharges == undefined){
@@ -1469,12 +1489,14 @@ angular.module('myApp.controllers')
             massnoofappt: $scope.aptPackage.no_of_sessions,
             serviceid: $scope.models.service.id,
             promocode: $scope.models.calculator.package,
+            zoneBasePrice:$scope.adminNewAppointmentCust.appointment.cost
         };
-        
+      
         spApi.calculateApptCharges(data).
         success(function (data, status, headers, config) {
             if(data && data.payload) {
                 $scope.models.response = data.payload;
+                console.log(data.payload);
                 $scope.models.response.netTotalCharges = $scope.models.response.netTotalCharges + temp_add;
                 $scope.aptPackage.net_amount = $scope.models.response.netTotalCharges;
                 $scope.aptPackage.temp_net_amount = parseInt($scope.models.response.netTotalCharges / 2);
@@ -1725,6 +1747,7 @@ angular.module('myApp.controllers')
     }
 
     showPackageDialog = function() {
+     
         if($scope.currentOpenView == 'APPOINTMENT') {
             slideDownByIndex('.spPackageDetails', 0);
         }else if($scope.currentOpenView == 'CUSTOMER_APPOINTMENT') {
