@@ -140,7 +140,12 @@ angular.module('myApp.controllers')
         spApi.getCities("India")
             .success(function(data, status, headers, config){
                 cache.cityToIdMap = buildCitiesToIdMap(data.payload);
+                angular.forEach(buildCitiesToIdMap(data.payload),function(item,key){
+                    console.log(key+'City Ids:'+item);
+                });
+                
             })
+
             .error(function(data, status, headers, config){
                 $scope.aptErrorMsg = "Failed to fetch services as part of init.";
                 $scope.checkSessionTimeout(data);
@@ -226,22 +231,27 @@ angular.module('myApp.controllers')
         success(function (data, status, headers, config) {
             $scope.models.packagecodes = [];
             var tempArr = data.payload;
+            
             console.log("successfully received package codes");
             console.log(data);
+            
             angular.copy(tempArr, $scope.models.packagecodes);
             $scope.models.packagecodes.forEach(function(item) {
-                item.validFromReadonly = item.validfrom*1000;
-                item.validTillReadonly = item.validtill*1000;
-                item.validfrom = moment(new Date(item.validfrom*1000).toString());
-                item.validtill = moment(new Date(item.validtill*1000).toString());
-                item.disctype = item.disctype.toString();
-                item.isNewPromo = false;
-                item.noofappt = item.noofappt;
-                item.is_promocode = item.is_promocode;
-                item.max_sessions = item.max_sessions;
-                item.min_sessions = item.min_sessions;
-                item._id = item._id;
-
+                //if($scope.adminNewAppointmentCust.customer.cityid==item.cityId){
+                    
+                    item.validFromReadonly = item.validfrom*1000;
+                    item.validTillReadonly = item.validtill*1000;
+                    item.validfrom = moment(new Date(item.validfrom*1000).toString());
+                    item.validtill = moment(new Date(item.validtill*1000).toString());
+                    item.disctype = item.disctype.toString();
+                    item.isNewPromo = false;
+                    item.noofappt = item.noofappt;
+                    item.is_promocode = item.is_promocode;
+                    item.max_sessions = item.max_sessions;
+                    item.min_sessions = item.min_sessions;
+                    item._id = item._id;
+                //}
+                
             });
         }).
         error(function (data, status, headers, config) {
@@ -1556,7 +1566,9 @@ angular.module('myApp.controllers')
             promocode: $scope.aptPayment.promocode,
             paymentmodes: $scope.aptPayment.paymentModes,
             promocost:$scope.applypromocost,
-            additionalchargespdesc:$scope.aptPayment.additionalSpAmntDesc
+            additionalchargespdesc:$scope.aptPayment.additionalSpAmntDesc,
+            city:$scope.adminNewAppointmentCust.customer.city,
+            cityId:$scope.adminNewAppointmentCust.customer.cityid
         }
 
         spApi.markAppointmentComplete(data)
@@ -1633,6 +1645,9 @@ angular.module('myApp.controllers')
 
     $scope.showEditDocumentation = function() {
         if(!Object.keys($scope.adminNewAppointmentCust).length == 0) {
+            if($scope.adminNewAppointmentCust.sp==undefined){
+                $scope.adminNewAppointmentCust.sp = "";
+            }
             return $scope.adminNewAppointmentCust.sp._id == $cookies.get("u_id");
         }
     }
@@ -1747,7 +1762,11 @@ angular.module('myApp.controllers')
     }
 
     showPackageDialog = function() {
-     
+        
+        angular.forEach($scope.adminNewAppointmentCust.customer,function(item,key){
+            console.log(key+'::::'+item);
+        });   
+
         if($scope.currentOpenView == 'APPOINTMENT') {
             slideDownByIndex('.spPackageDetails', 0);
         }else if($scope.currentOpenView == 'CUSTOMER_APPOINTMENT') {
@@ -1922,14 +1941,21 @@ angular.module('myApp.controllers')
             showClose:false,
             scope: $scope 
         }).then(function(value)
-        {
+        {   
+            
+            //console.log('City'+$scope.adminNewAppointmentCust.customer.city);
+            //console.log('cityId'+$scope.adminNewAppointmentCust.customer.cityid);
+            //console.log($scope.custReadList.custwallet.amount+'---'+$scope.models.response.netTotalCharges);
             if($scope.custReadList.custwallet.amount == $scope.models.response.netTotalCharges){
                 var data = {
                     "walletAmount": $scope.custReadList.custwallet.amount,
                     "walletTransType": "credit",
                     "currency":"INR",
-                    "description":"Package Assignment"
+                    "description":"Package Assignment",
+                    "city":$scope.adminNewAppointmentCust.customer.city,
+                    "cityId":$scope.adminNewAppointmentCust.customer.cityid
                 }
+
                 spApi.walletTransact($scope.custReadList._id, data)
                 .success(function(data, status, headers, config) {
                     if(data.error == undefined && data.payload != undefined) {
@@ -2660,7 +2686,9 @@ angular.module('myApp.controllers')
             "walletAmount": $scope.custReadList.custwallet.amount,
             "walletTransType": transType,
             "currency":"INR",
-            "description":$scope.custReadList.custwallet.description
+            "description":$scope.custReadList.custwallet.description,
+            "city":$scope.adminNewAppointmentCust.appointment.city,
+            "cityId":$scope.adminNewAppointmentCust.appointment.cityid
         }
 
         spApi.walletTransact($scope.custReadList._id, data)

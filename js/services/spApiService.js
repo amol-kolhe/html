@@ -152,6 +152,7 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         if(is_promocode != undefined) {
             url += "&is_promocode=" + is_promocode;
         }
+        url += "&where=spid=" + spApi.getSpid() ;
         return $http.get(url);
     };
 

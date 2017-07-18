@@ -4231,10 +4231,14 @@ angular.module('myApp.controllers')
 			adminApi.getSps(cityId)
 			.success(function(data, status, headers, config) {
 
-				$scope.spNamesArr = data.payload.spList;
-				$scope.arrSpRecords = angular.copy(data.payload.spList);
+				if(data.payload.spList != undefined && data.payload.spList != ""){
+					$scope.spNamesArr = data.payload.spList;
+					$scope.arrSpRecords = angular.copy(data.payload.spList);
+				}
 				
-				$scope.arrSpRecords.cityId = data.payload.cityId;
+				if(data.payload.cityId != "" && data.payload.cityId != undefined){
+					$scope.arrSpRecords.cityId = data.payload.cityId;
+				}
 
 				for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
 					$scope.arrSpRecords[i].primaryZones = [];
@@ -8619,6 +8623,8 @@ angular.module('myApp.controllers')
 			$scope.zoneMgmt.zoneRecord = rec;
 			/*copy the record to be editted to temppojo*/
 			angular.copy(rec, $scope.zoneMgmt.temppojo);
+			$scope.zoneMgmt.temppojo.zoneprice = $scope.zoneMgmt.temppojo.price;
+            $scope.zoneCitySelected = $scope.zoneMgmt.temppojo.cityid;
 			$scope.zoneMgmt.editZoneSection = true;
 			$scope.zoneMgmt.addNewZoneSection = false;
 		}
@@ -8705,7 +8711,7 @@ angular.module('myApp.controllers')
 					cityName = itemCity.city_name;
 				}
 			});
-
+			
 			var obj = {
 			    "zonename": rec.zonename,
 			    "countryid": $scope.zoneCountry.id,
@@ -9060,7 +9066,9 @@ angular.module('myApp.controllers')
 			"walletAmount": $scope.custReadList.custwallet.amount,
 			"walletTransType": transType,
 			"currency":"INR",
-			"description":$scope.custReadList.custwallet.description
+			"description":$scope.custReadList.custwallet.description,
+			"city":$scope.custReadList.city,
+			"cityId":$scope.custReadList.cityid
 		}
 
 		adminApi.walletTransact($scope.custReadList._id, data)
