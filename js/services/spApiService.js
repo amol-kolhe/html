@@ -130,7 +130,7 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
     };
 
     spApi.fetchPatientWithWallet = function() {
-        return $http.get(baseUrl + '/hrest/v1/admin/cust/fetchPatientWithWallet?apikey=' + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2");
+        return $http.get(baseUrl + '/hrest/v1/admin/cust/fetchPatientWithWallet?apikey=' + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2&where=spid=" + spApi.getSpid());
     }
 
     spApi.getWalletHistory = function(custID) {
@@ -138,7 +138,7 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
     };
 
     spApi.getCollection = function() {
-        var url = baseUrl + "/hrest/v1/finance/collection?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + '&role=2';
+        var url = baseUrl + "/hrest/v1/finance/collection?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + '&role=2' + "&where=spid=" + spApi.getSpid();
         return $http.get(url);
     }
 

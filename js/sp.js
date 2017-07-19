@@ -197,6 +197,7 @@ angular.module('myApp.controllers')
                 angular.forEach(data.payload, function(apt) {
                     appList.push(
                         {
+                            "city": apt.appointment.city,
                             "refNo": apt.appointment.refno,
                             "id": apt.appointment._id,
                             "scheduledon": apt.appointment.starttime,
@@ -1501,7 +1502,7 @@ angular.module('myApp.controllers')
             promocode: $scope.models.calculator.package,
             zoneBasePrice:$scope.adminNewAppointmentCust.appointment.cost
         };
-      
+        
         spApi.calculateApptCharges(data).
         success(function (data, status, headers, config) {
             if(data && data.payload) {

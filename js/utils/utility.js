@@ -166,6 +166,7 @@ function buildAppointmentsList(payload) {
 		}
 		var payment = (data.appointment.curr == undefined && data.appointment.amnt == 0) ? "NA" : data.appointment.curr + "-" + data.appointment.amnt;
 		appointmentsList.push({
+			"city": data.appointment.city,
 			"id" : data.appointment._id,
 			"start" : new Date(data.appointment.starttime),
 			"patient" : data.customer.name,

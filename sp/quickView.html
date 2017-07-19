@@ -171,7 +171,7 @@
                     <button class="btn" ng-class="spApts.time == 'past' ? 'btn-primary' : 'btn-default'"
                             data-ng-click="fetchSpAppointments('past')">Past</button>
                 </div>
-                <div class="col-xs-4 col-sm-5 col-lg-3">
+             <!--   <div class="col-xs-4 col-sm-5 col-lg-3">
                     <input type="text"
                            ng-model="spSearch"
                            id = "callmeSearchId"
@@ -179,7 +179,7 @@
                            title="Search records"
                            style="margin-top: 0;"
                            class="form-control"/>
-                </div>
+                </div> -->
             </div>
             <div class="alert alert-info">
                 <span ng-show="spApts.time == 'today'">Showing your <b>today's</b> appointments yet to be attended</span>
@@ -193,6 +193,9 @@
                 <table class="table table-striped table-condensed" ng-hide="spAptNotAvailable == true" ng-init="sortKey = 'scheduledon';">
                     <thead>
                         <tr>
+                            <th ng-click="sort('scheduledon')">City
+                                <span class="glyphicon sort-icon" ng-show="sortKey=='scheduledon'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                            </th>
                             <th ng-click="sort('scheduledon')">Date
                                 <span class="glyphicon sort-icon" ng-show="sortKey=='scheduledon'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
                             </th>
@@ -216,8 +219,19 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                        <td> <input style="width: 120px;" type="text" ng-model="spSearch.city"> </td>
+                        <td> <input style="width: 120px;" type="text" ng-model="spSearch.scheduledon"> </td>
+                        <td> <input style="width: 200px;" type="text" ng-model="spSearch.refNo"> </td>
+                        <td> <input style="width: 120px;" type="text" ng-model="spSearch.customername"> </td>
+                        <td> <input style="width: 120px;" type="text" ng-model="spSearch.servicelocation"> </td>
+                        <td> <input style="width: 120px;" type="text" ng-model="spSearch.customercontact"> </td>
+                        <td> <input style="width: 120px;" type="text" ng-model="spSearch.status"> </td>
+                        <td style="display:none;"> <input style="width: 120px;" type="text" ng-model="spSearch.sdate"> </td>
+                    </tr>
                         <tr dir-paginate="item in spAppointmentList|orderBy:sortKey:!reverse|filter:spSearch|itemsPerPage:10"
                             pagination-id="spApptListId">
+                            <td>{{item.city}}</td>
                             <td>{{item.scheduledon * 1000 | date:'yyyy-MM-dd hh:mm a'}}</td>
                             <td>
                                 <code><a href="#" ng-click="showAppointment(item, 'appointment')" title="Show Appointment Details">{{item.refNo}}</a></code>
