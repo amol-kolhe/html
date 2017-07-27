@@ -951,7 +951,7 @@ angular.module('myApp.controllers')
 
 		var locality = $scope.getLocalityNameFromPincode($scope.adminNewAppointmentCust.pincode);
 		var pincodeid = cache.pincodeToPincodeIdMap[$scope.adminNewAppointmentCust.pincode];
-
+		
 		var dataObjSubmitAptForm = {
 			"customer": {
 				"cityid": $scope.users1.city,
@@ -1604,11 +1604,24 @@ angular.module('myApp.controllers')
                 $scope.package_created_on = data.payload.customer.package_created_on;
                 $scope.approved_valid_days = data.payload.customer.approved_valid_days;
                 $scope.patientid = data.payload.appointment.patientid;
-                if(data.payload.customer.additional_amount){
-                    $scope.additional_amount = parseFloat(data.payload.customer.additional_amount);
+                temp_additional_amount = $scope.additional_amount;
+
+                if(($scope.no_of_sessions+'.0' ==data.payload.customer.use_sessions) && data.payload.customer.is_package_assign==false){
+                    temp_additional_amount = 0;
+                }else{
+                    temp_additional_amount = parseFloat(data.payload.customer.additional_amount);
+                }
+
+                if(temp_additional_amount){
+                    $scope.additional_amount = temp_additional_amount;
                 }else{
                     $scope.additional_amount = 0;
                 }
+                /*if(data.payload.customer.additional_amount){
+                    $scope.additional_amount = parseFloat(data.payload.customer.additional_amount);
+                }else{
+                    $scope.additional_amount = 0;
+                }*/
                    
                 if(data.payload.customer.is_package_assign){
                     $scope.is_package_assign = data.payload.customer.is_package_assign;

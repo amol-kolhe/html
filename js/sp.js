@@ -739,19 +739,35 @@ angular.module('myApp.controllers')
                      $scope.spNewAppointment.addchargedesc="";
                 }
 
-
-
                 $scope.package_code = data.payload.customer.package_code;
                 $scope.package_id = data.payload.customer.package_id;
                 $scope.no_of_sessions = data.payload.customer.no_of_sessions;
                 $scope.package_created_on = data.payload.customer.package_created_on;
                 $scope.approved_valid_days = data.payload.customer.approved_valid_days;
                 $scope.patientid = data.payload.appointment.patientid;
-                if(data.payload.customer.additional_amount){
-                    $scope.additional_amount = parseFloat(data.payload.customer.additional_amount);
+                
+                //console.log(data.payload.customer.additional_amount+'~ $scope.no_of_sessions:'+$scope.no_of_sessions+'data.payload.customer.use_sessions:'+data.payload.customer.use_sessions+'data.payload.customer.is_package_assign:'+data.payload.customer.is_package_assign);
+
+                temp_additional_amount = $scope.additional_amount;
+
+                if(($scope.no_of_sessions+'.0' ==data.payload.customer.use_sessions) && data.payload.customer.is_package_assign==false){
+                    temp_additional_amount = 0;
+                }else{
+                    temp_additional_amount = parseFloat(data.payload.customer.additional_amount);
+                }
+
+                if(temp_additional_amount){
+                    $scope.additional_amount = temp_additional_amount;
                 }else{
                     $scope.additional_amount = 0;
                 }
+                //console.log($scope.additional_amount);
+                /*if(data.payload.customer.additional_amount){
+                    $scope.additional_amount = parseFloat(data.payload.customer.additional_amount);
+                    //$scope.additional_amount = temp_additional_amount;
+                }else{
+                    $scope.additional_amount = 0;
+                }*/
                    
                 if(data.payload.customer.is_package_assign){
                     $scope.is_package_assign = data.payload.customer.is_package_assign;
@@ -1225,8 +1241,7 @@ angular.module('myApp.controllers')
         }else{
             approved_valid_days = 0;
         }
-
-
+        
         var idObj = $cookies.get('u_id');
 
         var dataObjSubmitAptForm = {
@@ -1243,6 +1258,7 @@ angular.module('myApp.controllers')
                 "no_of_sessions":no_of_sessions,
                 "is_package_assign":$scope.is_package_assign,
                 "additional_amount":$scope.additional_amount,
+                //"additional_amount":temp_additional_amount,  
                 "use_sessions":$scope.use_sessions,
                 "package_created_on":package_created_on,
                 "approved_valid_days":approved_valid_days
@@ -1762,11 +1778,7 @@ angular.module('myApp.controllers')
         $scope.scrollDiv('apptSection');
     }
 
-    showPackageDialog = function() {
-        
-        angular.forEach($scope.adminNewAppointmentCust.customer,function(item,key){
-            console.log(key+'::::'+item);
-        });   
+    showPackageDialog = function() {  
 
         if($scope.currentOpenView == 'APPOINTMENT') {
             slideDownByIndex('.spPackageDetails', 0);
@@ -2682,14 +2694,18 @@ angular.module('myApp.controllers')
             }, 5000);
             return;
         }
+        
+        /*angular.forEach($scope.custReadList,function(item,key){
+            console.log(key+'~~'+item);
+        });*/
 
         var data = {
             "walletAmount": $scope.custReadList.custwallet.amount,
             "walletTransType": transType,
             "currency":"INR",
             "description":$scope.custReadList.custwallet.description,
-            "city":$scope.adminNewAppointmentCust.appointment.city,
-            "cityId":$scope.adminNewAppointmentCust.appointment.cityid
+            "city":$scope.custReadList.city,
+            "cityId":$scope.custReadList.cityid
         }
 
         spApi.walletTransact($scope.custReadList._id, data)
