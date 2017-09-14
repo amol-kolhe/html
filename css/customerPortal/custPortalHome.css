@@ -647,6 +647,7 @@ p.slider-subtext {
 }
 
 .booknow-outer .home-redirecting-buttons button {
+     padding: 13px 30px;
     background: #f69279;
     color: #ffffff;
     opacity: 0.5;
