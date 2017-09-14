@@ -384,6 +384,38 @@ p.slider-subtext {
     font-size: 0.9em;
 }
 
+.city-section {
+    height: 41px;
+    width: 230px;
+    background: #fff;
+    float: left;
+    padding-top: 3px;
+    padding-right: 10px;
+    padding-bottom: 3px;
+    padding-left: 16px;
+    font-size: 1em;
+
+    border: 2px solid #fc8f7a;
+    border-radius: 50px;
+    float: right;
+    /*font-weight: bold;*/
+}
+@-moz-document url-prefix() {
+    
+}
+
+.city-section select {
+    background: #fff;
+    border: 0;
+    background-image: url('../../images/customer_portal/down_arrow.png') no-repeat;
+    cursor: pointer;
+    text-transform: capitalize;
+}
+
+.city-section option {
+    font-size: 0.9em;
+}
+
 .book-now-button {
 	border-radius: 0px 30px 30px 0px;
 	width: 200px;
@@ -420,6 +452,17 @@ p.slider-subtext {
 	-moz-appearance: none;
 	width: 178px;
 	vertical-align: -webkit-baseline-middle;
+    vertical-align: -moz-middle-with-baseline;
+    outline: none;
+}
+
+.city-section select {
+    background: url("../../images/customer_portal/down_arrow.png") no-repeat !important;
+    background-position: right !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 178px;
+    vertical-align: -webkit-baseline-middle;
     vertical-align: -moz-middle-with-baseline;
     outline: none;
 }
@@ -875,6 +918,17 @@ ul.list-unstyled.footer-company-subsection li {
 	padding-bottom: 11px;
 }
 
+ul.list-unstyled.footer-company-subsection li li {
+    padding-bottom: 8px;
+    width: 27%;
+    float: left;
+    font-size: 0.9em;
+}
+
+ul.list-unstyled.footer-company-subsection ul{
+    padding-left: 21px;
+}
+
 /* -----------Footer css END ------------------- */
 
 
@@ -1023,7 +1077,7 @@ p.testimonial-cust-name {
     font-family: "Montserrat-Regular", sans-serif;
     display: block;
     color: #262626;
-    padding: 10px 30px;
+    padding: 6px 30px;
     text-decoration: none !important;
     text-transform: none;
 }

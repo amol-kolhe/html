@@ -2,7 +2,11 @@
 @media (max-width: 480px) {
 	/*header section*/
 	.booking1-header-timeslot select { width: 130px; }
+	.city-section {border: 0 none; width:100%;}
+	.city-section select{width:auto;}
+
 }
+
 
 /* Common media query or small and extra small */
 @media (max-width: 767px) {

@@ -50,7 +50,7 @@
 	.home-navigation .container { padding: 10px 10px 8px 10px !important; }
 	.logo-image { /*background-image: url(../../images/customer_portal/logo.png);background-repeat: no-repeat; background-size: contain; */ height: 38px; width: 112px; display: inline-block; margin-top: 4px; }
 	span.request-callback {	display: none; }
-	.callme-request-desktop { display: none; }
+	/*.callme-request-desktop { display: none; }*/
 	.callme-request-mobile { display: inline-block; }
 	.hide-on-large-screens { display: block; }
 

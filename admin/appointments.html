@@ -205,7 +205,7 @@
                 <tbody>
                     <tr>
                         <td> <input style="width: 120px;" type="text" ng-model="search.city"> </td>
-                        <td> <input style="width: 120px;" type="text" ng-model="search.start"> </td>
+                        <td> <input style="width: 120px;" type="text" ng-model="search.sdate"> </td>
                         <td> <input style="width: 200px;" type="text" ng-model="search.ref"> </td>
                         <td> <input style="width: 120px;" type="text" ng-model="search.zone"> </td>
                         <td> <input style="width: 120px;" type="text" ng-model="search.spname"> </td>
@@ -217,7 +217,8 @@
                     <tr dir-paginate="apt in appointmentsList|orderBy:sortKey:reverse|filter:search|itemsPerPage:10"
                         pagination-id="appointmentsListId">
                         <td style="">{{apt.city}}</td>
-                        <td style="">{{apt.start * 1000 | date:'yyyy-MM-dd hh:mm a'}}</td>
+                      <!--  <td style="">{{apt.start * 1000 | date:'yyyy-MM-dd hh:mm a'}}</td> -->
+                            <td style=""> {{apt.sdate}}</td>
                         <td style="">
                             <code><a href="#" ng-click="editAppointment(apt)" title="Show Appointment Details">{{apt.ref}}</a></code>
                         </td>

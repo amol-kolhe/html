@@ -58,6 +58,42 @@
 				url: '/policy',
 				templateUrl: './CustPortal/other_pages/policy.html'
 			}).
+			state('homepages.neck', {
+				url: '/neck',
+				templateUrl: './CustPortal/other_pages/neck.html'
+			}).
+			state('homepages.elbow', {
+				url: '/elbow',
+				templateUrl: './CustPortal/other_pages/elbow.html'
+			}).
+			state('homepages.foot', {
+				url: '/foot',
+				templateUrl: './CustPortal/other_pages/foot.html'
+			}).
+			state('homepages.hip', {
+				url: '/hip',
+				templateUrl: './CustPortal/other_pages/hip.html'
+			}).
+			state('homepages.knee', {
+				url: '/knee',
+				templateUrl: './CustPortal/other_pages/knee.html'
+			}).
+			state('homepages.shoulder', {
+				url: '/shoulder',
+				templateUrl: './CustPortal/other_pages/shoulder.html'
+			}).
+			state('homepages.wrist', {
+				url: '/wrist',
+				templateUrl: './CustPortal/other_pages/wrist.html'
+			}).
+			state('homepages.ankle', {
+				url: '/ankle',
+				templateUrl: './CustPortal/other_pages/ankle.html'
+			}).
+			state('homepages.back', {
+				url: '/back',
+				templateUrl: './CustPortal/other_pages/back.html'
+			}).
 			state('booking', {
 				url: '/booking',
 				templateUrl: './CustPortal/booking_partials/booking_parent.html',

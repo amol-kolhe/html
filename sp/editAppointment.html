@@ -24,7 +24,7 @@
                             data-ng-click="show.DocumentRO = false; editAptClicked();"></span>
                     </span>
 
-                    <span ng-show="(adminNewAppointmentCust.appointment.state == 'Cancelled' || adminNewAppointmentCust.appointment.state == 'Confirmed' || adminNewAppointmentCust.appointment.state == 'Prepaid') && showEditDocumentation()">
+                    <span ng-show="(adminNewAppointmentCust.appointment.state == 'Confirmed' || adminNewAppointmentCust.appointment.state == 'Prepaid') && showEditDocumentation()">
                         <span title="Request for reschedule"
                             class="clickable glyphicon glyphicon-calendar"
                             style="margin-right: 15px; font-size: 15px;"
@@ -40,7 +40,7 @@
                         </span>
                     </span>
 
-                    <span ng-show="(adminNewAppointmentCust.appointment.state == 'Cancelled' || adminNewAppointmentCust.appointment.state == 'Confirmed' || adminNewAppointmentCust.appointment.state == 'Prepaid') && showEditDocumentation()">
+                    <span ng-show="(adminNewAppointmentCust.appointment.state == 'Confirmed' || adminNewAppointmentCust.appointment.state == 'Prepaid') && showEditDocumentation()">
                         <span title="Request for cancellation"
                             class="clickable glyphicon glyphicon-trash"
                             style="margin-right: 15px; font-size: 15px;"

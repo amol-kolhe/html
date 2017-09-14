@@ -190,7 +190,10 @@ angular.module('myApp.controllers')
 	                "walletAmount": $scope.financeMgmt.cost_difference,
 	                "walletTransType": "debit",
 	                "currency":"INR",
-	                "description":"Package Cancellation"
+	                "description":"Package Cancellation",
+	                "createdById":financeApi.getFinanceid(),
+		            "createdByName":financeApi.getFinanceuname(),
+		            "apptId":"",
 	            }
 	            financeApi.walletTransact($scope.financeMgmt.customer_id, data)
 	            .success(function(data, status, headers, config) {
@@ -253,6 +256,11 @@ angular.module('myApp.controllers')
 
      $scope.financeMgmt.getWalletHistory = function(rec){
      	$scope.financeMgmt.walletTransactionDetails = true;
+     	if($scope.financeMgmt.walletTransactionDetails){
+            $scope.searchWallet = {};
+            $('#aptFromDateWallet').data("DateTimePicker").clear();
+            $('#aptTillDateWallet').data("DateTimePicker").clear();
+        }
      	$scope.financeMgmt.customerName = rec.name;
 
      	$scope.financeMgmt.spIdForWallet = rec._id;
@@ -357,6 +365,7 @@ angular.module('myApp.controllers')
 			var arrStoreTrue = data.payload;
 			console.log("successfully received collections request.");
 			arrStoreTrue.forEach(function(item) {
+				console.log(item);
 				var today = moment(new Date()).format('YYYYMMDD');
 				var alert_date = moment(new Date(item.trans_date * 1000)).add(item.finance_alert_days, 'days').format("YYYYMMDD");
 				item.alert_to_finance = false;
@@ -416,7 +425,8 @@ angular.module('myApp.controllers')
 					"is_paytm" : $scope.financeMgmt.is_paytm,
 					"paytm_transaction_id" : $scope.financeMgmt.paytm_transaction_id,
 					"paytm_amount" : $scope.financeMgmt.paytm_amount,
-					"healyos_receipt_number" : $scope.financeMgmt.healyos_receipt_number
+					"healyos_receipt_number" : $scope.financeMgmt.healyos_receipt_number,
+					"createdById":financeApi.getFinanceid(),
 				}
 
 				financeApi.updateCollection(rec._id, dataObj)
@@ -681,8 +691,12 @@ angular.module('myApp.controllers')
 		$scope.financeMgmt.arrayWalletData = [];
 
 		arrayWalletDataTemp.forEach(function(item) {
+			var trancsaction_date = moment(new Date(item.transactiontime * 1000)).format("DD-MM-YYYY");
+            // converting Date to time stamp
+            var trancsaction_date_timestamp =  moment(trancsaction_date, 'DD-MM-YYYY').unix();
 
-			if((item.transactiontime >= fromDtWallet) && (tillDtWallet >= item.transactiontime)){
+			//if((item.transactiontime >= fromDtWallet) && (tillDtWallet >= item.transactiontime)){
+			  if((trancsaction_date_timestamp >= fromDtWallet) && (tillDtWallet >= trancsaction_date_timestamp)){	
 				$scope.debitAmnt = 0;
 			    $scope.creditAmnt = 0;
 

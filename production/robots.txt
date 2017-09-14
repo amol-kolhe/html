@@ -1,0 +1,24 @@
+User-agent:  *
+
+User-agent: NinjaBot
+Allow: /
+
+User-agent: Mediapartners-Google*
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Adsbot-Google
+Allow: /
+  
+User-agent: Googlebot-Mobile
+Allow: /
+
+User-Agent: Slurp
+Allow: /
+
+User-Agent: msnbot
+Allow: /
+
+sitemap :http://domainname/sitemap.xml

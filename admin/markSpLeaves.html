@@ -11,7 +11,7 @@
                          <select class = "input-width clstxt2 form-control"
                                 name = "spCity"
                                 data-ng-model = "SpWrkHrs.spCity"
-                                data-ng-class = "{red1: addNewSpForm.adminFormForNewSp.spCity.$invalid && addNewSpForm.adminFormForNewSp.spCity.$dirty}"
+                                data-ng-class = "{red3: markSpLeavesForm.adminFormForSp.spCity.$invalid && markSpLeavesForm.adminFormForSp.spCity.$dirty, green3: markSpLeavesForm.adminFormForSp.spCity.$valid && markSpLeavesForm.adminFormForSp.spCity.$dirty}"
                                 title = "Select city"
                                 data-ng-change = "populateCityBasedSps(SpWrkHrs.spCity);"
                                 data-ng-options="city._id as city.city_name for city in arrayActiveCity"

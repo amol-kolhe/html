@@ -23,12 +23,28 @@ angular.module("acute.select", [])
             "keyField": "@acKey",
             "acRefresh": "=",
             "acFocusWhen": "=",
-            "id": "@"
+            "id": "@",
+            data:"=acuteOptions"///newly added by me.
         },
         replace: true,
         templateUrl: defaultSettings.templatePath + "acute.select.htm",
         link: function(scope, element, attrs) {
             scope.initialise();
+
+            
+            //**************************added by me ***************************
+            scope.$watchCollection('data', function(newVals, oldVals) {
+            ///**I found out scope.allItems is the array to build and display the list. 
+            ///however it must follow {text,value,index} object format. So I reformat it that way.
+                if(newVals != undefined){
+                    scope.allItems = [];          
+                    for (var i = 0; i < newVals.length; i++) {
+                        scope.allItems.push({text:newVals[i].val,value:newVals[i],index:i});
+                    };
+                }
+           
+            }, true);
+            //******************************************************************
         },
         // **************************************************************
         //                          CONTROLLER

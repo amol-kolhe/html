@@ -77,10 +77,14 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
         
         $scope.usertabs = [{title: 'Home', url: 'home.html', glyph: 'glyphicon glyphicon-home'},
             {title: 'My Account', url: 'appointments.html', glyph: 'glyphicon glyphicon-user'},
+            {title: 'Reports', url: 'appointmentAnalysisReport.html', glyph: 'glyphicon glyphicon-save'},
 			{title: 'About Us', url: '../generic/aboutUs.html', glyph: 'glyphicon glyphicon-info-sign'},
-			{title: 'Contact Us', url: '../generic/contactUs.html', glyph: 'glyphicon glyphicon-envelope'}];
+			{title: 'Contact Us', url: '../generic/contactUs.html', glyph: 'glyphicon glyphicon-envelope'},
+			];
         $scope.userTabsFlg = false;
-		
+
+
+
 		$scope.tabs2 = [{title: 'Admin Name'},
 			{title: 'Notifications'},
 			{title: 'Settings'},
@@ -100,12 +104,23 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 			{title: 'Cost Calculator', url: 'costcalculator.html', clsclass: 'clsgray'},
 			{title: 'Clinics Management', url: 'clinicManagement.html', clsclass: 'clsgray'},
 
-			{title: 'City Management', url: 'cityManagement.html', clsclass: 'clsgray'},
+			//{title: 'City Management', url: 'cityManagement.html', clsclass: 'clsgray'},
 
 			{title: 'Policy Management', url: 'policyManagement.html', clsclass: 'clsgray'},
-			{title: 'Cancel Actionables', url: 'cancel_actionables.html', clsclass: 'clsgray'}
+			{title: 'Cancel Actionables', url: 'cancel_actionables.html', clsclass: 'clsgray'},
+			//{title: "Appt. Analysis Report", url: 'appointmentAnalysisReport.html'},
+			//{title: "Cancellation Report", url: 'cancellationReport.html'},
+			//{title: "New Patient Report", url: 'newPatientConversionReport.html'}
 
 			];
+
+		$scope.adminReportMenus = [
+			{title: "Appt. Analysis Report", url: 'appointmentAnalysisReport.html'},
+			{title: "New Patient Report", url: 'newPatientConversionReport.html'},
+			{title: "Cancellation Report", url: 'cancellationReport.html'},
+			{title: "Attendance Report", url: 'attendenceReport.html'}
+
+			];	
 
 		$scope.custMenus = [{title: "My Appointments", url: 'appointments.html'},
 			{title: "New Appointment", url: 'custNewAppointment.html'}
@@ -145,6 +160,15 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 			result.success(function(data, status, headers, config) {
 				if(data.error == undefined) {
 					var typeObj = data.payload.type;
+
+					$scope.typeObject = typeObj;
+
+					//alert($scope.typeObject);
+					//alert('hii'+ $scope.typeObject);
+
+					if($scope.typeObject != 0){
+						$scope.usertabs.splice(2, 1);
+					}
 					
 					if(typeObj == 0) {
 						$cookies.put('u_type', typeObj);
@@ -245,6 +269,11 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
             $scope.userTabsFlg = true;
         }
 		$scope.onClickHeaderTab = function(tab) {
+
+			//alert($scope.typeObject);
+
+			console.log($scope.usertabs);
+
             if((tab.title=='Home' || tab.title=='My Account') && $cookies.get('u_id') != undefined){
                 $scope.setUserMenu(tab.title);
                 if(tab.title=='Home'){
@@ -252,6 +281,11 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
                     $scope.pageSource = tab.url;
                     $scope.pageSource1 = ""; 
                 }
+            }else if(tab.title=='Reports'){
+            	 $scope.activeTab = 'Reports';
+                 $scope.pageSource = tab.url;
+                 $scope.pageSource1 = "leftNavigationReport.html"; 
+                 
             }else{
                 $scope.activeTab = tab.title;
                 $scope.pageSource = tab.url;

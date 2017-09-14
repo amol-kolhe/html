@@ -4,6 +4,7 @@ financeApiService.factory('financeApi', ['$http', '$cookies', function($http, $c
 	var apiKey;
 	var sid;
 	var financeid;
+	var finance_u_name;
 	var userType;
 	var financeApi = {};
 
@@ -28,6 +29,13 @@ financeApiService.factory('financeApi', ['$http', '$cookies', function($http, $c
         return financeid;
 	}
 
+	financeApi.getFinanceuname = function() {
+		if(finance_u_name == undefined) {
+            finance_u_name = $cookies.get('u_name');
+        }
+        return finance_u_name;
+	}
+
 	financeApi.getUserType = function() {
 		if(userType == undefined) {
 			userType = $cookies.get('u_type');
@@ -49,7 +57,7 @@ financeApiService.factory('financeApi', ['$http', '$cookies', function($http, $c
 	}
 
 	financeApi.fetchPatientWithWallet = function() {
-		return $http.get(baseUrl + '/hrest/v1/admin/cust/fetchPatientWithWallet?apikey=' + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + "&role=3");
+		return $http.get(baseUrl + '/hrest/v1/admin/cust/fetchPatientWithWallet?apikey=' + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + "&role=3&where=fnid=" + financeApi.getFinanceid());
 	}
 
 	financeApi.getFetchCust = function(custID) {

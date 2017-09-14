@@ -1,0 +1,66 @@
+<div class="mainContent2" ng-controller="ReportCtrl">
+	<span><h3>Attendance Reports</h3></span>
+
+    <input type="radio" ng-model="periodMonth" name="group1" value="month" ng-change = "resetWeek()"> <label>Monthly</label>
+    <input type="radio" ng-model="periodWeek" name="group1" value="week" ng-change = "resetMonth()"> <label>Weekly </label>
+
+	<form class="form-inline" data-ng-init="initReports()">
+        <select class="input-width clstxt2 form-control" name="monthcombo"
+                data-ng-model = "monthName"
+                title = "Select Month"
+                ng-options="month for month in monthList"
+                ng-change = "setMonthDateRange()"
+                ng-show = "periodMonth"
+                ng-hide = "periodWeek">
+            <option value="">Select Month</option>
+          
+        </select> 
+
+        <select class="input-width clstxt2 form-control" name="monthcombo"
+                data-ng-model = "weekName"
+                title = "Select week"
+                ng-options="weekstr for weekstr in weekArray"
+                ng-change = "setWeekDateRange()"
+                ng-show = "periodWeek"
+                ng-hide = "periodMonth">
+            <option value="">Select Week</option>
+          
+        </select>     
+
+        <div class="form-group" style="position:relative;">
+            From Date: <input type="text"
+                ng-model="fromDate"
+                name = "fromDate"
+                id="aptFromDate"
+                value = "{{fromDate}}"
+                title="From Date"
+                class="dateTimePicker aptSelectionInput form-control"/>
+            To Date:   <input type="text"
+                ng-model="tillDate"
+                name="tillDate"
+                id="aptTillDate"
+                value = "{{tillDate}}"
+                title="Till Date"
+                class="dateTimePicker aptSelectionInput form-control"/>
+            <button style="cursor:pointer;"
+                    data-ng-click="generateAttendence()"
+                    class="btn btn-primary btn-sm">
+                Generate Report
+            </button>
+        </div>
+
+       
+		<div ng-hide="!validDateRange || !dateValid">
+			<div ui-grid="gridOptionsAttendence" ui-grid-selection ui-grid-exporter class="grid"></div>
+	  	</div>
+	  	<div ng-show="!validDateRange">
+	  		<span style="color: red"> *Please enter correct date range... </span>
+	  	</div>
+	  	<div ng-show="!dateValid">
+	  		<span style="color: red"> *From Date should not greater than To Date... </span>
+	  	</div> 
+	
+	</form>
+
+
+</div>

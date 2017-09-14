@@ -5,6 +5,7 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 	var sid;
 	var adminid;
 	var userType;
+	var admin_name;
 	var adminApi = {};
 
 	adminApi.getApiKey = function() {
@@ -27,6 +28,13 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
         }
         return adminid;
 	}
+
+	adminApi.getAdminname = function() {
+		if(admin_name == undefined) {
+            admin_name = $cookies.get('u_name');
+        }
+        return admin_name;
+	};
 
 	adminApi.getUserType = function() {
 		if(userType == undefined) {
@@ -346,6 +354,10 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		return $http.delete(baseUrl + "/hrest/v1/admin/deleteZone/" + id + "?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0");
 	}
 
+	adminApi.getCustomerDetails = function(custID) {
+        return $http.get(baseUrl + '/hrest/v1/admin/cust/' + custID + "?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0");
+    };
+
 	//API to fetch the appointment charges
 	adminApi.calculateApptCharges = function(obj) {
 		var url = baseUrl + "/hrest/v1/appt/calculateapptcharges" +
@@ -362,6 +374,31 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 	adminApi.walletTransact = function(custId, obj) {
 		return $http.put(baseUrl + "/hrest/v1/cust/" + custId + "/wallet?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0", obj);
 	}
+
+
+
+	//************ Report Related APIs ************************
+
+	adminApi.getAppointmentAnalysisReport = function(fromDate,tillDate) {
+		var url = baseUrl + "/hrest/v1/report/appointmentAnalysisReport?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + '&role=3' + '&fromDate=' + fromDate + '&tillDate=' + tillDate;
+		return $http.get(url);
+	}
+
+	adminApi.getCancellationReport = function(fromDate,tillDate) {
+		var url = baseUrl + "/hrest/v1/report/cancellationReport?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + '&role=3' + '&fromDate=' + fromDate + '&tillDate=' + tillDate;
+		return $http.get(url);
+	}
+
+	adminApi.getNewPatientConversionReport = function(fromDate,tillDate) {
+		var url = baseUrl + "/hrest/v1/report/newPatientConversionReport?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + '&role=3' + '&fromDate=' + fromDate + '&tillDate=' + tillDate;
+		return $http.get(url);
+	}
+
+	adminApi.getAttendenceReport = function(fromDate,tillDate) {
+		var url = baseUrl + "/hrest/v1/report/attendenceReport?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + '&role=3' + '&fromDate=' + fromDate + '&tillDate=' + tillDate;
+		return $http.get(url);
+	}
+	
 
 	return adminApi;
 }]);

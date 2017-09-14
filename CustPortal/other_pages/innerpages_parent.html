@@ -10,7 +10,89 @@
 <!-- Ready to book -->
 <div class = "container-fluid ready-to-book-image">
 	<div class="container">
-		<div ng-include = "'./CustPortal/other_pages/innerPage_ready_to_book.html'"></div>
+		
+		<!--<div ng-include = "'./CustPortal/other_pages/innerPage_ready_to_book.html'"></div>-->
+		<!--<div ng-include = "'./CustPortal/home_partials/custPortal_ready_to_book.html'"></div>-->
+
+		<div class="ready-to-book-content booknow-container">	
+			<div class="ready-to-book-heading">Ready to book</div>
+			<div class="ready-to-book-booknow-section">
+				<!--<div ng-include = "'./CustPortal/home_partials/custPortal_booknow_footer.html'" class="booknow-container"></div> -->
+
+
+				<div class="booknow-outer">
+					<span class="locations-section">
+						<!--<select class="ac-select"
+				            id="lCombo"
+				            ac-model="cpc.selectedLocation"
+				            ac-refresh = cpc.acRefresh
+				            ac-options="l.val for l in cpc.getAllLocations()"
+				            ac-settings="{ allowClear: true, maxWidth: '250px', itemsInView: 20, loadOnCreate: false, comboMode: false, loadOnOpen: true, minWidth: '250px', height: '23px' }"
+				            ac-change="cpc.locationSelected(value)"
+				            ac-key="pin">
+				        </select>-->
+
+				         <select class="ac-select stateList"
+				            id="lCombo"
+				            ac-model="innerPageCtrl.model.selectedLocation"
+				            ac-refresh = cpc.acRefresh
+				            acute-options="locationArray"
+				            ac-options="l.val for l in cpc.getAllLocations()"  
+				            ac-settings="{ allowClear: true, maxWidth: '250px', itemsInView: 20, loadOnCreate: false, comboMode: false, loadOnOpen: true, minWidth: '250px', height: '23px' }"         
+				            ac-change="innerPageCtrl.method.locationSelected(value)"
+				            ac-key="pin">
+				        </select>
+				    </span>
+					<span class="date-section">
+				        <div class='input-group date dt'>
+				            <input type="text" id = "dt3"
+				            name = "fromDate"
+				            date-disabled="cpc.disabled(date, mode)"
+				            title="From Date" 
+				            class="callmeField2 datetimepicker2 form-control"
+				            placeholder="Pick a Date"
+				           />
+				            <span class="input-group-addon">
+				                <label for="dt3">
+				                    <img src="./images/customer_portal/down_arrow.png" />
+				                </label>                
+				            </span>
+				        </div>
+				    </span>
+				    <span class="timeslot-section">
+				        <select ng-model="innerPageCtrl.model.timeslot" ng-options = "time.starttime for time in innerPageCtrl.model.timeslotArray">
+				            <option value="">Select Time</option>
+				        </select>
+				    </span>
+
+					<span class="book-now-button" ng-click="innerPageCtrl.method.redirectToBooking1()">BOOK MY SESSION</span>
+				</div>
+
+
+				</div>
+				<div class="ready-to-book-booknow-mobile">
+					<button type="button">START HERE</button>
+				</div>
+				<div class="ready-to-book-contact-section">
+					<span class="ready-to-book-contact-subsection1">
+						<img src="./images/customer_portal/Icon_call_white.png">
+						<a href="tel:9370588888"><span class="ready-to-book-phonenumber">9370588888</span></a>
+					</span>
+					<div class="footer-booknow home-redirecting-buttons">
+						<a ui-sref="home"> <button type="button">BOOK NOW</button> </a>
+					</div>
+					<span class="ready-to-book-contact-subsection2">
+						<span class="dash"></span>
+						<span class="or">or</span>
+						<span class="dash"></span>
+					</span>			
+					<span class="ready-to-book-contact-subsection3">
+						<img src="./images/customer_portal/Icon_callback_white.png">
+						<span class="ready-to-book-callback">REQUEST A CALL BACK</span>
+					</span>
+				</div>
+		</div>
+
 	</div>
 </div>
 

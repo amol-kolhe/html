@@ -221,7 +221,7 @@
                     <tbody>
                         <tr>
                         <td> <input style="width: 120px;" type="text" ng-model="spSearch.city"> </td>
-                        <td> <input style="width: 120px;" type="text" ng-model="spSearch.scheduledon"> </td>
+                        <td> <input style="width: 120px;" type="text" ng-model="spSearch.sdate"> </td>
                         <td> <input style="width: 200px;" type="text" ng-model="spSearch.refNo"> </td>
                         <td> <input style="width: 120px;" type="text" ng-model="spSearch.customername"> </td>
                         <td> <input style="width: 120px;" type="text" ng-model="spSearch.servicelocation"> </td>
@@ -232,7 +232,8 @@
                         <tr dir-paginate="item in spAppointmentList|orderBy:sortKey:!reverse|filter:spSearch|itemsPerPage:10"
                             pagination-id="spApptListId">
                             <td>{{item.city}}</td>
-                            <td>{{item.scheduledon * 1000 | date:'yyyy-MM-dd hh:mm a'}}</td>
+                           <!-- <td>{{item.scheduledon * 1000 | date:'yyyy-MM-dd hh:mm a'}}</td> -->
+                            <td>{{item.sdate}}</td>
                             <td>
                                 <code><a href="#" ng-click="showAppointment(item, 'appointment')" title="Show Appointment Details">{{item.refNo}}</a></code>
                             </td>
@@ -587,7 +588,11 @@
                     <div ng-show="frm.submit" id="aptConfirmMsg">
                         <div ng-model="frm.submit"
                              class="alert alert-success"
-                             style="display: inline-block">{{frm.submit}}</div>
+                             style="display: inline-block">{{frm.submit}}
+                             <div style="display:inline;">
+                                <img height="1" width="1" style="border-style:none;" alt="" src="https://www.googleadservices.com/pagead/conversion/845120495/?value=599.00&amp;currency_code=INR&amp;label=186DCO__snMQ74f-kgM&amp;guid=ON&amp;script=0"/>
+                              </div>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -6,11 +6,13 @@
 
 	app.controller('custPortalController', custPortalController);
 	
-	custPortalController.$inject = ['$timeout', '$http', 'custApi', '$cookies', 'ngDialog', '$scope', '$state', 'custportalGetSetService', '$window'];
+	custPortalController.$inject = ['$timeout', '$http', 'custApi', '$cookies', 'ngDialog', '$scope', '$state', 'custportalGetSetService', '$window', '$templateCache'];
 
-	function custPortalController ($timeout, $http, custApi, $cookies, ngDialog, $scope, $state, custportalGetSetService, $window) {
+	function custPortalController ($timeout, $http, custApi, $cookies, ngDialog, $scope, $state, custportalGetSetService, $window, $templateCache) {
 		
 		var vm = this;
+
+	    $templateCache.removeAll();		
 
 		vm.flags = {
 			booknowSectionfieldsValid: false,
@@ -27,7 +29,9 @@
 		vm.getAllLocations = getAllLocations;
 		vm.locationSelected = locationSelected;
 		vm.initCustPortal = initCustPortal;
+		vm.initCurrentState = initCurrentState;
 		vm.initLocalities = initLocalities;
+		vm.getSelectedCity = getSelectedCity;
 		vm.getServicesList = getServicesList;
 		var anonymousLogin = anonymousLogin;
 		vm.showCallmeScroll = showCallmeScroll;
@@ -50,6 +54,7 @@
 		vm.redirectToPhysioExperts = redirectToPhysioExperts;
 		vm.redirectToFaq = redirectToFaq;
 		vm.closeDrawerMenu = closeDrawerMenu;
+		vm.setSpecializationFlag = setSpecializationFlag;
 		vm.navigateToHome = navigateToHome;
 		vm.scrolltodiv = scrolltodiv;
 		vm.faqScrolltodiv = faqScrolltodiv;
@@ -64,17 +69,20 @@
 		vm.cities = '';
 		vm.getClinics = getClinics;
 		vm.clinics = '';
+		vm.city = 'pune';
 		var initDatepicker2 = initDatepicker2;
 		//vm.initClinicPicker = initClinicPicker;
 		vm.clinicSelected = clinicSelected;
 		
 
+		vm.specializationFlag = false;
 		/*===Variable declaration===*/
 		vm.scrolltodivName = '';
 		vm.requestACallbackErrorMessage = '';
 		vm.requestACallbackRefNum = '';
 		vm.exp = 1;
 		vm.selectedLocation = "Choose Location";
+		vm.zonePrice = 0;
 		vm.baseArray = [];
 		//vm.initLocalities();
 		var screenWidth = 0;
@@ -83,6 +91,8 @@
 		vm.selectedDateClinic = '';
 		var cache = {};
 		vm.locationArr = [];
+		$scope.locationArray = [];
+		$scope.currentState = '';
 		var enableDatesArray = [];
 		vm.acRefresh = false;
 		vm.physiotherapyId;
@@ -173,7 +183,9 @@
 			"pin": "",
 			"pincodeid": "",
 			"localities": "",
-			"val": ""
+			"val": "",
+			"price":0,
+			"cityId":"",
 		};
 
 		vm.selectedLocationClinic = {
@@ -188,6 +200,7 @@
 
 		vm.timeslotArray = [];
 		vm.timeslotArrayClinic = [];
+		vm.arrayActiveCityList = [];
 
 		/* FAQ questions */
 		vm.groups = [
@@ -302,6 +315,7 @@
 		function redirectToBooking1() {
 			// InitiateCheckout
 			// Track when people enter the checkout flow (ex. click/landing page on checkout button)
+			console.log(vm.selectedLocation);
 			try {
 				fbq('track', 'InitiateCheckout');
 			} catch(err) {}
@@ -321,9 +335,12 @@
 					datesEnabled: enableDatesArray,
 					timeslot: vm.timeslot,
 					timeslotArray: vm.timeslotArray,
-					cityid: cache.cityToIdMap["Pune"],
-					apptCost: vm.apptCost
+					//cityid: cache.cityToIdMap["Pune"],
+					cityid: $scope.activeCityId,
+					//apptCost: vm.apptCost
+					apptCost:vm.zonePrice
 				};
+
 				vm.flags.booknowSectionfieldsValid = true;
 				custportalGetSetService.setBooknowObj(obj);
 				$cookies.put('booking_session', 'in_progress', { path: "/"});
@@ -521,13 +538,56 @@
 			vm.selectedLocation = "Choose Location";
 			vm.timeslot = "Select Time";
 			vm.timeslotClinic = "Select Time";
-			vm.initLocalities();
+			//vm.initLocalities();
 			registerEvents();
 			initDatepicker();
 			initDatepicker1();
 			//initDatepicker2();
 			
 		} /* initCustPortal() END */
+
+		function initCurrentState() {	
+			vm.initLocalities();		
+			/*if (window.navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function (position) {
+						var lat 	 = position.coords.latitude,
+						lng 	 = position.coords.longitude,
+						latlng 	 = new google.maps.LatLng(lat, lng),
+						geocoder = new google.maps.Geocoder();
+						geocoder.geocode({'latLng': latlng}, function(results, status) {
+						if (status == google.maps.GeocoderStatus.OK) {
+							if (results[1]) {
+								for (var i = 0; i < results.length; i++) {
+									if (results[i].types[0] === "locality") {
+										//var state = results[i].address_components[0].long_name;
+										$scope.currentState = results[i].address_components[0].long_name;
+										var city = results[i].address_components[0].short_name;
+										//$("input[name='location']").val(city + ", " + state);
+										//console.log(results[i]);
+										if(city == 'Pune' || city == 'pune' || city == 'PUNE'){
+											vm.city = 'pune';
+										}else if(city == 'Delhi' || city == 'delhi' || city == 'DELHI' || (city.indexOf("delhi") != -1) || (city.indexOf("Delhi") != -1)) {
+											vm.city = 'delhi';
+										}else{
+											vm.city = 'pune';
+										}
+
+										//cpc.activeCity = 'pune';
+										vm.initLocalities();
+									}
+								}
+							}
+							else {console.log("No reverse geocode results.")}
+						}
+						else {console.log("Geocoder failed: " + status)}
+					});
+				},
+				function() {console.log("Geolocation not available.")},
+				 {timeout: 30000, enableHighAccuracy: true, maximumAge: 75000});
+				vm.initLocalities();				
+			}*/
+
+		}
 
 		/*
 		* Resgister jquery events
@@ -901,21 +961,153 @@
 			});
 		}
 
+
+		function getSelectedCity() {
+
+			//alert(vm.activeCity);
+			//console.log(vm.locationArr);
+			//vm.selectedLocation = "Choose Location";
+			//vm.timeslot = "Select Time";
+			//vm.timeslotClinic = "Select Time";
+			$scope.activeCityId = vm.activeCity;
+			vm.locationArr = [];
+			$scope.locationArray = [];
+			custApi.getZones(vm.activeCity)
+			.success(function(data, status, headers, config){
+				var dataArray = [];
+				dataArray = data.payload;
+				//console.log(dataArray);
+				for(var i = 0 ; i < dataArray.length ; i++) {                                       
+                if(!dataArray[i].hasOwnProperty("deleted") || dataArray[i].deleted === false) {
+					var zoneid = dataArray[i].zoneid;
+					var zonename = dataArray[i].zonename;
+					var price = dataArray[i].price;
+					var pincodeArray = dataArray[i].pincodes;
+					for(var j = 0 ; j < pincodeArray.length ; j++) {
+                          var isdeleted = pincodeArray[j].isdeleted;
+                        if (isdeleted === false){
+                            var pincodeVal = pincodeArray[j].pin;
+                            var pincodeid = pincodeArray[j].pincodeid;
+                            var localitiesVal = pincodeArray[j].localities;
+                            var locationObj = {
+                                "zoneid": zoneid,
+                                "zonename": zonename,
+                                "pin": pincodeVal,
+                                "pincodeid": pincodeid,
+                                "localities": localitiesVal,
+                                "val": pincodeVal + " " + localitiesVal,
+                                "price": price,
+                                "cityId": vm.activeCity
+                            };
+                            vm.locationArr.push(locationObj);
+                            $scope.locationArray.push(locationObj);
+                            vm.locationArr.sort(compare);
+                        }
+					}
+                  }
+				}
+				vm.acRefresh = false;
+				custportalGetSetService.setLocalityObj(vm.locationArr);
+			})
+			.error(function(data, status, headers, config){
+				console.log("Error in getting Zones");
+			});
+
+			//vm.initCustPortal();
+			//console.log($scope.locationArray);
+
+		}
+
 		/*
 		* Function to initialize Pune Localities in dropdown
 		*/
 		function initLocalities() {
-			custApi.getCities("India")
+			$scope.arrayActiveCity = [];
+			vm.arrayActiveCityList = [];
+
+			//alert('localities');
+			//alert($scope.currentState);
+			//alert(vm.city);
+
+			custApi.getCity(true).
+			success(function (data, status, headers, config) {
+				var arrStoreTrue = [];
+
+				var arrStoreTrue = data.payload;
+				vm.arrayActiveCityList = data.payload;
+				console.log("successfully received cities");
+				//console.log(arrStoreTrue);
+
+				arrStoreTrue.forEach(function(item) {
+					$scope.arrayActiveCity.push(item);
+					if(item.city_name==vm.city){
+						$scope.activeCityId = item._id;
+						vm.activeCity = $scope.activeCityId;
+						
+						//custApi.getZones(vm.activeCity)
+						custApi.getZones(item._id)
+						.success(function(data, status, headers, config){
+						/*$scope.zonesList = buildZonesList(data.payload);
+						cache.zoneIdToNameMap = buildZoneIdToNameMap(data.payload);*/
+						vm.locationArr = [];
+						$scope.locationArray = [];
+						var dataArray = data.payload;
+						//console.log(dataArray);
+						for(var i = 0 ; i < dataArray.length ; i++) {                            
+                            //change to show only zones which are not deleted               
+                        if(!dataArray[i].hasOwnProperty("deleted") || dataArray[i].deleted === false) {
+							var zoneid = dataArray[i].zoneid;
+							var zonename = dataArray[i].zonename;
+							var price = dataArray[i].price;
+							var pincodeArray = dataArray[i].pincodes;
+							for(var j = 0 ; j < pincodeArray.length ; j++) {
+                                  var isdeleted = pincodeArray[j].isdeleted;
+                                if (isdeleted === false){
+                                    var pincodeVal = pincodeArray[j].pin;
+                                    var pincodeid = pincodeArray[j].pincodeid;
+                                    var localitiesVal = pincodeArray[j].localities;
+                                    var locationObj = {
+                                        "zoneid": zoneid,
+                                        "zonename": zonename,
+                                        "pin": pincodeVal,
+                                        "pincodeid": pincodeid,
+                                        "localities": localitiesVal,
+                                        "val": pincodeVal + " " + localitiesVal,
+                                        "price": price,
+                                        "cityId": vm.activeCity
+                                    };
+                                    vm.locationArr.push(locationObj);
+                                    $scope.locationArray.push(locationObj);
+                                    vm.locationArr.sort(compare);
+                                }
+							}
+                          }
+						}
+						vm.acRefresh = false;
+						custportalGetSetService.setLocalityObj(vm.locationArr);
+					})
+					.error(function(data, status, headers, config){
+						console.log("Error in getting Zones");
+					}); /*adminApi.getZones END*/	
+					}
+				});
+			}).
+			error(function (data, status, headers, config) {
+				console.log("Error in receiving cities");
+			});
+
+			/*custApi.getCities("India")
 			.success(function(data, status, headers, config){
 				cache.cityToIdMap = buildCitiesToIdMap(data.payload);
+				console.log(arrStoreTrue);
 				vm.cityMap = cache.cityToIdMap;
 				cache.cityIdToNameMap = buildCitiesIdToNameMap(data.payload);
 				cache.cityIdToStateMap = buildCityIdToStateMap(data.payload);
 				custApi.getZones(cache.cityToIdMap["Pune"])
-					.success(function(data, status, headers, config){
-						/*$scope.zonesList = buildZonesList(data.payload);
-						cache.zoneIdToNameMap = buildZoneIdToNameMap(data.payload);*/
-						vm.locationArr = [];
+					.success(function(data, status, headers, config){*/
+						//$scope.zonesList = buildZonesList(data.payload);
+						//cache.zoneIdToNameMap = buildZoneIdToNameMap(data.payload);*/
+				/*		vm.locationArr = [];
 						var dataArray = data.payload;
 						for(var i = 0 ; i < dataArray.length ; i++) {                            
                             //change to show only zones which are not deleted               
@@ -949,10 +1141,10 @@
 					.error(function(data, status, headers, config){
 						console.log("Error in getting Zones");
 					}); /*adminApi.getZones END*/
-			})
+			/*})
 			.error(function(data, status, headers, config){
 				console.log("Failed to get Cities");
-			});
+			});*/
 		}
 
 		/*
@@ -978,7 +1170,8 @@
 		* function for location selected
 		*/
 		function locationSelected(value) {
-			console.log(value);
+			
+			vm.zonePrice = value.price;
 			vm.selectedLocation = value;
 			if($("#dt1").data("DateTimePicker").date() != null) {
 				vm.fromMonthDate = $("#dt1").data("DateTimePicker").date().format("YYYYMM");
@@ -1140,10 +1333,12 @@
 		* Function to get the list of available problems
 		*/
 		function getServicesList() {
+		
 			custApi.getServices().
 			success(function (data, status, header, config) {
 				console.log("Services retrieved successfully");
-				vm.apptCost = data.payload[0].rate;
+				//vm.apptCost = data.payload[0].rate;
+				vm.apptCost = vm.zonePrice;
 				var serviceMap = buildServicesMap(data.payload);
 				vm.physiotherapyId = serviceMap["physiotherapy"];
 				custportalGetSetService.setPhysioId({"physioId": vm.physiotherapyId, "apptCost": vm.apptCost});
@@ -1259,6 +1454,17 @@
 			}
 		}
 
+		function setSpecializationFlag(){
+
+			//alert('Hi');
+			if(vm.specializationFlag == false){
+				vm.specializationFlag = true;
+			}else{
+				vm.specializationFlag = false;
+			}
+			
+		}
+
 
 		/*
 		* Function to redirect to physioexperts page
@@ -1279,6 +1485,7 @@
 		*/
 		function closeDrawerMenu() {
 			$('.pure-toggle-label').click();
+
 		}
 
 		/*
@@ -1330,7 +1537,9 @@
 			document.getElementById('scrolltobooknow').scrollIntoView(true);
 		}
 
+		vm.initCurrentState();	
 		vm.initCustPortal();
+
 
 	} /* Controller End */
 

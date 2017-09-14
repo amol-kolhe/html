@@ -96,6 +96,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 		discount: ''
 	};
 
+	$scope.locationArray = [];
+
 	/*$scope.$watch(function watchOtherProblem(scope) {
 		return (vm.model.otherProblem);
 		},
@@ -133,6 +135,9 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 		/*$scope.$parent.cpc.checkHomeDataFilled();*/
 		/*populate location array*/
 		vm.model.locationArr = custportalGetSetService.getLocalityObj();
+		$scope.locationArray =  custportalGetSetService.getLocalityObj();
+
+		
 		/*populate book now info*/
 		localVariables.bookNowobj = custportalGetSetService.getBooknowObj();
 		if(localVariables.bookNowobj != undefined) {
@@ -153,6 +158,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 			if(vm.model.clinic_id != undefined){
 				vm.custInfoFormFields.address = vm.model.clinicAddress;
 			}
+
 			
 		}
 		if(localVariables.bookNowobj != undefined) {
@@ -160,7 +166,6 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 			localmethods.initDatePicker();
 		}
 	}
-
 	/*
 	* Function for initialization for datepicker
 	*/
@@ -389,8 +394,14 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 	* function for location selected
 	*/
 	function locationSelected(value) {
-		console.log(value);
+		//console.log(value);
+		//alert('Hello');
 		vm.model.selectedLocation = value;
+		if(value.price > 0){
+			localVariables.bookNowobj.apptCost = value.price;
+		}
+		
+		//alert(vm.model.apptCost);
 		/* API call to check available dates */
 		custApi.checkAvailableDatesInMonth(3, vm.model.fromMonthDate, value.pincodeid, value.zoneid, vm.model.physiotherapyId).
 		success(function (data, status, header, config) {
@@ -466,6 +477,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 		vm.promoobj.discount='';
 		vm.model.apptCost = localVariables.bookNowobj.apptCost;
 		vm.custInfoFormFields.promocode='';
+		
 	}
 
 	/*
@@ -628,6 +640,14 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 	* Validating customer Information form
     */
     function bookNewAppointment() {
+    	var google_conversion_id = "";
+        var google_conversion_language = "";
+        var google_conversion_format = "";
+        var google_conversion_color = "";
+        var google_conversion_label = "";
+        var google_conversion_value = "";
+        var google_conversion_currency = "";
+        var google_remarketing_only = "";
     	vm.flags.custInfoFormSubmitted = true;
     	if(vm.model.selectedLocation != 'Choose Location' && 
 		(vm.model.selectedDate != undefined || vm.model.selectedDate != "") &&
@@ -687,7 +707,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 							"address": vm.custInfoFormFields.address,
 							"usecustomeraddress": false,
 							"locality": vm.model.selectedLocation.localities,
-							"apptRootId": ""
+							"apptRootId": "",
+							"zoneBasePrice":localVariables.bookNowobj.apptCost
 			    		};
 		    		} else {
 		    			var apptObj = {
@@ -712,7 +733,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 							"usecustomeraddress": false,
 							"locality": vm.model.selectedLocation.localities,
 							"apptRootId": "",
-							"promocode": vm.promoobj.promocode
+							"promocode": vm.promoobj.promocode,
+							"zoneBasePrice":localVariables.bookNowobj.apptCost
 			    		};
 		    		}
 	    		}else{
@@ -795,7 +817,14 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 
 	    			// load Google Conversion script now
 	    			vm.method.loadConversionScript();
-	    			
+	    			var google_conversion_id = 845120495;
+					var google_conversion_language = "en";
+					var google_conversion_format = "3";
+					var google_conversion_color = "ffffff";
+					var google_conversion_label = "186DCO__snMQ74f-kgM";
+					var google_conversion_value = 599.00;
+					var google_conversion_currency = "INR";
+					var google_remarketing_only = false;
 	    			console.log(data);
 	    			vm.model.appointmentRefNumber = data.payload[0].refno;
 	    			/*alert("Thank you for confirming appointment. Appointment reference number is: "+vm.model.appointmentRefNumber);*/
@@ -812,6 +841,14 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 	    		}).
 	    		error(function (data, status, headers, config) {
 	    			//alert(data.error.message);
+	    			var google_conversion_id = "";
+		            var google_conversion_language = "";
+		            var google_conversion_format = "";
+		            var google_conversion_color = "";
+		            var google_conversion_label = "";
+		            var google_conversion_value = "";
+		            var google_conversion_currency = "";
+		            var google_remarketing_only = "";
 	    			vm.flags.confirmAppointmentError = true;
 	    			vm.flags.bookingErrorContainer = vm.flags.confirmAppointmentError;
 					vm.model.bookingErrorMessageContainer = data.error.message;
@@ -877,7 +914,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 	    		'custname': '',
 	    		'problem': vm.model.problemName,
 	    		"apptslots": [apptslot],
-	    		'serviceid': vm.model.physiotherapyId
+	    		'serviceid': vm.model.physiotherapyId,
+	    		'zoneBasePrice' : localVariables.bookNowobj.apptCost
 	    	};
         }else{
         	var promoobj = {
@@ -942,12 +980,12 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 	    imgTag.height = 1;
 	    imgTag.width = 1;
 	    imgTag.border = 0;
-	    imgTag.src = encodeURI("http://www.googleadservices.com/pagead/conversion/881129817/?label=bKmrCOyJp2gQ2fKTpAM&guid=ON&script=0");
+	    imgTag.src = encodeURI("https://www.googleadservices.com/pagead/conversion/881129817/?label=bKmrCOyJp2gQ2fKTpAM&guid=ON&script=0");
 
 		$('body').append(noscriptTag);
 	    $('#idconversion').append(imgTag);    
 
-	    $.getScript("http://www.googleadservices.com/pagead/conversion.js", function() {
+	    $.getScript("https://www.googleadservices.com/pagead/conversion.js", function() {
 
 	        setTimeout(function() { // let the above script run, then replace doc.write
 	            document.write = oldDocWrite;

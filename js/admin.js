@@ -889,6 +889,15 @@ angular.module('myApp.controllers')
 	}); 
 	
 	$scope.aptSubmit = function() {
+		var google_conversion_id = "";
+        var google_conversion_language = "";
+        var google_conversion_format = "";
+        var google_conversion_color = "";
+        var google_conversion_label = "";
+        var google_conversion_value = "";
+        var google_conversion_currency = "";
+        var google_remarketing_only = "";
+		
 		$scope.aptSlotCount = 0;
         $scope.aptSlotFlag = false;
         $scope.custPackageTotalAppt = 0;
@@ -966,7 +975,7 @@ angular.module('myApp.controllers')
 				"no_of_sessions":0,
 				"is_package_assign":false,
                 "additional_amount":0,
-        
+        		"source": $scope.adminNewAppointmentCust.scource,
 			},
 			"apptslots": [apptstarttime],
 			"adminid": idObj,
@@ -998,10 +1007,26 @@ angular.module('myApp.controllers')
         }
 		adminApi.createNewAppointment(dataObjSubmitAptForm)
 		.success(function(data, status, headers, config) {
+			var google_conversion_id = 845120495;
+            var google_conversion_language = "en";
+            var google_conversion_format = "3";
+            var google_conversion_color = "ffffff";
+            var google_conversion_label = "186DCO__snMQ74f-kgM";
+            var google_conversion_value = 599.00;
+            var google_conversion_currency = "INR";
+            var google_remarketing_only = false;
 			$scope.frm.submit = data.payload[0].refno;
 			$scope.showNext('aptConfirmMsg');
 		})
 		.error(function(data, status, headers, config) {
+			var google_conversion_id = "";
+            var google_conversion_language = "";
+            var google_conversion_format = "";
+            var google_conversion_color = "";
+            var google_conversion_label = "";
+            var google_conversion_value = "";
+            var google_conversion_currency = "";
+            var google_remarketing_only = "";
 			$('#errormsg').text("error response: " + data.error.message);
 			$scope.checkSessionTimeout(data);
 		});
@@ -1206,6 +1231,15 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.spApptForCustSubmit = function() {
+		var google_conversion_id = "";
+        var google_conversion_language = "";
+        var google_conversion_format = "";
+        var google_conversion_color = "";
+        var google_conversion_label = "";
+        var google_conversion_value = "";
+        var google_conversion_currency = "";
+        var google_remarketing_only = "";
+
 		$scope.aptSlotCount = 0;
         $scope.aptSlotFlag = false;
 
@@ -1362,8 +1396,24 @@ angular.module('myApp.controllers')
 				refnos.push(data.payload[i].refno);
 			}
 			if(refnos.length == 1) {
+				var google_conversion_id = 845120495;
+                var google_conversion_language = "en";
+                var google_conversion_format = "3";
+                var google_conversion_color = "ffffff";
+                var google_conversion_label = "186DCO__snMQ74f-kgM";
+                var google_conversion_value = 599.00;
+                var google_conversion_currency = "INR";
+                var google_remarketing_only = false;
 				$scope.frm.submit = "Thank you for confirming appointment. Appointment reference number is " + refnos[0];
 			} else {
+				var google_conversion_id = 845120495;
+                var google_conversion_language = "en";
+                var google_conversion_format = "3";
+                var google_conversion_color = "ffffff";
+                var google_conversion_label = "186DCO__snMQ74f-kgM";
+                var google_conversion_value = 599.00;
+                var google_conversion_currency = "INR";
+                var google_remarketing_only = false;
 				$scope.frm.submit = "Thank you for confirming appointments. Appointment reference numbers are " + refnos.join(", ");
 			}
 			$scope.spNewApptForCustErrorMsg = "";
@@ -1371,6 +1421,14 @@ angular.module('myApp.controllers')
 			$scope.showAddressComments = false;
 		})
 		.error(function(data, status, headers, config) {
+			var google_conversion_id = "";
+            var google_conversion_language = "";
+            var google_conversion_format = "";
+            var google_conversion_color = "";
+            var google_conversion_label = "";
+            var google_conversion_value = "";
+            var google_conversion_currency = "";
+            var google_remarketing_only = "";
 			// $scope.showDatepicker = false;
 			// $scope.showAddressComments = false;
 			$scope.spNewApptForCustErrorMsg = data.error.message;
@@ -1557,6 +1615,24 @@ angular.module('myApp.controllers')
 				var spNewApptForCustObj = JSON.parse(jsonStringObj);
 				var locality = $scope.getLocalityNameFromPincode(data.payload.appointment.pincode); // to get updated pincode from appoinment object
 
+				adminApi.getCustomerDetails($scope.custAptHistory[index].custid)
+        .success(function(data, status, headers, config){
+        			if(data.payload.customer.package_created_on && data.payload.customer.approved_valid_days){
+                var packageCreatedOn = data.payload.customer.package_created_on;
+                var approvedValidDays = data.payload.customer.approved_valid_days;
+
+                var packageCreatedOnDate = moment(new Date(packageCreatedOn * 1000)).format("YYYY-MM-DD hh:mm A");                
+
+                //var result = new Date(packageCreatedOn);
+                //var date = result.setDate(result.getDate() + parseInt(5));
+                var myDate = new Date(new Date(packageCreatedOnDate).getTime()+(parseInt(approvedValidDays)*24*60*60*1000));
+                var validTill = moment(myDate).format("YYYY-MM-DD");
+
+                $scope.packageValidTillDate = validTill; 
+                
+            }
+        		});
+
 				$scope.obj.custid = $scope.custAptHistory[index].custid;
 				$scope.spNewAppointment.aptstarttime = "";
 				$scope.spInfo = false;
@@ -1579,6 +1655,7 @@ angular.module('myApp.controllers')
 				$scope.zoneId = data.payload.appointment.zoneid;
 				$scope.locality = locality;
 				$scope.appointmentCityId = data.payload.appointment.cityid;
+				$scope.original_costFollowUp = data.payload.appointment.cost;
 				$scope.costFollowUp = data.payload.appointment.cost;
 				$scope.baseCost = data.payload.appointment.cost;
 				$scope.currFollowUp = data.payload.appointment.currency;
@@ -1635,7 +1712,7 @@ angular.module('myApp.controllers')
                     $scope.use_sessions = 0;
                 }  
   
-
+                $scope.discounted_costFollowUp = $scope.costFollowUp;
                //API to fetch discount of given package:kalyani patil
                 if( $scope.package_id != null &&  $scope.package_id != undefined && $scope.is_package_assign == true){
 
@@ -1651,6 +1728,7 @@ angular.module('myApp.controllers')
 
 	                        if($scope.discount > 0 && $scope.discount != null){
 	                             $scope.costFollowUp =  $scope.costFollowUp - $scope.discount;
+	                             $scope.discounted_costFollowUp = $scope.costFollowUp;
 	                         }
 
 	                 })
@@ -2181,6 +2259,19 @@ angular.module('myApp.controllers')
 			$scope.checkSessionTimeout(data);
 		});
 		
+		$scope.customerSource =[
+			{id: "Sancheti referral",name:"Sancheti referral"},
+			{id: "Just Dail",name:"Just Dail"},
+			//{id: "Online Advertisement",name:"Online advertisement"},
+			{id:"Facebook",name:"Facebook"},
+			{id:"Urbanclap",name:"Urbanclap"},
+			{id:"Google",name:"Google"},
+			{id:"Website",name:"Website"},
+			{id: "Patient/physio referral",name:"Patient/physio referral"},
+			{id: "Other doctor referral",name:"Other doctor referral"},
+			{id: "Other",name:"Other"},
+		];
+
 		adminApi.getCities("India")
 		.success(function(data, status, headers, config) {
 			myJsonString = JSON.stringify(data);
@@ -2301,6 +2392,7 @@ angular.module('myApp.controllers')
                                     "pin": pincodeVal,
                                     "pincodeid": pincodeid,
                                     "localities": localitiesVal,
+                                    "locality": pincodeVal + ' - ' + localitiesVal,
                                     "val": pincodeVal + " " + localitiesVal
                                 };
                                 $scope.locationArr.push(locationObj);
@@ -3067,8 +3159,11 @@ angular.module('myApp.controllers')
 		success(function (data, status, headers, config) {
 			var arrZones = [];
 			var arrZones = data.payload;
+			$scope.zoneIdToNameMap = "";
 			$rootScope.zonesList = buildZonesList(data.payload);
+			$scope.zoneIdToNameMap = buildZoneIdToNameMap(data.payload);
 			console.log("successfully received zones");
+			console.log(cache.zoneIdToNameMap);
 			arrZones.forEach(function(item) {
 				$scope.arrayAllZones.push(item);
 			});
@@ -4226,7 +4321,7 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.getSps = function (value) {
-
+		
 		var cityId = "";
 		$scope.arrSpRecords.cityId = "";
 
@@ -4243,7 +4338,6 @@ angular.module('myApp.controllers')
 		if(cityId != undefined && cityId != "" && cityId.length > 0) {
 			adminApi.getSps(cityId)
 			.success(function(data, status, headers, config) {
-
 				if(data.payload.spList != undefined && data.payload.spList != ""){
 					$scope.spNamesArr = data.payload.spList;
 					$scope.arrSpRecords = angular.copy(data.payload.spList);
@@ -4272,6 +4366,10 @@ angular.module('myApp.controllers')
 						break;
 					}
 				}
+				if(data.payload.spList==undefined){
+					$scope.arrSpRecords = [];	
+				}
+				
 			})
 			.error(function(data, status, headers, config) {
 				$scope.checkSessionTimeout(data);
@@ -4387,6 +4485,7 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.showSpManagementWebPage = function(selectedTab) {
+		$scope.spDetails.workCity = "";
 		if(selectedTab == "Add Edit Service Provider") {
 			$scope.spManagementSelectedTab = "Add Edit Service Provider";
 		} else if (selectedTab == "Set Working Hours") {
@@ -4442,11 +4541,46 @@ angular.module('myApp.controllers')
 	$scope.populateCityBasedSps = function(cityId) {
 		$scope.cityIdValue = cityId;
 		$scope.cityBasedSps =[];
-		$scope.arrayAllSps.forEach(function(item) {
+
+		adminApi.getAllSps().
+		success(function (data, status, headers, config) {
+			$scope.spNamesArr = data.payload.spList;
+			$scope.arrayAllSps = angular.copy(data.payload.spList);
+			$scope.arrayAllSps.cityId = data.payload.cityId;
+
+			for(var i = 0 ; i < $scope.arrayAllSps.length ; i++) {
+				$scope.arrayAllSps[i].primaryZones = [];
+				$scope.arrayAllSps[i].secondaryZones = [];
+
+				for(var j = 0 ; j < $scope.arrayAllSps[i].zones.length ; j++) {
+					if ($scope.arrayAllSps[i].zones[j].zonerole == 1) {
+						$scope.arrayAllSps[i].primaryZones.push($scope.arrayAllSps[i].zones[j].name);
+					} else if ($scope.arrayAllSps[i].zones[j].zonerole == 2) {
+						$scope.arrayAllSps[i].secondaryZones.push($scope.arrayAllSps[i].zones[j].name);
+					}
+				}
+
+				if($scope.arrayAllSps[i].cityId == cityId){
+					$scope.cityBasedSps.push($scope.arrayAllSps[i]);
+				}
+			}
+
+			for(var i = 0 ; i < $scope.spNamesArr.length ; i++) {
+				if($scope.obj.followupSpid == $scope.spNamesArr[i]._id) {
+					$scope.spNewAppointment.spNames = $scope.spNamesArr[i]._id;
+					break;
+				}
+			}
+		}).
+		error(function (data, status, headers, config) {
+			console.log("Error in receiving Sps");
+		});
+
+		/*$scope.arrayAllSps.forEach(function(item) {
 			if(item.cityId == cityId){
 				$scope.cityBasedSps.push(item);
 			}
-		});
+		});*/
 
 		$scope.cityBasedLocations =[];
 		$scope.cityBasedLocations.push({"_id":"0", "clinic_name":"Home"});
@@ -4456,6 +4590,7 @@ angular.module('myApp.controllers')
 			}
 		});
 
+		$scope.getSps($scope.SpWrkHrs.spCity);
 
 	}
 
@@ -5102,14 +5237,13 @@ angular.module('myApp.controllers')
 
 	$scope.resetDatePicker9 = function () {
 		$('#datetimepicker9').multiDatesPicker('destroy');
+
 		arrayRemoveDates = [];
 		$timeout(function(){
 			$('#datetimepicker9').val('');
 			$scope.initDatePicker();
 			$scope.initPopulateBusySlotsTable1();
 		}, 100);
-
-		$scope.resetCity();
 	}
 
 	$scope.checkSpWrkHrsButton = function () {
@@ -5138,7 +5272,7 @@ angular.module('myApp.controllers')
 				}else{
 					$scope.changeWorkTimeSlot(spId, "0", clinic_rec);
 				}*/
-
+				$scope.clinicid = "";
 				var tempDateArray = [];
 				for (var d = 0; d < arrayDates.length; d++){
 					var res = arrayDates[d].split("-").join("");
@@ -5151,6 +5285,7 @@ angular.module('myApp.controllers')
 						"service_location" : "",
 						"sp_workingDate": tempDateArray
 					};
+
 				existingWorkTimeSlots = [];
 				existingWorkTimeSlotsForClinic = [];
 				existingWorkTimeSlotsForZone = [];
@@ -5160,9 +5295,10 @@ angular.module('myApp.controllers')
 				adminApi.getSpMonthlyWtimeAndOffSlots(dataObj)
 				.success(function(data, status, headers, config) {
 					$scope.SpWorkTime = data.payload.sp_monthlyWtimeAndOffSlots;
+
 					var record_1 = null;
 					record_1 = data.payload.sp_monthlyWtimeAndOffSlots;
-					record_1.forEach(function(item_1) {
+					 record_1.forEach(function(item_1) {
 						var record_2 = null;
 						if(item_1.wtime != undefined){
 							record_2 = item_1.wtime;
@@ -5173,7 +5309,7 @@ angular.module('myApp.controllers')
 
 						//taking clinic specific existing time slots.
 						if(item_1.sp_clinicSpecificWtimeDetail != undefined){
-;							record_3 = item_1.sp_clinicSpecificWtimeDetail;
+							record_3 = item_1.sp_clinicSpecificWtimeDetail;
 							record_3.forEach(function(item_3) {
 								record_4 = item_3.sp_cwtime;
 								clinicId = item_3.sp_clinicid;
@@ -5198,11 +5334,11 @@ angular.module('myApp.controllers')
 							record_5.forEach(function(item_5) {
 								record_6 = item_5.sp_zwtime;
 								zoneId = item_5.sp_zoneid;
-								for(var i = 0 ; i < $scope.arrayAllSps.length ; i++) {
-									for(var j = 0 ; j < $scope.arrayAllSps[i].zones.length ; j++) {
-										if($scope.arrayAllSps[i].zones[j].id == zoneId){
+								for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
+									for(var j = 0 ; j < $scope.arrSpRecords[i].zones.length ; j++) {
+										if($scope.arrSpRecords[i].zones[j].id == zoneId){
 											if(serviceLocation != "0" && serviceLocation != undefined){
-												$scope.zoneName = $scope.arrayAllSps[i].zones[j].name;
+												$scope.zoneName = $scope.arrSpRecords[i].zones[j].name;
 
 												if(!$scope.zoneNameList.includes($scope.zoneName)){
 													$scope.zoneNameList.push($scope.zoneName);
@@ -5296,6 +5432,7 @@ angular.module('myApp.controllers')
 								}
 							}
 						}
+
 					}else{
 						$scope.wrkHrsAllSlots = [
 							{
@@ -5369,11 +5506,14 @@ angular.module('myApp.controllers')
 							newWorkTimeSlots.push({"st" : st, "et" : et});
 						});
 					}
-
-					//console.log(existingWorkTimeSlots);
-					//console.log(newWorkTimeSlots);
-					//console.log(existingWorkTimeSlotsForClinic);
-					//console.log(existingWorkTimeSlotsForZone);
+					
+					if(serviceLocation!=undefined && serviceLocation != 0){
+						/*console.log($scope.wrkHrsAllSlots);
+					    console.log(existingWorkTimeSlots);
+					    console.log(newWorkTimeSlots);
+					    console.log(existingWorkTimeSlotsForClinic);
+					    console.log(existingWorkTimeSlotsForZone);*/
+					}
 
 					if(existingWorkTimeSlots.length != 0){
 						existingWorkTimeSlots.forEach(function(item_4) {
@@ -5405,7 +5545,7 @@ angular.module('myApp.controllers')
 																		var result1 = first1+delimeter1+middle1;
 																		if(label_split[0] == result1){																		
 																		
-																			//console.log(result1);
+																			//console.log(result1+':=>'+item_7.clinicName);
 																			item_6.selected = true;
 																			item_6.disabled = true;
 
@@ -5429,10 +5569,11 @@ angular.module('myApp.controllers')
 																});
 															}
 														}
-
+														
 														if(serviceLocation != "0" && serviceLocation != undefined){
 															if(existingWorkTimeSlotsForZone.length != 0){
 																existingWorkTimeSlotsForZone.forEach(function(item_8){
+																	//console.log(item_5.st+':=>:'+item_5.et+' item_8 '+item_8.st+':=>'+item_8.et);
 																	if((item_5.st >= item_8.st && item_5.st < item_8.et) || (item_5.et > item_8.st && item_5.et < item_8.et)){
 																		var first2 = item_5.st.slice(0,2);
 																		var middle2 = item_5.st.slice(2,4);
@@ -5443,13 +5584,13 @@ angular.module('myApp.controllers')
 																			//console.log(result2);
 																			item_6.selected = true;
 																			item_6.disabled = true;
-
+																			
 																		}
 
 																	}
 																
 																});
-															}
+															 }
 														}
 
 													}
@@ -5461,15 +5602,15 @@ angular.module('myApp.controllers')
 							});
 						});
 					}
-
-					//console.log($scope.wrkHrsAllSlots);
+					
+					//alert(spId+""+$scope.arrSpRecords[i]._id);
 
 					$scope.selectZoneIdsArr = [];
-					for(var i = 0 ; i < $scope.arrayAllSps.length ; i++) {
-						if ((spId != undefined) && (spId != null) && (spId.length > 0) && (spId == $scope.arrayAllSps[i]._id)) {
+					for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
+						if ((spId != undefined) && (spId != null) && (spId.length > 0) && (spId == $scope.arrSpRecords[i]._id)) {
 							if(serviceLocation == undefined || serviceLocation == 0){
-								if (($scope.arrayAllSps[i].zones != undefined) && ($scope.arrayAllSps[i].zones.length > 0)) {
-									for(var j = 0 ; j < $scope.arrayAllSps[i].zones.length ; j++) {
+								if (($scope.arrSpRecords[i].zones != undefined) && ($scope.arrSpRecords[i].zones.length > 0)) {
+									for(var j = 0 ; j < $scope.arrSpRecords[i].zones.length ; j++) {
 										var zoneObj1 = {
 											"sp_zoneid": "",
 											"sp_zonename": "",
@@ -5479,8 +5620,8 @@ angular.module('myApp.controllers')
 											}
 										};
 
-										zoneObj1.sp_zoneid = $scope.arrayAllSps[i].zones[j].id;
-										zoneObj1.sp_zonename = $scope.arrayAllSps[i].zones[j].name;
+										zoneObj1.sp_zoneid = $scope.arrSpRecords[i].zones[j].id;
+										zoneObj1.sp_zonename = $scope.arrSpRecords[i].zones[j].name;
 										zoneObj1.sp_zwtime.start_time = "";
 										zoneObj1.sp_zwtime.end_time = "";
 										$scope.selectZoneIdsArr.push(zoneObj1);
@@ -5504,8 +5645,8 @@ angular.module('myApp.controllers')
 												}
 											};
 
-											zoneObj.sp_zoneid = $scope.arrayAllSps[i].zones[j].id;
-											zoneObj.sp_zonename = $scope.arrayAllSps[i].zones[j].name;
+											zoneObj.sp_zoneid = $scope.arrSpRecords[i].zones[j].id;
+											zoneObj.sp_zonename = $scope.arrSpRecords[i].zones[j].name;
 											zoneObj.sp_zwtime.start_time = start_time;
 											zoneObj.sp_zwtime.end_time = end_time;
 
@@ -5514,6 +5655,7 @@ angular.module('myApp.controllers')
 									}
 								}
 							}else{
+
 								for (var k = 0 ; k < $scope.wrkHrsAllSlots.length ; k++) {
 									var strSlot = $scope.wrkHrsAllSlots[k].label;
 									strSlot = strSlot.replace(/:/g, "");
@@ -5524,7 +5666,7 @@ angular.module('myApp.controllers')
 									var intSt = parseInt(start_time);
 									var intEt = parseInt(end_time);
 									for (var c = 0; c < clinic_rec.length; c++){
-										if(clinic_rec[c]._id == serviceLocation){
+										if(clinic_rec[c]._id == serviceLocation && $scope.wrkHrsAllSlots[k].disabled==false){
 											var clinicObj = {
 												"sp_clinicid": "",
 												"sp_clinicname": "",
@@ -5533,22 +5675,22 @@ angular.module('myApp.controllers')
 													"end_time": ""
 												}
 											};
-
+											console.log(clinic_rec[c].clinic_name+':~:'+serviceLocation);
 											clinicObj.sp_clinicid = serviceLocation;
 											clinicObj.sp_clinicname = clinic_rec[c].clinic_name;
 											clinicObj.sp_cwtime.start_time = start_time;
 											clinicObj.sp_cwtime.end_time = end_time;
+											$scope.wrkHrsAllSlots[k].selectClinicIds.push(clinicObj);
 										}
 									}
-
-									$scope.wrkHrsAllSlots[k].selectClinicIds.push(clinicObj);
+									
 								}
 							}
 						}
 					}
 
 					$scope.wrkHrErrorSlot = false;
-					$scope.SpWrkHrs = {};
+					//$scope.SpWrkHrs = {};
 					$scope.addSpWrkHrsForm.adminFormForSp.$setPristine();
 					$scope.addSpWrkHrsForm.adminFormForSp.$setUntouched();
 
@@ -5560,6 +5702,7 @@ angular.module('myApp.controllers')
 					}else{
 						$scope.SpWrkHrs.spServiceLocationId = "0";
 					}
+					// $scope.SpWrkHrs.spCity = $scope.cityIdValue;
 				})
 				.error(function(data, status, headers, config) {
 					$scope.checkSessionTimeout(data);
@@ -5637,6 +5780,7 @@ angular.module('myApp.controllers')
 		$scope.arrWTime = [];
 		$scope.dispArrWTime = [];
 		$scope.showWTime = false;
+		$scope.resetDatePicker9();
 	}
 
 	$scope.resetAddSpWrkHrsWebPage = function() {
@@ -5645,6 +5789,7 @@ angular.module('myApp.controllers')
 			$scope.resetDatePicker9();
 			$scope.dateErrorFlag = false;
 			$scope.wrkHrErrorSlot = false;
+			$scope.SpWrkHrs.spCity = "";
 		}, 50);
 	}
 
@@ -5672,6 +5817,7 @@ angular.module('myApp.controllers')
 			$scope.dateErrorFlag = true;
 		}
 
+		
 		console.log($scope.wrkHrsAllSlots);
 
 		if ($scope.wrkHrsAllSlots != undefined && $scope.wrkHrsAllSlots.length > 0) {
@@ -6062,6 +6208,7 @@ angular.module('myApp.controllers')
 
 	$scope.resetMarkSpLeavesForm = function () {
 		$scope.SpLeaves = {};
+		$scope.SpWrkHrs.spCity = "";
 		$scope.markSpLeavesForm.adminFormForSp.$setPristine();
 		$scope.markSpLeavesForm.adminFormForSp.$setUntouched();
 
@@ -6105,6 +6252,7 @@ angular.module('myApp.controllers')
 		$scope.showOffTime = false;
 		$scope.arrOffTime = [];
 		$scope.dispArrOffTime = [];
+		$scope.resetDatePicker10();
 	}
 
 	$scope.resetDatePicker10 = function () {
@@ -6122,6 +6270,7 @@ angular.module('myApp.controllers')
 			$scope.resetDatePicker10();
 			$scope.leaveDateErrorFlag = false;
 			$scope.leaveErrorSlot = false;
+			$scope.SpWrkHrs.spCity = "";
 		}, 50);
 	}
 
@@ -6425,7 +6574,10 @@ angular.module('myApp.controllers')
 									}
 								}
 
-								var sp_zoneName = cache.zoneIdToNameMap[$scope.arrWTime[i].sp_zoneSpecificWtimeDetail[k].sp_zoneid];
+								var sp_zoneName = $scope.zoneIdToNameMap[$scope.arrWTime[i].sp_zoneSpecificWtimeDetail[k].sp_zoneid];
+								console.log(cache.zoneIdToNameMap);	
+								console.log($scope.arrWTime[i].sp_zoneSpecificWtimeDetail[k].sp_zoneid);
+
 								$scope.arrWTime[i].sp_zoneSpecificWtimeDetail[k].sp_zoneName = sp_zoneName;
 
 								for(var j = 0 ; j < $scope.arrWTime[i].sp_zoneSpecificWtimeDetail[k].sp_zwtime.length ; j++) {
@@ -6494,6 +6646,8 @@ angular.module('myApp.controllers')
 					}
 				}
 				$scope.sort3("sp_workDate", false);
+				console.log('dispArrWTime');
+				console.log($scope.dispArrWTime);
 			})
 			.error(function(data, status, headers, config) {
 				$scope.checkSessionTimeout(data);
@@ -7036,7 +7190,8 @@ angular.module('myApp.controllers')
 				}
 			}
 		}
-
+		console.log($scope.wrkHrsAllSlots);
+		
 		// removing duplicate zone ids
 		var finalZoneWorkingTime = [];
 		for(var index = 0 ; index < zoneWorkingTime.length ; index++) {
@@ -7121,22 +7276,24 @@ angular.module('myApp.controllers')
 				finalClinicWorkingTime.push(finalObj);
 			}
 		}
-
+		console.log(finalClinicWorkingTime);
 		// total work time
+
 		for(var i = 0 ; i < $scope.wrkHrsAllSlots.length ; i++) {
 			var wrkSlot = {};
 			wrkSlot.start_time = "0000";
 			wrkSlot.end_time = "0000";
 			selectedSlots.push(wrkSlot);
 		}
-
+		//alert($scope.SpWrkHrs.spCity);
 		if (!($scope.dateErrorFlag)) {
 			var dataObj = {
 				"sp_id": $scope.SpWrkHrs.spNamesId,
 				"sp_workingDate": wrkDates,
 				"sp_workTime": selectedSlots,
 				"spZoneAllocatedWTime": finalZoneWorkingTime,
-				"spClinicAllocatedWTime": finalClinicWorkingTime
+				"spClinicAllocatedWTime": finalClinicWorkingTime,
+				"cityId":$scope.SpWrkHrs.spCity
 			};
 
 			adminApi.addSpWrkHrs(dataObj)
@@ -7148,6 +7305,7 @@ angular.module('myApp.controllers')
 				//$scope.populateBusySlotsTable1();
 				//$scope.deSelectAllWrkDates();
 				alert("Physio's work hours cleared successfully!");
+
 				$scope.showSpManagementWebPage('Set Working Hours');
 				$scope.resetAddSpWrkHrsWebPage();
 			})
@@ -7342,6 +7500,7 @@ angular.module('myApp.controllers')
 				"disctype": "2",
 				"noofappt": 0,
 				action: "edit",
+				"promoCityError":false,
 				"promoNameError": false,
 				"promodescError": false,
 				"validFromError": false,
@@ -7393,6 +7552,8 @@ angular.module('myApp.controllers')
 			}
 		});
 
+		rec.city = $scope.promoCityName;
+		
 		var isRecordValid = $scope.validatePromoCode(rec);
 		if(isRecordValid == true) {
 			var fromEpoch = convertToEpoch(rec.validfrom);
@@ -7427,6 +7588,7 @@ angular.module('myApp.controllers')
 					rec.isNewPromo = false;
 					rec.validFromReadonly = data.payload.validfrom*1000;
 					rec.validTillReadonly = data.payload.validtill*1000;
+					rec.city = $scope.promoCityName;
 					var obj1 = {};
 					angular.copy(rec, obj1);
 					$scope.promoStoreObj[obj1._id] = obj1;
@@ -7448,6 +7610,7 @@ angular.module('myApp.controllers')
 					rec.isNewPromo = false;
 					rec.validFromReadonly = data.payload.validfrom*1000;
 					rec.validTillReadonly = data.payload.validtill*1000;
+					rec.city = $scope.promoCityName;
 					var obj1 = {};
 					angular.copy(rec, obj1);
 					$scope.promoStoreObj[obj1._id] = obj1;
@@ -7491,7 +7654,11 @@ angular.module('myApp.controllers')
 
 	/* Function to validate promocode */
 	$scope.validatePromoCode = function(rec) {
-	
+		
+		if(!rec.city){
+			rec.promoCityError = true;
+		}else{ rec.promoCityError = false;}
+
 		if(!rec.promocode) {
 			rec.promoNameError = true;
 		} else { rec.promoNameError = false;}
@@ -7589,6 +7756,7 @@ angular.module('myApp.controllers')
 		}
 
 		if(rec.promoNameError == false && 
+			rec.promoCityError == false &&
 			rec.promodescError == false && 
 			rec.validFromError == false &&
 			rec.validTillError == false &&
@@ -7635,6 +7803,10 @@ angular.module('myApp.controllers')
 	/* Function to edit promocode. It copies the value the existing obj. */
 	$scope.editPromoCode = function(rec, index) {
 		var obj = {};
+		if(rec.cityId!="" && rec.cityId!=undefined){
+	    	rec.promoCity = rec.cityId;
+	    }
+	    
 		angular.copy(rec, obj);
 		$scope.promoStoreObj[obj._id] = obj;
 
@@ -8588,6 +8760,11 @@ angular.module('myApp.controllers')
 			arrStore.forEach(function(item) {
 				item.isNewZone = false;
 				$scope.zoneMgmt.arrZone.push(item);
+				
+				angular.forEach(item.pincodes,function(pincodeEntites,pincodekeys){
+				  item.pincodes[pincodekeys].locality = pincodeEntites.pin+' - '+pincodeEntites.localities ;
+				});
+			
 			});
 		}).
 		error(function (data, status, headers, config) {
@@ -8619,6 +8796,18 @@ angular.module('myApp.controllers')
 		"isZoneRecValid" : false,
 		"isZonePriceError" : false
 	};	
+
+	$scope.setZonePrice = function(){
+		if($scope.zoneMgmt.temppojo==undefined){
+			$scope.zoneMgmt.temppojo = {};	
+		}
+		angular.forEach($scope.arrayActiveCity,function(item,key){
+			if(item._id==$scope.zoneCitySelected){
+				$scope.zoneMgmt.temppojo.zoneprice = item.price;	
+			}
+		});
+	}
+
 	/* Function to Add new Zone */
 	$scope.zoneMgmt.addNewZone = function(action, rec, index) {
 		console.log(rec);
@@ -8626,6 +8815,13 @@ angular.module('myApp.controllers')
 		if(action == 'addnew') {
 			$scope.zoneMgmt.temppojo = {};
 			angular.copy($scope.zoneMgmt.emptyZoneArr, $scope.zoneMgmt.temppojo);
+			if($scope.zoneCitySelected!=undefined){
+				angular.forEach($scope.arrayActiveCity,function(item,key){
+					if(item._id==$scope.zoneCitySelected){
+						$scope.zoneMgmt.temppojo.zoneprice = item.price;	
+					}
+				});
+			}
 			$scope.zoneMgmt.addNewZoneSection = true;
 			$scope.zoneMgmt.editZoneSection = false;
 		}
@@ -8668,6 +8864,7 @@ angular.module('myApp.controllers')
 	$scope.zoneMgmt.cancelZoneEdit = function(rec, index) {
 		$scope.zoneMgmt.editZoneSection = false;
 		$scope.zoneMgmt.addNewZoneSection = false;
+		$scope.zoneCitySelected = "";
 	};
 
 	/* Function to validate zone pin and area name */
@@ -8710,7 +8907,7 @@ angular.module('myApp.controllers')
 			var pinarray = [];
 			rec.pincodes.forEach(function(item) {
 				if(!item.hasOwnProperty("isdeleted") || item.isdeleted == false) {
-					var pincodeObj = { "pin": item.pin, "localities": item.localities };
+					var pincodeObj = { "pin": item.pin, "localities": item.localities,"locality": item.pin+' - '+item.localities };
 					if(item.pincodeid) {
 						pincodeObj.pincodeid = item.pincodeid;
 					}				
@@ -8741,7 +8938,20 @@ angular.module('myApp.controllers')
 				success(function (data, status, headers, config) {
 					console.log("Successfully created new zone");
 					data.payload.isNewZone = false;
-					$scope.zoneMgmt.arrZone.push(data.payload);
+					//$scope.zoneMgmt.arrZone.push(data.payload);
+					console.log($scope.zoneMgmt.arrZone);
+					var arrStore = [];
+					arrStore.push(data.payload);
+					console.log("successfully retrieved all zones!");
+					angular.forEach(arrStore,function(item) {
+						item.isNewZone = false;
+						$scope.zoneMgmt.arrZone.push(item);
+							
+						angular.forEach(item.pincodes,function(pincodeEntites,pincodekeys){
+							item.pincodes[pincodekeys].locality = pincodeEntites.pin+' - '+pincodeEntites.localities ;
+						});
+						
+					});
 					alert("Zone added successfully!");
 					$scope.zoneMgmt.editZoneSection = false;
 					$scope.zoneMgmt.addNewZoneSection = false;
@@ -8762,6 +8972,10 @@ angular.module('myApp.controllers')
 				success(function (data, status, headers, config) {
 					console.log("Successfully edited new zone");
 					angular.copy(data.payload, $scope.zoneMgmt.zoneRecord);
+					angular.forEach($scope.zoneMgmt.zoneRecord.pincodes,function(pincodeEntites,pincodekeys){
+						$scope.zoneMgmt.zoneRecord.pincodes[pincodekeys].locality = pincodeEntites.pin+' - '+pincodeEntites.localities ;
+					});
+					console.log($scope.zoneMgmt.zoneRecord.pincodes);
 					$scope.zoneMgmt.editZoneSection = false;
 					$scope.zoneMgmt.addNewZoneSection = false;
 
@@ -8820,30 +9034,30 @@ angular.module('myApp.controllers')
 		$scope.manageSp.showSpForm = true;
 
 		$scope.selectedSpId = rec._id;
-		if ((rec._id != undefined) && (rec._id.length > 0) && ($scope.arrayAllSps.length > 0)) {
-			for(var i = 0 ; i < $scope.arrayAllSps.length ; i++) {
-				if(rec._id == $scope.arrayAllSps[i]._id) {
-					$scope.selectedSpId = $scope.arrayAllSps[i]._id;
-					console.log($scope.arrayAllSps[i].cityid);
-					$scope.spDetails.spName = $scope.arrayAllSps[i].name;
-					$scope.spDetails.qualification = $scope.arrayAllSps[i].qualification;
-					$scope.spDetails.spEmail = $scope.arrayAllSps[i].email;
-					$scope.spDetails.spAlternateEmail = $scope.arrayAllSps[i].alternateemail;
-					$scope.spDetails.spAddress = $scope.arrayAllSps[i].address;
-					$scope.spDetails.spPincode = $scope.arrayAllSps[i].pincode;
-					$scope.spDetails.spCity = $scope.arrayAllSps[i].cityId;
-					$scope.spDetails.spState = $scope.arrayAllSps[i].state;
-					$scope.spDetails.spCountry = $scope.arrayAllSps[i].country;
-					$scope.spDetails.spMobile = $scope.arrayAllSps[i].phonemobile;
-					$scope.spDetails.spAlternateContact = $scope.arrayAllSps[i].phonealternate;
+		if ((rec._id != undefined) && (rec._id.length > 0) && ($scope.arrSpRecords.length > 0)) {
+			for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
+				if(rec._id == $scope.arrSpRecords[i]._id) {
+					$scope.selectedSpId = $scope.arrSpRecords[i]._id;
+					console.log($scope.arrSpRecords[i].cityid);
+					$scope.spDetails.spName = $scope.arrSpRecords[i].name;
+					$scope.spDetails.qualification = $scope.arrSpRecords[i].qualification;
+					$scope.spDetails.spEmail = $scope.arrSpRecords[i].email;
+					$scope.spDetails.spAlternateEmail = $scope.arrSpRecords[i].alternateemail;
+					$scope.spDetails.spAddress = $scope.arrSpRecords[i].address;
+					$scope.spDetails.spPincode = $scope.arrSpRecords[i].pincode;
+					$scope.spDetails.spCity = $scope.arrSpRecords[i].cityId;
+					$scope.spDetails.spState = $scope.arrSpRecords[i].state;
+					$scope.spDetails.spCountry = $scope.arrSpRecords[i].country;
+					$scope.spDetails.spMobile = $scope.arrSpRecords[i].phonemobile;
+					$scope.spDetails.spAlternateContact = $scope.arrSpRecords[i].phonealternate;
 
-					if ($scope.arrayAllSps[i].gender == "Male") {
+					if ($scope.arrSpRecords[i].gender == "Male") {
 						$scope.spDetails.spGender = "male";
-					} else if ($scope.arrayAllSps[i].gender == "Female") {
+					} else if ($scope.arrSpRecords[i].gender == "Female") {
 						$scope.spDetails.spGender = "female";
 					}
 
-					var d = $scope.arrayAllSps[i].dateofbirth + "";
+					var d = $scope.arrSpRecords[i].dateofbirth + "";
 					var year = d.substring(0,4);
 					var month = d.substring(4,6);
 					var day = d.substring(6,8);
@@ -8859,15 +9073,15 @@ angular.module('myApp.controllers')
 
 					var primaryZoneId = [];
 					var secondaryZoneId = [];
-					for (var j = 0 ; j < $scope.arrayAllSps[i].zones.length ; j++) {
-						if($scope.arrayAllSps[i].zones[j].zonerole == 1) {
-							$scope.spPrimaryZones.push({"id":$scope.arrayAllSps[i].zones[j].id});
-							$scope.populateSecondaryZones($scope.arrayAllSps[i].zones[j].id, "onItemSelect");
-							primaryZoneId.push($scope.arrayAllSps[i].zones[j].id);
-						} else if($scope.arrayAllSps[i].zones[j].zonerole == 2) {
-							$scope.spSecondaryZones.push({"id":$scope.arrayAllSps[i].zones[j].id});
-							$scope.populatePrimaryZones($scope.arrayAllSps[i].zones[j].id, "onItemSelect");
-							secondaryZoneId.push($scope.arrayAllSps[i].zones[j].id);
+					for (var j = 0 ; j < $scope.arrSpRecords[i].zones.length ; j++) {
+						if($scope.arrSpRecords[i].zones[j].zonerole == 1) {
+							$scope.spPrimaryZones.push({"id":$scope.arrSpRecords[i].zones[j].id});
+							$scope.populateSecondaryZones($scope.arrSpRecords[i].zones[j].id, "onItemSelect");
+							primaryZoneId.push($scope.arrSpRecords[i].zones[j].id);
+						} else if($scope.arrSpRecords[i].zones[j].zonerole == 2) {
+							$scope.spSecondaryZones.push({"id":$scope.arrSpRecords[i].zones[j].id});
+							$scope.populatePrimaryZones($scope.arrSpRecords[i].zones[j].id, "onItemSelect");
+							secondaryZoneId.push($scope.arrSpRecords[i].zones[j].id);
 						}
 					}
 
@@ -8929,9 +9143,9 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.checkBoxSelected = function (wrkHrSlot, $index) {
-		console.log($scope.wrkHrsAllSlots);
+		
 		if ((wrkHrSlot.selected == true) && (wrkHrSlot.selectZoneIds != undefined) && (wrkHrSlot.selectZoneIds.length > 0) && ($scope.selectZoneIdsArr != undefined) && ($scope.selectZoneIdsArr.length > 0)) {
-			
+				
 			var temporaryArray = angular.copy($scope.wrkHrsAllSlots);
 
 			var strSlot = temporaryArray[$index].label;
@@ -9080,6 +9294,9 @@ angular.module('myApp.controllers')
 			"walletTransType": transType,
 			"currency":"INR",
 			"description":$scope.custReadList.custwallet.description,
+			"createdById":adminApi.getAdminid(),
+			"createdByName":adminApi.getAdminname(),
+			"apptId":"",
 			"city":$scope.custReadList.city,
 			"cityId":$scope.custReadList.cityid
 		}
@@ -9138,6 +9355,16 @@ angular.module('myApp.controllers')
 				$scope.aptSlotCount = $scope.aptSlotCount - 1;
 			}
 		}
+
+		var selectedatetimeslot = moment(new Date($scope.spNewAppointment.selectedTimeSlots)).format("YYYY-MM-DD");
+        var selecteddateslot =  moment(selectedatetimeslot, 'YYYY-MM-DD').unix();
+        var validtilltimeslot =  moment($scope.packageValidTillDate, 'YYYY-MM-DD').unix();
+        
+        if(selecteddateslot>validtilltimeslot){
+           $scope.costFollowUp = $scope.original_costFollowUp;
+        }else{
+          	$scope.costFollowUp = $scope.discounted_costFollowUp;
+        }
 
 		if($scope.aptSlotCount > 0 && $scope.custLeftPackageSeesion > 0 && $scope.aptSlotCount == $scope.custLeftPackageSeesion){
             $scope.aptSlotFlag = true;

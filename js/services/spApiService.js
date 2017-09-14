@@ -5,6 +5,7 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
 	var sid;
 	var spid;
 	var spId;
+    var spname;
 	var spApi = {};
 	
 	spApi.getApiKey = function() {
@@ -27,6 +28,13 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         }
         return spid;
 	};
+
+    spApi.getSpname = function() {
+        if(spname == undefined) {
+            spname = $cookies.get('u_name');
+        }
+        return spname;
+    };
 
     //API support to get all policy.
     spApi.getPolicy = function() {

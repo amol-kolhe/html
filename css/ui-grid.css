@@ -345,6 +345,30 @@ select.ui-grid-filter-select:hover {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 }
+
+/*.ui-grid .ui-grid-render-container-body .ui-grid-viewport {
+    overflow-x: scroll;
+    overflow-y: scroll;  
+}*/
+
+.ui-grid-header-viewport {
+     width: auto !important; 
+}
+
+.ui-grid-viewport {
+    width: auto !important;
+   
+}
+
+.ui-grid-header-cell .ui-grid-cell-contents {
+     height: 48px;
+     white-space: normal;
+     -ms-text-overflow: clip;
+     -o-text-overflow: clip;
+     text-overflow: clip;
+     overflow: visible;
+}
+
 .ui-grid-viewport:focus {
   outline: none !important;
 }

@@ -198,7 +198,14 @@ angular.module('myApp.controllers')
 		month = parseInt(month)
 		month = month - 1;
 		day = dateText.substring(6,8);*/
-
+		var google_conversion_id = "";
+        var google_conversion_language = "";
+        var google_conversion_format = "";
+        var google_conversion_color = "";
+        var google_conversion_label = "";
+        var google_conversion_value = "";
+        var google_conversion_currency = "";
+        var google_remarketing_only = "";
 		var dateInst = $scope.dt;
 		var year = dateInst.getFullYear();
 		var month = dateInst.getMonth();
@@ -279,10 +286,26 @@ angular.module('myApp.controllers')
 		.success(function(data, status, headers, config) {
 			console.log("createNewAppointment");
 			console.log("success");
+			var google_conversion_id = 845120495;
+            var google_conversion_language = "en";
+            var google_conversion_format = "3";
+            var google_conversion_color = "ffffff";
+            var google_conversion_label = "186DCO__snMQ74f-kgM";
+            var google_conversion_value = 599.00;
+            var google_conversion_currency = "INR";
+            var google_remarketing_only = false;
 			$scope.frm.submit = data.payload.refno;
 			$scope.showNext('aptConfirmMsg');
 		})
 		.error(function(data, status, headers, config) {
+			var google_conversion_id = "";
+            var google_conversion_language = "";
+            var google_conversion_format = "";
+            var google_conversion_color = "";
+            var google_conversion_label = "";
+            var google_conversion_value = "";
+            var google_conversion_currency = "";
+            var google_remarketing_only = "";
 			console.log("error response: " + data.error.message);
 			$('#errormsg').text("error response: " + data.error.message);
 		});

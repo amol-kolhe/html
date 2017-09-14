@@ -11,7 +11,25 @@
                         </div>
 
                         <div class="row row-align">
-                            <div class="col-xs-12 col-sm-3 appointment-label">Problem</div>
+                            <div class="col-xs-12 col-sm-3 appointment-label">Source <span style="color: red;">*</span></div>
+                            <div class="col-xs-12 col-sm-9">
+                                <span class="colonSeparatorRight hidden-xs">:</span>
+                                <select ng-model="adminNewAppointmentCust.scource" name="patientSource"
+                                class="input-width clstxt2 form-control"
+                                data-ng-class = "{red2: adminNewAppointmentForm.adminSignInForCust.patientSource.$invalid && adminNewAppointmentForm.adminSignInForCust.patientSource.$dirty}"
+                                title = "Select source of information"
+                                data-ng-required = "true"
+                                ng-options="source.id as source.name for source in customerSource">
+                                <option value="">Select source of information</option>
+                                </select>
+                                <span style="color:red" data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientSource.$dirty && adminNewAppointmentForm.adminSignInForCust.patientSource.$invalid">
+                                    <span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientSource.$error.required">Source is required.</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row row-align">
+                            <div class="col-xs-12 col-sm-3 appointment-label">Problem <span style="color: red;">*</span></div>
                             <div class="col-xs-12 col-sm-9">
                                 <span class="colonSeparatorRight hidden-xs">:</span>
                                 <select ng-model="adminNewAppointmentCust.Problem" name="patientProblem"
@@ -29,7 +47,7 @@
                         </div>
 
                         <div class="row row-align">
-                            <div class="col-xs-12 col-sm-3 appointment-label">City</div>
+                            <div class="col-xs-12 col-sm-3 appointment-label">City<span style="color: red;">*</span></div>
                             <div class="col-xs-12 col-sm-9">
                                 <span class="colonSeparatorRight hidden-xs">:</span>
                                 <div class="clsfleft" data-ng-if="users1.disableFlag" style="height: 30px;">
@@ -55,7 +73,7 @@
                         </div>
 
                         <div class="row row-align">
-                            <div class="col-xs-12 col-sm-3 appointment-label">Service Location</div>
+                            <div class="col-xs-12 col-sm-3 appointment-label">Service Location<span style="color: red;">*</span></div>
                             <div class="col-xs-12 col-sm-9">
                                 <span class="colonSeparatorRight hidden-xs">:</span>
                                 <select ng-model="adminNewAppointmentCust.serviceLocation" name="patientServiceLocation"
@@ -73,7 +91,7 @@
                         </div>
 
                         <div class="row row-align">
-                            <div class="col-xs-12 col-sm-3 appointment-label">Name</div>
+                            <div class="col-xs-12 col-sm-3 appointment-label">Name<span style="color: red;">*</span></div>
                             <div class="col-xs-12 col-sm-9">
                                 <span class="colonSeparatorRight hidden-xs">:</span>
                                 <input class="input-width clstxt2 form-control" type="text"
@@ -96,7 +114,7 @@
                         </div>
 						
 						<div class="row row-align">
-							<div class="col-xs-12 col-sm-3 appointment-label">Gender</div>
+							<div class="col-xs-12 col-sm-3 appointment-label">Gender<span style="color: red;">*</span></div>
 							<div class="col-xs-12 col-sm-9">
                                 <span class="colonSeparatorRight hidden-xs">:</span>
 								<select class="input-width clstxt2 form-control" name="patientGender"
@@ -113,7 +131,7 @@
 							</div>
 						</div>
                         <div class="row row-align">
-                            <div class="col-xs-12 col-sm-3 appointment-label">Contact number</div>
+                            <div class="col-xs-12 col-sm-3 appointment-label">Contact number<span style="color: red;">*</span></div>
                             <div  class="col-xs-12 col-sm-9">
                                 <span class="colonSeparatorRight hidden-xs">:</span>
                                 <input class="input-width clstxt2 form-control" type="text"
@@ -137,7 +155,7 @@
                             </div>
                         </div>
                         <div class="row row-align" >
-                            <div class="col-xs-12 col-sm-3 appointment-label">Email address</div>
+                            <div class="col-xs-12 col-sm-3 appointment-label">Email address<span style="color: red;">*</span></div>
                             <div class="col-xs-12 col-sm-9">
                                 <span class="colonSeparatorRight hidden-xs">:</span>
                                 <input class="input-width clstxt2 form-control" type="text"
@@ -231,7 +249,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th colspan="2">Select Appointment Time Slot</th>
+                            <th colspan="2">Select Appointment Time Slot<span style="color: red;">*</span></th>
                         </tr>
                         <tr><td colspan="2">&nbsp;</td></tr>
                         <!-- <tr>
@@ -352,7 +370,7 @@
                         </tr>
                         <tr><td>&nbsp;</td></tr>
                         <tr>
-                            <td align="right" style="vertical-align:top"> Appointment Address : </td>
+                            <td align="right" style="vertical-align:top"> Appointment Address<span style="color: red;">*</span> : </td>
                             <td>
                                 <textarea maxlength="150"
                                     class="clsspace2 form-control"
@@ -396,7 +414,7 @@
 								<div ng:show="divAptAddress" id="divAptAddress">
 									<table width="100%">
 										<tr>
-											<td align="right" style="vertical-align:top"> Appointment Address : </td>
+											<td align="right" style="vertical-align:top"> Appointment Address <span style="color: red;">*</span>: </td>
 											<td>
 												<textarea maxlength="150" class="clsspace2 form-control" ng-trim="false" rows="5" 1cols="80" name="patientAppointmentAddress"
 														  data-ng-model="adminNewAppointmentCust.appointmentAddress"
@@ -473,9 +491,9 @@
                         </tr>
                         
                          <tr>
-                            <td align="right"> Additional Charges Description: &nbsp;</td>
+                            <td align="right"> Additional Charges Description <span ng-if="adminNewAppointmentCust.addcharges!=undefined" style="color: red;">*</span>: &nbsp;</td>
                             <td>
-                                <input class="input-width clstxt2 form-control" style="width:308px; display: inline;" type="text" name="addchargedesc" data-ng-model="adminNewAppointmentCust.addchargedesc"  title="Enter additional charges description" placeholder="Enter additional charges description" data-ng-required="false" > 
+                                <input class="input-width clstxt2 form-control" style="width:308px; display: inline;" type="text" name="addchargedesc" data-ng-model="adminNewAppointmentCust.addchargedesc" ng-disabled = "adminNewAppointmentCust.addcharges==undefined" ng-required="adminNewAppointmentCust.addcharges" title="Enter additional charges description" placeholder="Enter additional charges description"> 
                                
                                 
                             </td>
@@ -537,8 +555,8 @@
 
                 <div>
                     <button style="float:left" ng-click="showBack('serviceProvider')" type="button" class="btn btn-default"> Back </button>
-					<button data-ng-if="residenceAddressFlag" style="float:right" type="submit" class="btn btn-primary" ng-disabled="!(!!adminNewAppointmentCust.residenceAddress) || adminNewAppointmentForm.adminSignInForCust.addcharges.$invalid" ng-click="aptSubmit();"> Confirm </button>
-					<button data-ng-if="!residenceAddressFlag" style="float:right" type="submit" class="btn btn-primary" ng-disabled="!(!!adminNewAppointmentCust.residenceAddress && adminNewAppointmentCust.appointmentAddress) || adminNewAppointmentForm.adminSignInForCust.addcharges.$invalid" ng-click="aptSubmit();"> Confirm </button>
+					<button data-ng-if="residenceAddressFlag" style="float:right" type="submit" class="btn btn-primary" ng-disabled="!(!!adminNewAppointmentCust.residenceAddress) || adminNewAppointmentForm.adminSignInForCust.addcharges.$invalid || adminNewAppointmentForm.adminSignInForCust.addchargedesc.$invalid" ng-click="aptSubmit();"> Confirm </button>
+					<button data-ng-if="!residenceAddressFlag" style="float:right" type="submit" class="btn btn-primary" ng-disabled="!(!!adminNewAppointmentCust.residenceAddress && adminNewAppointmentCust.appointmentAddress) || adminNewAppointmentForm.adminSignInForCust.addcharges.$invalid || adminNewAppointmentForm.adminSignInForCust.addchargedesc.$invalid" ng-click="aptSubmit();"> Confirm </button>
                 </div>
             </div>
 
@@ -547,7 +565,11 @@
                     <table border="0" width="100%">
                         <tr>
                             <td>
-                                <div ng-model="frm.submit" style="color:green; text-align:center;"> Thank you for confirming appointment. Appointment reference number is {{frm.submit}}. </div>
+                                <div ng-model="frm.submit" style="color:green; text-align:center;"> Thank you for confirming appointment. Appointment reference number is {{frm.submit}}. 
+                                   <div style="display:inline;">
+                                       <img height="1" width="1" style="border-style:none;" alt="" src="https://www.googleadservices.com/pagead/conversion/845120495/?value=599.00&amp;currency_code=INR&amp;label=186DCO__snMQ74f-kgM&amp;guid=ON&amp;script=0"/>
+                                   </div>
+                               </div>
                             </td>
                         </tr>
                     </table>

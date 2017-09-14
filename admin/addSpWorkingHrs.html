@@ -11,7 +11,7 @@
                          <select class = "input-width clstxt2 form-control"
                                 name = "spCity"
                                 data-ng-model = "SpWrkHrs.spCity"
-                                data-ng-class = "{red1: addNewSpForm.adminFormForNewSp.spCity.$invalid && addNewSpForm.adminFormForNewSp.spCity.$dirty}"
+                                data-ng-class = "{red3: addSpWrkHrsForm.adminFormForSp.spCity.$invalid && addSpWrkHrsForm.adminFormForSp.spCity.$dirty, green3: addSpWrkHrsForm.adminFormForSp.spCity.$valid && addSpWrkHrsForm.adminFormForSp.spCity.$dirty}"
                                 title = "Select city"
                                 data-ng-change = "populateCityBasedSps(SpWrkHrs.spCity);"
                                 data-ng-options="city._id as city.city_name for city in arrayActiveCity"
@@ -35,7 +35,6 @@
                                 data-ng-class = "{red3: addSpWrkHrsForm.adminFormForSp.spNamesId.$invalid && addSpWrkHrsForm.adminFormForSp.spNamesId.$dirty, green3: addSpWrkHrsForm.adminFormForSp.spNamesId.$valid && addSpWrkHrsForm.adminFormForSp.spNamesId.$dirty}"
                                 title = "Select service provider"
                                 data-ng-change="resetDatePicker9();"
-                                data-ng-blur="resetCity();"
                                 ng-options="sp._id as sp.name for sp in cityBasedSps"
                                 data-ng-required = "true">
                             <option value="">Select service provider</option>
@@ -59,7 +58,6 @@
                                 data-ng-class = "{red3: addSpWrkHrsForm.adminFormForSp.spServiceLocationId.$invalid && addSpWrkHrsForm.adminFormForSp.spServiceLocationId.$dirty, green3: addSpWrkHrsForm.adminFormForSp.spServiceLocationId.$valid && addSpWrkHrsForm.adminFormForSp.spServiceLocationId.$dirty}"
                                 title = "Select service location"
                                 data-ng-change="resetDatePicker9();"
-                                data-ng-blur="resetCity();"
                                 ng-options="clinic._id as clinic.clinic_name for clinic in cityBasedLocations"
                                 data-ng-required = "true">
                             <option value="">Select service location</option>

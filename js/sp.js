@@ -661,6 +661,7 @@ angular.module('myApp.controllers')
     }
 
     $scope.spNewApptForCust = function () {
+
         $scope.rootApptId = "";
         $scope.obj.custid = "";
         $("#datetimepicker3").find("[id^='datepicker'].btn-default").attr("disabled", true);
@@ -719,6 +720,7 @@ angular.module('myApp.controllers')
                 $scope.custGender = data.payload.customer.gender;
                 $scope.zoneId = data.payload.appointment.zoneid;
                 $scope.locality = data.payload.appointment.locality;
+                $scope.original_costFollowUp = data.payload.appointment.cost;
                 $scope.costFollowUp = data.payload.appointment.cost;
                 $scope.currFollowUp = data.payload.appointment.currency;
                 $scope.baseCost = data.payload.appointment.cost;
@@ -781,7 +783,7 @@ angular.module('myApp.controllers')
                     $scope.use_sessions = 0;
                 }  
 
-                
+                $scope.discounted_costFollowUp = $scope.costFollowUp;
                 //API to fetch discount of given package:kalyani patil
                 if( $scope.package_id != null &&  $scope.package_id != undefined && $scope.is_package_assign == true){
 
@@ -797,6 +799,7 @@ angular.module('myApp.controllers')
 
                             if($scope.discount > 0 && $scope.discount != null){
                                  $scope.costFollowUp =  $scope.costFollowUp - $scope.discount;
+                                 $scope.discounted_costFollowUp = $scope.costFollowUp;
                              }
 
                      })
@@ -1142,6 +1145,15 @@ angular.module('myApp.controllers')
     }
 
     $scope.spApptForCustSubmit = function() {
+        var google_conversion_id = "";
+        var google_conversion_language = "";
+        var google_conversion_format = "";
+        var google_conversion_color = "";
+        var google_conversion_label = "";
+        var google_conversion_value = "";
+        var google_conversion_currency = "";
+        var google_remarketing_only = "";
+            
         $scope.aptSlotCount = 0;
         $scope.aptSlotFlag = false;
 
@@ -1296,8 +1308,24 @@ angular.module('myApp.controllers')
                 refnos.push(data.payload[i].refno);
             }
             if(refnos.length == 1) {
+                var google_conversion_id = 845120495;
+                var google_conversion_language = "en";
+                var google_conversion_format = "3";
+                var google_conversion_color = "ffffff";
+                var google_conversion_label = "186DCO__snMQ74f-kgM";
+                var google_conversion_value = 599.00;
+                var google_conversion_currency = "INR";
+                var google_remarketing_only = false;
                 $scope.frm.submit = "Thank you for confirming appointment. Appointment reference number is " + refnos[0];
             } else {
+                var google_conversion_id = 845120495;
+                var google_conversion_language = "en";
+                var google_conversion_format = "3";
+                var google_conversion_color = "ffffff";
+                var google_conversion_label = "186DCO__snMQ74f-kgM";
+                var google_conversion_value = 599.00;
+                var google_conversion_currency = "INR";
+                var google_remarketing_only = false;
                 $scope.frm.submit = "Thank you for confirming appointments. Appointment reference numbers are " + refnos.join(", ");
             }
             $scope.spNewApptForCustErrorMsg = "";
@@ -1305,6 +1333,14 @@ angular.module('myApp.controllers')
             $scope.showAddressComments = false;
         })
         .error(function(data, status, headers, config) {
+            var google_conversion_id = "";
+            var google_conversion_language = "";
+            var google_conversion_format = "";
+            var google_conversion_color = "";
+            var google_conversion_label = "";
+            var google_conversion_value = "";
+            var google_conversion_currency = "";
+            var google_remarketing_only = "";
             //$scope.showDatepicker = false;
             //$scope.showAddressComments = false;
             $scope.spNewApptForCustErrorMsg = data.error.message;
@@ -1485,7 +1521,7 @@ angular.module('myApp.controllers')
             $scope.walletFlag = false;
         }
 
-        $scope.aptPackage.isretrofit = false;
+       // $scope.aptPackage.isretrofit = false;
     }
 
     $scope.calculateCost = function(promo) {
@@ -1948,14 +1984,12 @@ angular.module('myApp.controllers')
     $scope.requestApptWalletTrans = function() {
 
         //alert($scope.models.response.netTotalCharges);
-        
         ngDialog.openConfirm({
             template: 'AptWallet',
             showClose:false,
             scope: $scope 
         }).then(function(value)
-        {   
-            
+        {      
             //console.log('City'+$scope.adminNewAppointmentCust.customer.city);
             //console.log('cityId'+$scope.adminNewAppointmentCust.customer.cityid);
             //console.log($scope.custReadList.custwallet.amount+'---'+$scope.models.response.netTotalCharges);
@@ -1965,6 +1999,9 @@ angular.module('myApp.controllers')
                     "walletTransType": "credit",
                     "currency":"INR",
                     "description":"Package Assignment",
+                    "createdById":spApi.getSpid(),
+                    "createdByName":spApi.getSpname(),
+                    "apptId":$scope.adminNewAppointmentCust.appointment._id,
                     "city":$scope.adminNewAppointmentCust.customer.city,
                     "cityId":$scope.adminNewAppointmentCust.customer.cityid
                 }
@@ -2206,7 +2243,13 @@ angular.module('myApp.controllers')
     }    
 
      $scope.fetchPatientWithWallet = function(){
+        if($scope.walletTransactionDetails){
+            $scope.searchWallet = {};
+            $('#aptFromDateWallet').data("DateTimePicker").clear();
+            $('#aptTillDateWallet').data("DateTimePicker").clear();
+        }
         $scope.walletTransactionDetails = false;
+
         $scope.currentDate = moment(new Date()).format('DD-MM-YYYY');
         $scope.currentDateWallet = moment(new Date()).format('DD-MM-YYYY');
 
@@ -2272,7 +2315,7 @@ angular.module('myApp.controllers')
 
     $scope.generateWalletTransactions = function() {
 
-        alert($scope.spIdForWallet);
+        console.log($scope.spIdForWallet);
         var arrayWalletDataTemp = [];
 
         var fromDtWallet = getEpochDate($('#aptFromDateWallet').val());
@@ -2280,8 +2323,8 @@ angular.module('myApp.controllers')
         var fromDateWallet = moment(new Date(fromDtWallet * 1000)).format("DD-MM-YYYY");
         var toDateWallet = moment(new Date(tillDtWallet * 1000)).format("DD-MM-YYYY");
 
-        alert(fromDtWallet);
-        alert(tillDtWallet);
+        console.log(fromDtWallet);
+        console.log(tillDtWallet);
 
         arrayWalletDataTemp = $scope.arrayWalletDataTrans;
         $scope.currentDateWallet = toDateWallet;
@@ -2290,8 +2333,14 @@ angular.module('myApp.controllers')
         $scope.asOfBalance = 0;
 
         arrayWalletDataTemp.forEach(function(item) {
-
-            if((item.transactiontime >= fromDtWallet) && (tillDtWallet >= item.transactiontime)){
+            console.log(item);
+            // Converting Date and time only Date
+            var trancsaction_date = moment(new Date(item.transactiontime * 1000)).format("DD-MM-YYYY");
+            // converting Date to time stamp
+            var trancsaction_date_timestamp =  moment(trancsaction_date, 'DD-MM-YYYY').unix();
+            
+            //if((item.transactiontime >= fromDtWallet) && (tillDtWallet >= item.transactiontime)){
+              if((trancsaction_date_timestamp >= fromDtWallet) && (tillDtWallet >= trancsaction_date_timestamp)){
                 $scope.debitAmnt = 0;
                 $scope.creditAmnt = 0;
 
@@ -2704,8 +2753,12 @@ angular.module('myApp.controllers')
             "walletTransType": transType,
             "currency":"INR",
             "description":$scope.custReadList.custwallet.description,
+            "createdById":spApi.getSpid(),
+            "createdByName":spApi.getSpname(),
+            "apptId":"",
             "city":$scope.custReadList.city,
-            "cityId":$scope.custReadList.cityid
+            "cityId":$scope.custReadList.cityid,
+
         }
 
         spApi.walletTransact($scope.custReadList._id, data)
@@ -2762,6 +2815,15 @@ angular.module('myApp.controllers')
             }
         }
 
+        var selectedatetimeslot = moment(new Date($scope.spNewAppointment.selectedTimeSlots)).format("YYYY-MM-DD");
+        var selecteddateslot =  moment(selectedatetimeslot, 'YYYY-MM-DD').unix();
+        var validtilltimeslot =  moment($scope.packageValidTillDate, 'YYYY-MM-DD').unix();
+        //console.log($scope.original_costFollowUp+'~'+);
+        if(selecteddateslot>validtilltimeslot){
+           $scope.costFollowUp = $scope.original_costFollowUp;
+        }else{
+           $scope.costFollowUp = $scope.discounted_costFollowUp;
+        }
 
         if($scope.aptSlotCount > 0 && $scope.custLeftPackageSeesion > 0 && $scope.aptSlotCount == $scope.custLeftPackageSeesion){
             $scope.aptSlotFlag = true;

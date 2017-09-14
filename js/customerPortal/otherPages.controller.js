@@ -41,6 +41,9 @@ function innerPageController($timeout, $http, custApi, $cookies, $scope, $state,
 		enableDatesArray: [],
 		cache: {},
 	};
+
+	vm.zonePrice = 0;
+	vm.cityId = "";
 	
 	/* *******Function Definitions**************** */
 
@@ -263,7 +266,10 @@ function innerPageController($timeout, $http, custApi, $cookies, $scope, $state,
 	* function for location selected
 	*/
 	function locationSelected(value) {
-		console.log(value);
+		//alert(value.cityId);
+		//console.log(value);
+		vm.zonePrice = value.price;
+		vm.cityId = value.cityId;
 		vm.model.selectedLocation = value;
 		/* API call to check available dates */
 		custApi.checkAvailableDatesInMonth(3, vm.model.fromMonthDate, value.pincodeid, value.zoneid, vm.model.physiotherapyId).
@@ -353,8 +359,9 @@ function innerPageController($timeout, $http, custApi, $cookies, $scope, $state,
 				datesEnabled: localVariables.enableDatesArray,
 				timeslot: vm.model.timeslot,
 				timeslotArray: vm.model.timeslotArray,
-				cityid: localVariables.cache.cityToIdMap["Pune"],
-				apptCost: vm.model.apptCost
+				cityid: vm.cityId,
+				//apptCost: vm.model.apptCost
+				apptCost:vm.zonePrice
 			};
 			/* 
 			* Set the master controller flag to true

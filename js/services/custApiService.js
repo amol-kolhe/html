@@ -74,6 +74,15 @@ custApiService.factory('custApi', ['$http', '$cookies', function($http, $cookies
 		return $http.get(baseUrl + "/hrest/v1/zone/cities?apikey=" + custApi.getApiKey() + "&sid=" + custApi.getSid() + "&countrynm=" + countryName + '&time=' + new Date().getTime());
 	}
 
+	//API support to get all clinic.
+	custApi.getCity = function(active) {
+		var url = baseUrl + "/hrest/v1/admin/city?apikey=" + custApi.getApiKey() + "&sid=" + custApi.getSid() + '&role=0';
+		if(active != undefined) {
+			url += "&active=" + active;
+		}
+		return $http.get(url);
+	};
+	
 	//API to get clinics for given city
 	custApi.getClinics = function(cityId) {
 		return $http.get(baseUrl + "/hrest/v1/zone/clinic?apikey=" + custApi.getApiKey() + "&sid=" + custApi.getSid() + "&cityid=" + cityId);
