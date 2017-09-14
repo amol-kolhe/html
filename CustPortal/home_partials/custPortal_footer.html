@@ -11,6 +11,9 @@
 			<li ng-click = "cpc.openPrivacyPolicy()" style="cursor: pointer">
 				<a>{{cpc.footerCompanyItems.pPolicy}}</a>
 			</li>
+			<li>
+				<a ui-sref="homepages.testimonials">Testimonials</a>
+            </li>
 			<li style="cursor:pointer">
             	<a ui-sref="" ng-click="cpc.setSpecializationFlag()" style="background:url(../../images/customer_portal/down_arrow.png) no-repeat 100% 50%;padding-right: 30px;">specialisation</a>
             	<ul style="list-style-type:none" ng-hide="!cpc.specializationFlag">

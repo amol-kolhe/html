@@ -646,6 +646,17 @@ p.slider-subtext {
     text-transform: uppercase;
 }
 
+.booknow-outer .home-redirecting-buttons button {
+    background: #f69279;
+    color: #ffffff;
+    opacity: 0.5;
+}
+
+.booknow-outer .home-redirecting-buttons button:hover {
+    background: #f69279;
+    opacity: 1;
+}
+
 .home-redirecting-buttons button:hover {
     background: #f69279;
 }

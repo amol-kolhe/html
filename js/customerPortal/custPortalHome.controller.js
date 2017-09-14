@@ -24,7 +24,11 @@
 		};
 
 		/*===Function declaration===*/
-
+		vm.videoId1 = "gPuN_9DS0Zk";
+		vm.videoId2 = "HqiozPzPMCI";	
+		vm.videoId3 = "N2cIv0yTpU4";
+		vm.videoId4 = "g3gAvyxJDvA";
+		vm.playerVars = {loop:1,rel:0};
 		vm.isThisMobileDevice = isThisMobileDevice;
 		vm.getAllLocations = getAllLocations;
 		vm.locationSelected = locationSelected;

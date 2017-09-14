@@ -11,6 +11,7 @@
 		'ngSanitize',
 		'ngTouch',
 		'ngAnimate',
+		'youtube-embed'
 		]);
 
 	app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider', function ($urlRouterprovider, $stateProvider, $locationProvider) {
@@ -45,6 +46,10 @@
 			state('homepages.aboutsancheti', {
 				url: '/aboutsancheti',
 				templateUrl: './CustPortal/other_pages/aboutsancheti.html'
+			}).
+			state('homepages.testimonials', {
+				url: '/testimonials',
+				templateUrl: './CustPortal/home_partials/testimonials.html'
 			}).
 			state('homepages.faq', {
 				url: '/faq',
