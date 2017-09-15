@@ -1240,3 +1240,20 @@ p.testimonial-cust-name {
     z-index: 150;
     background-color: rgba(0,0,0,0.5);
 }
+@media (min-width: 481px) {
+.testimonial_btn {
+    left: 1%;
+    top: 93px;
+    position: fixed;
+    z-index: 99;
+  }
+}
+
+@media (max-width: 374px) {
+.testimonial_btn {
+   right: 1%;
+   top: 250px !important; 
+   position: fixed;
+   z-index: 99;
+  }
+}

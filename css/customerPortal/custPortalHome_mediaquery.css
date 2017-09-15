@@ -70,6 +70,8 @@
 	
 	/* ----SLIDER------- */
 	.slider-headtext { left: 6% !important; top: 10%; width: 62%; }
+	.testimonial_btn {right: 1%;top: 230px;position: fixed;}
+	.booknow-outer .testimonial_btn.home-redirecting-buttons button {opacity: 0.8;}
 	p.slider-subtext { width: 160px; }
 	.desktop-slider, .tablet-slider, .large-screen-slider { display: none; }
 	.mobile-slider { display: block; }
@@ -79,6 +81,7 @@
 
 	/* -----BOOK NOW -----*/
 	.booknow-container { width: 100%; top: -120px; }
+	.ready-to-book-top {top:5px; }
 	.booknow-outer { top: -35px; }
 	.locations-section { text-align: center; width: 100%; border-radius: 0px; height: 45px; background: rgba(255, 255, 255, 0.7); margin-bottom: 4px; padding: 8px 3px 3px 23px; /*padding-left: 42%;*/ font-weight: bold; }
 	.date-section {	width: 100%; height: 45px; background: rgba(255, 255, 255, 0.7); margin-bottom: 4px; padding: 4px 7px 7px 5px; font-weight: bold; }
