@@ -56,6 +56,19 @@
 	left: 884px;
 }
 
+.slot-span {
+    border:1px solid;
+    display:inline-block;
+    width:60px;
+    height:20px;
+    float:left;
+    margin:0 10px 10px 0;
+}
+
+.slot-legend-label {
+    line-height:20px;
+}
+
 .aptSrcCriteria {
 	color: #967A8F;
 }

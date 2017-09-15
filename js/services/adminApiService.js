@@ -398,6 +398,14 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		var url = baseUrl + "/hrest/v1/report/attendenceReport?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + '&role=3' + '&fromDate=' + fromDate + '&tillDate=' + tillDate;
 		return $http.get(url);
 	}
+
+
+	//--------slot related apis------------------
+
+	//API to get zones for given city
+	adminApi.getZones = function(cityId) {
+		return $http.get(baseUrl + "/hrest/v1/zone/map?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&cityid=" + cityId + '&time=' + new Date().getTime());
+	}
 	
 
 	return adminApi;

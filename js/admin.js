@@ -479,6 +479,9 @@ angular.module('myApp.controllers')
 		$('#datetimepicker5').datetimepicker({
 			format: 'YYYY-MM-DD'
 		});
+		$('.dateTimePickerSlot').datetimepicker({
+			format: 'YYYY-MMM-DD'
+		});
 	}, 200);
 
 	$scope.adminCallMeListReset = function() {
@@ -3147,6 +3150,16 @@ angular.module('myApp.controllers')
 			console.log("successfully received cities");
 			arrStoreTrue.forEach(function(item) {
 				$scope.arrayActiveCity.push(item);
+
+				if(item.city_name == 'pune'){
+					$scope.cityIdForSlot = item._id;
+					$scope.SpWrkHrs.spSlotCity = $scope.cityIdForSlot;
+					$scope.populateCityBasedSps(item._id);
+					$scope.populateCityBasedZonesForSlot(item._id);
+					$scope.SpWrkHrs.spServiceLocationSlot = '0';
+					$scope.SpWrkHrs.spNamesIdSlot = 'All';
+
+				}
 			});
 		}).
 		error(function (data, status, headers, config) {
@@ -3217,6 +3230,11 @@ angular.module('myApp.controllers')
 		error(function (data, status, headers, config) {
 			console.log("Error in receiving clinics");
 		});
+
+
+		$scope.curdate = moment().format("YYYY-MMM-DD");
+		$scope.SpWrkHrs.slotDate = $scope.curdate;
+		//$('.dateTimePickerSlot').val($scope.curdate);
 
 	}
 
@@ -4542,6 +4560,11 @@ angular.module('myApp.controllers')
 		$scope.cityIdValue = cityId;
 		$scope.cityBasedSps =[];
 
+		$scope.populateCityBasedZonesForSlot(cityId);
+
+		$scope.curdate = moment().format("YYYY-MMM-DD");
+		$('.dateTimePickerSlot').val($scope.curdate);
+
 		adminApi.getAllSps().
 		success(function (data, status, headers, config) {
 			$scope.spNamesArr = data.payload.spList;
@@ -4571,6 +4594,11 @@ angular.module('myApp.controllers')
 					break;
 				}
 			}
+
+			var obj = {"_id":"All","name":"All"};
+			$scope.cityBasedSps.push(obj);
+
+			console.log($scope.cityBasedSps);
 		}).
 		error(function (data, status, headers, config) {
 			console.log("Error in receiving Sps");
@@ -4593,6 +4621,53 @@ angular.module('myApp.controllers')
 		$scope.getSps($scope.SpWrkHrs.spCity);
 
 	}
+
+    $scope.populateCityBasedZonesForSlot = function(cityId) {	
+			
+			$scope.locationArray = [];
+			adminApi.getZones(cityId)
+			.success(function(data, status, headers, config){
+				var dataArray = [];
+				dataArray = data.payload;
+				//console.log(dataArray);
+				for(var i = 0 ; i < dataArray.length ; i++) {                                       
+                if(!dataArray[i].hasOwnProperty("deleted") || dataArray[i].deleted === false) {
+					var zoneid = dataArray[i].zoneid;
+					var zonename = dataArray[i].zonename;
+					var price = dataArray[i].price;
+					var pincodeArray = dataArray[i].pincodes;
+					for(var j = 0 ; j < pincodeArray.length ; j++) {
+                          var isdeleted = pincodeArray[j].isdeleted;
+                        if (isdeleted === false){
+                            var pincodeVal = pincodeArray[j].pin;
+                            var pincodeid = pincodeArray[j].pincodeid;
+                            var localitiesVal = pincodeArray[j].localities;
+                            var locationObj = {
+                                "zoneid": zoneid,
+                                "zonename": zonename,
+                                "pin": pincodeVal,
+                                "pincodeid": pincodeid,
+                                "localities": localitiesVal,
+                                "val": pincodeVal + " " + localitiesVal,
+                                "price": price,
+                                "cityId": cityId
+                            };                       
+                            $scope.locationArray.push(locationObj);                      
+                        }
+					}
+                  }
+				}
+			
+			})
+			.error(function(data, status, headers, config){
+				console.log("Error in getting Zones");
+			});
+
+			console.log($scope.locationArray);
+
+
+	}
+
 
 	$scope.resetCity = function() {
 		$scope.SpWrkHrs.spCity = $scope.cityIdValue;

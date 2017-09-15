@@ -100,6 +100,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 			{title: 'Actionables', url: 'actionables.html', clsclass: 'clsgray'},
 			{title: 'Zone Management', url: 'zoneManagement.html', clsclass: 'clsgray'},
 			{title: 'Service Provider Management', url: 'spManagement.html', clsclass: 'clsgray'},
+			//{title: 'Slot Management', url: 'slotManagement.html', clsclass: 'clsgray'},
 			{title: 'Promotional Code Management', url: 'promotionalCodeMgmt.html', clsclass: 'clsgray'},
 			{title: 'Cost Calculator', url: 'costcalculator.html', clsclass: 'clsgray'},
 			{title: 'Clinics Management', url: 'clinicManagement.html', clsclass: 'clsgray'},

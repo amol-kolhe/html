@@ -1,0 +1,143 @@
+<div id="q1" class="mainContent2" ng-controller="AdminCtrl" ng-init="initCache();">
+    <div style="padding:10px;">
+        <form name="addSpWrkHrsForm.adminFormForSp" data-ng-init="initDatePicker();" data-ng-submit="" novalidate>
+                <div class= "table-hover new-appointment-table col-xs-7">
+                    <div class="row row-align">
+                        <div class="col-xs-12 col-sm-3 appointment-label">
+                            City <span style="color: red;">*</span>
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            <span class = "colonSeparatorRight hidden-xs">:</span>
+                             <select class = "input-width clstxt2 form-control"
+                                    name = "spSlotCity"
+                                    data-ng-model = "SpWrkHrs.spSlotCity"
+                                    data-ng-class = "{red3: addSpWrkHrsForm.adminFormForSp.spSlotCity.$invalid && addSpWrkHrsForm.adminFormForSp.spSlotCity.$dirty, green3: addSpWrkHrsForm.adminFormForSp.spSlotCity.$valid && addSpWrkHrsForm.adminFormForSp.spSlotCity.$dirty}"
+                                    title = "Select city"
+                                    data-ng-change = "populateCityBasedSps(SpWrkHrs.spSlotCity);"
+                                    data-ng-options="city._id as city.city_name for city in arrayActiveCity"
+                                    data-ng-required = "true"
+                                    >
+                                <option value="">Select City</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row row-align">
+                        <div class="col-xs-12 col-sm-3 appointment-label">
+                            Service Location
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            <span class = "colonSeparatorRight hidden-xs">:</span>
+                                <select ng-model="SpWrkHrs.spServiceLocationSlot"
+                                    name="spServiceLocationSlot"
+                                    class="input-width clstxt2 form-control"
+                                    id = "spServiceLocationSlot"
+                                    data-ng-class = "{red3: addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$invalid && addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$dirty, green3: addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$valid && addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$dirty}"
+                                    title = "Select service location"
+                                    data-ng-change="resetDatePicker9();"
+                                    ng-options="clinic._id as clinic.clinic_name for clinic in cityBasedLocations"
+                                    data-ng-required = "true">
+                                    <option value="">Select service location</option>
+                                 </select>
+                            <span style="color:red" data-ng-show="addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$dirty && addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$invalid">
+                                <span data-ng-show="addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$error.required">Service location is required.</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row row-align">
+                        <div class="col-xs-12 col-sm-3 appointment-label">
+                            Service Provider
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            <span class = "colonSeparatorRight hidden-xs">:</span>
+                            <select ng-model="SpWrkHrs.spNamesIdSlot"
+                                    name="spNamesIdSlot"
+                                    class="input-width clstxt2 form-control"
+                                    id = "spNamesListId"
+                                    title = "Select service provider"
+                                    data-ng-change="resetDatePicker9();"
+                                    ng-options="sp._id as sp.name for sp in cityBasedSps"
+                                    data-ng-required = "true">
+                                <option value="">Select service provider</option>
+                            </select>
+                        </div>
+                    </div>
+
+                     <div class="row row-align">
+                        <div class="col-xs-12 col-sm-3 appointment-label">
+                            Zones
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            <span class = "colonSeparatorRight hidden-xs">:</span>
+                            <select ng-model="SpWrkHrs.spZones"
+                                    name="spZones"
+                                    class="input-width clstxt2 form-control"
+                                    id = "spZonesId"
+                                    title = "Select zone"
+                                    data-ng-change="resetDatePicker9();"
+                                    ng-options="l.val for l in locationArray"
+                                    data-ng-required = "true">
+                                <option value="">Select zone</option>
+                            </select>
+                        
+                        </div>
+                    </div>
+
+                     <div class="row row-align">
+                        <div class="col-xs-12 col-sm-3 appointment-label">
+                            Date
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            <span class = "colonSeparatorRight hidden-xs">:</span>
+                            <input type="text"
+                                ng-model="SpWrkHrs.slotDate"
+                                name = "slotDate"
+                                id="slotDate"
+                                value = "{{slotDate}}"
+                                title="Date"
+                                class="dateTimePickerSlot form-control input-width clstxt2"/>
+                        
+                        </div>
+                    </div>
+
+                   
+            </div>
+            <div class= "col-xs-5">
+                <div style="border: 1px solid;padding:20px 0;" class="row">
+                   
+                    <div class= "col-xs-6">
+                        <span class = "slot-span"></span>
+                        <span class="slot-legend-label">Free Slot</span>
+                    </div>   
+                    <div class= "col-xs-6">
+                        <span class = "slot-span" style="background-color:#efff02;"></span>
+                        <span class="slot-legend-label">Weekly Off</span>
+                    </div>                
+               
+                   
+                    <div class= "col-xs-6">
+                        <span class = "slot-span" style="background-color:#c1bfbb;"></span>
+                        <span class="slot-legend-label">Booked</span>
+                    </div>   
+                    <div class= "col-xs-6">
+                        <span class = "slot-span" style="background-color:#ff567d;"></span>
+                        <span class="slot-legend-label">Leave</span>
+                    </div>                
+            
+               
+                    <div class= "col-xs-6">
+                        <span class = "slot-span" style="background-color:#2fca2c;"></span>
+                        <span class="slot-legend-label">Available</span>
+                    </div>   
+               
+              
+                </div>
+
+            </div>
+
+             <div class= "col-xs-12">
+             </div>
+        </form>
+    </div>
+</div>
