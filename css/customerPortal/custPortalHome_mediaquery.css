@@ -70,7 +70,7 @@
 	
 	/* ----SLIDER------- */
 	.slider-headtext { left: 6% !important; top: 10%; width: 62%; }
-	.testimonial_btn {right: 1%;top: 230px;position: fixed;}
+	.testimonial_btn {left: 1%;top: 340px;position: fixed;}
 	.booknow-outer .testimonial_btn.home-redirecting-buttons button {opacity: 0.8;}
 	p.slider-subtext { width: 160px; }
 	.desktop-slider, .tablet-slider, .large-screen-slider { display: none; }
