@@ -406,6 +406,19 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 	adminApi.getZones = function(cityId) {
 		return $http.get(baseUrl + "/hrest/v1/zone/map?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&cityid=" + cityId + '&time=' + new Date().getTime());
 	}
+
+	adminApi.addSlotInfo = function(slotObj,initdate) {
+		return $http.post(baseUrl + "/hrest/v1/slot/addSlotInfo?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&initdate=" + initdate + "&role=0", slotObj);
+	}
+
+	adminApi.getSpSlot = function(spid,month) {
+		return $http.get(baseUrl + "/hrest/v1/slot/getSpSlot?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&spid=" + spid + '&month=' + month);
+	}
+
+	adminApi.getAllSlot = function(date) {
+		return $http.get(baseUrl + "/hrest/v1/slot/getAllSlot?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid()+ '&date=' + date);
+	}
+
 	
 
 	return adminApi;

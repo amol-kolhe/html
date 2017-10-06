@@ -438,3 +438,38 @@ ul.hover li:not(.btn-primary):hover, ol.hover li:not(.btn-primary):hover{
 .ac-select-popup ul {
     max-height: 350px;
 }
+
+
+.slot-view-table th {
+    padding: 0px 12px 0px 12px;
+    font-size: 12px;
+    min-width: 80px;
+}
+
+.slot-view-table-main th {
+    padding: 0px 12px 0px 12px;
+    text-align: center;
+}
+
+.slot-view-table-main td {
+    text-align: center;
+}
+
+.slot-view-table td {
+    text-align: center;
+}
+
+.slot-table {
+    margin-top: 50px;
+}
+
+div.align-cell{
+    width: 130px;
+  
+}
+
+.slot-view-table-main th.align-cell{
+    min-width: 55px;
+  
+} 
+

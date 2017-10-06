@@ -805,8 +805,8 @@
 					custApi.fetchAvailableSlotsForDay(vm.fromDate, vm.selectedLocation.zoneid, vm.physiotherapyId, vm.selectedLocation.pincodeid).
 					success(function (data, status, header, config) {
 						console.log("Available slots retrieved successfully");
-						console.log("Slots:");
-						console.log(data);
+						//console.log("Slots:");
+						//console.log(data);
 						vm.timeslotArray = [];
 						/* format time slot into hr:min am/pm */
 						data.payload.appointmentslots.forEach(function(item) {

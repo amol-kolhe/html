@@ -96,6 +96,7 @@ angular.module('myApp.controllers')
 	$scope.custZones = "";
 	$scope.custPinLocalities = [];
 	$scope.locationArr = [];
+	$scope.cityBasedSps =[];
 	$scope.arrayLocalities = [];
 	$scope.customerLocality = '';
 	$scope.adminNewAppointmentCust.zone = "";
@@ -122,6 +123,9 @@ angular.module('myApp.controllers')
 	$scope.addNewSpForm = {};
 	$scope.spDetails = {};
 	$scope.addSpWrkHrsForm = {};
+	$scope.slotViewTableFlag = true;
+	$scope.monthList = ["January", "February" , "March" , "April" , "May" , "June" , "July" , "August" ,"September" ,"October" , "November" , "December" ];
+	$scope.weekDays = ["Select weekly off","Sunday" , "Monday" , "Tuesday" , "Wednesday" , "Thursday" , "Friday" , "Saturday"]
 
 	$scope.spPrimaryZonesOptions = [];
 	$scope.spPrimaryZones = [];
@@ -131,6 +135,22 @@ angular.module('myApp.controllers')
 		displayProp: 'zonename',
 		idProp: 'zoneid'
 	};
+
+	
+	$scope.markLeave = false;
+
+	for(var i = 1 ; i<= 31 ; i++){
+		for(var j= 1 ; j <= 8 ; j ++){
+			var v = 'subTick'+j+i;
+		    $scope[v] = false;
+		}
+		
+	}
+
+
+
+	$scope.slotChecked = false;
+	$scope.saveBtn = true;
 
 	$scope.eventObj1 = {
 		onItemSelect: function(item) {
@@ -479,8 +499,14 @@ angular.module('myApp.controllers')
 		$('#datetimepicker5').datetimepicker({
 			format: 'YYYY-MM-DD'
 		});
-		$('.dateTimePickerSlot').datetimepicker({
+		/*$('.dateTimePickerSlot').datetimepicker({
 			format: 'YYYY-MMM-DD'
+		});*/
+		$('.dateTimePickerOnlyMonth').datetimepicker({			
+			format: 'MMMM',
+            viewMode: 'months', 
+             // pickTime: false,
+   			
 		});
 	}, 200);
 
@@ -3159,6 +3185,9 @@ angular.module('myApp.controllers')
 					$scope.SpWrkHrs.spServiceLocationSlot = '0';
 					$scope.SpWrkHrs.spNamesIdSlot = 'All';
 
+	                $scope.SpWrkHrs.spZones = "All";
+	              	             
+
 				}
 			});
 		}).
@@ -3233,8 +3262,903 @@ angular.module('myApp.controllers')
 
 
 		$scope.curdate = moment().format("YYYY-MMM-DD");
+		$scope.day = moment().format("dddd");
+		$scope.month = moment().format("MMMM");
 		$scope.SpWrkHrs.slotDate = $scope.curdate;
-		//$('.dateTimePickerSlot').val($scope.curdate);
+		$scope.SpWrkHrs.spMonth = $scope.month;
+		$scope.SpWrkHrs.spWeeklyOff = "Sunday";
+
+
+		if($scope.SpWrkHrs.spMonth != undefined){
+			var daysNo = moment($scope.SpWrkHrs.spMonth , "MMMM").daysInMonth();
+		}else{
+			var daysNo = moment().daysInMonth();			
+		}
+		//var dayName = moment("2017-09-30").format('dddd');
+		var year = moment().format('YYYY');
+		var month = moment($scope.SpWrkHrs.spMonth , "MMMM").format('MM');
+
+		$scope.slotDateList = [];
+    	for(var i = 1 ; i <= daysNo ; i++){
+    		var obj = {'dateNo':0,'dayOfWeek':''};
+    		var date = year+'-'+month+'-'+i;
+    		var dayOfWeek = moment(date).format('ddd');
+    		obj.dateNo = i;
+    		obj.dayOfWeek = dayOfWeek;
+    		$scope.slotDateList.push(obj);
+    	}      
+
+
+		$scope.wrkHrsSlotsForHome = [
+							{							
+								"label" : 	"07:30 AM - 09:00 AM",
+								"slotNo": "1", 
+								"startTime": "07:30AM",
+								"endTime": "09:00AM"
+							},
+							{
+								"label": 	"09:00 AM - 10:30 AM",
+								"slotNo": "2", 
+								"startTime": "09:00AM",
+								"endTime": "10:30AM"
+							},
+							{
+								"label": 	"10:30 AM - 12:00 PM",	
+								"slotNo": "3", 
+								"startTime": "10:30AM",
+								"endTime": "12:00PM"					
+							},
+							{
+								"label": 	"12:00 PM - 13:30 PM",
+								"slotNo": "4", 
+								"startTime": "12:00PM",
+								"endTime": "13:30PM"
+							},
+							{
+								"label": 	"15:00 PM - 16:30 PM",	
+								"slotNo": "5", 	
+								"startTime": "15:00PM",
+								"endTime": "16:30PM"
+							},
+							{
+								"label": 	"16:30 PM - 18:00 PM",
+								"slotNo": "6", 
+								"startTime": "16:30PM",
+								"endTime": "18:00PM"
+							},
+							{
+								"label": 	"18:00 PM - 19:30 PM",	
+								"slotNo": "7", 
+								"startTime": "18:00PM",
+								"endTime": "19:30PM"					
+							},
+							{
+								"label": 	"19:30 PM - 21:00 PM",
+								"slotNo": "8", 
+								"startTime": "19:30PM",
+								"endTime": "21:00PM"							
+							}
+						];
+
+
+		
+
+		$scope.todaysDate = moment().format("D-MM-YYYY");
+
+		$scope.loadSlotViewTable($scope.todaysDate);
+
+	}
+
+	$scope.loadSlotViewTable = function(dateString){
+		setTimeout(function() {
+
+			//var cityId = $scope.SpWrkHrs.spSlotCity;
+			//$scope.populateCityBasedSps(cityId);
+
+			adminApi.getAllSlot(dateString)
+			.success(function(data, status, headers, config){
+
+				$scope.allSpSLots = data.payload;
+
+
+				for(var m = 0;m< $scope.cityBasedSpsForViewSlot.length;m++){
+					for(var n = 0 ; n < $scope.wrkHrsSlotsForHome.length; n++){
+						var tdId1 = $scope.wrkHrsSlotsForHome[n].startTime+"_"+$scope.cityBasedSpsForViewSlot[m]._id;
+						document.getElementById(tdId1).style.backgroundColor = "";
+					}
+				}
+
+				for(var i = 0;i< $scope.cityBasedSpsForViewSlot.length;i++){
+					for(var j = 0 ; j < $scope.wrkHrsSlotsForHome.length; j++){
+						var tdId = $scope.wrkHrsSlotsForHome[j].startTime+"_"+$scope.cityBasedSpsForViewSlot[i]._id;
+						for(var k = 0; k< $scope.allSpSLots.length; k++){
+
+							var start = (($scope.wrkHrsSlotsForHome[j].startTime).substring(0, 5)).replace(":","");
+							if($scope.cityBasedSpsForViewSlot[i]._id == $scope.allSpSLots[k].service_provider_id && start == $scope.allSpSLots[k].startTime){
+								
+								if($scope.allSpSLots[k].is_weeklyOff == true){
+									document.getElementById(tdId).style.backgroundColor = 'yellow';
+								}
+
+								if( $scope.allSpSLots[k].is_leave == true){
+									document.getElementById(tdId).style.backgroundColor = 'red';
+								}
+
+								if( $scope.allSpSLots[k].is_leave == false && $scope.allSpSLots[k].is_allocated == true){
+									document.getElementById(tdId).style.backgroundColor = '#2fca2c'; //green
+								}
+
+								/*if($scope.allSpSLots[k].appointment_id != null && $scope.allSpSLots[k].appointment_id != undefined){
+									document.getElementById(tdId).style.backgroundColor = '#c1bfbb'; //grey
+								}*/
+
+								if($scope.allSpSLots[k].is_blocked && $scope.allSpSLots[k].is_blocked == true){
+									document.getElementById(tdId).style.backgroundColor = '#c1bfbb'; //grey
+								}	
+
+
+							}
+
+						}						
+					}
+				}
+
+			})
+			.error(function(data, status, headers, config){
+				console.log("Error While Opening Slots!");
+			});
+
+		},200);
+
+	}
+
+	/*$scope.loadSlotViewTableByDate = function(){
+		//alert($("#slotDate").val());
+		var date = $("#slotDate").val();
+
+		var dateString = (moment(date).format("D-MM-YYYY")).toString();
+
+		alert(dateString);
+
+		$scope.loadSlotViewTable(dateString);
+	}*/
+
+
+	$scope.setHorizontalChecked = function(row) {
+		var dayNo = moment().format('D');
+
+		var currentMonthNo = moment().format("M");
+    	var selectedMonthNO = moment($scope.SpWrkHrs.spMonth , "MMMM").format('M');
+
+    	if(parseInt(currentMonthNo) == parseInt(selectedMonthNO)){
+    		dayNo = dayNo - 1;
+    	}else if (parseInt(currentMonthNo) > parseInt(selectedMonthNO)){
+    		dayNo = $scope.slotDateList.length;
+    	}else{
+    		dayNo = 0;
+    	}
+
+		for(var i = 0 ; i < $scope.wrkHrsSlotsForHome.length; i++){
+			//console.log($scope.wrkHrsSlotsForHome[i].label);
+			//console.log($scope.wrkHrsSlotsForHome[i].slotNo);
+			if(row.slotNo == $scope.wrkHrsSlotsForHome[i].slotNo){		
+				for(var j = dayNo ; j < $scope.slotDateList.length; j++){				
+					if($scope.wrkHrsSlotsForHome[i].slotNo==(i+1).toString()){
+						var tdCellID = $scope.wrkHrsSlotsForHome[i].startTime+"_"+$scope.slotDateList[j].dateNo;
+
+						if($('#tick-1').is(':checked') && row.slotNo == "1"){	
+							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
+							var v = 'subTick1'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+								$scope[v] = true;
+							}							
+							
+						}else if(row.slotNo == "1"){
+							var v = 'subTick1'+(j+1);	
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){				
+								$scope[v] = false;
+							}						
+						}
+
+						if($('#tick-2').is(':checked') && row.slotNo == "2"){	
+							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
+							var v = 'subTick2'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+								$scope[v] = true;
+							}
+						}else if(row.slotNo == "2"){
+							var v = 'subTick2'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){				
+								$scope[v] = false;
+							}
+						}
+
+						if($('#tick-3').is(':checked') && row.slotNo == "3"){	
+							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
+							var v = 'subTick3'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+								$scope[v] = true;
+							}
+						}else if(row.slotNo == "3"){
+							var v = 'subTick3'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){				
+								$scope[v] = false;
+							}
+						}
+
+						if($('#tick-4').is(':checked') && row.slotNo == "4"){	
+							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
+							var v = 'subTick4'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+								$scope[v] = true;
+							}
+						}else if(row.slotNo == "4"){
+							var v = 'subTick4'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){				
+								$scope[v] = false;
+							}
+						}
+
+						if($('#tick-5').is(':checked') && row.slotNo == "5"){	
+							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
+							var v = 'subTick5'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+								$scope[v] = true;
+							}
+						}else if(row.slotNo == "5"){
+							var v = 'subTick5'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){				
+								$scope[v] = false;
+							}
+						}
+
+						if($('#tick-6').is(':checked') && row.slotNo == "6"){	
+							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
+							var v = 'subTick6'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+								$scope[v] = true;
+							}
+						}else if(row.slotNo == "6"){
+							var v = 'subTick6'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){				
+								$scope[v] = false;
+							}
+						}
+
+						if($('#tick-7').is(':checked') && row.slotNo == "7"){	
+							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
+							var v = 'subTick7'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+								$scope[v] = true;
+							}
+						}else if(row.slotNo == "7"){
+							var v = 'subTick7'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){				
+								$scope[v] = false;
+							}
+						}
+
+						if($('#tick-8').is(':checked') && row.slotNo == "8"){	
+							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
+							var v = 'subTick8'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+								$scope[v] = true;
+							}
+						}else if(row.slotNo == "8"){
+							var v = 'subTick8'+(j+1);
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){				
+								$scope[v] = false;
+							}
+						}
+
+
+					}
+				}
+
+			}
+
+		}
+
+	}
+
+	$scope.resetGlobalSlotTick = function() {
+		
+		var dayNo = 0;
+		var currentMonthNo = moment().format("M");
+    	var selectedMonthNO = moment($scope.SpWrkHrs.spMonth , "MMMM").format('M');
+
+    	if(parseInt(currentMonthNo) == parseInt(selectedMonthNO)){
+            dayNo = moment().format('D');
+    	}else if (parseInt(currentMonthNo) > parseInt(selectedMonthNO)){
+    		dayNo = 32;
+    	}else{
+    		dayNo = 1;
+    	}
+
+		if($scope.slotChecked == false){
+			/*$scope.subTick1 = false;
+			$scope.subTick2 = false;
+			$scope.subTick3 = false;
+			$scope.subTick4 = false;
+			$scope.subTick5 = false;
+			$scope.subTick6 = false;
+			$scope.subTick7 = false;
+			$scope.subTick8 = false;*/
+
+			for(var i = dayNo ; i<= $scope.slotDateList.length ; i++){
+				for(var j= 1 ; j <= $scope.wrkHrsSlotsForHome.length ; j ++){
+					var tdCellID = $scope.wrkHrsSlotsForHome[j-1].startTime+"_"+$scope.slotDateList[i-1].dateNo;
+					var v = 'subTick'+j+i;
+					if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+				   	 	$scope[v] = false;
+				   	}
+				}
+		
+			}
+		}else{
+			/*$scope.subTick1 = true;
+			$scope.subTick2 = true;
+			$scope.subTick3 = true;
+			$scope.subTick4 = true;
+			$scope.subTick5 = true;
+			$scope.subTick6 = true;
+			$scope.subTick7 = true;
+			$scope.subTick8 = true;*/
+			for(var i = dayNo ; i<= $scope.slotDateList.length ; i++){
+				for(var j= 1 ; j <= $scope.wrkHrsSlotsForHome.length ; j ++){
+					var tdCellID = $scope.wrkHrsSlotsForHome[j-1].startTime+"_"+$scope.slotDateList[i-1].dateNo;
+					var v = 'subTick'+j+i;
+				    if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+				   		 $scope[v] = true;
+				   	}
+				}
+				
+			}
+		}
+	}
+
+	$scope.getTdSlot = function(slot,date) {
+
+		if($scope.markLeave == false){
+			var tdId= ('subTick'+slot.slotNo+""+date.dateNo);		
+			if($scope[tdId] == false){
+				$scope[tdId] = true;
+			}else{
+				$scope[tdId] = false;
+			}
+		}else{
+			var td = slot.startTime+'_'+date.dateNo;
+			//alert(td);
+			if(document.getElementById(td).style.backgroundColor != "yellow"){
+				if(document.getElementById(td).style.backgroundColor == 'red'){
+
+					document.getElementById(td).style.backgroundColor = 'white';
+				}else{
+					document.getElementById(td).style.backgroundColor = 'red';
+				}
+			}	
+		}
+
+	}
+
+	$scope.markLeaves = function(dateNO) {
+		if($scope.markLeave == true){
+			for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){
+				var td = $scope.wrkHrsSlotsForHome[i].startTime +"_"+dateNO;
+				if(document.getElementById(td).style.backgroundColor != "yellow"){
+					if(document.getElementById(td).style.backgroundColor == 'red'){
+						document.getElementById(td).style.backgroundColor = 'white';
+					}else{
+						document.getElementById(td).style.backgroundColor = 'red';
+					}
+				}
+			}
+		}
+	}
+
+	$scope.redirectToSlotAllocation = function() {
+		$scope.month = moment().format("MMMM");
+		$('.dateTimePickerSlot').val(moment().format("YYYY-MMM-DD"));
+
+		$scope.SpWrkHrs.spMonth = $scope.month;
+		$scope.slotChecked = false;
+		for(var i = 1 ; i<= 31 ; i++){
+			for(var j= 1 ; j <= 8 ; j ++){
+				var v = 'subTick'+j+i;
+			    $scope[v] = false;
+			}
+	
+		}
+
+		if($scope.SpWrkHrs.spNamesIdSlot != "All" && $scope.SpWrkHrs.spNamesIdSlot != undefined){
+			$scope.slotViewTableFlag = false;
+		}else{
+			$scope.slotViewTableFlag = true;
+			$scope.todaysDate = moment().format("D-MM-YYYY");
+			$scope.loadSlotViewTable($scope.todaysDate);
+		}
+
+		if($scope.SpWrkHrs.spMonth != undefined){
+			var daysNo = moment($scope.SpWrkHrs.spMonth , "MMMM").daysInMonth();
+		}else{
+			var daysNo = moment().daysInMonth();			
+		}
+		//var dayName = moment("2017-09-30").format('dddd');
+		var year = moment().format('YYYY');
+		var month = moment($scope.SpWrkHrs.spMonth , "MMMM").format('MM');
+
+		$scope.slotDateList = [];
+    	for(var i = 1 ; i <= daysNo ; i++){
+    		var obj = {'dateNo':0,'dayOfWeek':''};
+    		var date = year+'-'+month+'-'+i;
+    		var dayOfWeek = moment(date).format('ddd');
+    		obj.dateNo = i;
+    		obj.dayOfWeek = dayOfWeek;
+    		$scope.slotDateList.push(obj);
+    	}     
+
+    	//set weekly off as sunday by default for current month
+
+    	setTimeout(function() {
+			/*for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){
+				for(var j = 0 ; j < $scope.slotDateList.length; j++){
+					if($scope.slotDateList[j].dayOfWeek == "Sun"){			
+						var td = $scope.wrkHrsSlotsForHome[i].startTime +"_"+ $scope.slotDateList[j].dateNo;			
+					    document.getElementById(td).style.backgroundColor = 'yellow';	
+									
+					}	
+				}
+			}*/
+
+			//freeze grid for past dates
+			var dayNo = moment().format('D');
+			for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){
+				for(var j = 0 ; j < (dayNo-1) ; j++){
+								
+						var td = $scope.wrkHrsSlotsForHome[i].startTime +"_"+ $scope.slotDateList[j].dateNo;
+						var th1 = $scope.slotDateList[j].dateNo;
+						var th2 = $scope.slotDateList[j].dateNo+"_"+ $scope.slotDateList[j].dayOfWeek;
+								
+					    document.getElementById(td).style.opacity = "0.2";
+					    document.getElementById(td).style.pointerEvents = "none";
+					    document.getElementById(td).style.backgroundColor = '#d4d4b4';
+
+					
+					    document.getElementById(th1).style.backgroundColor = '#d4d4b4';
+					    document.getElementById(th1).style.pointerEvents = "none";
+
+					    document.getElementById(th2).style.backgroundColor = '#d4d4b4';
+					    document.getElementById(th2).style.pointerEvents = "none";
+										
+				}
+			}
+
+
+			var spid = $scope.SpWrkHrs.spNamesIdSlot;
+			var month = $scope.SpWrkHrs.spMonth;
+
+			$scope.loadSlotTickTable(spid,month);
+		
+
+		}, 200);		
+
+	}
+
+
+     /*$("#spMonthId").datetimepicker({			
+			format: 'MMMM',
+            viewMode: 'months', 
+             // pickTime: false, 			
+		  }).on("dp.change", function (data) {
+
+    	 setTimeout(function() {
+          $scope.monthString = document.getElementById(".dateTimePickerOnlyMonth").value; 
+
+     	 }, 50);
+
+          var arrayMonthString =  $scope.monthString.split('-');
+
+          $scope.SpWrkHrs.spMonth = arrayMonthString[0];
+          $scope.SpWrkHrs.spYear = arrayMonthString[1];
+
+          $scope.resetSlotDate();
+
+    });*/
+
+
+	$scope.resetSlotDate = function(){
+
+		$scope.month = $scope.SpWrkHrs.spMonth;
+		$scope.saveBtn = true;
+	
+		//to deselect all cells according to month
+		$scope.slotChecked = false;		
+		for(var i = 1 ; i<= 31 ; i++){
+			for(var j= 1 ; j <= 8 ; j ++){
+				var v = 'subTick'+j+i;
+			    $scope[v] = false;
+			}
+	
+		}
+
+		//to populate $scope.slotDateList according to month selection
+		if($scope.SpWrkHrs.spMonth != undefined){
+			var daysNo = moment($scope.SpWrkHrs.spMonth , "MMMM").daysInMonth();
+		}else{
+			var daysNo = moment().daysInMonth();			
+		}
+		var year = moment().format('YYYY');
+		var month = moment($scope.SpWrkHrs.spMonth , "MMMM").format('MM');
+
+		$scope.slotDateList = [];
+    	for(var i = 1 ; i <= daysNo ; i++){
+    		var obj = {'dateNo':0,'dayOfWeek':''};
+    		var date = year+'-'+month+'-'+i;
+    		var dayOfWeek = moment(date).format('ddd');
+    		obj.dateNo = i;
+    		obj.dayOfWeek = dayOfWeek;
+    		$scope.slotDateList.push(obj);
+    	}   
+
+
+    	$scope.SpWrkHrs.spWeeklyOff = "Sunday";
+
+    	var currentMonthNo = moment().format("M");
+    	var selectedMonthNO = moment($scope.SpWrkHrs.spMonth , "MMMM").format('M');
+    	//console.log(currentMonthNo);
+    	//console.log(selectedMonthNO);
+
+    	setTimeout(function() {
+
+    		if(selectedMonthNO == currentMonthNo){
+	    		var dayNo = moment().format('D');
+				for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){
+					for(var j = 0 ; j < (dayNo-1) ; j++){
+									
+							var td = $scope.wrkHrsSlotsForHome[i].startTime +"_"+ $scope.slotDateList[j].dateNo;
+							var th1 = $scope.slotDateList[j].dateNo;
+							var th2 = $scope.slotDateList[j].dateNo+"_"+ $scope.slotDateList[j].dayOfWeek;
+									
+						    document.getElementById(td).style.opacity = "0.2";
+						    document.getElementById(td).style.pointerEvents = "none";
+						    document.getElementById(td).style.backgroundColor = '#d4d4b4';
+						
+						    document.getElementById(th1).style.backgroundColor = '#d4d4b4';
+						    document.getElementById(th1).style.pointerEvents = "none";
+
+						    document.getElementById(th2).style.backgroundColor = '#d4d4b4';
+						    document.getElementById(th2).style.pointerEvents = "none";
+			
+						    //$scope.slotChecked = true;
+											
+					}
+				}
+
+	    	}else if(parseInt(selectedMonthNO) < parseInt(currentMonthNo) ){
+		    	for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){	    		
+					for(var j = 0 ; j < $scope.slotDateList.length; j++){			
+							var td1 =$scope.wrkHrsSlotsForHome[i].startTime +"_"+ $scope.slotDateList[j].dateNo;
+							var th1 = $scope.slotDateList[j].dateNo;
+							var th2 = $scope.slotDateList[j].dateNo+"_"+ $scope.slotDateList[j].dayOfWeek;
+
+							document.getElementById(td1).style.opacity = "0.2";
+						    document.getElementById(td1).style.pointerEvents = "none";
+						    document.getElementById(td1).style.backgroundColor = '#d4d4b4';
+
+						    document.getElementById(th1).style.backgroundColor = '#d4d4b4';
+						    document.getElementById(th1).style.pointerEvents = "none";
+
+						    document.getElementById(th2).style.backgroundColor = '#d4d4b4';
+						    document.getElementById(th2).style.pointerEvents = "none";
+
+						   // $scope.slotChecked = false;
+					}
+				}
+
+				$scope.saveBtn = false;
+
+			}
+
+			var spid = $scope.SpWrkHrs.spNamesIdSlot;
+			var month = $scope.SpWrkHrs.spMonth;
+
+			$scope.loadSlotTickTable(spid,month);
+
+		}, 200);	
+		
+
+	}
+
+
+	$scope.loadSlotTickTable = function(spid,month){
+
+		adminApi.getSpSlot(spid,month)
+			.success(function(data, status, headers, config){
+
+				$scope.spSlotList = data.payload;
+				//console.log(data.payload);
+
+				var dateStringArray = [];
+
+				$scope.spUniqueSlot = [];
+				for(var i=0;i<$scope.spSlotList.length;i++){
+					if(dateStringArray.indexOf($scope.spSlotList[i].dateString+"_"+$scope.spSlotList[i].startTime) == -1){
+						$scope.spUniqueSlot.push($scope.spSlotList[i]);
+						dateStringArray.push($scope.spSlotList[i].dateString+"_"+$scope.spSlotList[i].startTime);
+					}
+				}
+
+				for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){
+					for(var j = 0 ; j < $scope.slotDateList.length; j++){
+						var tdSlot = $scope.wrkHrsSlotsForHome[i].startTime +"_"+ $scope.slotDateList[j].dateNo;
+						var tickSlot = 'subTick'+$scope.wrkHrsSlotsForHome[i].slotNo+""+$scope.slotDateList[j].dateNo;
+
+						var startTime = (($scope.wrkHrsSlotsForHome[i].startTime).substring(0, 5)).replace(":","");
+						var DateNo = $scope.slotDateList[j].dateNo;
+						for(var k =0;k < $scope.spUniqueSlot.length; k++){
+							var slotStart = $scope.spUniqueSlot[k].startTime;
+							//console.log($scope.spUniqueSlot[k].dateString);
+							var date = ($scope.spUniqueSlot[k].dateString).split('-');
+							var slotDateNO = date[0];
+							$scope.SpWrkHrs.spWeeklyOff = $scope.spUniqueSlot[k].weekly_off;
+
+							if((startTime == slotStart) && (DateNo == slotDateNO) && ($scope.SpWrkHrs.spMonth == $scope.spUniqueSlot[k].month) && ($scope.spUniqueSlot[k].is_allocated == true)){
+								$scope[tickSlot] = true;
+								//$scope.setWeeklyOff();
+
+								if($scope.spUniqueSlot[k].is_weeklyOff == true){
+										document.getElementById(tdSlot).style.backgroundColor = 'yellow';
+								}
+								
+								if($scope.spUniqueSlot[k].is_leave == true){
+									document.getElementById(tdSlot).style.backgroundColor = 'red';
+								}
+
+								/*if($scope.spUniqueSlot[k].appointment_id != null && $scope.spUniqueSlot[k].appointment_id != undefined){
+									document.getElementById(tdSlot).style.backgroundColor = '#d8d7d5';
+									document.getElementById(tdSlot).style.pointerEvents = "none";
+									//alert("Hi");
+								}*/
+								if($scope.spUniqueSlot[k].is_blocked && $scope.spUniqueSlot[k].is_blocked == true){
+									document.getElementById(tdSlot).style.backgroundColor = '#d8d7d5';
+									document.getElementById(tdSlot).style.pointerEvents = "none";
+									//alert("Hi");
+								}
+							}else{
+								if((startTime == slotStart) && (DateNo == slotDateNO) && ($scope.SpWrkHrs.spMonth == $scope.spUniqueSlot[k].month) && ($scope.spUniqueSlot[k].is_allocated == false)){
+									
+									if($scope.spUniqueSlot[k].is_weeklyOff == true){
+										document.getElementById(tdSlot).style.backgroundColor = 'yellow';
+									}
+
+									if($scope.spUniqueSlot[k].is_leave == true){
+										document.getElementById(tdSlot).style.backgroundColor = 'red';
+									}
+								}
+							}
+						}
+					}
+				}
+
+			})
+			.error(function(data, status, headers, config){
+				console.log("Error while recieving sp slot...");
+			});
+
+	}
+
+	$scope.setWeeklyOff = function(){
+
+		var dayNo = 0;
+		var currentMonthNo = moment().format("M");
+    	var selectedMonthNO = moment($scope.SpWrkHrs.spMonth , "MMMM").format('M');
+
+    	//alert($scope.SpWrkHrs.spMonth);
+
+    	if(parseInt(currentMonthNo) == parseInt(selectedMonthNO)){
+            dayNo = (moment().format('D')) - 1;
+    	}else if (parseInt(currentMonthNo) > parseInt(selectedMonthNO)){
+    		dayNo = 32;
+    	}else{
+    		dayNo = 0;
+    	}
+
+
+		for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){
+			for(var j = dayNo ; j < $scope.slotDateList.length; j++){			
+				var tdCell = $scope.wrkHrsSlotsForHome[i].startTime +"_"+ $scope.slotDateList[j].dateNo;					
+				    if(document.getElementById(tdCell).style.backgroundColor == 'yellow'){
+				    	//document.getElementById(tdCell).style.backgroundColor = 'white';
+				    	document.getElementById(tdCell).style.backgroundColor = null;
+				    	//console.log(tdCell)
+				    }											
+			}
+		}
+
+	    var day = "";
+
+		if($scope.SpWrkHrs.spWeeklyOff == "Sunday"){
+			day = "Sun";
+		}else if($scope.SpWrkHrs.spWeeklyOff == "Monday"){
+			day = "Mon";
+		}else if($scope.SpWrkHrs.spWeeklyOff == "Tuesday"){
+			day = "Tue";			
+		}else if($scope.SpWrkHrs.spWeeklyOff == "Wednesday"){
+			day = "Wed";
+		}else if($scope.SpWrkHrs.spWeeklyOff == "Thursday"){
+			day = "Thu";
+		}else if($scope.SpWrkHrs.spWeeklyOff == "Friday"){
+			day = "Fri";
+		}else if($scope.SpWrkHrs.spWeeklyOff == "Saturday"){
+			day = "Sat";
+		}
+
+
+    	for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){
+			for(var j = dayNo ; j < $scope.slotDateList.length; j++){
+				if($scope.slotDateList[j].dayOfWeek == day){			
+					var td = $scope.wrkHrsSlotsForHome[i].startTime +"_"+ $scope.slotDateList[j].dateNo;
+					//console.log(td);
+					if(document.getElementById(td).style.backgroundColor != 'red'){
+						document.getElementById(td).style.backgroundColor = 'yellow';	
+					}						    
+								
+				}	
+			}
+		}
+
+	}
+
+	$scope.saveSlotData = function() {
+
+
+		$scope.slotInfo = [];
+		$scope.serviceLocation = "";
+		
+        if($scope.SpWrkHrs.spServiceLocationSlot == '0'){
+        	$scope.serviceLocation = "Home";
+        } 
+
+	   	$scope.cityId = $scope.SpWrkHrs.spSlotCity;
+		$scope.serviceProvider = $scope.SpWrkHrs.spNamesIdSlot;
+
+        if($scope.SpWrkHrs.spWeeklyOff != 'Select weekly off'){
+        	$scope.weekly_off = $scope.SpWrkHrs.spWeeklyOff;
+        }else{
+        	$scope.weekly_off = 'Sunday';
+        }   
+
+        $scope.flag='true';
+
+     	for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){
+			for(var j = 0 ; j < $scope.slotDateList.length; j++){
+				var tdSlot = $scope.wrkHrsSlotsForHome[i].startTime +"_"+ $scope.slotDateList[j].dateNo;
+				var tickSlot = 'subTick'+$scope.wrkHrsSlotsForHome[i].slotNo+""+$scope.slotDateList[j].dateNo;
+
+				if(document.getElementById(tdSlot).style.pointerEvents != "none"){
+					var year1 = moment().format('YYYY');
+					var month1 = moment($scope.SpWrkHrs.spMonth , "MMMM").format('MM');
+					var day1 = $scope.slotDateList[j].dateNo;
+					$scope.dateString1 = day1+"-"+month1+"-"+year1;
+   				
+	   				if($scope.flag=='true'){
+	   					$scope.initdate = (moment($scope.dateString1, "DD-MM-YYYY").valueOf())/1000;
+	   					$scope.flag='false';
+	   				}
+				}
+				    
+
+
+				if(($scope[tickSlot] == true && document.getElementById(tdSlot).style.pointerEvents != "none") || 
+				   (document.getElementById(tdSlot).style.backgroundColor == 'red' && document.getElementById(tdSlot).style.pointerEvents != "none") ||
+				   (document.getElementById(tdSlot).style.backgroundColor == 'yellow' && document.getElementById(tdSlot).style.pointerEvents != "none")){
+
+					var start = (($scope.wrkHrsSlotsForHome[i].startTime).substring(0, 5)).replace(":","");
+					var end = (($scope.wrkHrsSlotsForHome[i].endTime).substring(0, 5)).replace(":","");
+
+					if(document.getElementById(tdSlot).style.backgroundColor == 'red'){
+						$scope.isLeave = true;
+					}else{
+						$scope.isLeave = false;
+					}
+
+					var year = moment().format('YYYY');
+					var month = moment($scope.SpWrkHrs.spMonth , "MMMM").format('MM');
+					var day = $scope.slotDateList[j].dateNo;
+					$scope.dateString = day+"-"+month+"-"+year;
+	   				$scope.date = (moment($scope.dateString, "DD-MM-YYYY").valueOf())/1000;
+
+	   				if($scope[tickSlot] == true){
+	   					$scope.isAllocated = true;
+	   				}else{
+	   					$scope.isAllocated = false;
+	   				}
+
+	   				if(document.getElementById(tdSlot).style.backgroundColor == 'yellow'){
+   						$scope.isWeekend = true;
+   					}else{
+   						$scope.isWeekend = false;
+   					}
+
+					var obj = {		
+						"service_provider_id":$scope.SpWrkHrs.spNamesIdSlot,
+						"service_location":$scope.serviceLocation,
+						"dateString":$scope.dateString,
+						"date":$scope.date,
+						"startTime":start,
+						"endTime":end,	
+						"weekly_off":$scope.weekly_off,
+						"is_leave":$scope.isLeave,
+						"city_id":$scope.SpWrkHrs.spSlotCity,
+						"month":$scope.SpWrkHrs.spMonth,
+						"is_allocated":$scope.isAllocated,
+						"is_weeklyOff":$scope.isWeekend
+
+					};
+					
+					$scope.slotInfo.push(obj);
+				}
+      				
+			}
+		}
+
+		//console.log($scope.slotInfo);
+		console.log($scope.initdate);
+
+		var result = confirm("Do you want to open slot?");
+		if(result == true) {
+			adminApi.addSlotInfo($scope.slotInfo,$scope.initdate)
+			.success(function(data, status, headers, config){
+				alert("Slot Opened Successfully!")
+				$scope.resetSlotDate();
+
+			})
+			.error(function(data, status, headers, config){
+				console.log("Error While Opening Slots!");
+			});
+
+		}
+
+	}
+
+	$scope.cancelSlotData = function() {
+		$scope.resetSlotDate();
+	}
+
+
+	$('.dateTimePickerSlot').datepicker({
+			dateFormat: 'yy-M-dd'
+		})
+	    .on("change", function (e) {
+	    //console.log("Date changed: ", e.target.value);
+	    //alert($(this).val())
+	    var date = $(this).val();
+		var dateString = (moment(date).format("D-MM-YYYY")).toString();
+		$scope.loadSlotViewTable(dateString);
+	});
+
+	$scope.setSlotViewTableByZone = function() {
+		$scope.zoneid = $scope.SpWrkHrs.spZones;
+		$scope.zoneBasedSp =[];
+
+		if($scope.zoneid != "All"){
+			for(var i=0;i < $scope.cityBasedSps.length; i++){
+				$scope.zoneList =[];
+				if($scope.cityBasedSps[i].zones){
+					for(var j = 0;j< $scope.cityBasedSps[i].zones.length;j++){
+						$scope.zoneList.push($scope.cityBasedSps[i].zones[j].id);
+					}
+					
+					if($scope.zoneList.indexOf($scope.zoneid) !== -1){
+						$scope.zoneBasedSp.push($scope.cityBasedSps[i]);		
+					}
+				}		
+			}
+
+			$scope.cityBasedSpsForViewSlot = $scope.zoneBasedSp;	
+		}else{
+			$scope.cityBasedSpsForViewSlot = $scope.cityBasedSps;	
+		}			
 
 	}
 
@@ -4554,16 +5478,21 @@ angular.module('myApp.controllers')
 			
 		}, 900);
 
+
 	}
 
 	$scope.populateCityBasedSps = function(cityId) {
 		$scope.cityIdValue = cityId;
 		$scope.cityBasedSps =[];
+		$scope.cityBasedSpsForViewSlot =[];
 
 		$scope.populateCityBasedZonesForSlot(cityId);
 
 		$scope.curdate = moment().format("YYYY-MMM-DD");
+		$scope.curdate1 = moment().format("MMMM");
 		$('.dateTimePickerSlot').val($scope.curdate);
+		$('.dateTimePickerOnlyMonth').val($scope.curdate1);
+
 
 		adminApi.getAllSps().
 		success(function (data, status, headers, config) {
@@ -4585,6 +5514,7 @@ angular.module('myApp.controllers')
 
 				if($scope.arrayAllSps[i].cityId == cityId){
 					$scope.cityBasedSps.push($scope.arrayAllSps[i]);
+					$scope.cityBasedSpsForViewSlot.push($scope.arrayAllSps[i]);
 				}
 			}
 
@@ -4598,7 +5528,12 @@ angular.module('myApp.controllers')
 			var obj = {"_id":"All","name":"All"};
 			$scope.cityBasedSps.push(obj);
 
+			console.log('city based sps');
 			console.log($scope.cityBasedSps);
+
+			$scope.SpWrkHrs.spNamesIdSlot = 'All';
+
+
 		}).
 		error(function (data, status, headers, config) {
 			console.log("Error in receiving Sps");
@@ -4664,6 +5599,13 @@ angular.module('myApp.controllers')
 			});
 
 			console.log($scope.locationArray);
+
+			var obj ={  "zoneid": "All",
+	                    "zonename": "All",	         	       
+	                    "val":"All",
+	                    "cityId": cityId
+	                };
+			$scope.locationArray.push(obj);
 
 
 	}
@@ -7265,7 +8207,7 @@ angular.module('myApp.controllers')
 				}
 			}
 		}
-		console.log($scope.wrkHrsAllSlots);
+		//console.log($scope.wrkHrsAllSlots);
 		
 		// removing duplicate zone ids
 		var finalZoneWorkingTime = [];

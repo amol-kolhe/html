@@ -1,12 +1,17 @@
 <div id="q1" class="mainContent2" ng-controller="AdminCtrl" ng-init="initCache();">
-    <div style="padding:10px;">
+    <div style="padding:5px;">
+        <div class="row">
+            <div class="col-xs-12">
+                  <h4>Slot Management</h4>
+             </div>
+       </div>
         <form name="addSpWrkHrsForm.adminFormForSp" data-ng-init="initDatePicker();" data-ng-submit="" novalidate>
-                <div class= "table-hover new-appointment-table col-xs-7">
+                <div class= "table-hover new-appointment-table col-xs-6">
                     <div class="row row-align">
-                        <div class="col-xs-12 col-sm-3 appointment-label">
+                        <div class="col-xs-12 col-sm-4 appointment-label">
                             City <span style="color: red;">*</span>
                         </div>
-                        <div class="col-xs-12 col-sm-9">
+                        <div class="col-xs-12 col-sm-8">
                             <span class = "colonSeparatorRight hidden-xs">:</span>
                              <select class = "input-width clstxt2 form-control"
                                     name = "spSlotCity"
@@ -23,10 +28,10 @@
                     </div>
 
                     <div class="row row-align">
-                        <div class="col-xs-12 col-sm-3 appointment-label">
+                        <div class="col-xs-12 col-sm-4 appointment-label">
                             Service Location
                         </div>
-                        <div class="col-xs-12 col-sm-9">
+                        <div class="col-xs-12 col-sm-8">
                             <span class = "colonSeparatorRight hidden-xs">:</span>
                                 <select ng-model="SpWrkHrs.spServiceLocationSlot"
                                     name="spServiceLocationSlot"
@@ -46,17 +51,17 @@
                     </div>
 
                     <div class="row row-align">
-                        <div class="col-xs-12 col-sm-3 appointment-label">
+                        <div class="col-xs-12 col-sm-4 appointment-label">
                             Service Provider
                         </div>
-                        <div class="col-xs-12 col-sm-9">
+                        <div class="col-xs-12 col-sm-8">
                             <span class = "colonSeparatorRight hidden-xs">:</span>
                             <select ng-model="SpWrkHrs.spNamesIdSlot"
                                     name="spNamesIdSlot"
                                     class="input-width clstxt2 form-control"
                                     id = "spNamesListId"
                                     title = "Select service provider"
-                                    data-ng-change="resetDatePicker9();"
+                                    data-ng-change="redirectToSlotAllocation();"
                                     ng-options="sp._id as sp.name for sp in cityBasedSps"
                                     data-ng-required = "true">
                                 <option value="">Select service provider</option>
@@ -64,19 +69,19 @@
                         </div>
                     </div>
 
-                     <div class="row row-align">
-                        <div class="col-xs-12 col-sm-3 appointment-label">
+                     <div class="row row-align" ng-show="slotViewTableFlag">
+                        <div class="col-xs-12 col-sm-4 appointment-label">
                             Zones
                         </div>
-                        <div class="col-xs-12 col-sm-9">
+                        <div class="col-xs-12 col-sm-8">
                             <span class = "colonSeparatorRight hidden-xs">:</span>
                             <select ng-model="SpWrkHrs.spZones"
                                     name="spZones"
                                     class="input-width clstxt2 form-control"
                                     id = "spZonesId"
                                     title = "Select zone"
-                                    data-ng-change="resetDatePicker9();"
-                                    ng-options="l.val for l in locationArray"
+                                    data-ng-change="setSlotViewTableByZone();"
+                                    ng-options="l.zoneid as l.val for l in locationArray"
                                     data-ng-required = "true">
                                 <option value="">Select zone</option>
                             </select>
@@ -84,26 +89,56 @@
                         </div>
                     </div>
 
-                     <div class="row row-align">
-                        <div class="col-xs-12 col-sm-3 appointment-label">
+                     <div class="row row-align" ng-show="slotViewTableFlag">
+                        <div class="col-xs-12 col-sm-4 appointment-label">
                             Date
                         </div>
-                        <div class="col-xs-12 col-sm-9">
+                        <div class="col-xs-12 col-sm-8">
                             <span class = "colonSeparatorRight hidden-xs">:</span>
                             <input type="text"
                                 ng-model="SpWrkHrs.slotDate"
                                 name = "slotDate"
                                 id="slotDate"
-                                value = "{{slotDate}}"
                                 title="Date"
-                                class="dateTimePickerSlot form-control input-width clstxt2"/>
+                                class="dateTimePickerSlot form-control input-width clstxt2"
+                                ng-change="loadSlotViewTableByDate();"/>
+                        
+                        </div>
+                       <!-- <div class="col-xs-12 col-sm-2">
+                            <button class="btn btn-primary btn-sm" ng-click="loadSlotViewTableByDate();" type="button" >Show Availability</button>
+                        </div> -->
+                    </div>
+
+                    <div class="row row-align" ng-show="!slotViewTableFlag">
+                        <div class="col-xs-12 col-sm-4 appointment-label">
+                            Month
+                        </div>
+                        <div class="col-xs-12 col-sm-8">
+                            <span class = "colonSeparatorRight hidden-xs">:</span>
+                            <select ng-model="SpWrkHrs.spMonth"
+                                    name="spMonth"
+                                    class="input-width clstxt2 form-control"
+                                    id = "spMonthId"
+                                    title = "Select month"
+                                    data-ng-change="resetSlotDate();"
+                                    ng-options="month for month in monthList"
+                                    data-ng-required = "true">
+                                <!--<option value="">Select month</option>-->
+                            </select>
+
+                             <!--<input
+                                type="text"
+                                ng-model="SpWrkHrs.spMonth"
+                                data-ng-change="resetSlotDate()"
+                                id="spMonthId"
+                                class="dateTimePickerOnlyMonth form-control input-width clstxt2"/> -->
                         
                         </div>
                     </div>
 
                    
             </div>
-            <div class= "col-xs-5">
+            <div class= "col-xs-6" ng-show="slotViewTableFlag">
                 <div style="border: 1px solid;padding:20px 0;" class="row">
                    
                     <div class= "col-xs-6">
@@ -111,7 +146,7 @@
                         <span class="slot-legend-label">Free Slot</span>
                     </div>   
                     <div class= "col-xs-6">
-                        <span class = "slot-span" style="background-color:#efff02;"></span>
+                        <span class = "slot-span" style="background-color:yellow;"></span>
                         <span class="slot-legend-label">Weekly Off</span>
                     </div>                
                
@@ -121,7 +156,7 @@
                         <span class="slot-legend-label">Booked</span>
                     </div>   
                     <div class= "col-xs-6">
-                        <span class = "slot-span" style="background-color:#ff567d;"></span>
+                        <span class = "slot-span" style="background-color:red;"></span>
                         <span class="slot-legend-label">Leave</span>
                     </div>                
             
@@ -129,14 +164,116 @@
                     <div class= "col-xs-6">
                         <span class = "slot-span" style="background-color:#2fca2c;"></span>
                         <span class="slot-legend-label">Available</span>
-                    </div>   
-               
+                    </div>                  
               
                 </div>
 
             </div>
 
-             <div class= "col-xs-12">
+            <div class= "col-xs-6" ng-show="!slotViewTableFlag">
+                <div style="border: 1px solid;padding:20px 0;margin-bottom: 30px;" class="row">
+                   
+                    <div class= "col-xs-6">
+                        <span class = "slot-span"></span>
+                        <span class="slot-legend-label">Free Slot</span>
+                    </div>   
+                    <div class= "col-xs-6">
+                        <span class = "slot-span" style="background-color:yellow;"></span>
+                        <span class="slot-legend-label">Weekly Off</span>
+                    </div>                
+               
+                   
+                    <div class= "col-xs-6">
+                        <span class = "slot-span"> 
+                             <i style="margin: 0px 23px 0px 23px;" class="glyphicon glyphicon-ok"></i>
+                        </span>
+                        <span class="slot-legend-label">Allocated</span>
+                    </div>   
+                    <div class= "col-xs-6">
+                        <span class = "slot-span" style="background-color:red;"></span>
+                        <span class="slot-legend-label">Leave</span>
+                    </div>                           
+              
+                </div>
+
+                <div class = "row row-align">
+                   
+                         <div class="col-xs-12 col-sm-3 appointment-label">
+                            Weekly off
+                        </div>
+                        <div class="col-xs-12 col-sm-5">
+                            <span class = "colonSeparatorRight hidden-xs">:</span>
+                            <select ng-model="SpWrkHrs.spWeeklyOff"
+                                    name="spWeeklyOff"
+                                    class="input-width form-control"
+                                    id = "spWeeklyOffId"
+                                    title = "Select weekly off"
+                                    data-ng-change="setWeeklyOff();"
+                                    ng-options="week for week in weekDays"
+                                    data-ng-required = "true">
+                            </select>                       
+                        </div>
+                 
+                   
+                        <div class="col-xs-12 col-sm-3 appointment-label">
+
+                            Mark Leaves
+                        </div>
+                        <div class="col-xs-12 col-sm-1">
+                            <span class = "colonSeparatorRight hidden-xs">:</span>
+                            <input ng-model="markLeave" type="checkbox" />        
+                        </div>
+                 
+
+                </div>
+
+            </div>
+
+
+            <div class= "col-xs-12 slot-table" ng-show="slotViewTableFlag" style="margin-bottom: 25px;overflow:auto;">
+                    <table border="1" class="slot-view-table">
+                        <tr>
+                            <th><div style="width:130px;">{{curdate}}({{day}})</div></th>                          
+                            <th ng-repeat="column in cityBasedSpsForViewSlot">{{column.name}}</th>
+                        </tr>
+                        <tr ng-repeat="row in wrkHrsSlotsForHome">
+                            <td >{{row.label}}</td>
+                            <td ng-repeat="column in cityBasedSpsForViewSlot" id="{{row.startTime}}_{{column._id}}"></td>
+                        </tr>
+                    </table>
+             </div>
+
+
+             <div class= "row" ng-show="!slotViewTableFlag">
+                <div class="col-xs-12" style="margin-bottom: 25px;overflow:auto;">
+                    <table border="1" class="slot-view-table-main" style="margin-top: 50px;">
+                        <tr>
+                            <th rowspan = "2"><div class="align-cell">{{month}}</div></th> 
+                            <th rowspan = "2"> 
+                                <input ng-model="slotChecked" ng-click="resetGlobalSlotTick();" type="checkbox"/> 
+                            </th>   
+                            <th ng-repeat="item in slotDateList" id="{{item.dateNo}}_{{item.dayOfWeek}}" ng-click="markLeaves(item.dateNo)" class="align-cell">{{item.dayOfWeek}}</th>
+                        </tr>
+                        <tr>                      
+                            <th ng-repeat="item in slotDateList" id="{{item.dateNo}}" ng-click="markLeaves(item.dateNo)">{{item.dateNo}}</th>
+                        </tr>
+
+                        <tr ng-repeat="row in wrkHrsSlotsForHome">
+                            <td>{{row.label}}</td>
+                            <td > <input ng-checked="slotChecked" ng-click="setHorizontalChecked(row);" id="tick-{{row.slotNo}}" type="checkbox"/> </td>
+                            <td ng-repeat="item in slotDateList" ng-click="getTdSlot(row,item);" id="{{row.startTime}}_{{item.dateNo}}">
+                               
+                                    <i ng-show="subTick{{row.slotNo}}{{item.dateNo}}" class="glyphicon glyphicon-ok"  id="{{row.startTime}}_{{item.dateNo}}_tick"></i>
+                            
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="class=col-xs-12" style="margin-left: 20px;">
+                    <button class="btn btn-primary btn-sm" ng-show="saveBtn" ng-click="saveSlotData();" type="button" >Save</button>
+                    <button class="btn btn-primary btn-sm" ng-show="saveBtn" ng-click="cancelSlotData();"type="button" >Cancel</button>
+                </div>
+
              </div>
         </form>
     </div>
