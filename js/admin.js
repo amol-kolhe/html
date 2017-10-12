@@ -148,9 +148,9 @@ angular.module('myApp.controllers')
 	}
 
 
-
 	$scope.slotChecked = false;
 	$scope.saveBtn = true;
+	$scope.locationArray = [];
 
 	$scope.eventObj1 = {
 		onItemSelect: function(item) {
@@ -1905,7 +1905,7 @@ angular.module('myApp.controllers')
 		var yr = 0;
 
 		arrDateInst = $(".btn.btn-default.btn-sm").eq(1).text().split(' '); // November 2015
-		console.log(arrDateInst);
+		//console.log(arrDateInst);
 		if (arrDateInst[0] == "January") {
 			monthObj = "01";
 		} else if(arrDateInst[0] == "February") {
@@ -2131,7 +2131,7 @@ angular.module('myApp.controllers')
 		$("#datetimepicker7").find("[id^='datepicker'].btn-default").attr("disabled", true);
 		$("#datetimepicker7").find("[id^='datepicker'].btn-default").css({"color": "#333"});
 		$(".btn.btn-default.btn-sm.pull-left").on( "click", function() {
-			console.log( $( this ).text() );
+			//console.log( $( this ).text() );
 			$scope.spInfo = false;
 			$timeout(invokeGetEditMonthlyAppointmentAvailability, 100);
 		});
@@ -3205,7 +3205,7 @@ angular.module('myApp.controllers')
 			$rootScope.zonesList = buildZonesList(data.payload);
 			$scope.zoneIdToNameMap = buildZoneIdToNameMap(data.payload);
 			console.log("successfully received zones");
-			console.log(cache.zoneIdToNameMap);
+			//console.log(cache.zoneIdToNameMap);
 			arrZones.forEach(function(item) {
 				$scope.arrayAllZones.push(item);
 			});
@@ -3266,8 +3266,7 @@ angular.module('myApp.controllers')
 		$scope.month = moment().format("MMMM");
 		$scope.SpWrkHrs.slotDate = $scope.curdate;
 		$scope.SpWrkHrs.spMonth = $scope.month;
-		$scope.SpWrkHrs.spWeeklyOff = "Sunday";
-
+		$scope.SpWrkHrs.spWeeklyOff = "Select weekly off";	
 
 		if($scope.SpWrkHrs.spMonth != undefined){
 			var daysNo = moment($scope.SpWrkHrs.spMonth , "MMMM").daysInMonth();
@@ -3340,12 +3339,12 @@ angular.module('myApp.controllers')
 							}
 						];
 
+		//set veiw table as per current date
+		setTimeout(function() {
+			$scope.todaysDate = moment().format("D-MM-YYYY");
+			$scope.loadSlotViewTable($scope.todaysDate);
+		}, 300);
 
-		
-
-		$scope.todaysDate = moment().format("D-MM-YYYY");
-
-		$scope.loadSlotViewTable($scope.todaysDate);
 
 	}
 
@@ -3359,7 +3358,6 @@ angular.module('myApp.controllers')
 			.success(function(data, status, headers, config){
 
 				$scope.allSpSLots = data.payload;
-
 
 				for(var m = 0;m< $scope.cityBasedSpsForViewSlot.length;m++){
 					for(var n = 0 ; n < $scope.wrkHrsSlotsForHome.length; n++){
@@ -3408,7 +3406,7 @@ angular.module('myApp.controllers')
 				console.log("Error While Opening Slots!");
 			});
 
-		},200);
+		},300);
 
 	}
 
@@ -3669,6 +3667,9 @@ angular.module('myApp.controllers')
 			}
 	
 		}
+		for(var tick = 1 ; tick <= 8 ; tick ++){
+			document.getElementById('tick-'+tick).checked = false;
+		}
 
 		if($scope.SpWrkHrs.spNamesIdSlot != "All" && $scope.SpWrkHrs.spNamesIdSlot != undefined){
 			$scope.slotViewTableFlag = false;
@@ -3781,6 +3782,10 @@ angular.module('myApp.controllers')
 	
 		}
 
+		for(var tick = 1 ; tick <= 8 ; tick ++){
+			document.getElementById('tick-'+tick).checked = false;
+		}
+
 		//to populate $scope.slotDateList according to month selection
 		if($scope.SpWrkHrs.spMonth != undefined){
 			var daysNo = moment($scope.SpWrkHrs.spMonth , "MMMM").daysInMonth();
@@ -3801,7 +3806,7 @@ angular.module('myApp.controllers')
     	}   
 
 
-    	$scope.SpWrkHrs.spWeeklyOff = "Sunday";
+    	$scope.SpWrkHrs.spWeeklyOff = "Select weekly off";
 
     	var currentMonthNo = moment().format("M");
     	var selectedMonthNO = moment($scope.SpWrkHrs.spMonth , "MMMM").format('M');
@@ -3864,7 +3869,7 @@ angular.module('myApp.controllers')
 
 			$scope.loadSlotTickTable(spid,month);
 
-		}, 200);	
+		}, 300);	
 		
 
 	}
@@ -3888,6 +3893,8 @@ angular.module('myApp.controllers')
 					}
 				}
 
+				$scope.SpWrkHrs.spWeeklyOff = "Select weekly off";
+
 				for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){
 					for(var j = 0 ; j < $scope.slotDateList.length; j++){
 						var tdSlot = $scope.wrkHrsSlotsForHome[i].startTime +"_"+ $scope.slotDateList[j].dateNo;
@@ -3900,7 +3907,13 @@ angular.module('myApp.controllers')
 							//console.log($scope.spUniqueSlot[k].dateString);
 							var date = ($scope.spUniqueSlot[k].dateString).split('-');
 							var slotDateNO = date[0];
-							$scope.SpWrkHrs.spWeeklyOff = $scope.spUniqueSlot[k].weekly_off;
+
+							if($scope.spUniqueSlot[k].weekly_off != undefined){
+								$scope.SpWrkHrs.spWeeklyOff = $scope.spUniqueSlot[k].weekly_off;
+							}else{
+								$scope.SpWrkHrs.spWeeklyOff = "Select weekly off";
+							}
+							
 
 							if((startTime == slotStart) && (DateNo == slotDateNO) && ($scope.SpWrkHrs.spMonth == $scope.spUniqueSlot[k].month) && ($scope.spUniqueSlot[k].is_allocated == true)){
 								$scope[tickSlot] = true;
@@ -4010,8 +4023,6 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.saveSlotData = function() {
-
-
 		$scope.slotInfo = [];
 		$scope.serviceLocation = "";
 		
@@ -4025,8 +4036,8 @@ angular.module('myApp.controllers')
         if($scope.SpWrkHrs.spWeeklyOff != 'Select weekly off'){
         	$scope.weekly_off = $scope.SpWrkHrs.spWeeklyOff;
         }else{
-        	$scope.weekly_off = 'Sunday';
-        }   
+        	$scope.weekly_off = null;
+        }
 
         $scope.flag='true';
 
@@ -4034,7 +4045,7 @@ angular.module('myApp.controllers')
 			for(var j = 0 ; j < $scope.slotDateList.length; j++){
 				var tdSlot = $scope.wrkHrsSlotsForHome[i].startTime +"_"+ $scope.slotDateList[j].dateNo;
 				var tickSlot = 'subTick'+$scope.wrkHrsSlotsForHome[i].slotNo+""+$scope.slotDateList[j].dateNo;
-
+				//console.log("tdSlot");
 				if(document.getElementById(tdSlot).style.pointerEvents != "none"){
 					var year1 = moment().format('YYYY');
 					var month1 = moment($scope.SpWrkHrs.spMonth , "MMMM").format('MM');
@@ -4103,11 +4114,11 @@ angular.module('myApp.controllers')
 		}
 
 		//console.log($scope.slotInfo);
-		console.log($scope.initdate);
+		//alert($scope.initdate);
 
 		var result = confirm("Do you want to open slot?");
 		if(result == true) {
-			adminApi.addSlotInfo($scope.slotInfo,$scope.initdate)
+			adminApi.addSlotInfo($scope.slotInfo,$scope.initdate,$scope.SpWrkHrs.spNamesIdSlot,$scope.SpWrkHrs.spMonth)
 			.success(function(data, status, headers, config){
 				alert("Slot Opened Successfully!")
 				$scope.resetSlotDate();
@@ -4122,7 +4133,10 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.cancelSlotData = function() {
-		$scope.resetSlotDate();
+		var result = confirm("Do you want to discard changes?");
+		if(result == true) {
+			$scope.resetSlotDate();
+		}		
 	}
 
 
@@ -4132,14 +4146,25 @@ angular.module('myApp.controllers')
 	    .on("change", function (e) {
 	    //console.log("Date changed: ", e.target.value);
 	    //alert($(this).val())
+	    $scope.SpWrkHrs.slotDate = $(this).val();
 	    var date = $(this).val();
 		var dateString = (moment(date).format("D-MM-YYYY")).toString();
+
+		$scope.curdate = moment(date).format("YYYY-MMM-DD");
+		$scope.day = (moment(date).format("dddd")).toString();
 		$scope.loadSlotViewTable(dateString);
+
+		//alert($scope.SpWrkHrs.slotDate);
 	});
 
 	$scope.setSlotViewTableByZone = function() {
 		$scope.zoneid = $scope.SpWrkHrs.spZones;
 		$scope.zoneBasedSp =[];
+		$scope.allsp = [];
+
+		var date = $scope.SpWrkHrs.slotDate;
+		var dateString = (moment(date).format("D-MM-YYYY")).toString();
+		$scope.loadSlotViewTable(dateString);
 
 		if($scope.zoneid != "All"){
 			for(var i=0;i < $scope.cityBasedSps.length; i++){
@@ -4154,10 +4179,14 @@ angular.module('myApp.controllers')
 					}
 				}		
 			}
-
 			$scope.cityBasedSpsForViewSlot = $scope.zoneBasedSp;	
 		}else{
-			$scope.cityBasedSpsForViewSlot = $scope.cityBasedSps;	
+			for(var i=0;i < $scope.cityBasedSps.length; i++){
+				if($scope.cityBasedSps[i]._id != 'All'){
+					$scope.allsp.push($scope.cityBasedSps[i]);
+				}
+			}
+			$scope.cityBasedSpsForViewSlot = $scope.allsp;	
 		}			
 
 	}
@@ -5467,9 +5496,9 @@ angular.module('myApp.controllers')
             for (var i = 0 ; i < spAllZonesOptions.length ;i++){
                 if ((spAllZonesOptions[i].deleted == false) && (spAllZonesOptions[i].cityid == $scope.spDetails.spCity)){
                     spNonDeletedZones.push(spAllZonesOptions[i]);
-                    console.log("zonelist id" + spAllZonesOptions[i].cityid);
-                    console.log("selected id" + $scope.spDetails.spCity);
-                    console.log(spAllZonesOptions[i]);
+                    //console.log("zonelist id" + spAllZonesOptions[i].cityid);
+                   // console.log("selected id" + $scope.spDetails.spCity);
+                   // console.log(spAllZonesOptions[i]);
                 }
             }
 
@@ -5485,6 +5514,7 @@ angular.module('myApp.controllers')
 		$scope.cityIdValue = cityId;
 		$scope.cityBasedSps =[];
 		$scope.cityBasedSpsForViewSlot =[];
+		$scope.locationArray =[];
 
 		$scope.populateCityBasedZonesForSlot(cityId);
 
@@ -5528,10 +5558,11 @@ angular.module('myApp.controllers')
 			var obj = {"_id":"All","name":"All"};
 			$scope.cityBasedSps.push(obj);
 
-			console.log('city based sps');
-			console.log($scope.cityBasedSps);
+			//console.log('city based sps');
+			//console.log($scope.cityBasedSps);
 
 			$scope.SpWrkHrs.spNamesIdSlot = 'All';
+			$scope.SpWrkHrs.spZones = "All";
 
 
 		}).
@@ -5558,12 +5589,12 @@ angular.module('myApp.controllers')
 	}
 
     $scope.populateCityBasedZonesForSlot = function(cityId) {	
-			
-			$scope.locationArray = [];
+			//alert('Hi');
 			adminApi.getZones(cityId)
 			.success(function(data, status, headers, config){
 				var dataArray = [];
 				dataArray = data.payload;
+				$scope.locationArray = [];
 				//console.log(dataArray);
 				for(var i = 0 ; i < dataArray.length ; i++) {                                       
                 if(!dataArray[i].hasOwnProperty("deleted") || dataArray[i].deleted === false) {
@@ -5592,20 +5623,22 @@ angular.module('myApp.controllers')
 					}
                   }
 				}
+
+				var obj ={  "zoneid": "All",
+	                "zonename": "All",	         	       
+	                "val":"All",
+	                "cityId": cityId
+	            };
+				$scope.locationArray.push(obj);
+
+				//console.log("HHHHHHHHH");
+				//console.log($scope.locationArray);
+
 			
 			})
 			.error(function(data, status, headers, config){
 				console.log("Error in getting Zones");
 			});
-
-			console.log($scope.locationArray);
-
-			var obj ={  "zoneid": "All",
-	                    "zonename": "All",	         	       
-	                    "val":"All",
-	                    "cityId": cityId
-	                };
-			$scope.locationArray.push(obj);
 
 
 	}
@@ -9992,7 +10025,7 @@ angular.module('myApp.controllers')
 					angular.forEach($scope.zoneMgmt.zoneRecord.pincodes,function(pincodeEntites,pincodekeys){
 						$scope.zoneMgmt.zoneRecord.pincodes[pincodekeys].locality = pincodeEntites.pin+' - '+pincodeEntites.localities ;
 					});
-					console.log($scope.zoneMgmt.zoneRecord.pincodes);
+					//console.log($scope.zoneMgmt.zoneRecord.pincodes);
 					$scope.zoneMgmt.editZoneSection = false;
 					$scope.zoneMgmt.addNewZoneSection = false;
 
@@ -10055,7 +10088,7 @@ angular.module('myApp.controllers')
 			for(var i = 0 ; i < $scope.arrSpRecords.length ; i++) {
 				if(rec._id == $scope.arrSpRecords[i]._id) {
 					$scope.selectedSpId = $scope.arrSpRecords[i]._id;
-					console.log($scope.arrSpRecords[i].cityid);
+					//console.log($scope.arrSpRecords[i].cityid);
 					$scope.spDetails.spName = $scope.arrSpRecords[i].name;
 					$scope.spDetails.qualification = $scope.arrSpRecords[i].qualification;
 					$scope.spDetails.spEmail = $scope.arrSpRecords[i].email;

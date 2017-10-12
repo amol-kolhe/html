@@ -9,21 +9,25 @@
                 <div class= "table-hover new-appointment-table col-xs-6">
                     <div class="row row-align">
                         <div class="col-xs-12 col-sm-4 appointment-label">
-                            City <span style="color: red;">*</span>
+                            City
                         </div>
                         <div class="col-xs-12 col-sm-8">
                             <span class = "colonSeparatorRight hidden-xs">:</span>
-                             <select class = "input-width clstxt2 form-control"
+                             <select class = "input-width form-control"
                                     name = "spSlotCity"
                                     data-ng-model = "SpWrkHrs.spSlotCity"
-                                    data-ng-class = "{red3: addSpWrkHrsForm.adminFormForSp.spSlotCity.$invalid && addSpWrkHrsForm.adminFormForSp.spSlotCity.$dirty, green3: addSpWrkHrsForm.adminFormForSp.spSlotCity.$valid && addSpWrkHrsForm.adminFormForSp.spSlotCity.$dirty}"
+                                    data-ng-class = "{red3: addSpWrkHrsForm.adminFormForSp.spSlotCity.$invalid && addSpWrkHrsForm.adminFormForSp.spSlotCity.$dirty,green: addSpWrkHrsForm.adminFormForSp.spSlotCity.$valid && addSpWrkHrsForm.adminFormForSp.spSlotCity.$dirty}"
                                     title = "Select city"
                                     data-ng-change = "populateCityBasedSps(SpWrkHrs.spSlotCity);"
                                     data-ng-options="city._id as city.city_name for city in arrayActiveCity"
                                     data-ng-required = "true"
+                                    style="text-transform: capitalize;"
                                     >
                                 <option value="">Select City</option>
                             </select>
+                            <span style="color:red" data-ng-show="addSpWrkHrsForm.adminFormForSp.spSlotCity.$dirty && addSpWrkHrsForm.adminFormForSp.spSlotCity.$invalid">
+                                <span data-ng-show="addSpWrkHrsForm.adminFormForSp.spSlotCity.$error.required">City is required.</span>
+                            </span>
                         </div>
                     </div>
 
@@ -35,9 +39,9 @@
                             <span class = "colonSeparatorRight hidden-xs">:</span>
                                 <select ng-model="SpWrkHrs.spServiceLocationSlot"
                                     name="spServiceLocationSlot"
-                                    class="input-width clstxt2 form-control"
+                                    class="input-width form-control"
                                     id = "spServiceLocationSlot"
-                                    data-ng-class = "{red3: addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$invalid && addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$dirty, green3: addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$valid && addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$dirty}"
+                                    data-ng-class = "{red3: addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$invalid && addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$dirty, green: addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$valid && addSpWrkHrsForm.adminFormForSp.spServiceLocationSlot.$dirty}"
                                     title = "Select service location"
                                     data-ng-change="resetDatePicker9();"
                                     ng-options="clinic._id as clinic.clinic_name for clinic in cityBasedLocations"
@@ -58,7 +62,7 @@
                             <span class = "colonSeparatorRight hidden-xs">:</span>
                             <select ng-model="SpWrkHrs.spNamesIdSlot"
                                     name="spNamesIdSlot"
-                                    class="input-width clstxt2 form-control"
+                                    class="input-width form-control"
                                     id = "spNamesListId"
                                     title = "Select service provider"
                                     data-ng-change="redirectToSlotAllocation();"
@@ -77,7 +81,7 @@
                             <span class = "colonSeparatorRight hidden-xs">:</span>
                             <select ng-model="SpWrkHrs.spZones"
                                     name="spZones"
-                                    class="input-width clstxt2 form-control"
+                                    class="input-width form-control"
                                     id = "spZonesId"
                                     title = "Select zone"
                                     data-ng-change="setSlotViewTableByZone();"
@@ -100,7 +104,7 @@
                                 name = "slotDate"
                                 id="slotDate"
                                 title="Date"
-                                class="dateTimePickerSlot form-control input-width clstxt2"
+                                class="dateTimePickerSlot form-control input-width"
                                 ng-change="loadSlotViewTableByDate();"/>
                         
                         </div>
@@ -117,7 +121,7 @@
                             <span class = "colonSeparatorRight hidden-xs">:</span>
                             <select ng-model="SpWrkHrs.spMonth"
                                     name="spMonth"
-                                    class="input-width clstxt2 form-control"
+                                    class="input-width form-control"
                                     id = "spMonthId"
                                     title = "Select month"
                                     data-ng-change="resetSlotDate();"
@@ -243,38 +247,43 @@
                     </table>
              </div>
 
+             <div ng-show="!slotViewTableFlag">
+                 <div class= "row">
+                    <div class="col-xs-12" style="margin-bottom: 25px;overflow:auto;">
+                        <table border="1" class="slot-view-table-main" style="margin-top: 50px;">
+                            <tr>
+                                <th rowspan = "2"><div class="align-cell">{{month}}</div></th> 
+                                <th rowspan = "2"> 
+                                    <input ng-model="slotChecked" ng-click="resetGlobalSlotTick();" type="checkbox"/> 
+                                </th>   
+                                <th ng-repeat="item in slotDateList" id="{{item.dateNo}}_{{item.dayOfWeek}}" ng-click="markLeaves(item.dateNo)" class="align-cell">{{item.dayOfWeek}}</th>
+                            </tr>
+                            <tr>                      
+                                <th ng-repeat="item in slotDateList" id="{{item.dateNo}}" ng-click="markLeaves(item.dateNo)">{{item.dateNo}}</th>
+                            </tr>
 
-             <div class= "row" ng-show="!slotViewTableFlag">
-                <div class="col-xs-12" style="margin-bottom: 25px;overflow:auto;">
-                    <table border="1" class="slot-view-table-main" style="margin-top: 50px;">
-                        <tr>
-                            <th rowspan = "2"><div class="align-cell">{{month}}</div></th> 
-                            <th rowspan = "2"> 
-                                <input ng-model="slotChecked" ng-click="resetGlobalSlotTick();" type="checkbox"/> 
-                            </th>   
-                            <th ng-repeat="item in slotDateList" id="{{item.dateNo}}_{{item.dayOfWeek}}" ng-click="markLeaves(item.dateNo)" class="align-cell">{{item.dayOfWeek}}</th>
-                        </tr>
-                        <tr>                      
-                            <th ng-repeat="item in slotDateList" id="{{item.dateNo}}" ng-click="markLeaves(item.dateNo)">{{item.dateNo}}</th>
-                        </tr>
+                            <tr ng-repeat="row in wrkHrsSlotsForHome">
+                                <td>{{row.label}}</td>
+                                <td > <input ng-checked="slotChecked" ng-click="setHorizontalChecked(row);" id="tick-{{row.slotNo}}" type="checkbox"/> </td>
+                                <td ng-repeat="item in slotDateList" ng-click="getTdSlot(row,item);" id="{{row.startTime}}_{{item.dateNo}}">
+                                   
+                                        <i ng-show="subTick{{row.slotNo}}{{item.dateNo}}" class="glyphicon glyphicon-ok"  id="{{row.startTime}}_{{item.dateNo}}_tick"></i>
+                                
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
 
-                        <tr ng-repeat="row in wrkHrsSlotsForHome">
-                            <td>{{row.label}}</td>
-                            <td > <input ng-checked="slotChecked" ng-click="setHorizontalChecked(row);" id="tick-{{row.slotNo}}" type="checkbox"/> </td>
-                            <td ng-repeat="item in slotDateList" ng-click="getTdSlot(row,item);" id="{{row.startTime}}_{{item.dateNo}}">
-                               
-                                    <i ng-show="subTick{{row.slotNo}}{{item.dateNo}}" class="glyphicon glyphicon-ok"  id="{{row.startTime}}_{{item.dateNo}}_tick"></i>
-                            
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="class=col-xs-12" style="margin-left: 20px;">
-                    <button class="btn btn-primary btn-sm" ng-show="saveBtn" ng-click="saveSlotData();" type="button" >Save</button>
-                    <button class="btn btn-primary btn-sm" ng-show="saveBtn" ng-click="cancelSlotData();"type="button" >Cancel</button>
                 </div>
 
-             </div>
+                <div class= "row">
+                    <div class="class=col-xs-12" style="margin-left: 20px;">
+                        <button class="btn btn-primary btn-sm" ng-show="saveBtn" ng-click="saveSlotData();" type="button" >Save</button>
+                        <button class="btn btn-primary btn-sm" ng-show="saveBtn" ng-click="cancelSlotData();"type="button" >Cancel</button>
+                    </div>
+                </div>
+            </div>
+             
         </form>
     </div>
 </div>

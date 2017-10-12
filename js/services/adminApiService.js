@@ -407,8 +407,8 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		return $http.get(baseUrl + "/hrest/v1/zone/map?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&cityid=" + cityId + '&time=' + new Date().getTime());
 	}
 
-	adminApi.addSlotInfo = function(slotObj,initdate) {
-		return $http.post(baseUrl + "/hrest/v1/slot/addSlotInfo?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&initdate=" + initdate + "&role=0", slotObj);
+	adminApi.addSlotInfo = function(slotObj,initdate,spid,month) {
+		return $http.post(baseUrl + "/hrest/v1/slot/addSlotInfo?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&initdate=" + initdate + "&spid=" + spid + "&month=" + month +"&role=0", slotObj);
 	}
 
 	adminApi.getSpSlot = function(spid,month) {
