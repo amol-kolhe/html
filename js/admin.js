@@ -4046,7 +4046,7 @@ angular.module('myApp.controllers')
 				var tdSlot = $scope.wrkHrsSlotsForHome[i].startTime +"_"+ $scope.slotDateList[j].dateNo;
 				var tickSlot = 'subTick'+$scope.wrkHrsSlotsForHome[i].slotNo+""+$scope.slotDateList[j].dateNo;
 				//console.log("tdSlot");
-				if(document.getElementById(tdSlot).style.pointerEvents != "none"){
+				if(document.getElementById(tdSlot).style.pointerEvents != "none" || document.getElementById(tdSlot).style.opacity != "0.2"){
 					var year1 = moment().format('YYYY');
 					var month1 = moment($scope.SpWrkHrs.spMonth , "MMMM").format('MM');
 					var day1 = $scope.slotDateList[j].dateNo;
