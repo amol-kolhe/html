@@ -261,6 +261,7 @@ angular.module('myApp.controllers')
 
 	    $scope.gridOptionsNewPatientConversion = {
 		    columnDefs: [
+		      { field: 'city',width:'10%',pinnedLeft: true},
 		      { field: 'patientName',width:'18%',pinnedLeft: true},
 		      { field: 'treatingPhysioName',width:'20%',pinnedLeft: true},
 		      { field: 'patientSource',width:'15%' },
