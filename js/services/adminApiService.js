@@ -419,6 +419,13 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		return $http.get(baseUrl + "/hrest/v1/slot/getAllSlot?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid()+ '&date=' + date);
 	}
 
+	//**************API Related PRMB Event**********************
+
+	adminApi.addPrmbData = function (dataObj) {
+		return $http.post(baseUrl + "/hrest/v1/admin/addPrmbData?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0", dataObj);
+	}
+
+
 	
 
 	return adminApi;

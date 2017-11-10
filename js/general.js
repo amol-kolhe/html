@@ -109,6 +109,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 
 			{title: 'Policy Management', url: 'policyManagement.html', clsclass: 'clsgray'},
 			{title: 'Cancel Actionables', url: 'cancel_actionables.html', clsclass: 'clsgray'},
+			{title: 'PRBM Form', url: 'prbm_form.html', clsclass: 'clsgray'},			
 			//{title: "Appt. Analysis Report", url: 'appointmentAnalysisReport.html'},
 			//{title: "Cancellation Report", url: 'cancellationReport.html'},
 			//{title: "New Patient Report", url: 'newPatientConversionReport.html'}
@@ -129,6 +130,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 			
 		$scope.spMenus = [{title: "My Appointments", url: 'quickView.html'},
 			{title: "Cost Calculator", url: 'costcalculator.html'},
+			//{title: "Package View", url: 'packageView.html'},
 			{title: "Patient Wallet", url: 'patientWallet.html'},
 			{title: "Collection Transactions", url: 'collectionInfo.html'}
 		];

@@ -102,6 +102,8 @@ angular.module('myApp.controllers')
 	$scope.adminNewAppointmentCust.zone = "";
 	$scope.adminNewAppointmentCust.selectSp = false;
 
+	$scope.RequestedBy = ['Physio','Customer','Patient Transfer','Appointment Swap'];
+
 	$scope.sorting = {
 		by : "appointment.approvalDetails.requestedOn",
 		reverse : false
@@ -151,6 +153,16 @@ angular.module('myApp.controllers')
 	$scope.slotChecked = false;
 	$scope.saveBtn = true;
 	$scope.locationArray = [];
+
+	$scope.prbmName = "";
+	$scope.prbmContact = "";
+	$scope.prbmEmail = "";
+	$scope.prbmAge = "";
+	$scope.prbmProblem = "";
+	$scope.prbmGender = "";
+	$scope.prbmProblem = "";
+	$scope.prbmCallback = false;
+	$scope.prbmSatisfied = 'NA'; 
 
 	$scope.eventObj1 = {
 		onItemSelect: function(item) {
@@ -3261,7 +3273,8 @@ angular.module('myApp.controllers')
 		});
 
 
-		$scope.curdate = moment().format("YYYY-MMM-DD");
+		//$scope.curdate = moment().format("YYYY-MMM-DD");
+		$scope.curdate = moment().format("DD-MMM-YYYY");
 		$scope.day = moment().format("dddd");
 		$scope.month = moment().format("MMMM");
 		$scope.SpWrkHrs.slotDate = $scope.curdate;
@@ -3447,7 +3460,7 @@ angular.module('myApp.controllers')
 						if($('#tick-1').is(':checked') && row.slotNo == "1"){	
 							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
 							var v = 'subTick1'+(j+1);
-							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+							if((document.getElementById(tdCellID).style.pointerEvents != "none") && (document.getElementById(tdCellID).style.backgroundColor != 'yellow') && (document.getElementById(tdCellID).style.backgroundColor != 'red')){
 								$scope[v] = true;
 							}							
 							
@@ -3461,12 +3474,12 @@ angular.module('myApp.controllers')
 						if($('#tick-2').is(':checked') && row.slotNo == "2"){	
 							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
 							var v = 'subTick2'+(j+1);
-							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+							if((document.getElementById(tdCellID).style.pointerEvents != "none") && (document.getElementById(tdCellID).style.backgroundColor != 'yellow') && (document.getElementById(tdCellID).style.backgroundColor != 'red')){
 								$scope[v] = true;
 							}
 						}else if(row.slotNo == "2"){
 							var v = 'subTick2'+(j+1);
-							if(document.getElementById(tdCellID).style.pointerEvents != "none"){				
+							if(document.getElementById(tdCellID).style.pointerEvents != "none"){		
 								$scope[v] = false;
 							}
 						}
@@ -3474,7 +3487,7 @@ angular.module('myApp.controllers')
 						if($('#tick-3').is(':checked') && row.slotNo == "3"){	
 							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
 							var v = 'subTick3'+(j+1);
-							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+							if((document.getElementById(tdCellID).style.pointerEvents != "none") && (document.getElementById(tdCellID).style.backgroundColor != 'yellow') && (document.getElementById(tdCellID).style.backgroundColor != 'red')){
 								$scope[v] = true;
 							}
 						}else if(row.slotNo == "3"){
@@ -3487,7 +3500,7 @@ angular.module('myApp.controllers')
 						if($('#tick-4').is(':checked') && row.slotNo == "4"){	
 							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
 							var v = 'subTick4'+(j+1);
-							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+							if((document.getElementById(tdCellID).style.pointerEvents != "none") && (document.getElementById(tdCellID).style.backgroundColor != 'yellow') && (document.getElementById(tdCellID).style.backgroundColor != 'red')){
 								$scope[v] = true;
 							}
 						}else if(row.slotNo == "4"){
@@ -3500,7 +3513,7 @@ angular.module('myApp.controllers')
 						if($('#tick-5').is(':checked') && row.slotNo == "5"){	
 							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
 							var v = 'subTick5'+(j+1);
-							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+							if((document.getElementById(tdCellID).style.pointerEvents != "none") && (document.getElementById(tdCellID).style.backgroundColor != 'yellow') && (document.getElementById(tdCellID).style.backgroundColor != 'red')){
 								$scope[v] = true;
 							}
 						}else if(row.slotNo == "5"){
@@ -3513,7 +3526,7 @@ angular.module('myApp.controllers')
 						if($('#tick-6').is(':checked') && row.slotNo == "6"){	
 							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
 							var v = 'subTick6'+(j+1);
-							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+							if((document.getElementById(tdCellID).style.pointerEvents != "none") && (document.getElementById(tdCellID).style.backgroundColor != 'yellow') && (document.getElementById(tdCellID).style.backgroundColor != 'red')){
 								$scope[v] = true;
 							}
 						}else if(row.slotNo == "6"){
@@ -3526,7 +3539,7 @@ angular.module('myApp.controllers')
 						if($('#tick-7').is(':checked') && row.slotNo == "7"){	
 							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
 							var v = 'subTick7'+(j+1);
-							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+							if((document.getElementById(tdCellID).style.pointerEvents != "none") && (document.getElementById(tdCellID).style.backgroundColor != 'yellow') && (document.getElementById(tdCellID).style.backgroundColor != 'red')){
 								$scope[v] = true;
 							}
 						}else if(row.slotNo == "7"){
@@ -3539,7 +3552,7 @@ angular.module('myApp.controllers')
 						if($('#tick-8').is(':checked') && row.slotNo == "8"){	
 							//var tdSlotId = $scope.wrkHrsSlotsForHome[i].label+'-'+$scope.slotDateList[i].dateNo+'-tick';
 							var v = 'subTick8'+(j+1);
-							if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+							if((document.getElementById(tdCellID).style.pointerEvents != "none") && (document.getElementById(tdCellID).style.backgroundColor != 'yellow') && (document.getElementById(tdCellID).style.backgroundColor != 'red')){
 								$scope[v] = true;
 							}
 						}else if(row.slotNo == "8"){
@@ -3606,7 +3619,7 @@ angular.module('myApp.controllers')
 				for(var j= 1 ; j <= $scope.wrkHrsSlotsForHome.length ; j ++){
 					var tdCellID = $scope.wrkHrsSlotsForHome[j-1].startTime+"_"+$scope.slotDateList[i-1].dateNo;
 					var v = 'subTick'+j+i;
-				    if(document.getElementById(tdCellID).style.pointerEvents != "none"){
+				    if((document.getElementById(tdCellID).style.pointerEvents) != "none" && (document.getElementById(tdCellID).style.backgroundColor != 'yellow') && (document.getElementById(tdCellID).style.backgroundColor != 'red')){
 				   		 $scope[v] = true;
 				   	}
 				}
@@ -3626,6 +3639,7 @@ angular.module('myApp.controllers')
 			}
 		}else{
 			var td = slot.startTime+'_'+date.dateNo;
+			var tickSlot = 'subTick'+slot.slotNo+""+date.dateNo;
 			//alert(td);
 			if(document.getElementById(td).style.backgroundColor != "yellow"){
 				if(document.getElementById(td).style.backgroundColor == 'red'){
@@ -3633,6 +3647,15 @@ angular.module('myApp.controllers')
 					document.getElementById(td).style.backgroundColor = 'white';
 				}else{
 					document.getElementById(td).style.backgroundColor = 'red';
+					
+					if($scope[tickSlot] == true && document.getElementById(td).style.pointerEvents != "none"){
+						$scope[tickSlot] = false;
+						document.getElementById(td).style.backgroundColor = 'red';
+					}else{
+						if($scope[tickSlot] == true){
+							document.getElementById(td).style.backgroundColor = '#c1bfbb';
+						}
+					}
 				}
 			}	
 		}
@@ -3643,11 +3666,21 @@ angular.module('myApp.controllers')
 		if($scope.markLeave == true){
 			for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){
 				var td = $scope.wrkHrsSlotsForHome[i].startTime +"_"+dateNO;
-				if(document.getElementById(td).style.backgroundColor != "yellow"){
+				var tickSlot = 'subTick'+$scope.wrkHrsSlotsForHome[i].slotNo+""+dateNO;
+				if((document.getElementById(td).style.backgroundColor != "yellow") && (document.getElementById(td).style.pointerEvents != "none")){
 					if(document.getElementById(td).style.backgroundColor == 'red'){
 						document.getElementById(td).style.backgroundColor = 'white';
 					}else{
 						document.getElementById(td).style.backgroundColor = 'red';
+
+						if($scope[tickSlot] == true && document.getElementById(td).style.pointerEvents != "none"){
+							$scope[tickSlot] = false;
+							document.getElementById(td).style.backgroundColor = 'red';
+						}else{
+							if($scope[tickSlot] == true){
+								document.getElementById(td).style.backgroundColor = '#c1bfbb';
+							}
+						}
 					}
 				}
 			}
@@ -3656,7 +3689,8 @@ angular.module('myApp.controllers')
 
 	$scope.redirectToSlotAllocation = function() {
 		$scope.month = moment().format("MMMM");
-		$('.dateTimePickerSlot').val(moment().format("YYYY-MMM-DD"));
+		//$('.dateTimePickerSlot').val(moment().format("YYYY-MMM-DD"));
+		$('.dateTimePickerSlot').val(moment().format("DD-MMM-YYYY"));
 
 		$scope.SpWrkHrs.spMonth = $scope.month;
 		$scope.slotChecked = false;
@@ -3876,7 +3910,6 @@ angular.module('myApp.controllers')
 
 
 	$scope.loadSlotTickTable = function(spid,month){
-
 		adminApi.getSpSlot(spid,month)
 			.success(function(data, status, headers, config){
 
@@ -4011,15 +4044,27 @@ angular.module('myApp.controllers')
 			for(var j = dayNo ; j < $scope.slotDateList.length; j++){
 				if($scope.slotDateList[j].dayOfWeek == day){			
 					var td = $scope.wrkHrsSlotsForHome[i].startTime +"_"+ $scope.slotDateList[j].dateNo;
+
+					var tickSlot = 'subTick'+$scope.wrkHrsSlotsForHome[i].slotNo+""+$scope.slotDateList[j].dateNo;
 					//console.log(td);
 					if(document.getElementById(td).style.backgroundColor != 'red'){
-						document.getElementById(td).style.backgroundColor = 'yellow';	
+						document.getElementById(td).style.backgroundColor = 'yellow';
+
+						if($scope[tickSlot] == true && document.getElementById(td).style.pointerEvents != "none"){
+							$scope[tickSlot] = false;
+							document.getElementById(td).style.backgroundColor = 'yellow';
+						}else{
+							if($scope[tickSlot] == true){
+								document.getElementById(td).style.backgroundColor = '#c1bfbb';
+							}
+						}	
 					}						    
 								
 				}	
 			}
 		}
 
+		
 	}
 
 	$scope.saveSlotData = function() {
@@ -4116,11 +4161,11 @@ angular.module('myApp.controllers')
 		//console.log($scope.slotInfo);
 		//alert($scope.initdate);
 
-		var result = confirm("Do you want to open slot?");
+		var result = confirm("Do you want to update the slot?");
 		if(result == true) {
 			adminApi.addSlotInfo($scope.slotInfo,$scope.initdate,$scope.SpWrkHrs.spNamesIdSlot,$scope.SpWrkHrs.spMonth)
 			.success(function(data, status, headers, config){
-				alert("Slot Opened Successfully!")
+				alert("Your slot request is processed successfully!")
 				$scope.resetSlotDate();
 
 			})
@@ -4141,7 +4186,8 @@ angular.module('myApp.controllers')
 
 
 	$('.dateTimePickerSlot').datepicker({
-			dateFormat: 'yy-M-dd'
+			//dateFormat: 'yy-M-dd'
+			dateFormat: 'dd-M-yy'
 		})
 	    .on("change", function (e) {
 	    //console.log("Date changed: ", e.target.value);
@@ -4150,7 +4196,8 @@ angular.module('myApp.controllers')
 	    var date = $(this).val();
 		var dateString = (moment(date).format("D-MM-YYYY")).toString();
 
-		$scope.curdate = moment(date).format("YYYY-MMM-DD");
+		//$scope.curdate = moment(date).format("YYYY-MMM-DD");
+		$scope.curdate = moment(date).format("DD-MMM-YYYY");
 		$scope.day = (moment(date).format("dddd")).toString();
 		$scope.loadSlotViewTable(dateString);
 
@@ -4429,8 +4476,7 @@ angular.module('myApp.controllers')
 			$scope.adminNewAppointmentCust.appointment.state = appointmentStateMap[$scope.adminNewAppointmentCust.appointment.state];
 			$scope.adminNewAppointmentCust.appointment.pincodeid = $scope.adminNewAppointmentCust.appointment.pincode;
 			$scope.adminNewAppointmentCust.appointment.pincode = cache.pincodeIdToPincodeNameMap[$scope.adminNewAppointmentCust.appointment.pincode];
-			
-			
+						
 			$scope.resetEditAptModel();
 
 			$scope.aptPayment.appointmentid = id;
@@ -4453,7 +4499,6 @@ angular.module('myApp.controllers')
 				$scope.adminNewAppointmentCust.documentRO = angular.copy($scope.adminNewAppointmentCust.appointment.document);
 				$scope.adminNewAppointmentCust.hasDocument = true;
 			}
-
 
 		    if($scope.adminNewAppointmentCust.appointment.promocode == undefined || $scope.adminNewAppointmentCust.appointment.promocode == ''){
                 $scope.adminNewAppointmentCust.appointment.promocode = '';
@@ -4488,8 +4533,6 @@ angular.module('myApp.controllers')
 		            }else{
 		                $scope.serviceLocationLabel = 'At Home';
 		            }
-
-
 				
 				})
 				.error(function(data, status, headers, config) {
@@ -4500,8 +4543,6 @@ angular.module('myApp.controllers')
 	      		$scope.serviceLocationLabel = 'At Home';
 	      	}
             
-          
-
 			/*if ($scope.adminNewAppointmentCust.payment != undefined && $scope.adminNewAppointmentCust.payment != "") {
 				if ($scope.adminNewAppointmentCust.payment.amnt != undefined && $scope.adminNewAppointmentCust.payment.amnt != "") {
 					$scope.costPaid = $scope.adminNewAppointmentCust.payment.amnt;
@@ -4511,8 +4552,7 @@ angular.module('myApp.controllers')
 			} else {
 				$scope.costPaid = 0;
 			}*/
-
-          
+        
             if($scope.adminNewAppointmentCust.appointment.finalcost > 0){
                 $scope.costPaid = $scope.adminNewAppointmentCust.appointment.finalcost;
                 if($scope.adminNewAppointmentCust.appointment.additionalcharge > 0 && $scope.adminNewAppointmentCust.appointment.additionalcharge != undefined){
@@ -4532,6 +4572,9 @@ angular.module('myApp.controllers')
                 $scope.calculatedAptAmount =  $scope.adminNewAppointmentCust.appointment.finalcost;
                 //alert($scope.calculatedAptAmount);
             }
+
+
+            $scope.setCancelledBy($scope.adminNewAppointmentCust.appointment.starttime);
             
 		})
 		.error(function(data, status, headers, config){
@@ -4541,6 +4584,18 @@ angular.module('myApp.controllers')
 		$scope.manageDocumentationCollapse();
 		$scope.resetPaymentDetails();
 	}
+
+	//for past confirmed appointments,cancellation request should go with 'physio' option only. Kalyani patil  
+    $scope.setCancelledBy = function(appt_starttime) {
+        
+        $scope.RequestedBy = ['Physio','Customer','Patient Transfer','Appointment Swap'];
+        var curdate = new Date();
+        var myEpochtotime = Math.round(curdate.getTime()/1000);
+        //console.log(myEpochtotime);
+        if(myEpochtotime > appt_starttime){
+            $scope.RequestedBy = ['Physio']; 
+        }
+    }
 
 	$scope.resetPaymentDetails = function() {
 		$scope.apptPaymentErrorMsg = false;
@@ -5518,11 +5573,11 @@ angular.module('myApp.controllers')
 
 		$scope.populateCityBasedZonesForSlot(cityId);
 
-		$scope.curdate = moment().format("YYYY-MMM-DD");
+		//$scope.curdate = moment().format("YYYY-MMM-DD");
+		$scope.curdate = moment().format("DD-MMM-YYYY");
 		$scope.curdate1 = moment().format("MMMM");
 		$('.dateTimePickerSlot').val($scope.curdate);
 		$('.dateTimePickerOnlyMonth').val($scope.curdate1);
-
 
 		adminApi.getAllSps().
 		success(function (data, status, headers, config) {
@@ -5585,6 +5640,13 @@ angular.module('myApp.controllers')
 		});
 
 		$scope.getSps($scope.SpWrkHrs.spCity);
+
+		//set veiw table as per current date
+		setTimeout(function() {
+			$scope.todaysDate = moment().format("D-MM-YYYY");
+			$scope.loadSlotViewTable($scope.todaysDate);
+		}, 300);
+
 
 	}
 
@@ -10454,6 +10516,144 @@ angular.module('myApp.controllers')
 		$scope.spNewAppointment.selectedTimeSlots = [];
 		$scope.spNewAppointment.selectedSlotIndex = -1;
 		$scope.spNewAppointment.selectedSlot = null;
+	}
+
+	$scope.cancelPrbmData = function() {
+		//alert('Hi');
+		$scope.prbmName = "";
+		$scope.prbmContact = "";
+		$scope.prbmEmail = "";
+		$scope.prbmAge = "";
+		$scope.prbmProblem = "";
+		$scope.prbmGender = "";
+		$scope.prbmProblem = "";
+		$scope.prbmCallback = false;
+		$scope.prbmSatisfied = 'NA'; 
+		$scope.prmbName_error = undefined;
+		$scope.prbmContact_error = undefined;
+		$scope.prbmGender_error = undefined;
+
+
+	}
+
+	$scope.savePrbmData = function() {
+		//alert($scope.prbmName);
+		//alert($scope.prbmContact);
+		//alert($scope.prbmEmail);
+		//alert($scope.prbmAge);
+		//alert($scope.prbmProblem);
+		var name = "";
+		var contact = "";
+		var email = "";
+		var age = "";
+		var problem = "";
+		var satisfied = 'no';
+		var callback = false;
+		var gender = "";
+
+		if($scope.prbmName != undefined){
+			name = $scope.prbmName;
+		}
+
+		if($scope.prbmContact != undefined){
+			contact = $scope.prbmContact;
+		}	
+
+		if($scope.prbmEmail != undefined){
+			email = $scope.prbmEmail;
+		}
+
+		if($scope.prbmAge != undefined){
+			age = $scope.prbmAge;
+		}
+
+		if($scope.prbmProblem != undefined){
+			problem = $scope.prbmProblem;
+		}
+
+		if($scope.prbmSatisfied != undefined){
+			satisfied = $scope.prbmSatisfied;
+		}
+
+		if($scope.prbmCallback != undefined){
+			if($scope.prbmCallback == true){
+				callback = true;
+			}else{
+				callback = false;
+			}
+		}else{
+			callback = false;
+		}
+
+		if($scope.prbmGender != undefined){
+			gender = $scope.prbmGender;
+		}
+
+		console.log(name);
+		console.log(contact);
+		console.log(email);
+		console.log(age);
+		console.log(gender);
+		console.log(satisfied);
+		console.log(callback);
+		console.log(problem);
+
+		var prmbObj = {
+			"name": name,
+			"contact": contact,
+			"email":email,
+			"age":age,
+			"gender":gender,
+			"satisfied":satisfied,
+			"callback":callback,
+			"problem":problem,
+		};
+
+		$scope.validatePRMB();
+
+		if($scope.validPRMB == true){
+			adminApi.addPrmbData(prmbObj)
+			.success(function(data, status, headers, config) {
+				if(data.error == undefined && data.payload != undefined) {
+					alert('Record Saved Successfully!');
+					$scope.cancelPrbmData();	
+				}
+			})
+			.error(function(data, status, headers, config) {
+				console.log("Failed to insert PRMB Record!");
+				console.log(data.error);
+			});
+		}
+		
+
+	}
+
+	$scope.validatePRMB = function(){
+		$scope.validPRMB = true;
+		$scope.prmbName_error = null;
+		$scope.prbmContact_error = null;
+		$scope.prbmGender_error = null;
+		
+		if($scope.prbmName == "" || $scope.prbmName == undefined){
+			$scope.validPRMB = false;
+			$scope.prmbName_error = "Registration name cannot be blank.";
+		}
+
+		if($scope.prbmContact == "" || $scope.prbmContact == undefined){
+			$scope.validPRMB = false;
+			$scope.prbmContact_error = "Registration contact cannot be blank.";
+		}
+
+		/*if($scope.prbmEmail == "" && $scope.prbmEmail != undefined){
+			$scope.validPRMB = false;
+			$scope.prbmEmail = "Registration email cannot be blank.";
+		}*/
+
+		if($scope.prbmGender == "" || $scope.prbmGender == undefined){
+			$scope.validPRMB = false;
+			$scope.prbmGender_error = "Please select gender.";
+		}
+
 	}
 
 	$scope.initAdmin();

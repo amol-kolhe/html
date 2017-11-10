@@ -1,0 +1,176 @@
+<div class="mainContent2" ng-controller="SpCtrl" ng-init="initPackageView();">
+	
+<div style="padding:10px;">
+ 	<div class="row">
+		<div class="panel panel-default" style="border: 1px solid #ddd">
+			<div class="panel-heading">
+				<span style="font-weight: bold;font-size: 20px">Package View Details</span>
+				<!--<span class="pull-right clickable glyphicon glyphicon-refresh" title="Refresh the actionable items" ng-click="fetchPatientWithWallet();"></span> -->
+			</div>
+			<div style="padding: 10px 12px;">
+			    <div class="row">
+					<div class="col-xs-4 col-sm-2 col-md-2"><b>Base Price</b></div>
+					<div class="col-xs-8 col-sm-2 col-md-10"><b>: {{basePrice}}</b></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4 col-sm-2 col-md-2"><b>Modalities</b></div>
+					<div class="col-xs-8 col-sm-2 col-md-10"><b>: +Rs.100 per session per modality</b></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4 col-sm-2 col-md-2"><b>Neuro</b></div>
+					<div class="col-xs-8 col-sm-2 col-md-10"><b>: +Rs.100 per session</b></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4 col-sm-2 col-md-2"><b>Dry Needling</b></div>
+					<div class="col-xs-8 col-sm-2 col-md-10"><b>: +Rs.300 per session</b></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4 col-sm-2 col-md-2"><b>Taping</b></div>
+					<div class="col-xs-8 col-sm-2 col-md-10"><b>: +Rs.300 per session</b></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4 col-sm-2 col-md-2"><b>Cancellation Fee</b></div>
+					<div class="col-xs-8 col-sm-2 col-md-10"><b>: Rs.150</b></div>
+				</div>
+			</div>
+			<table class="table">
+				<thead style="background-color: #ECECEC;">
+					
+					<tr>
+						<th ng-click="sort('min_sessions')"><span class="1clsfleft">No Of Sessions</span>
+							 <span class="glyphicon sort-icon" ng-show="sortKey=='min_sessions'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+
+						<th ng-click="sort('promocode')"><span class="1clsfleft">Package Code</span>
+							 <span class="glyphicon sort-icon" ng-show="sortKey=='promocode'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+
+						<th ng-click="sort('perSessionPrice')"><span class="1clsfleft">Per Session Cost</span>
+							 <span class="glyphicon sort-icon" ng-show="sortKey=='perSessionPrice'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+
+						<th ng-click="sort('totalPackageCost')"><span class="1clsfleft">Total Package Cost</span>
+							 <span class="glyphicon sort-icon" ng-show="sortKey=='totalPackageCost'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+
+						<th ng-click="sort('freeCancellationDays')"><span class="1clsfleft">No Of Cancellation</span>
+							 <span class="glyphicon sort-icon" ng-show="sortKey=='freeCancellationDays'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+
+						<th ng-click="sort('valid_days')"><span class="1clsfleft">Valid Days(Days)</span>
+							<span class="glyphicon sort-icon" ng-show="sortKey=='valid_days'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+						
+						
+					</tr>
+
+					<tr>
+						<td> <input type="text" ng-model="search.min_sessions" style="width: 120px;"> </td>
+						<td> <input type="text" ng-model="search.promocode" style="width: 120px;"> </td>
+						<td> <input type="text" ng-model="search.perSessionPrice" style="width: 120px;"> </td>
+						<td> <input type="text" ng-model="search.totalPackageCost" style="width: 120px;"> </td>
+						<td> <input type="text" ng-model="search.freeCancellationDays" style="width: 120px;"> </td>
+						<td> <input type="text" ng-model="search.valid_days" style="width: 120px;"> </td>
+						
+					</tr>
+				</thead>
+				<tbody>
+					<tr dir-paginate="rec in arrPackages|orderBy:sortKey:!reverse|filter:search|itemsPerPage:5"
+							pagination-id="arrFinanceId">
+						<td>
+							<span style="word-break: break-word;">{{rec.min_sessions}} Session</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">{{rec.promocode}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">{{rec.perSessionPrice}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">{{rec.totalPackageCost}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">{{rec.freeCancellationDays}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">{{rec.valid_days}} Days</span>
+						</td>
+						
+					</tr>
+				</tbody>
+			</table>
+			<dir-pagination-controls
+				max-size="5"
+				pagination-id="arrFinanceId"
+				direction-links="true"
+				boundary-links="true" 
+				style="padding-left: 10px;">
+			</dir-pagination-controls>
+		</div>
+	</div>
+
+</div>
+
+<div style="padding:10px;">
+ 	<div class="row">
+		<div class="panel panel-default" style="border: 1px solid #ddd">
+			<div class="panel-heading">
+				<span style="font-weight: bold;font-size: 20px">Promocode Details</span>
+				<!--<span class="pull-right clickable glyphicon glyphicon-refresh" title="Refresh the actionable items" ng-click="fetchPatientWithWallet();"></span> -->
+			</div>
+			<table class="table">
+				<thead style="background-color: #ECECEC;">
+					
+					<tr>
+
+						<th ng-click="sort('promocode')"><span class="1clsfleft"> Promocode</span>
+							 <span class="glyphicon sort-icon" ng-show="sortKey=='promocode'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+
+						<th ng-click="sort('promodesc')"><span class="1clsfleft">Description</span>
+							 <span class="glyphicon sort-icon" ng-show="sortKey=='promodesc'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+
+						<th ng-click="sort('perSessionPrice')"><span class="1clsfleft">Amount</span>
+							 <span class="glyphicon sort-icon" ng-show="sortKey=='perSessionPrice'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+						
+					</tr>
+
+					<tr>
+						<td> <input type="text" ng-model="search.promocode" style="width: 120px;"> </td>
+						<td> <input type="text" ng-model="search.promodesc" style="width: 120px;"> </td>
+						<td> <input type="text" ng-model="search.perSessionPrice" style="width: 120px;"> </td>
+												
+					</tr>
+				</thead>
+				<tbody>
+					<tr dir-paginate="rec in arrPromocodes|orderBy:sortKey:!reverse|filter:search|itemsPerPage:5"
+							pagination-id="arrFinanceId">
+					
+						<td>
+							<span style="word-break: break-word;">{{rec.promocode}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">{{rec.promodesc}}</span>
+						</td>
+						<td>
+							<span style="word-break: break-word;">{{rec.perSessionPrice}}</span>
+						</td>						
+						
+					</tr>
+				</tbody>
+			</table>
+			<dir-pagination-controls
+				max-size="5"
+				pagination-id="arrFinanceId"
+				direction-links="true"
+				boundary-links="true" 
+				style="padding-left: 10px;">
+			</dir-pagination-controls>
+		</div>
+	</div>
+
+</div>
+
+</div>

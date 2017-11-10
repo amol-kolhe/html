@@ -59,6 +59,7 @@
 		vm.redirectToFaq = redirectToFaq;
 		vm.closeDrawerMenu = closeDrawerMenu;
 		vm.setSpecializationFlag = setSpecializationFlag;
+		vm.setEventsFlag = setEventsFlag;
 		vm.navigateToHome = navigateToHome;
 		vm.scrolltodiv = scrolltodiv;
 		vm.faqScrolltodiv = faqScrolltodiv;
@@ -80,6 +81,7 @@
 		
 
 		vm.specializationFlag = false;
+		vm.EventsFlag = false;
 		/*===Variable declaration===*/
 		vm.scrolltodivName = '';
 		vm.requestACallbackErrorMessage = '';
@@ -1465,6 +1467,17 @@
 				vm.specializationFlag = true;
 			}else{
 				vm.specializationFlag = false;
+			}
+			
+		}
+
+		function setEventsFlag(){
+
+			//alert('Hi');
+			if(vm.EventsFlag == false){
+				vm.EventsFlag = true;
+			}else{
+				vm.EventsFlag = false;
 			}
 			
 		}

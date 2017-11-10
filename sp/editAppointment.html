@@ -8,7 +8,7 @@
 
                     <span>
                         <span ng-show="(!adminNewAppointmentCust.customer.is_package_assign && adminNewAppointmentCust.appointment.state == 'Confirmed' && adminNewAppointmentCust.appointment.current_session_no == '0' && lastApptTime == adminNewAppointmentCust.appointment.starttime) &&
-                        adminNewAppointmentCust.appointment.clinic_id == undefined"
+                        (adminNewAppointmentCust.appointment.clinic_id == undefined)"
                             title="Select Package"
                             class="clickable glyphicon glyphicon-briefcase"
                             style="color:red;margin-right:15px; font-size: 15px;"
@@ -24,7 +24,7 @@
                             data-ng-click="show.DocumentRO = false; editAptClicked();"></span>
                     </span>
 
-                    <span ng-show="(adminNewAppointmentCust.appointment.state == 'Confirmed' || adminNewAppointmentCust.appointment.state == 'Prepaid') && showEditDocumentation()">
+                    <span ng-show="(adminNewAppointmentCust.appointment.state == 'Confirmed' || adminNewAppointmentCust.appointment.state == 'Prepaid') && showEditDocumentation() && (showRescheduleOption == true)">
                         <span title="Request for reschedule"
                             class="clickable glyphicon glyphicon-calendar"
                             style="margin-right: 15px; font-size: 15px;"

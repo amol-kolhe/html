@@ -187,6 +187,29 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         return $http.put(baseUrl + "/hrest/v1/cust/" + custId + "/package?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2", obj);
     }
 
+    // API support to get all sp list
+    spApi.getAllSps = function () {
+        return $http.get(baseUrl + "/hrest/v1/admin/getAllSps?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2");
+    };
+
+    //API support to get all promocodes.
+    spApi.getPromo = function(active) {
+        var url = baseUrl + "/hrest/v1/admin/promocode?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + '&time=' + new Date().getTime() + '&role=2';
+        if(active != undefined) {
+            url += "&active=" + active;
+        }
+        return $http.get(url);
+    };
+
+    //API support to get all clinic.
+    spApi.getCity = function(active) {
+        var url = baseUrl + "/hrest/v1/admin/city?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + '&role=2';
+        if(active != undefined) {
+            url += "&active=" + active;
+        }
+        return $http.get(url);
+    };
+
 	return spApi;
 }]);
 

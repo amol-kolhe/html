@@ -112,6 +112,16 @@
 
 	                        	</ul>
                         	</li> 
+
+                        	<li style="cursor:pointer">
+	                        	<a ng-click="cpc.setEventsFlag()" style="background:url(../../images/customer_portal/down_arrow.png) no-repeat 60% 50%;">EVENTS</a>
+	                        	<ul style="list-style-type:none" ng-hide="!cpc.EventsFlag">
+	                        		<li>
+			                        	<a ui-sref="homepages.prbm" ng-click="cpc.closeDrawerMenu()">PRBM</a>
+		                        	</li>
+		              
+	                        	</ul>
+                        	</li>
 	                        <!-- <li>
 	                        	<a href="/blog" ng-click="cpc.closeDrawerMenu();" onclick="window.location.href='/blog'">BLOG</a>
                         	</li> -->

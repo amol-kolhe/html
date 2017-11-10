@@ -130,6 +130,8 @@ angular.module('myApp.controllers')
     };
     $scope.showResponse = false;
     $scope.spIdForWallet = "";
+
+    $scope.RequestedBy = ['Physio','Customer','Patient Transfer','Appointment Swap'];
     
 
     $scope.initSpAppointments = function(timeSpan) {
@@ -371,7 +373,8 @@ angular.module('myApp.controllers')
                 hidePackageDialog();
             }
             $scope.adminNewAppointmentCust = data.payload;
-            console.log($scope.adminNewAppointmentCust);
+            //console.log($scope.adminNewAppointmentCust.appointment.starttime);
+
 
             $scope.adminNewAppointmentCust.appointment.state = appointmentStateMap[$scope.adminNewAppointmentCust.appointment.state];
             //populate pincode string from pincode id
@@ -485,6 +488,10 @@ angular.module('myApp.controllers')
                 $scope.adminNewAppointmentCust.hasDocument = true;
             }
 
+
+            $scope.hideRescheduleOption($scope.adminNewAppointmentCust.appointment.starttime);
+            $scope.setCancelledBy($scope.adminNewAppointmentCust.appointment.starttime);
+
         })
         .error(function(data, status, headers, config){
             $scope.aptErrorMsg = data.error.message;
@@ -495,6 +502,43 @@ angular.module('myApp.controllers')
         $scope.manageDocumentationCollapse();
         $scope.spInfo = false;
         $scope.flags.showRescheduleAppt = false;
+
+    }
+
+    $scope.hideRescheduleOption = function(appt_starttime) {
+
+        $scope.showRescheduleOption = true;
+
+        var curdate = new Date();
+        var myEpochtotime = Math.round(curdate.getTime()/1000);
+        console.log('appt date:'+ appt_starttime);
+        console.log('myEpochtotime:'+ myEpochtotime);
+
+        var hourDiff = parseInt(appt_starttime) - parseInt(myEpochtotime); //in ms
+        //var hourDiff1 = parseInt(myEpochtotime) - parseInt(appt_starttime);
+        //var secDiff = hourDiff / 1000; //in s
+        var minDiff = hourDiff / 60; //in minutes
+        var hDiff = (hourDiff / 3600); //in hours
+        var hours = Math.floor(hDiff);
+        var minutes = Math.floor(minDiff);
+
+        //check appointment within 22 hr i.e. 1320 minutes
+        if(minutes <= 1320){
+            $scope.showRescheduleOption = false;
+        }
+
+    }
+
+    //for past confirmed appointments,cancellation request should go with 'physio' option only. Kalyani patil  
+    $scope.setCancelledBy = function(appt_starttime) {
+        
+        $scope.RequestedBy = ['Physio','Customer','Patient Transfer','Appointment Swap'];
+        var curdate = new Date();
+        var myEpochtotime = Math.round(curdate.getTime()/1000);
+        //console.log(myEpochtotime);
+        if(myEpochtotime > appt_starttime){
+            $scope.RequestedBy = ['Physio']; 
+        }
     }
 
     $scope.manageRootApptDocumentationCollapse = function() {
@@ -2258,12 +2302,111 @@ angular.module('myApp.controllers')
                 //console.log(custData);
 
                 $scope.arrayCustomerWithWallet = custData.payload;
-                console.log($scope.arrayCustomerWithWallet);
+                //console.log($scope.arrayCustomerWithWallet);
 
             })
             .error(function(data, status, headers, config) {
                 item.walletBalance = 0;
             });
+
+    }
+
+    $scope.initPackageView = function(){
+        $scope.spId = $cookies.get('u_id');
+        $scope.spCity = '';
+        $scope.arrPackages = [];
+        $scope.arrPromocodes = [];
+        //alert($scope.spId);
+        spApi.getAllSps().
+        success(function (data, status, headers, config) {
+            //console.log(data.payload);
+            $scope.arrayAllSps = angular.copy(data.payload.spList);
+            for(var i = 0 ; i < $scope.arrayAllSps.length ; i++) {
+                if($scope.spId == $scope.arrayAllSps[i]._id){
+                    $scope.spCity = $scope.arrayAllSps[i].city;
+                }
+            }
+
+            spApi.getPromo().
+            success(function (data, status, headers, config) {
+
+                $scope.arrPromoCode = [];
+                $scope.arrPackages = [];
+                $scope.arrPromocodes = [];
+                $scope.arrCity = [];
+                $scope.basePrice = 0;
+                var tempArr = data.payload
+                console.log("successfully received promo codes");
+                angular.copy(tempArr, $scope.arrPromoCode);
+
+                spApi.getCity(true).
+                success(function (data, status, headers, config) {
+                    $scope.arrCity = data.payload;
+
+                    $scope.arrCity.forEach(function(itemCity) {  
+                        if(itemCity.city_name == $scope.spCity){
+                          $scope.basePrice = itemCity.price;  
+                        }
+                    });
+
+                    $scope.arrPromoCode.forEach(function(item) {                  
+                    //console.log(item);
+                        if(item.is_promocode == false && item.city == $scope.spCity){
+                            item.validfrom = moment(new Date(item.validfrom*1000).toString());
+                            item.validtill = moment(new Date(item.validtill*1000).toString());
+                            item.disctype = item.disctype.toString();
+                            item.noofappt = item.noofappt;
+                            item.max_sessions = item.max_sessions;
+                            item.min_sessions = item.min_sessions;
+                            //item.free_cancellation_percent = item.free_cancellation_ratio;
+                            item.before_cancellation_time = item.before_cancellation_time;
+                            item.valid_days = item.valid_days;
+                            item.cancellation_fee = item.cancellation_fee;
+                            item.promocode = item.promocode;
+
+                            var discount = item.discount;
+                            var perSession = $scope.basePrice - discount;
+                            item.perSessionPrice = perSession;
+
+                            var packageCost = parseInt(item.min_sessions) * parseInt(perSession);
+                            item.totalPackageCost = packageCost;
+
+                            var free_cancellation_days = (parseInt(item.min_sessions) * parseInt(item.free_cancellation_ratio)) / 100;
+                            item.freeCancellationDays = Math.round(free_cancellation_days);
+
+                            $scope.arrPackages.push(item);
+                        }
+
+                        if(item.is_promocode == true && item.city == $scope.spCity){
+                            item.promocode = item.promocode;
+                            var discount = item.discount;
+                            var perSession = $scope.basePrice - discount;
+                            item.perSessionPrice = perSession;
+                            item.promodesc = item.promodesc;
+
+                            $scope.arrPromocodes.push(item);
+
+                        }              
+                   
+                    });
+
+                }).
+                error(function (data, status, headers, config) {
+                    console.log("Error in receiving cities");
+                });
+         
+                console.log($scope.arrPackages);
+
+            }).
+            error(function (data, status, headers, config) {
+                console.log("Error in receiving promo codes");
+            });
+
+        }).
+        error(function (data, status, headers, config) {
+            console.log("Error in receiving Sps");
+        });
+
 
     }
 

@@ -1,0 +1,142 @@
+<div class="mainContent2" ng-controller="AdminCtrl" ng-init="initCache(); clinicMgmt.getClinic()">
+ 	<div>
+			<div class="createClinic">
+				<h3 ng-hide="clinicMgmt.editMode">PRBM Registration</h3>
+		        <br />
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2" style="line-height: 45px;">
+		        		<span class="clinic-label">Name</span>
+		        		<span style="color: red;">*</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<input type="text" class="form-control" name="prbmName" ng-model="prbmName" value="{{prbmName}}" placeholder="Name" required />
+	        		</div>
+	        		<div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="prmbName_error">
+		        			{{prmbName_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2" style="line-height: 45px;">
+		        		<span class="clinic-label">Contact</span>
+		        		<span style="color: red;">*</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<input type="text" class="form-control" name="Contact" ng-model="prbmContact" value="{{prbmContact}}" placeholder="Contact" required />
+	        		</div>
+	        		<div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="prbmContact_error">
+		        			{{prbmContact_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2" style="line-height: 45px;">
+		        		<span class="clinic-label">Gender</span>
+		        		<span style="color: red;">*</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+			        	<select class="form-control" name="prbmGender" data-ng-model="prbmGender"  title="Select gender" data-ng-required="true" required="required">
+			        	<option value="" selected="selected">Select customer gender</option>
+			        	<option value="Male" label="Male">Male</option>
+			        	<option value="Female" label="Female">Female</option>
+			        	</select>
+	        		</div>
+	        		<div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="prbmGender_error">
+		        			{{prbmGender_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2" style="line-height: 45px;">
+		        		<span class="clinic-label">Age</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<input type="number" min="1" max="120" step="1" class="form-control" name="prbmAge" ng-model="prbmAge" value="{{prbmAge}}" placeholder="Age" required />
+	        		</div>
+	        		<div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="clinicMgmt.clinic_name_error">
+		        			{{clinicMgmt.clinic_name_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2" style="line-height: 45px;">
+		        		<span class="clinic-label">Email</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<input type="text" class="form-control" name="prbmEmail" ng-model="prbmEmail" value="{{prbmEmail}}" placeholder="Email" required />
+	        		</div>
+	        		<div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="clinicMgmt.clinic_name_error">
+		        			{{clinicMgmt.clinic_name_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2">
+		        		<span class="clinic-label">Were you satisfied with recovery zone?</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<input type="radio" name="prbmSatisfied" ng-model="prbmSatisfied" value='yes'/> Yes &nbsp; &nbsp; 
+		        		<input type="radio" name="prbmSatisfied" ng-model="prbmSatisfied" value='no'/> No &nbsp; &nbsp; 
+		        		<input type="radio" name="prbmSatisfied" ng-model="prbmSatisfied" value='NA'/> NA &nbsp; &nbsp; 
+	        	    </div>
+	        	</div>
+
+		         <div class="row">
+		        	<div class="col-xs-12 col-sm-2">
+		        		<span class="clinic-label">Callback Required?</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<input type="checkbox" name="prbmCallback" ng-model="prbmCallback" value="{{prbmCallback}}" placeholder="Prbm Callback" required />
+	        	    </div>
+	        	</div>
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2" style="line-height: 45px;">
+		        		<span class="clinic-label">Problem</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<textarea class="input-width form-control clstxt2"
+                                  rows="3"
+                                  name="Problem"
+                                  data-ng-model = "prbmProblem"
+                                  data-ng-pattern = "/^[a-zA-Z0-9.()-/\s]+$/"
+                                  title = "Problem"
+                                  placeholder = "Problem"
+                                  data-ng-required = "true"
+                                  style = "width: 100%">
+                   		</textarea>
+	        	   </div>
+	        	    <div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="clinicMgmt.clinic_description_error">
+		        			{{clinicMgmt.clinic_description_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
+
+		        <div class="row row-align">
+		        	<div class="col-xs-12 col-sm-2">
+		        		&nbsp;
+	        		</div>
+		        	<div class="col-xs-12 col-sm-1">
+						<button class="btn btn-primary btn-sm" type="button" ng-click="savePrbmData()">Save</button>
+					</div>
+					<div class="col-xs-12 col-sm-1">
+						<button class="btn btn-default btn-sm" type="button" ng-click="cancelPrbmData();">Cancel</button>
+					</div>
+		        </div>
+
+		    </div>
+		</div>
+</div>
