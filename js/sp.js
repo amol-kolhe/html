@@ -511,8 +511,8 @@ angular.module('myApp.controllers')
 
         var curdate = new Date();
         var myEpochtotime = Math.round(curdate.getTime()/1000);
-        console.log('appt date:'+ appt_starttime);
-        console.log('myEpochtotime:'+ myEpochtotime);
+       // console.log('appt date:'+ appt_starttime);
+       // console.log('myEpochtotime:'+ myEpochtotime);
 
         var hourDiff = parseInt(appt_starttime) - parseInt(myEpochtotime); //in ms
         //var hourDiff1 = parseInt(myEpochtotime) - parseInt(appt_starttime);
@@ -536,7 +536,13 @@ angular.module('myApp.controllers')
         var curdate = new Date();
         var myEpochtotime = Math.round(curdate.getTime()/1000);
         //console.log(myEpochtotime);
-        if(myEpochtotime > appt_starttime){
+        var date = moment(new Date(appt_starttime * 1000)).format("YYYY-MM-DD 11:59") + " PM";
+        var starttime = Date.parse(date);
+
+        //console.log(starttime/1000);
+        var datelimit = starttime/1000;
+
+        if(myEpochtotime > datelimit){
             $scope.RequestedBy = ['Physio']; 
         }
     }
