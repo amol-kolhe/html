@@ -128,7 +128,8 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 			{title: "New Appointment", url: 'custNewAppointment.html'}
 		];
 			
-		$scope.spMenus = [{title: "My Appointments", url: 'quickView.html'},
+		$scope.spMenus = [{title: "Dashboard", url: 'dashboard.html'},
+			{title: "My Appointments", url: 'quickView.html'},
 			//{title: "Cost Calculator", url: 'costcalculator.html'},
 			{title: "Package View", url: 'packageView.html'},
 			{title: "Patient Wallet", url: 'patientWallet.html'},
@@ -191,8 +192,10 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 						$scope.pageSource2 = 'custInfoBar.html';
 					} else if(typeObj == 2) {
 						$cookies.put('u_type', typeObj);
-						$scope.activeTab = 'My Appointments';
-						$scope.pageSource = 'quickView.html';
+						//$scope.activeTab = 'My Appointments';
+						$scope.activeTab ='Dashboard';
+						//$scope.pageSource = 'quickView.html';
+						$scope.pageSource = 'dashboard.html';
 						$scope.pageSource1 = "leftNavigation.html";
 						$scope.pageSource2 = 'spInfoBar.html';
 					} else if(typeObj == 3) {
@@ -233,8 +236,10 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
                     $scope.pageSource1 = "leftNavigation.html";
                     $scope.pageSource2 = 'custInfoBar.html';
                 } else if($cookies.get('u_type') == 2) {
-                    $scope.activeTab = 'My Appointments';
-                    $scope.pageSource = 'quickView.html';
+                    //$scope.activeTab = 'My Appointments';
+                    //$scope.pageSource = 'quickView.html';
+                    $scope.activeTab = 'Dashboard';
+                    $scope.pageSource = 'dashboard.html';
                     $scope.pageSource1 = "leftNavigation.html";
                     $scope.pageSource2 = 'spInfoBar.html';
                 } else if($cookies.get('u_type') == 3){
@@ -967,8 +972,10 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 						$cookies.put('u_name', name);
 						$cookies.put('u_type', 2);
 
-						$scope.activeTab = 'My Appointments';
-						$scope.pageSource = 'quickView.html';
+						//$scope.activeTab = 'My Appointments';
+						$scope.activeTab ='Dashboard';
+						//$scope.pageSource = 'quickView.html';
+						$scope.pageSource = 'dashboard.html';
 						$scope.pageSource1 = "leftNavigation.html";
 						$scope.pageSource2 = 'spInfoBar.html';
 
@@ -1131,6 +1138,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
                     $scope.pageSource = 'custNewAppointment.html';
                 }else{
                     $scope.activeTab = 'My Appointments';
+                    //$scope.activeTab ='Dashboard';
                     $scope.pageSource = 'appointments.html';
                 }
 
@@ -1171,7 +1179,8 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
         
         if($cookies.get('u_type')!=undefined) 
         {
-        	$scope.activeTab = "My Appointments";
+        	//$scope.activeTab = "My Appointments";
+        	$scope.activeTab ='Dashboard';
             if($cookies.get('u_type') == 3){
                 $scope.activeTab = 'Package Cancellations';
             }

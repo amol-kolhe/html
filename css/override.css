@@ -166,3 +166,137 @@ button[disabled], html input[disabled] {
     border-radius: 0;
 }
 /* End override  */
+
+/*SP Dashboard CSS starts*/
+
+.appt_panel {
+    border: 4px solid #d6d6d6;
+    border-radius: 4px !important;
+}
+.appt_panel .panel-heading {
+    background: #00b2ab;
+}
+.appt_panel .panel-title {
+    color: #ffffff;
+    font-size: 18px;
+    font-family: Arial;
+    font-weight: bold;
+}
+.appt_panel .panel-body {
+    background: #ebebec;
+     min-height: 271px;
+}
+.next_appt {
+    text-align: center;
+}
+.next_appt img {
+    text-align: center;
+    margin: 15px 0;
+}
+.next_appt h4 {
+    font-size: 20px;
+    font-family: Arial;
+    font-weight: bold;
+    
+}
+.next_appt p {
+    font-size: 20px;
+    font-family: Arial;
+    
+}
+.slot_panel {
+    border: 1px solid #a7a7a7;
+    border-radius: 1px !important;
+}
+.slot_panel .panel-heading {
+    background: #00b2ab;
+}
+.slot_panel .panel-title {
+    color: #ffffff;
+    font-size: 18px;
+    font-family: Arial;
+    font-weight: bold;
+}
+.slot_panel .panel-body {
+    background: #ebebec;
+    padding: 0px;
+}
+
+.appt_panel .pagination {
+	margin: 0px;
+}
+
+.apptListNo {
+    font-weight: bold;
+}
+
+.tableTd {
+    width: 220px;
+}
+
+.slot-view td{
+    background: #ffffff;
+}
+
+.slot-view thead{
+    background: #757575;
+    color: #ffffff;
+}
+
+.slot-view th{
+    text-align: center;
+}
+
+/*.slot-view td span{
+    display:block;
+    border: 2px solid #ffffff;
+    height: 25px;
+}*/
+
+.panel-body .slot-span {
+    border: 1px solid;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    float: left;
+    margin: 0 10px 10px 0;
+}
+
+.left_arrow {
+    background:url(../../images/left_arrow.png) no-repeat;
+    width:23px;
+    height:60px;
+    border: 0 none;
+    box-shadow: 0 0 0 none;
+    position: absolute;
+    top: 138px;
+    left: 219px;
+}
+
+.right_arrow {
+    background:url(../../images/right_arrow.png) no-repeat;
+    width:23px;
+    height:60px;
+    border: 0 none;
+    box-shadow: 0 0 0 none;
+    position: absolute;
+    top: 138px;
+    right: 20px;
+}
+
+
+ @media (max-width: 375px) {
+
+ .left_arrow {   
+        top: 259px;
+        left: 133px;
+    }
+
+    .right_arrow {
+        top: 259px;
+        right: 20px;
+    }
+
+}
+
+

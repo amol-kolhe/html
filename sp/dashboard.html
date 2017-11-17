@@ -1,0 +1,212 @@
+<div class="mainContent2" ng-controller="SpCtrl" ng-init="initDashboard();">
+	<div class="row">
+        <div class="col-sm-12 col-md-4">
+            <div class="panel appt_panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"> Next Appoinment </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="next_appt">
+                    <img src="../../images/next_appt_icon.png" width="75" height="75" alt=""/> 
+                        <h4>{{patientName}}</h4>
+                        <p>{{latestApptDate}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-8">
+            <div class="panel appt_panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"> Collection  <span class='pull-right'>Total Amount:{{collectionTotal}}/-</span></h3>
+                </div>
+                <div class="panel-body">
+                	<div style="min-height:176px;">
+	                	<table class="table">
+							<thead>							
+								<tr>							
+									<th ng-click="sort('customer_name')"><span class="1clsfleft">Customer</span>
+										<span class="glyphicon sort-icon" ng-show="sortKey=='customer_name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+									</th>
+								
+									<th ng-click="sort('trans_amount')"><span class="1clsfleft">Amount</span>
+										<span class="glyphicon sort-icon" ng-show="sortKey=='trans_amount'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+									</th>								
+								</tr>
+
+							</thead>
+							<tbody>
+								<tr dir-paginate="rec in arrayCollection|orderBy:sortKey:!reverse|filter:search|itemsPerPage:4"
+										pagination-id="arrFinanceId" ng-class="rec.alert_to_finance?'row-selected':''">							
+									<td>
+										<span style="word-break: break-word;">{{rec.customer_name}}</span>
+									</td>
+									<td>
+										<span style="word-break: break-word;">{{rec.trans_amount}}/-</span>
+									</td>
+									
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<dir-pagination-controls
+						max-size="4"
+						pagination-id="arrFinanceId"
+						direction-links="true"
+						boundary-links="true" >
+					</dir-pagination-controls>
+                </div>
+            </div>
+        </div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12 col-md-12">
+		    <div class="panel slot_panel">
+				<div class="panel-heading">
+				    <h3 class="panel-title">Appointments list</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table">
+						<thead>							
+							<tr>	
+								<th><span class="1clsfleft"></span>
+								</th>	
+
+								<th><span class="1clsfleft">Yesterday</span>
+								</th>
+							
+								<th><span class="1clsfleft">Today</span>
+								</th>	
+
+								<th><span class="1clsfleft">Tomorrow</span>
+								</th>							
+							</tr>
+
+						</thead>
+						<tbody>
+							<tr>							
+								<td>
+									<span class="1clsfleft apptListNo">
+										<img src="../../images/confirmed_icon.png" width="20" height="20" alt=""/>
+										Confirmed
+								    </span>
+								</td>
+								<td class='tableTd'>
+									<span>{{yesterdaysConfirmed}}</span>
+								</td>
+								<td class='tableTd'>
+									<span>{{todaysConfirmed}}</span>
+								</td>
+								<td class='tableTd'>
+									<span>{{tomorrowsConfirmed}}</span>
+								</td>													
+							</tr>
+							<tr>							
+								<td>
+									<span class="1clsfleft apptListNo">
+										<img src="../../images/cancelled_icon.png" width="20" height="20" alt=""/>
+										Cancelled
+									</span>
+								</td>
+								<td class='tableTd'>
+									<span>{{yesterdaysCancelled}}</span>
+								</td>
+								<td class='tableTd'>
+									<span>{{todaysCancelled}}</span>
+								</td>
+								<td class='tableTd'>
+									<span>{{tomorrowsCancelled}}</span>
+								</td>													
+							</tr>
+							<tr>							
+								<td>
+									<span class="1clsfleft apptListNo">
+										<img src="../../images/completed_icon.png" width="20" height="20" alt=""/>
+										Completed
+									</span>
+								</td>
+								<td class='tableTd'>
+									<span>{{yesterdaysCompleted}}</span>
+								</td>
+								<td class='tableTd'>
+									<span>{{todaysCompleted}}</span>
+								</td>
+								<td class='tableTd'>
+									<span></span>
+								</td>													
+							</tr>
+						</tbody>
+					</table>
+				</div>
+		    </div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 col-md-12">
+		    <div class="panel slot_panel">
+				<div class="panel-heading">
+				    <h3 class="panel-title">Appointments slot status</h3>
+				</div>
+				<div class="panel-body"> 
+					<table class='slot-view' border="1" width = "100%" cellpadding = "4">
+							<thead>
+	                            <tr>
+	                                <th rowspan = "2" width= "200">Timing</th> 
+	                                <th ng-repeat="item in weekDays" id="{{item.Date}}_{{item.Day}}">{{item.Day}}</th>
+	                            </tr>
+	                            <tr>                      
+	                                <th ng-repeat="item in weekDays" id="{{item.Date}}">{{item.Date}}</th>
+	                            </tr>
+                        	</thead>
+
+                            <tr ng-repeat="row in wrkHrsSlotsForHome">
+                                <th>{{row.label}}</th>
+         
+                                <td ng-repeat="item in weekDays" id="{{row.startTime}}_{{item.DateEpoch}}">
+                                       <span></span>                          
+                                </td>
+                            </tr>
+                    </table>
+                    <button class="left_arrow" ng-click="showPreviousSlotView();"type="button" ></button>  
+                    <button class="right_arrow" ng-click="showNextSlotView();" type="button" ></button>
+                    <div class= "row">                   
+              
+	               		<div class="col-xs-12">
+				                <div style="padding-left: 120px;padding-top: 20px;" class="row">
+				                   
+				                    <div class="col-xs-2">
+				                        <span class="slot-span" style="background-color:#ffffff;"></span>
+				                        <span class="slot-legend-label">Free Slot</span>
+				                    </div>   
+				                    <div class="col-xs-2">
+				                        <span class="slot-span" style="background-color:yellow;"></span>
+				                        <span class="slot-legend-label">Weekly Off</span>
+				                    </div>                
+				               
+				                   
+				                    <div class="col-xs-2">
+				                        <span class="slot-span" style="background-color:#c1bfbb;"></span>
+				                        <span class="slot-legend-label">Booked</span>
+				                    </div>   
+				                    <div class="col-xs-2">
+				                        <span class="slot-span" style="background-color:red;"></span>
+				                        <span class="slot-legend-label">Leave</span>
+				                    </div>                
+				            
+				               
+				                    <div class="col-xs-2">
+				                        <span class="slot-span" style="background-color:#2fca2c;"></span>
+				                        <span class="slot-legend-label">Available</span>
+				                    </div>                  
+				              
+				                </div>
+				         </div>
+			         </div>
+				</div>
+		    </div>
+		</div>
+	</div>
+
+
+
+</div>

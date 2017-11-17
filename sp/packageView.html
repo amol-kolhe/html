@@ -10,7 +10,7 @@
 			<div style="padding: 10px 12px;">
 			    <div class="row">
 					<div class="col-xs-4 col-sm-2 col-md-2"><b>Base Price</b></div>
-					<div class="col-xs-8 col-sm-2 col-md-10"><b>: {{basePrice}}</b></div>
+					<div class="col-xs-8 col-sm-2 col-md-10"><b>: Rs.{{basePrice}}</b></div>
 				</div>
 				<div class="row">
 					<div class="col-xs-4 col-sm-2 col-md-2"><b>Modalities</b></div>
@@ -76,7 +76,7 @@
 				</thead>
 				<tbody>
 					<tr dir-paginate="rec in arrPackages|orderBy:sortKey:!reverse|filter:search|itemsPerPage:5"
-							pagination-id="arrFinanceId">
+							pagination-id="arrPackageId">
 						<td>
 							<span style="word-break: break-word;">{{rec.min_sessions}} Session</span>
 						</td>
@@ -101,7 +101,7 @@
 			</table>
 			<dir-pagination-controls
 				max-size="5"
-				pagination-id="arrFinanceId"
+				pagination-id="arrPackageId"
 				direction-links="true"
 				boundary-links="true" 
 				style="padding-left: 10px;">
@@ -146,7 +146,7 @@
 				</thead>
 				<tbody>
 					<tr dir-paginate="rec in arrPromocodes|orderBy:sortKey:!reverse|filter:search|itemsPerPage:5"
-							pagination-id="arrFinanceId">
+							pagination-id="arrPromo">
 					
 						<td>
 							<span style="word-break: break-word;">{{rec.promocode}}</span>
@@ -163,7 +163,7 @@
 			</table>
 			<dir-pagination-controls
 				max-size="5"
-				pagination-id="arrFinanceId"
+				pagination-id="arrPromo"
 				direction-links="true"
 				boundary-links="true" 
 				style="padding-left: 10px;">

@@ -210,6 +210,15 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         return $http.get(url);
     };
 
+    //APIs for dashboard
+    spApi.fetchSpAppointments = function(spid,dayBeforeYesterdayDate) {
+        return $http.get(baseUrl + "/hrest/v1/appt/fetchSpAppointments?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2&spid=" + spid + "&starttime=" + dayBeforeYesterdayDate);
+    };
+
+    spApi.getSpWeeklySlot = function(spid,dateFrom,dateTill) {
+        return $http.get(baseUrl + "/hrest/v1/slot/getSpWeeklySlot?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid()+ '&spid=' + spid+ '&dateFrom=' + dateFrom+ '&dateTill=' + dateTill);
+    }
+
 	return spApi;
 }]);
 

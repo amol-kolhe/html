@@ -2416,6 +2416,339 @@ angular.module('myApp.controllers')
 
     }
 
+    $scope.initDashboard = function(){
+        $scope.spId = $cookies.get('u_id');
+        $scope.spApptList = [];
+
+        var today = new Date();
+        var preDate = new Date(today);
+        preDate.setDate(today.getDate() - 3);
+
+        var yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+
+        var tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        var dayBeforeYesterdayDate = Math.round(Date.parse(preDate)/1000);
+
+       spApi.fetchSpAppointments($scope.spId,dayBeforeYesterdayDate)
+        .success(function(data, status, headers, config) {
+           console.log(data.payload);
+          
+           var futureAppt = [];
+           $scope.latestApptDate = '';
+           $scope.patientName = '';
+           $scope.todaysConfirmed = 0;
+           $scope.todaysCancelled = 0;
+           $scope.todaysCompleted = 0;
+           $scope.yesterdaysConfirmed = 0;
+           $scope.yesterdaysCancelled = 0;
+           $scope.yesterdaysCompleted = 0;
+           $scope.tomorrowsConfirmed = 0;
+           $scope.tomorrowsCancelled = 0;
+           $scope.tomorrowsCompleted = 0;
+
+           todaysDate=moment(today).format('DD-MM-YYYY');
+           yesterdayDate = moment(yesterday).format('DD-MM-YYYY');
+           tomorrowDate = moment(tomorrow).format('DD-MM-YYYY');
+
+           $scope.spApptList = data.payload;
+           var todayDate = new Date();
+           var todayEpoch = Math.round(todayDate.getTime()/1000);
+           //console.log(todayEpoch);
+           $scope.spApptList.forEach(function(item) {  
+            if(item.startTime > todayEpoch && item.status == 'Confirmed'){
+               var start = item.startTime;
+               futureAppt.push(item);
+            }
+
+            var apptDate = moment(new Date(item.startTime * 1000)).format("DD-MM-YYYY");
+
+            if(item.status == 'Confirmed' && todaysDate == apptDate){
+                $scope.todaysConfirmed = $scope.todaysConfirmed + 1;
+            }else if(item.status == 'Cancelled' && todaysDate == apptDate){
+                $scope.todaysCancelled = $scope.todaysCancelled + 1;
+            }else if(item.status == 'Completed' && todaysDate == apptDate){
+                $scope.todaysCompleted = $scope.todaysCompleted + 1;
+            }
+
+            if(item.status == 'Confirmed' && yesterdayDate == apptDate){
+                $scope.yesterdaysConfirmed = $scope.yesterdaysConfirmed + 1;
+            }else if(item.status == 'Cancelled' && yesterdayDate == apptDate){
+                $scope.yesterdaysCancelled = $scope.yesterdaysCancelled + 1;
+            }else if(item.status == 'Completed' && yesterdayDate == apptDate){
+                $scope.yesterdaysCompleted = $scope.yesterdaysCompleted + 1;
+            }
+
+            if(item.status == 'Confirmed' && tomorrowDate == apptDate){
+                $scope.tomorrowsConfirmed = $scope.tomorrowsConfirmed + 1;
+            }else if(item.status == 'Cancelled' && tomorrowDate == apptDate){
+                $scope.tomorrowsCancelled = $scope.tomorrowsCancelled + 1;
+            }else if(item.status == 'Completed' && tomorrowDate == apptDate){
+                $scope.tomorrowsCompleted = $scope.tomorrowsCompleted + 1;
+            }
+
+
+           });
+
+           if(futureAppt.length > 0){
+               var apptStartTime = futureAppt.map(function(obj) { return obj.startTime; });
+               var min = Math.min.apply(null, apptStartTime);
+               //console.log(xVals);
+               //console.log(min);
+               futureAppt.forEach(function(appt){
+                if(appt.startTime == min){
+                    $scope.latestApptDate = appt.startTime_date;
+                    $scope.patientName = appt.apptPatientName;
+                }
+
+               });
+
+           }
+
+           /*console.log($scope.latestApptDate);
+           console.log($scope.patientName);
+           console.log(todaysDate);
+           console.log(yesterdayDate);
+           console.log(tomorrowDate);
+           console.log($scope.tomorrowsConfirmed);
+           console.log($scope.tomorrowsCancelled);
+           console.log($scope.tomorrowsCompleted);*/
+           $scope.getCollection(); 
+        })
+        .error(function(data, status, headers, config) {
+           console.log('Failed to fetch sp appointments!');
+        });
+
+
+        $scope.wrkHrsSlotsForHome = [
+            {                           
+                "label" :   "07:30 AM - 09:00 AM",
+                "slotNo": "1", 
+                "startTime": "07:30AM",
+                "endTime": "09:00AM"
+            },
+            {
+                "label":    "09:00 AM - 10:30 AM",
+                "slotNo": "2", 
+                "startTime": "09:00AM",
+                "endTime": "10:30AM"
+            },
+            {
+                "label":    "10:30 AM - 12:00 PM",  
+                "slotNo": "3", 
+                "startTime": "10:30AM",
+                "endTime": "12:00PM"                    
+            },
+            {
+                "label":    "12:00 PM - 13:30 PM",
+                "slotNo": "4", 
+                "startTime": "12:00PM",
+                "endTime": "13:30PM"
+            },
+            {
+                "label":    "15:00 PM - 16:30 PM",  
+                "slotNo": "5",  
+                "startTime": "15:00PM",
+                "endTime": "16:30PM"
+            },
+            {
+                "label":    "16:30 PM - 18:00 PM",
+                "slotNo": "6", 
+                "startTime": "16:30PM",
+                "endTime": "18:00PM"
+            },
+            {
+                "label":    "18:00 PM - 19:30 PM",  
+                "slotNo": "7", 
+                "startTime": "18:00PM",
+                "endTime": "19:30PM"                    
+            },
+            {
+                "label":    "19:30 PM - 21:00 PM",
+                "slotNo": "8", 
+                "startTime": "19:30PM",
+                "endTime": "21:00PM"                            
+            }
+        ];
+
+
+        $scope.weekNumber = moment().week();
+        //console.log($scope.weekNumber);
+
+        var weekday1 = moment().week($scope.weekNumber).startOf('isoweek');
+        var weekday2 = moment().week($scope.weekNumber).startOf('week').add(7, 'days');
+
+        var weekDate1 = weekday1._d;
+        var date1 = moment(weekDate1).format('DD-MMM-YYYY');
+        var d1 = new Date(weekDate1);
+        var dateEpoch1 = Math.round(d1.getTime()/1000);
+
+        var weekDate2 = weekday2._d;
+        var d2 = new Date(weekDate2);
+        var dateEpoch2 = Math.round(d2.getTime()/1000);
+
+        var day1 = moment(weekDate1).format('ddd');
+
+        $scope.weekDays =[];
+        $scope.weekDays.push({
+            'Date': date1,
+            'DateEpoch': dateEpoch1,
+            'Day' : day1
+        });
+     
+        for(var i =2;i<=7;i++){
+            var weekday = moment().week($scope.weekNumber).startOf('week').add(i, 'days');
+
+            var weekDate = weekday._d;
+            var date = moment(weekDate).format('DD-MMM-YYYY');
+            var d = new Date(weekDate);
+            var dateEpoch = Math.round(d.getTime()/1000);
+            var day = moment(weekDate).format('ddd');
+            $scope.weekDays.push({
+                'Date': date,
+                'DateEpoch': dateEpoch,
+                'Day' : day
+            });
+        }
+        //console.log($scope.weekDays);
+
+        $scope.loadSlotView($scope.spId,dateEpoch1,dateEpoch2);
+
+    }
+
+    $scope.loadSlotView = function(spid,start,end){
+        spApi.getSpWeeklySlot(spid,start,end)
+        .success(function(data, status, headers, config) {
+           
+            $scope.spWeeklySlots = data.payload;
+            if($scope.spWeeklySlots.length > 0){
+              $scope.spWeeklySlots.forEach( function(item){
+                   for(var i = 0 ; i < $scope.wrkHrsSlotsForHome.length; i++){
+                    for(var j = 0 ; j < $scope.weekDays.length; j++){
+                        var td = $scope.wrkHrsSlotsForHome[i].startTime+"_"+$scope.weekDays[j].DateEpoch;
+                        var start = (($scope.wrkHrsSlotsForHome[i].startTime).substring(0, 5)).replace(":","");
+
+                        if(start == item.startTime && $scope.weekDays[j].DateEpoch == item.date){
+
+                                if(item.is_weeklyOff == true){
+                                    document.getElementById(td).style.backgroundColor = 'yellow';
+                                   
+                                }
+
+                                if(item.is_leave == true){
+                                    document.getElementById(td).style.backgroundColor = 'red';
+                                }
+
+                                if(item.is_leave == false && item.is_allocated == true){
+                                    document.getElementById(td).style.backgroundColor = '#2fca2c'; //green
+                                }
+
+                                if(item.is_blocked == true){
+                                    document.getElementById(td).style.backgroundColor = '#c1bfbb'; //grey
+                                }
+
+                        }
+                    }
+                   }
+
+                });
+            }
+        })
+        .error(function(data, status, headers, config) {
+            console.log('Fail to fetch sp slots!');
+        });
+    }
+
+    $scope.showNextSlotView = function(){
+        $scope.spId = $cookies.get('u_id');
+
+        $scope.weekNumber = $scope.weekNumber + 1;
+        var weekday1 = moment().week($scope.weekNumber).startOf('isoweek');
+        var weekday2 = moment().week($scope.weekNumber).startOf('week').add(7, 'days');
+
+        var weekDate1 = weekday1._d;
+        var date1 = moment(weekDate1).format('DD-MMM-YYYY');
+        var d1 = new Date(weekDate1);
+        var dateEpoch1 = Math.round(d1.getTime()/1000);
+
+        var weekDate2 = weekday2._d;
+        var d2 = new Date(weekDate2);
+        var dateEpoch2 = Math.round(d2.getTime()/1000);
+
+        var day1 = moment(weekDate1).format('ddd');
+
+        $scope.weekDays =[];
+        $scope.weekDays.push({
+            'Date': date1,
+            'DateEpoch': dateEpoch1,
+            'Day' : day1
+        });
+     
+        for(var i =2;i<=7;i++){
+            var weekday = moment().week($scope.weekNumber).startOf('week').add(i, 'days');
+
+            var weekDate = weekday._d;
+            var date = moment(weekDate).format('DD-MMM-YYYY');
+            var d = new Date(weekDate);
+            var dateEpoch = Math.round(d.getTime()/1000);
+            var day = moment(weekDate).format('ddd');
+            $scope.weekDays.push({
+                'Date': date,
+                'DateEpoch': dateEpoch,
+                'Day' : day
+            });
+        }
+       // console.log($scope.weekDays);
+       $scope.loadSlotView($scope.spId,dateEpoch1,dateEpoch2);
+
+    }
+
+    $scope.showPreviousSlotView = function(){
+        $scope.spId = $cookies.get('u_id');
+
+        $scope.weekNumber = $scope.weekNumber - 1;
+        var weekday1 = moment().week($scope.weekNumber).startOf('isoweek');
+        var weekday2 = moment().week($scope.weekNumber).startOf('week').add(7, 'days');
+
+        var weekDate1 = weekday1._d;
+        var date1 = moment(weekDate1).format('DD-MMM-YYYY');
+        var d1 = new Date(weekDate1);
+        var dateEpoch1 = Math.round(d1.getTime()/1000);
+
+        var weekDate2 = weekday2._d;
+        var d2 = new Date(weekDate2);
+        var dateEpoch2 = Math.round(d2.getTime()/1000);
+
+        var day1 = moment(weekDate1).format('ddd');
+
+        $scope.weekDays =[];
+        $scope.weekDays.push({
+            'Date': date1,
+            'DateEpoch': dateEpoch1,
+            'Day' : day1
+        });
+     
+        for(var i =2;i<=7;i++){
+            var weekday = moment().week($scope.weekNumber).startOf('week').add(i, 'days');
+
+            var weekDate = weekday._d;
+            var date = moment(weekDate).format('DD-MMM-YYYY');
+            var d = new Date(weekDate);
+            var dateEpoch = Math.round(d.getTime()/1000);
+            var day = moment(weekDate).format('ddd');
+            $scope.weekDays.push({
+                'Date': date,
+                'DateEpoch': dateEpoch,
+                'Day' : day
+            });
+        }
+        //console.log($scope.weekDays);
+        $scope.loadSlotView($scope.spId,dateEpoch1,dateEpoch2);
+       
+    }
+
     $scope.getWalletHistory = function(rec){
         $scope.walletTransactionDetails = true;
         $scope.customerName = rec.name;
@@ -2515,6 +2848,7 @@ angular.module('myApp.controllers')
 
     $scope.getCollection = function() {
         $scope.arrayCollection = [];
+        $scope.collectionTotal = 0;
 
         spApi.getCollection().
         success(function (data, status, headers, config) {
@@ -2524,18 +2858,20 @@ angular.module('myApp.controllers')
             arrStoreTrue.forEach(function(item) {
                 if($cookies.get('u_id') == item.service_provider_id && item.trans_type != "debit"){
                     var today = moment(new Date()).format('YYYYMMDD');
-                   /* var alert_date = moment(new Date(item.trans_date * 1000)).add(item.finance_alert_days, 'days').format("YYYYMMDD");
+                    var alert_date = moment(new Date(item.trans_date * 1000)).add(item.finance_alert_days, 'days').format("YYYYMMDD");
                     item.alert_to_finance = false;
                     if(today >= alert_date){
                         item.alert_to_finance = true;
-                    }*/
+                    }
                     item.orignal_trans_date = item.trans_date;
                     item.trans_date = moment(new Date(item.trans_date * 1000)).format("DD-MM-YYYY hh:mm A");
                     $scope.arrayCollection.push(item);
+                    $scope.collectionTotal = $scope.collectionTotal + item.trans_amount;
                 }
          
             });
-            //console.log($scope.arrayCollection);
+            //alert($scope.collectionTotal);
+            console.log($scope.arrayCollection);
         }).
         error(function (data, status, headers, config) {
             console.log("Error in receiving package cancellation request.");
