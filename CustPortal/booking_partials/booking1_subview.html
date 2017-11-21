@@ -1,13 +1,61 @@
-<!-- Select a problem -->
+<div class="booking1-main-container" ng-init = "cpc.checkHomeDataFilled()">
+	<div class="container-fluid booking1-menu-container">
+		<div ng-include = "'./CustPortal/booking_partials/booking1_header.html'"></div>
+	</div>
+	<div class="booking-spacer"></div>
+	
+	<div autoscroll='true'>
+			<!-- Select a problem -->
+			<div class = "container-fluid select-problem-container">
+				<div class="container">
+			        <div ng-include = "'./CustPortal/booking_partials/booking1_selectproblem.html'"></div>
+				</div>
+			</div>
+
+			<!-- Whats included on your session -->
+			<div class = "container-fluid included-session-container">
+				<div class="container">
+			        <div ng-include = "'./CustPortal/booking_partials/booking1_includedsession.html'"></div>
+				</div>
+			</div>
+	</div>
+
+	<!-- request a call back -->
+	<div class = "container-fluid booking1-request-callback-container">
+		<div class="container">
+	        <div ng-include = "'./CustPortal/booking_partials/booking1_requestcallback.html'"></div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<div class = "container-fluid home-footer">
+		<div class="container">
+			<footer>
+	            <div ng-include = "'./CustPortal/home_partials/custPortal_footer.html'"></div>
+	        </footer>
+		</div>
+	</div>
+</div>
+
+
+<!-- Select a problem 
 <div class = "container-fluid select-problem-container">
 	<div class="container">
         <div ng-include = "'./CustPortal/booking_partials/booking1_selectproblem.html'"></div>
 	</div>
-</div>
+</div> -->
 
-<!-- Whats included on your session -->
+<!-- Whats included on your session 
 <div class = "container-fluid included-session-container">
 	<div class="container">
         <div ng-include = "'./CustPortal/booking_partials/booking1_includedsession.html'"></div>
 	</div>
-</div>
+</div> -->
+
+<script type="text/javascript">
+$( document ).ready(function() {
+	    document.title = "Book Physiotherapy service online at your home on HealYos";
+	    document.querySelector('meta[name="description"]').setAttribute("content", "Book Physiotherapists online for doorstep physiotherapy services on HealYos in just 3 steps - Choose your available time, choose the body part and confirm.");
+	    document.querySelector('meta[name="keywords"]').setAttribute("content", "Online Physio, Physio online, Book physio online"); 
+	});
+</script>

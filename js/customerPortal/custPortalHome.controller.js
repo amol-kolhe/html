@@ -147,7 +147,7 @@
 				imgUrl: './images/customer_portal/back_hero_768_sml.png',
 				heading1: 'Heal Your Pain',
 				heading2: 'Feel Awesome Again',
-				subtext: 'Expert Physiotherapists at your door',
+				subtext:  'Expert Physiotherapists at your door',
 				classes: 'item'
 			}
 		];
@@ -179,7 +179,7 @@
 				imgUrl: './images/customer_portal/back_hero_1200_sml.png',
 				heading1: 'Heal Your Pain',
 				heading2: 'Feel Awesome Again',
-				subtext: 'Expert Physiotherapists at your door',
+				subtext: '<h1>Expert Physiotherapists at your door</h1>',
 				classes: 'item'
 			}
 		];
@@ -350,7 +350,7 @@
 				vm.flags.booknowSectionfieldsValid = true;
 				custportalGetSetService.setBooknowObj(obj);
 				$cookies.put('booking_session', 'in_progress', { path: "/"});
-				$state.go('booking.booking1');
+				$state.go('booking1');
 			} else {
 				vm.flags.booknowSectionfieldsValid = false;
 				vm.flags.bookNowError = true;
@@ -408,7 +408,7 @@
 				vm.flags.booknowSectionfieldsValid = true;
 				custportalGetSetService.setBooknowObj(obj);
 				$cookies.put('booking_session', 'in_progress', { path: "/"});
-				$state.go('booking.booking1');
+				$state.go('booking1');
 			} else {
 				vm.flags.booknowSectionfieldsValid = false;
 				vm.flags.bookNowError = true;
@@ -1487,14 +1487,14 @@
 		* Function to redirect to physioexperts page
 		*/
 		function redirectToPhysioExperts() {
-			$state.go("homepages.physioexperts");
+			$state.go("physioexperts");
 		}
 
 		/*
 		* Function to redirect to FAQ page
 		*/
 		function redirectToFaq() {
-			$state.go("homepages.faq");
+			$state.go("faq");
 		}
 
 		/*
@@ -1518,7 +1518,7 @@
 		*/
 		function scrolltodiv(divname) {
 			if(divname = "physiotherapy") {
-				$state.go("homepages.faq");
+				$state.go("faq");
 				vm.scrolltodivName = "physiotherapy";
 			}
 		}

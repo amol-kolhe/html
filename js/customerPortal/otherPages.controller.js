@@ -371,7 +371,7 @@ function innerPageController($timeout, $http, custApi, $cookies, $scope, $state,
 			$scope.$parent.cpc.flags.booknowSectionfieldsValid = true;
 			$cookies.put('booking_session', 'in_progress', { path: "/"});
 			custportalGetSetService.setBooknowObj(obj);
-			$state.go('booking.booking1');
+			$state.go('booking1');
 		} else {
 			$scope.$parent.cpc.flags.booknowSectionfieldsValid = false;
 			$scope.$parent.cpc.flags.bookNowError = true;

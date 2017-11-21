@@ -1,8 +1,15 @@
+<!-- Header -->
+<div class = "container-fluid">
+	<div class="container header-container">
+		<div ng-include = "'./CustPortal/home_partials/custPortal_header.html'"></div>
+	</div>
+</div>
+
 <div class="container-fluid inner-page-contactus-banner-image" style="background-image: url(../../images/customer_portal/neck.png);">
 </div>
 <div class="container">
 	<div class="contactus-heading inner-page-banner-heading">
-		Physiotherapy for Neck
+		<h1>Physiotherapy for Neck</h1>
 	</div>
 </div>
 
@@ -10,7 +17,7 @@
 	<div class="workwithus-main-container">
 		<div class="workwithus-main-content">
 			<div class="workwithus-section1-content">
-				<!--<div class="workwithus-heading">What is HealYos</div>-->
+				<div class="workwithus-heading"><h2>Take your Neck pain seriously</h2></div>
 				<div class="workwithus-text">
 					<p>Sometimes simple home interventions are not enough to treat cervical disc disease, in which an abnormality in one or more discs that lie between the vertebrae cause neck pain. Often, though, it helps to see a physical therapist that can treat abnormalities, show you how to stretch and strengthen your neck and vertebrae, improve your posture, and prevent neck pain from recurring. In the majority of people, certain exercises and manipulations used by the physical therapist can help relieve discomfort and restore movements.</p>
 					<p>When you visit a physical therapist you’ll first have a complete evaluation relevant to your symptoms such as pain in the neck or between the shoulder blades, pain that radiates down the arm to the hand or fingers, or numbness or tingling in the shoulder or arm. Your strength, reflexes, and other potential sources of pain will be checked. The therapist will also assess joint function in your neck and upper back and lower back to identify limitations or dysfunctions that may contribute to your pain.</p>
@@ -20,10 +27,113 @@
 		</div>
 	</div>
 </div>
+
+<!-- Ready to book -->
+<div class = "container-fluid ready-to-book-image">
+	<div class="container">
+		
+		<!--<div ng-include = "'./CustPortal/other_pages/innerPage_ready_to_book.html'"></div>-->
+		<!--<div ng-include = "'./CustPortal/home_partials/custPortal_ready_to_book.html'"></div>-->
+
+		<div class="ready-to-book-content booknow-container  ready-to-book-top">	
+			<div class="ready-to-book-heading">Ready to book</div>
+			<div class="ready-to-book-booknow-section">
+				<!--<div ng-include = "'./CustPortal/home_partials/custPortal_booknow_footer.html'" class="booknow-container"></div> -->
+
+
+				<div class="booknow-outer">
+					<span class="locations-section">
+						<!--<select class="ac-select"
+				            id="lCombo"
+				            ac-model="cpc.selectedLocation"
+				            ac-refresh = cpc.acRefresh
+				            ac-options="l.val for l in cpc.getAllLocations()"
+				            ac-settings="{ allowClear: true, maxWidth: '250px', itemsInView: 20, loadOnCreate: false, comboMode: false, loadOnOpen: true, minWidth: '250px', height: '23px' }"
+				            ac-change="cpc.locationSelected(value)"
+				            ac-key="pin">
+				        </select>-->
+
+				         <select class="ac-select stateList"
+				            id="lCombo"
+				            ac-model="innerPageCtrl.model.selectedLocation"
+				            ac-refresh = cpc.acRefresh
+				            acute-options="locationArray"
+				            ac-options="l.val for l in cpc.getAllLocations()"  
+				            ac-settings="{ allowClear: true, maxWidth: '250px', itemsInView: 20, loadOnCreate: false, comboMode: false, loadOnOpen: true, minWidth: '250px', height: '23px' }"         
+				            ac-change="innerPageCtrl.method.locationSelected(value)"
+				            ac-key="pin">
+				        </select>
+				    </span>
+					<span class="date-section">
+				        <div class='input-group date dt'>
+				            <input type="text" id = "dt3"
+				            name = "fromDate"
+				            date-disabled="cpc.disabled(date, mode)"
+				            title="From Date" 
+				            class="callmeField2 datetimepicker2 form-control"
+				            placeholder="Pick a Date"
+				           />
+				            <span class="input-group-addon">
+				                <label for="dt3">
+				                    <img src="./images/customer_portal/down_arrow.png" />
+				                </label>                
+				            </span>
+				        </div>
+				    </span>
+				    <span class="timeslot-section">
+				        <select ng-model="innerPageCtrl.model.timeslot" ng-options = "time.starttime for time in innerPageCtrl.model.timeslotArray">
+				            <option value="">Select Time</option>
+				        </select>
+				    </span>
+
+					<span class="book-now-button" ng-click="innerPageCtrl.method.redirectToBooking1()">BOOK MY SESSION</span>
+				</div>
+
+
+				</div>
+				<div class="ready-to-book-booknow-mobile">
+					<button type="button">START HERE</button>
+				</div>
+				<div class="ready-to-book-contact-section">
+					<span class="ready-to-book-contact-subsection1">
+						<img src="./images/customer_portal/Icon_call_white.png">
+						<a href="tel:9370588888"><span class="ready-to-book-phonenumber">9370588888</span></a>
+					</span>
+					<div class="footer-booknow home-redirecting-buttons">
+						<a ui-sref="home"> <button type="button">BOOK NOW</button> </a>
+					</div>
+					<span class="ready-to-book-contact-subsection2">
+						<span class="dash"></span>
+						<span class="or">or</span>
+						<span class="dash"></span>
+					</span>			
+					<span class="ready-to-book-contact-subsection3">
+						<img src="./images/customer_portal/Icon_callback_white.png">
+						<span class="ready-to-book-callback">REQUEST A CALL BACK</span>
+					</span>
+				</div>
+		</div>
+
+	</div>
+</div>
+
+<!-- Footer -->
+<div class = "container-fluid home-footer">
+	<div class="container">
+		<footer>
+            <div ng-include = "'./CustPortal/home_partials/custPortal_footer.html'"></div>
+        </footer>
+	</div>
+</div>
 <script type="text/javascript">
 	// ViewContent
 	// Track key page views (ex: product page, landing page or article)
 	try {
 		fbq('track', 'ViewContent');
 	} catch(err) {}
+	$( document ).ready(function() {
+	    document.title = "Physiotherapy for neck? Book doorstep physiotherpy service online | HealYos";
+	    document.querySelector('meta[name="description"]').setAttribute("content", "Looking for an expert Physiotherapy For Neck at home? Book physiotherapy session for Neck online on HealYos. Get relieve from all your Neck pains with HealYos.");
+	    document.querySelector('meta[name="keywords"]').setAttribute("content", "Physiotherapy For Neck, Neck pain, Pain in neck, Neck physio, Neck pain recovery"); 
+	});
 </script>

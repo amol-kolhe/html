@@ -95,6 +95,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 		finalcost: '',
 		discount: ''
 	};
+	vm.problemNameVar = "";
 
 	$scope.locationArray = [];
 
@@ -134,6 +135,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 	function initBooking1screen() {
 		/*$scope.$parent.cpc.checkHomeDataFilled();*/
 		/*populate location array*/
+
 		vm.model.locationArr = custportalGetSetService.getLocalityObj();
 		$scope.locationArray =  custportalGetSetService.getLocalityObj();
 
@@ -235,7 +237,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 				vm.model.apptCost = localVariables.bookNowobj.apptCost;
 				vm.custInfoFormFields.promocode='';
 	        });
-
+			
 	        /*
 	        * Event called when date is changed 
 	        */
@@ -387,6 +389,12 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 	* function to get location array
 	*/
 	function getAllLocations(callback) {
+		
+		$('#booking1-dt').datetimepicker({
+			defaultDate: localVariables.bookNowobj.date,
+			format: 'DD-MM-YYYY'
+		});
+		vm.model.problemName = localVariables.bookNowobj.problemName;
 		callback(vm.model.locationArr);
 	};
 
@@ -515,6 +523,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 		localVariables.selectedProblemId = item.target.id;
 		localVariables.selectedItem = item.target;
 		vm.model.problemName = item.target.getAttribute("value");
+		
 		vm.model.otherProblem = '';
 	}
 
@@ -524,6 +533,9 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 	* Header remains constant.
 	*/
 	function navigateToBooking2() {
+		
+		localVariables.bookNowobj.problemName = "";
+
 		if(vm.model.selectedLocation != 'Choose Location' && 
 		(vm.model.selectedDate != undefined || vm.model.selectedDate != "") &&
 		 (vm.model.timeslot != null)) {
@@ -535,6 +547,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 				$timeout(function () { vm.flags.bookingErrorContainer = false; vm.flags.selectProblemError = false}, 5000);
 			} else {
 				custportalGetSetService.setProblem({selectedItemId: localVariables.selectedProblemId, otherProblem: vm.model.otherProblem});
+				localVariables.bookNowobj.problemName = vm.model.problemName;
 				$state.go('booking.booking2');
 			}
 		} else {
@@ -551,7 +564,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 	* Function to navigate back to booking screen1
 	*/
 	function navigateBackToBooking1() {
-		$state.go('booking.booking1');
+		$state.go('booking1');
 		var problemObj = custportalGetSetService.getProblem();
 		$timeout(function() {
 			
@@ -652,13 +665,16 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
     	if(vm.model.selectedLocation != 'Choose Location' && 
 		(vm.model.selectedDate != undefined || vm.model.selectedDate != "") &&
 		 (vm.model.timeslot != null)) {
+
     		if(vm.custInfoForm.$valid) {
 	    		var uid = $cookies.get('u_id');
 	    		if(vm.custInfoFormFields.lastName == "" || vm.custInfoFormFields.lastName == undefined) {
 	    			var name = vm.custInfoFormFields.firstName;
 	    		} else {
 	    			var name = vm.custInfoFormFields.firstName+ " "+vm.custInfoFormFields.lastName;
-	    		}	    		
+	    		}	    
+	    		//console.log('vm.model=');	
+	    		//console.log(vm.model);	
 	    		var dateInstance = $('#booking1-dt').data("DateTimePicker").date().format("YYYYMMDD");
 	    		var year = $('#booking1-dt').data("DateTimePicker").date().format("YYYY");
 	    		var month = $('#booking1-dt').data("DateTimePicker").date().format("MM") - 1;

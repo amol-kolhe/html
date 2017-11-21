@@ -22,8 +22,8 @@
 
 		$stateProvider.
 			state('home', {
-				url: '/home',
-				templateUrl: './CustPortal/home_partials/custPortal_home.html'
+				url: '/',
+				templateUrl: './CustPortal/home_partials/custPortal_home.html',
 			}).
 			state('homepages', {
 				url: '/homepages',
@@ -35,69 +35,100 @@
 				url: '/privacypolicy',
 				templateUrl: './CustPortal/other_pages/privacy_policy.html'
 			}).
-			state('homepages.contactus', {
+			state('contactus', {
 				url: '/contactus',
-				templateUrl: './CustPortal/other_pages/contactus.html'
+				templateUrl: './CustPortal/other_pages/contactus.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
 			}).
-			state('homepages.physioexperts', {
+			state('physioexperts', {
 				url: '/physioexperts',
-				templateUrl: './CustPortal/other_pages/physioexperts.html'
+				templateUrl: './CustPortal/other_pages/physioexperts.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
 			}).
-			state('homepages.aboutsancheti', {
-				url: '/aboutsancheti',
-				templateUrl: './CustPortal/other_pages/aboutsancheti.html'
+			state('aboutsancheti', {
+				url: '/about-sancheti-hospital',
+				templateUrl: './CustPortal/other_pages/aboutsancheti.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
 			}).
 			state('homepages.testimonials', {
 				url: '/testimonials',
 				templateUrl: './CustPortal/home_partials/testimonials.html'
 			}).
-			state('homepages.faq', {
+			state('faq', {
 				url: '/faq',
-				templateUrl: './CustPortal/other_pages/faq.html'
+				templateUrl: './CustPortal/other_pages/faq.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
 			}).
-			state('homepages.aboutus', {
+			state('aboutus', {
 				url: '/aboutus',
-				templateUrl: './CustPortal/other_pages/aboutus.html'
+				templateUrl: './CustPortal/other_pages/aboutus.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
 			}).
-			state('homepages.policy', {
+			state('policy', {
 				url: '/policy',
-				templateUrl: './CustPortal/other_pages/policy.html'
+				templateUrl: './CustPortal/other_pages/policy.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
 			}).
-			state('homepages.neck', {
-				url: '/neck',
-				templateUrl: './CustPortal/other_pages/neck.html'
+			state('neck', {
+				url: '/physiotherpay-for-neck',
+				templateUrl: './CustPortal/other_pages/neck.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
+
 			}).
-			state('homepages.elbow', {
-				url: '/elbow',
-				templateUrl: './CustPortal/other_pages/elbow.html'
+			state('elbow', {
+				url: '/physiotherpay-for-elbow',
+				templateUrl: './CustPortal/other_pages/elbow.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
 			}).
-			state('homepages.foot', {
-				url: '/foot',
-				templateUrl: './CustPortal/other_pages/foot.html'
+			state('foot', {
+				url: '/physiotherpay-for-foot',
+				templateUrl: './CustPortal/other_pages/foot.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
 			}).
-			state('homepages.hip', {
-				url: '/hip',
-				templateUrl: './CustPortal/other_pages/hip.html'
+			state('hip', {
+				url: '/physiotherpay-for-hip',
+				templateUrl: './CustPortal/other_pages/hip.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
 			}).
-			state('homepages.knee', {
-				url: '/knee',
-				templateUrl: './CustPortal/other_pages/knee.html'
+			state('knee', {
+				url: '/physiotherpay-for-knee',
+				templateUrl: './CustPortal/other_pages/knee.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
 			}).
-			state('homepages.shoulder', {
-				url: '/shoulder',
-				templateUrl: './CustPortal/other_pages/shoulder.html'
+			state('shoulder', {
+				url: '/physiotherpay-for-shoulder',
+				templateUrl: './CustPortal/other_pages/shoulder.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
 			}).
-			state('homepages.wrist', {
-				url: '/wrist',
-				templateUrl: './CustPortal/other_pages/wrist.html'
+			state('wrist', {
+				url: '/physiotherpay-for-wrist',
+				templateUrl: './CustPortal/other_pages/wrist.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
 			}).
-			state('homepages.ankle', {
-				url: '/ankle',
-				templateUrl: './CustPortal/other_pages/ankle.html'
+			state('ankle', {
+				url: '/physiotherpay-for-ankle',
+				templateUrl: './CustPortal/other_pages/ankle.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
 			}).
-			state('homepages.back', {
-				url: '/back',
-				templateUrl: './CustPortal/other_pages/back.html'
+			state('back', {
+				url: '/physiotherpay-for-back',
+				templateUrl: './CustPortal/other_pages/back.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
 			}).
 			state('homepages.prbm', {
 				url: '/prbm',
@@ -109,13 +140,25 @@
 				controller: 'bookingController',
 				controllerAs: 'bookingCtrl'
 			}).
-			state('booking.booking1', {
-				url: '/booking1',
-				templateUrl: './CustPortal/booking_partials/booking1_subview.html'
+			/*state('booking.booking1', {
+				url: '/book-physiotherpist-online',
+				templateUrl: './CustPortal/booking_partials/booking1_subview.html',
 			}).
 			state('booking.booking2', {
 				url: '/booking2',
-				templateUrl: './CustPortal/booking_partials/booking2_subview.html'
+				templateUrl: './CustPortal/booking_partials/booking2_subview.html',
+				
+			}).
+			*/
+			state('booking1', {
+				url: '/book-physiotherpist-online',
+				templateUrl: './CustPortal/booking_partials/booking1_subview.html',
+				controller: 'bookingController',
+				controllerAs: 'bookingCtrl'
+			}).
+			state('booking.booking2', {
+				url: '/booking2',
+				templateUrl: './CustPortal/booking_partials/booking2_subview.html',
 			}).
 			state('bookingConfirmation', {
 				url: '/booking_confirmation',
@@ -128,6 +171,6 @@
 				templateUrl: './CustPortal/other_pages/privacy_policy.html'
 			});
 
-		$urlRouterprovider.otherwise('/home');
+		$urlRouterprovider.otherwise('/');
 	}]);
 /*})();*/
