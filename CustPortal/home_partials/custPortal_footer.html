@@ -47,6 +47,15 @@
 
             	</ul>
         	</li> 
+        	<li style="cursor:pointer">
+            	<a ng-click="cpc.setEventsFlag()" style="background:url(../../images/customer_portal/down_arrow.png) no-repeat 60% 50%;padding-right: 156px;">Events</a>
+            	<ul style="list-style-type:none" ng-hide="!cpc.EventsFlag">
+            		<li>
+                    	<a ui-sref="homepages.prbm">PRBM</a>
+                	</li>
+      
+            	</ul>
+        	</li>
 			<!-- <li><a ui-sref="homepages.privacypolicy">{{cpc.footerCompanyItems.pPolicy}}</a></li> -->
 		</ul>
 	</div>
@@ -71,6 +80,9 @@
 	<!-- <div class="col-xs-12 col-sm-4 col-sm-offset-1 footer-sub-section3"> -->
 	<div class="col-xs-12 col-sm-4 footer-sub-section3">
 		<span class="footer-widget-headings therapist"><a ui-sref="contactus">CONTACT US IF YOU ARE A THERAPIST</a></span>
+	</div>
+	<div class="col-xs-12 col-sm-4 footer-sub-section3">
+		<span class="footer-widget-headings"><a ui-sref="policy">POLICY HELP</a></span>
 	</div>
 
 </div>

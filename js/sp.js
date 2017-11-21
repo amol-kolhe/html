@@ -2786,7 +2786,7 @@ angular.module('myApp.controllers')
                     $scope.arrayWalletDataTrans.push(item);
                 });
 
-                //console.log($scope.arrayWalletData);
+                console.log($scope.arrayWalletData);
 
             })
             .error(function(data, status, headers, config) {

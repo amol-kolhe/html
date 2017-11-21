@@ -245,6 +245,11 @@ button[disabled], html input[disabled] {
 
 .slot-view th{
     text-align: center;
+    cursor: auto;
+}
+
+.slot_panel th{
+    cursor: auto;
 }
 
 /*.slot-view td span{
@@ -288,8 +293,24 @@ button[disabled], html input[disabled] {
  @media (max-width: 375px) {
 
  .left_arrow {   
-        top: 259px;
+        /*top: 259px;*/
+        top:320px;
         left: 133px;
+    }
+
+    .right_arrow {
+        /*top: 259px;*/
+        top:320px;
+        right: 20px;
+    }
+
+}
+
+@media (max-width: 320px) {
+
+ .left_arrow {   
+        top: 259px;
+        left: 76px;
     }
 
     .right_arrow {
@@ -298,5 +319,7 @@ button[disabled], html input[disabled] {
     }
 
 }
+
+
 
 
