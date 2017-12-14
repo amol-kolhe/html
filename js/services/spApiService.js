@@ -219,6 +219,21 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         return $http.get(baseUrl + "/hrest/v1/slot/getSpWeeklySlot?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid()+ '&spid=' + spid+ '&dateFrom=' + dateFrom+ '&dateTill=' + dateTill);
     }
 
+    spApi.getServiceAndProducts = function() {
+        var url = baseUrl + "/hrest/v1/admin/getServiceAndProducts?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + '&role=2';
+        return $http.get(url);
+    };
+
+    spApi.getServiceProductTrans = function(patientid) {
+        var url = baseUrl + "/hrest/v1/admin/getServiceProductTrans?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2&patientid="+ patientid;
+        return $http.get(url);
+    };
+
+    spApi.addServicesProductsTrans = function (dataObj,patientid,spid) {
+        return $http.post(baseUrl + "/hrest/v1/admin/addServicesProductsTrans?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2&patientid="+ patientid + "&spid="+ spid , dataObj);
+    }
+
+
 	return spApi;
 }]);
 

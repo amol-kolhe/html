@@ -12,6 +12,12 @@
                                 <input class="form-control cust-search-fields" type="text" id="firstFocus" ng-model="custSearch.customerid" />
                             </div>
                         </div>
+                        <!--<div class="row cust-label-align">
+                            <span class="col-xs-12 col-sm-3">Name<span class="colonSeparator hidden-xs">:</span></span>
+                            <div class="col-xs-12 col-sm-5">
+                                <input class="form-control cust-search-fields" type="text" id="firstFocus" ng-model="custSearch.name" />
+                            </div>
+                        </div>-->
                         <div class="row cust-label-align">
                             <span class="col-xs-12 col-sm-3">Contact Number <span class="colonSeparator hidden-xs">:</span></span>
                             <div class="col-xs-12 col-sm-5">
@@ -27,7 +33,7 @@
                         <div class="row">
                             <span class="col-xs-4 col-sm-3"></span>
                             <div style="text-align: right;" class="col-xs-12 col-sm-5">
-                                <button class="btn btn-primary btn-sm" type="submit" ng-disabled="!(!!custSearch.customerid || !!custSearch.contact || !!custSearch.email)">Search</button>
+                                <button class="btn btn-primary btn-sm" type="submit" ng-disabled="!(!!custSearch.customerid || !!custSearch.contact || !!custSearch.email || !!custSearch.name)">Search</button>
                             </div>
                         </div>
                     </div>

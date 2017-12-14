@@ -97,16 +97,68 @@ function innerPageController($timeout, $http, custApi, $cookies, $scope, $state,
 	* Function to initialize Pune Localities in dropdown
 	*/
 	function initLocalities() {
-		custApi.getCities("India")
+
+		//alert(vm.cityId);
+
+		$scope.arrayActiveCity = [];
+		vm.arrayActiveCityList = [];
+
+
+		custApi.getZones(vm.cityId)
+			.success(function(data, status, headers, config){
+			/*$scope.zonesList = buildZonesList(data.payload);
+			cache.zoneIdToNameMap = buildZoneIdToNameMap(data.payload);*/
+			vm.locationArr = [];
+			$scope.locationArray = [];
+			var dataArray = data.payload;
+			//console.log(dataArray);
+			for(var i = 0 ; i < dataArray.length ; i++) {                            
+                //change to show only zones which are not deleted               
+            if(!dataArray[i].hasOwnProperty("deleted") || dataArray[i].deleted === false) {
+				var zoneid = dataArray[i].zoneid;
+				var zonename = dataArray[i].zonename;
+				var price = dataArray[i].price;
+				var pincodeArray = dataArray[i].pincodes;
+				for(var j = 0 ; j < pincodeArray.length ; j++) {
+                      var isdeleted = pincodeArray[j].isdeleted;
+                    if (isdeleted === false){
+                        var pincodeVal = pincodeArray[j].pin;
+                        var pincodeid = pincodeArray[j].pincodeid;
+                        var localitiesVal = pincodeArray[j].localities;
+                        var locationObj = {
+                            "zoneid": zoneid,
+                            "zonename": zonename,
+                            "pin": pincodeVal,
+                            "pincodeid": pincodeid,
+                            "localities": localitiesVal,
+                            "val": pincodeVal + " " + localitiesVal,
+                            "price": price,
+                            "cityId": vm.activeCity
+                        };
+                        vm.locationArr.push(locationObj);
+                        $scope.locationArray.push(locationObj);
+                        vm.locationArr.sort(compare);
+                    }
+				}
+              }
+			}
+			vm.acRefresh = false;
+			custportalGetSetService.setLocalityObj(vm.locationArr);
+		})
+		.error(function(data, status, headers, config){
+			console.log("Error in getting Zones");
+		}); 
+	
+
+		/*custApi.getCities("India")
         .success(function(data, status, headers, config){
             localVariables.cache.cityToIdMap = buildCitiesToIdMap(data.payload);
-            //vm.cityMap = cache.cityToIdMap;
+            
             localVariables.cache.cityIdToNameMap = buildCitiesIdToNameMap(data.payload);
             localVariables.cache.cityIdToStateMap = buildCityIdToStateMap(data.payload);
-            custApi.getZones(localVariables.cache.cityToIdMap["Pune"])
+            custApi.getZones(vm.cityId)
                 .success(function(data, status, headers, config){
-                    /*$scope.zonesList = buildZonesList(data.payload);
-                    cache.zoneIdToNameMap = buildZoneIdToNameMap(data.payload);*/
+             
                     vm.model.locationArr = [];
 					var dataArray = data.payload;
 					for(var i = 0 ; i < dataArray.length ; i++) {
@@ -139,11 +191,11 @@ function innerPageController($timeout, $http, custApi, $cookies, $scope, $state,
                 })
                 .error(function(data, status, headers, config){
                     console.log("Error in getting Zones");
-                }); /*adminApi.getZones END*/
+                });
         })
         .error(function(data, status, headers, config){
             console.log("Failed to get Cities");
-        });
+        });*/
 	}
 
 	/*
@@ -266,12 +318,12 @@ function innerPageController($timeout, $http, custApi, $cookies, $scope, $state,
 	* function for location selected
 	*/
 	function locationSelected(value) {
-		//alert(value.cityId);
 		//console.log(value);
 		vm.zonePrice = value.price;
 		vm.cityId = value.cityId;
 		vm.model.selectedLocation = value;
 		/* API call to check available dates */
+		localmethods.initLocalities();
 		custApi.checkAvailableDatesInMonth(3, vm.model.fromMonthDate, value.pincodeid, value.zoneid, vm.model.physiotherapyId).
 		success(function (data, status, header, config) {
 			console.log("Available dates retrieved successfully");

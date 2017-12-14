@@ -713,7 +713,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 								"problem": vm.model.problemName,
 								"gender": vm.custInfoFormFields.gender,
 								"signMeUp": vm.custInfoFormFields.signup,
-								"is_package_assign":false
+								"is_package_assign":false,
+								"source":"Online"
 							},
 							"apptslots": [apptstarttime],
 							"adminid": uid,
@@ -738,7 +739,9 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 								"problem": vm.model.problemName,
 								"gender": vm.custInfoFormFields.gender,
 								"signMeUp": vm.custInfoFormFields.signup,
-								"is_package_assign":false
+								"is_package_assign":false,
+								"source":"Online"
+
 							},
 							"apptslots": [apptstarttime],
 							"adminid": uid,
@@ -767,7 +770,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 								"problem": vm.model.problemName,
 								"gender": vm.custInfoFormFields.gender,
 								"signMeUp": vm.custInfoFormFields.signup,
-								"is_package_assign":false
+								"is_package_assign":false,
+								"source":"Online"
 							},
 							"apptslots": [apptstarttime],
 							"adminid": uid,
@@ -793,7 +797,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 								"problem": vm.model.problemName,
 								"gender": vm.custInfoFormFields.gender,
 								"signMeUp": vm.custInfoFormFields.signup,
-								"is_package_assign":false
+								"is_package_assign":false,
+								"source":"Online"
 							},
 							"apptslots": [apptstarttime],
 							"adminid": uid,

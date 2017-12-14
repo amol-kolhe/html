@@ -387,7 +387,7 @@
                                         class="btn btn-default btn-sm" 
                                         style="margin: 10px;" 
                                         ng-click="addTimeSlot()"
-                                        ng-disabled="!obj.dt || !spNewAppointment.aptstarttime || !spInfo">
+                                        ng-disabled="(!obj.dt || !spNewAppointment.aptstarttime || !spInfo) || (aptSlotFlag == true)">
                                         <i class="glyphicon glyphicon-arrow-down"></i>
                                     </button>
                                     <button type="button" 

@@ -312,6 +312,8 @@
 				window.location = "/web/CustPortal/";
 			}
 		}
+
+		
 		
 		/*
 		* Function to redirect to the booking 1 screen.

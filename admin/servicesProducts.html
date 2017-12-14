@@ -1,0 +1,71 @@
+<div class="mainContent2" ng-controller="AdminCtrl" ng-init="initCache(); clinicMgmt.getClinic()">
+ 	<div>
+			<div class="createClinic">
+				<h3 ng-hide="clinicMgmt.editMode">Services And Products Management</h3>
+		        <br />
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2" style="line-height: 45px;">
+		        		<span class="clinic-label">Name</span>
+		        		<span style="color: red;">*</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<input type="text" class="form-control" name="serviecProductName" ng-model="serviecProductName" value="{{serviecProductName}}" placeholder="serviecProductName" required />
+	        		</div>
+	        		<div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="serviecProductName_error">
+		        			{{serviecProductName_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2" style="line-height: 45px;">
+		        		<span class="clinic-label">Category</span>
+		        		<span style="color: red;">*</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+			        	<select class="form-control" name="category" data-ng-model="category"  title="Select category" data-ng-required="true" required="required">
+			        	<option value="" selected="selected">Select category</option>
+			        	<option value="Product" label="Product">Product</option>
+			        	<option value="Service" label="Service">Service</option>
+			        	</select>
+	        		</div>
+	        		<div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="category_error">
+		        			{{category_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2" style="line-height: 45px;">
+		        		<span class="clinic-label">Price</span>
+		        		<span style="color: red;">*</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<input type="number" min="1" max="2500" step="1" class="form-control" name="serviceProductPrice" ng-model="serviceProductPrice" value="{{serviceProductPrice}}" placeholder="serviceProductPrice" required />
+	        		</div>
+	        		<div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="serviceProductPrice_error">
+		        			{{serviceProductPrice_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
+		        <div class="row row-align">
+		        	<div class="col-xs-12 col-sm-2">
+		        		&nbsp;
+	        		</div>
+		        	<div class="col-xs-12 col-sm-1">
+						<button class="btn btn-primary btn-sm" type="button" ng-click="saveServiceProductData()">Save</button>
+					</div>
+					<div class="col-xs-12 col-sm-1">
+						<button class="btn btn-default btn-sm" type="button" ng-click="cancelServiceProductData();">Cancel</button>
+					</div>
+		        </div>
+
+		    </div>
+		</div>
+</div>

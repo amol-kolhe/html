@@ -2,6 +2,7 @@
 	<span><h3>Appointment Analysis Reports</h3></span>
     <input type="radio" ng-model="periodMonth" name="group1" value="month" ng-change = "resetWeek()"> <label>Monthly</label>
     <input type="radio" ng-model="periodWeek" name="group1" value="week" ng-change = "resetMonth()"> <label>Weekly </label>
+    <input type="radio" ng-model="periodYesterday" name="group1" value="yesterday" ng-change = "resetYesterday()"> <label>Yesterday </label>
 
 	<form class="form-inline" data-ng-init="initReports()">
         <select class="input-width clstxt2 form-control" name="monthcombo"
@@ -10,7 +11,7 @@
                 ng-options="month for month in monthList"
                 ng-change = "setMonthDateRange()"
                 ng-show = "periodMonth"
-                ng-hide = "periodWeek">
+                ng-hide = "periodWeek || periodYesterday">
             <option value="">Select Month</option>
           
         </select> 
@@ -21,7 +22,7 @@
                 ng-options="weekstr for weekstr in weekArray"
                 ng-change = "setWeekDateRange()"
                 ng-show = "periodWeek"
-                ng-hide = "periodMonth">
+                ng-hide = "periodMonth || periodYesterday">
             <option value="">Select Week</option>
           
         </select>     

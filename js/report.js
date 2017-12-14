@@ -12,6 +12,7 @@ angular.module('myApp.controllers')
 	$scope.from_date="";
 	$scope.till_date="";
 	$scope.periodMonth="";
+	$scope.periodYesterday="";
 	$scope.periodWeek="week";
 
 	$scope.monthList = ["January", "February" , "March" , "April" , "May" , "June" , "July" , "August" ,"September" ,"October" , "November" , "December" ];
@@ -642,6 +643,7 @@ angular.module('myApp.controllers')
     $scope.resetWeek = function() {    	
     	$scope.periodWeek="";
     	$scope.periodMonth="month";
+    	$scope.periodYesterday="";
     	$('#aptFromDate').val('');
 		$('#aptTillDate').val('');	
     }
@@ -650,9 +652,35 @@ angular.module('myApp.controllers')
     $scope.resetMonth = function() {    	
     	$scope.periodMonth="";
     	$scope.periodWeek="week";
+    	$scope.periodYesterday="";
     	$('#aptFromDate').val('');
 		$('#aptTillDate').val('');	
 
+    }
+
+    $scope.resetYesterday = function() {
+    	
+    	$scope.periodYesterday="yesterday";
+    	$scope.periodMonth="";
+    	$scope.periodWeek="";
+
+    	var today = new Date();
+        var dayBeforeYesterday = new Date(today);
+        dayBeforeYesterday.setDate(today.getDate() - 2);
+     
+        dayBeforeYesterdate = moment(dayBeforeYesterday).format("YYYY-MM-DD 11:59") + " PM";
+        todaysDate = moment(today).format("YYYY-MM-DD 12:01") + " AM";
+        //alert(dayBeforeYesterdate);
+        //alert(todaysDate);
+
+		if(dayBeforeYesterdate != "Invalid" && todaysDate != "Invalid"){
+			$scope.fromDate = dayBeforeYesterdate; 
+			$scope.tillDate = todaysDate;
+			$('#aptFromDate').val($scope.fromDate);
+			$('#aptTillDate').val($scope.tillDate);	
+		}
+
+      
     }
 
     $scope.initGrigOptionsAppointmentAnalysis($scope.from_date,$scope.till_date);

@@ -426,6 +426,25 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 	}
 
 
+	adminApi.getServiceAndProducts = function() {
+		var url = baseUrl + "/hrest/v1/admin/getServiceAndProducts?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + '&role=0';
+		return $http.get(url);
+	};
+
+
+	//**********API for additional cost *****************
+
+	adminApi.addServicesProducts = function (dataObj) {
+		return $http.post(baseUrl + "/hrest/v1/admin/addServicesProducts?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0", dataObj);
+	}
+
+
+	adminApi.getServiceProductTrans = function(patientid) {
+        var url = baseUrl + "/hrest/v1/admin/getServiceProductTrans?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0&patientid="+ patientid;
+        return $http.get(url);
+    };
+
+
 	
 
 	return adminApi;

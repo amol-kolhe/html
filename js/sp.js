@@ -44,7 +44,7 @@ angular.module('myApp.controllers')
     $scope.spNewAppointment.selectedTimeSlots = [];
     $scope.paymentModes = ["Cash", "Wallet"];
     $scope.serviceLocation = "";
-    $scope.paymentModesSp = ["Cash"];
+    $scope.paymentModesSp = ["Wallet"];
     $scope.apptPayment = {};
     $scope.apptPackage = {};
     $scope.apptPackage.packageForm = "";
@@ -126,7 +126,9 @@ angular.module('myApp.controllers')
             id: "",
             name: ""
         },
-        response: null
+        response: {
+            netTotalCharges: 0
+        }
     };
     $scope.showResponse = false;
     $scope.spIdForWallet = "";
@@ -503,6 +505,138 @@ angular.module('myApp.controllers')
         $scope.spInfo = false;
         $scope.flags.showRescheduleAppt = false;
 
+    }
+
+    $scope.getServicesAndProducts = function(){
+        //alert('Hi');
+        spApi.getServiceAndProducts()
+        .success(function(data, status, headers, config) {
+            $scope.products = [];
+            $scope.services = [];
+            $scope.productServiceList = [];
+            $scope.productServiceTotal = 0;
+            $scope.models.response.netTotalCharges = 0;
+           
+            $scope.ServicesAndProducts = data.payload;
+            $scope.ServicesAndProducts.forEach(function(item) {
+            if(item.category == 'Product'){
+                $scope.products.push(item); 
+            }else if(item.category == 'Service'){
+                $scope.services.push(item);
+            }
+            });
+         
+        })
+        .error(function(data, status, headers, config) {
+            console.log('Failed to fetch services and products!');
+        });
+
+        spApi.getServiceProductTrans($scope.adminNewAppointmentCust.appointment.patientid)
+        .success(function(data, status, headers, config) {
+          
+           $scope.productServiceAllTrans = data.payload;
+           $scope.productServiceTrans = [];
+           $scope.productServiceAllTrans.forEach(function(item) {
+            if(item.is_used == false){
+                $scope.productServiceTrans.push(item);
+            }
+
+           });
+      
+        })
+        .error(function(data, status, headers, config) {
+            console.log('Failed to fetch services and products transactions!');
+        });
+
+
+    }
+
+    $scope.AddService = function(service,qty){
+        var flag = false;
+        if(qty == undefined || qty == NaN){
+            service.qty = 1;
+             service.totprice = service.price;
+        }else{
+            service.qty = qty; 
+            service.totprice = qty*service.price;   
+        }
+
+       // alert($scope.aptPackage.net_amount);
+
+        if($scope.productServiceList.length > 0){
+            $scope.productServiceList.forEach(function(item) {
+                if(item.name == service.name){
+                   flag = true;
+                }
+            });
+
+            if(flag == true){
+                alert('Service already added!');
+            }else{
+                $scope.productServiceList.push(service);
+            }
+        }else{
+            $scope.productServiceList.push(service);
+        }
+
+
+        $scope.productServiceTotal = $scope.productServiceTotal + service.totprice;
+        if($scope.models.response.netTotalCharges > 0){
+            $scope.models.response.netTotalCharges = $scope.models.response.netTotalCharges + service.totprice;
+        }
+
+        console.log($scope.productServiceList);
+    }
+
+    $scope.AddProduct = function(product ,qty){
+
+        if(qty == undefined || qty == NaN){
+            product.qty = 1;
+            product.totprice = product.price;
+        }else{
+             product.qty = qty;
+             product.totprice = product.qty*product.price;
+        }
+
+        var flag = false;
+        if( $scope.productServiceList.length > 0){
+            $scope.productServiceList.forEach(function(item) {
+                if(item.name == product.name){
+                   flag = true;
+                }
+            });
+
+            if(flag == true){
+                alert('Product already added!');
+            }else{
+                $scope.productServiceList.push(product);
+            }
+        }else{
+            $scope.productServiceList.push(product);
+        }
+
+        $scope.productServiceTotal = $scope.productServiceTotal + product.totprice;
+        if($scope.models.response.netTotalCharges > 0){
+            $scope.models.response.netTotalCharges = $scope.models.response.netTotalCharges + product.totprice;
+        }
+        console.log($scope.productServiceList);
+    }
+
+    $scope.removeItem = function(item){
+        var index = -1;
+        for(var i = 0; i < $scope.productServiceList.length; i++) {
+           if($scope.productServiceList[i].name === item.name) {
+             index = i;
+           }
+        }
+
+        $scope.productServiceList.splice(index,1);
+        $scope.productServiceTotal = $scope.productServiceTotal - item.totprice;
+        
+        if($scope.models.response.netTotalCharges > 0){
+             $scope.models.response.netTotalCharges = $scope.models.response.netTotalCharges - item.totprice;
+        }
+       
     }
 
     $scope.hideRescheduleOption = function(appt_starttime) {
@@ -1446,7 +1580,8 @@ angular.module('myApp.controllers')
                     type: $scope.aptPayment.sptype,
                     amount: $scope.aptPayment.additionalSpAmnt,
                     //description: "additional amount",
-                    description:$scope.aptPayment.additionalSpAmntDesc,
+                    //description:$scope.aptPayment.additionalSpAmntDesc,
+                    description:"Services/Products Additional Amount"
                 });
             }
 
@@ -1479,7 +1614,7 @@ angular.module('myApp.controllers')
     $scope.submitAptPackage = function() {
 
         //alert($scope.aptPackage.isretrofit);
-        if($scope.apptPackage.packageForm.free_cancellation_days.$valid && $scope.apptPackage.packageForm.valid_days.$valid && $scope.apptPackage.packageForm.additional_amount.$valid && $scope.apptPackage.packageForm.no_of_sessions.$valid && $scope.aptPackage.no_of_sessions >= $scope.aptPackage.min_sessions && $scope.aptPackage.no_of_sessions <= $scope.aptPackage.max_sessions)
+        if($scope.apptPackage.packageForm.free_cancellation_days.$valid && $scope.apptPackage.packageForm.valid_days.$valid && $scope.apptPackage.packageForm.no_of_sessions.$valid && $scope.aptPackage.no_of_sessions >= $scope.aptPackage.min_sessions && $scope.aptPackage.no_of_sessions <= $scope.aptPackage.max_sessions)
         {
             if($scope.custReadList.custwallet.walletbalance >= $scope.aptPackage.net_amount)
             {
@@ -1512,15 +1647,24 @@ angular.module('myApp.controllers')
                     hidePackageDialog();
                     $scope.adminNewAppointmentCust.appointment.custid = $scope.adminNewAppointmentCust.appointment.patientid;
                     $scope.showAppointment($scope.adminNewAppointmentCust.appointment, 'appointment');
+
                 })
                 .error(function(data, status, headers, config) {
                     $scope.apptPackageError = data.error.message;
                     $scope.checkSessionTimeout(data);
                 });
 
+                spApi.addServicesProductsTrans($scope.productServiceList,$scope.adminNewAppointmentCust.appointment.patientid,$scope.adminNewAppointmentCust.appointment.spid)
+                .success(function(data, status, headers, config) {
+                    console.log('service/product record added successfully!');
+                })
+                .error(function(data, status, headers, config) {
+                    console.log('Failed to add service/product record!');
+                });
+
             }else{
-                if(!$scope.custOldPackage.is_package_assign && $scope.custOldPackage.package_id == $scope.aptPackage.package_id && $scope.custOldPackage.package_code == $scope.aptPackage.package_code){
-                    
+              
+                if(!$scope.custOldPackage.is_package_assign && $scope.custOldPackage.package_id == $scope.aptPackage.package_id && $scope.custOldPackage.package_code == $scope.aptPackage.package_code){         
                     if($scope.custReadList.custwallet.walletbalance >= $scope.aptPackage.temp_net_amount)
                     {
                         /*var free_cancellation_days = 0;
@@ -1549,7 +1693,7 @@ angular.module('myApp.controllers')
                             $scope.adminNewAppointmentCust.customer.additional_amount = $scope.aptPackage.additional_amount;
                             alert("Customer package updated successfully");
                             hidePackageDialog();
-                            $scope.adminNewAppointmentCust.appointment.custid = $scope.adminNewAppointmentCust.appointment.patientid;
+                            $scoproductServiceListpe.adminNewAppointmentCust.appointment.custid = $scope.adminNewAppointmentCust.appointment.patientid;
                             $scope.showAppointment($scope.adminNewAppointmentCust.appointment, 'appointment');
                         })
                         .error(function(data, status, headers, config) {
@@ -1557,11 +1701,21 @@ angular.module('myApp.controllers')
                             $scope.checkSessionTimeout(data);
                         });
 
+                        spApi.addServicesProductsTrans($scope.productServiceList,$scope.adminNewAppointmentCust.appointment.patientid,$scope.adminNewAppointmentCust.appointment.spid)
+                        .success(function(data, status, headers, config) {
+                            console.log('service/product record added successfully!');
+                        })
+                        .error(function(data, status, headers, config) {
+                            console.log('Failed to add service/product record!');
+                        });
+                        
+
                     }else{
                         $scope.apptPackageError = "Customer does't have enough credit in wallet.";
                         $scope.walletFlag = true;
                     }
                 }else{
+                    alert('else');
                     $scope.apptPackageError = "Customer does't have enough credit in wallet.";
                     $scope.walletFlag = true;
                 }
@@ -1585,7 +1739,7 @@ angular.module('myApp.controllers')
             $scope.aptPackage.free_cancellation_ratio = promo.free_cancellation_ratio;
             $scope.aptPackage.valid_days = promo.valid_days;
             $scope.cancellation_fee = promo.cancellation_fee;
-
+            
             $scope.aptPackage.free_cancellation_days = 0;
             if($scope.aptPackage.no_of_sessions > 0 && $scope.aptPackage.free_cancellation_ratio > 0){
                 $scope.aptPackage.free_cancellation_days = (($scope.aptPackage.no_of_sessions * $scope.aptPackage.free_cancellation_ratio) / 100);
@@ -1663,6 +1817,10 @@ angular.module('myApp.controllers')
             $scope.aptPayment.finalcost = $scope.applyPromoResponsePaymentSection.finalcost;
         }
 
+        if($scope.productServiceAddlTotal > 0 && $scope.productServiceAddlTotal != undefined){
+            $scope.aptPayment.additionalSpAmntDesc = "Services/Products Additional Amount";
+        }
+
         var data = {
             appointmentid: $scope.aptPayment.appointmentid,
             promocodeid: $scope.aptPayment.promocodeid,
@@ -1671,7 +1829,8 @@ angular.module('myApp.controllers')
             promocost:$scope.applypromocost,
             additionalchargespdesc:$scope.aptPayment.additionalSpAmntDesc,
             city:$scope.adminNewAppointmentCust.customer.city,
-            cityId:$scope.adminNewAppointmentCust.customer.cityid
+            cityId:$scope.adminNewAppointmentCust.customer.cityid,
+            serviceProductList:$scope.aptPayment.productServicesToBeUsed
         }
 
         spApi.markAppointmentComplete(data)
@@ -1855,6 +2014,104 @@ angular.module('myApp.controllers')
         $scope.scrollDiv('spApptPayment');
     }
 
+    $scope.addInAccountService = function(service) {
+
+       if(service != undefined){
+            $scope.aptPayment.productServicesToBeUsed.push(service)
+       }
+
+       //console.log($scope.aptPayment.productServicesToBeUsed);
+
+       var index = -1;
+       for(var i = 0;i< $scope.serviceInAccount.length;i++){
+            if(service._id == $scope.serviceInAccount[i]._id){
+                index = i;
+            }
+       }
+       $scope.serviceInAccount.splice(index,1);
+
+       $scope.productServiceAddlTotal = $scope.productServiceAddlTotal + service.price;
+       $scope.aptPayment.additionalSpAmnt = $scope.productServiceAddlTotal;
+
+    }
+
+    $scope.addInAccountProduct = function(product) {
+
+        if(product != undefined){
+            $scope.aptPayment.productServicesToBeUsed.push(product)
+        }
+
+        //console.log($scope.aptPayment.productServicesToBeUsed);
+
+        var index = -1;
+        for(var i = 0;i< $scope.productsInAccount.length;i++){
+            if(product._id == $scope.productsInAccount[i]._id){
+                index = i;
+            }
+        }
+       $scope.productsInAccount.splice(index,1);
+
+       $scope.productServiceAddlTotal = $scope.productServiceAddlTotal + product.price;
+       $scope.aptPayment.additionalSpAmnt = $scope.productServiceAddlTotal;
+    }
+
+
+    $scope.removeServiceProduct = function(item) {
+        console.log(item);
+        var index = -1;
+        for(var i = 0; i < $scope.aptPayment.productServicesToBeUsed.length; i++) {
+           if($scope.aptPayment.productServicesToBeUsed[i]._id == item._id) {
+             index = i;
+           }
+        }
+
+        $scope.aptPayment.productServicesToBeUsed.splice(index,1);
+
+         if(item.category == 'Product'){
+             $scope.productsInAccount.push(item);
+         }else{
+             $scope.serviceInAccount.push(item);
+         }
+
+         $scope.productServiceAddlTotal = $scope.productServiceAddlTotal - item.price;
+         $scope.aptPayment.additionalSpAmnt = $scope.productServiceAddlTotal;
+    }
+
+    getPatientProductService = function() {
+        //alert('Hi');
+        //alert($scope.adminNewAppointmentCust.appointment.patientid);
+        spApi.getServiceProductTrans($scope.adminNewAppointmentCust.appointment.patientid)
+        .success(function(data, status, headers, config) {
+          console.log('Mark');
+          console.log(data.payload);
+          $scope.aptPayment.productServicesToBeUsed = [];
+
+          $scope.productsServices = [];
+          $scope.serviceInAccount = [];
+          $scope.productsInAccount = [];
+          $scope.productsServices = data.payload;
+          $scope.productServiceAddlTotal = 0;
+          $scope.aptPayment.additionalSpAmnt = $scope.productServiceAddlTotal;
+
+          $scope.productsServices.forEach(function(item){
+            if(item.is_used == false){
+                if(item.category == 'Service'){
+                    $scope.serviceInAccount.push(item);
+                }
+                if(item.category == 'Product'){
+                    $scope.productsInAccount.push(item);
+                }
+            }
+
+          });
+      
+        })
+        .error(function(data, status, headers, config) {
+            console.log('Failed to fetch Patient services and products transactions!');
+        });
+
+    }
+
     hidePaymentDialog = function() {
         if($scope.currentOpenView == 'APPOINTMENT') {
             slideUpByIndex('.spApptPayment', 0);
@@ -1877,6 +2134,8 @@ angular.module('myApp.controllers')
         $scope.models.calculator.package = 'Select Package';
         $scope.apptPackageError = "";
         $scope.showResponse = false;
+
+        $scope.getServicesAndProducts();
     }
 
     hidePackageDialog = function() {
@@ -2045,7 +2304,8 @@ angular.module('myApp.controllers')
             //console.log($scope.custReadList.custwallet.amount+'---'+$scope.models.response.netTotalCharges);
             if($scope.custReadList.custwallet.amount == $scope.models.response.netTotalCharges){
                 var data = {
-                    "walletAmount": $scope.custReadList.custwallet.amount,
+                   // "walletAmount": $scope.custReadList.custwallet.amount,
+                    "walletAmount":$scope.aptPackage.net_amount,
                     "walletTransType": "credit",
                     "currency":"INR",
                     "description":"Package Assignment",
@@ -2081,6 +2341,50 @@ angular.module('myApp.controllers')
                         delete $scope.custReadList.custwallet.response;
                     }, 5000);
                 });
+
+
+                if($scope.productServiceTotal > 0){
+                    var data1 = {
+                       // "walletAmount": $scope.custReadList.custwallet.amount,
+                        "walletAmount": $scope.productServiceTotal,
+                        "walletTransType": "credit",
+                        "currency":"INR",
+                        "description":"Services/Products Additional Amount",
+                        "createdById":spApi.getSpid(),
+                        "createdByName":spApi.getSpname(),
+                        "apptId":$scope.adminNewAppointmentCust.appointment._id,
+                        "city":$scope.adminNewAppointmentCust.customer.city,
+                        "cityId":$scope.adminNewAppointmentCust.customer.cityid
+                    }
+
+                    spApi.walletTransact($scope.custReadList._id, data1)
+                    .success(function(data, status, headers, config) {
+                        if(data.error == undefined && data.payload != undefined) {
+                            $scope.apptPackageError = "";
+                            $scope.walletFlag = false;
+                            $scope.custReadList.custwallet = data.payload.custwallet;
+                            $scope.custReadList.custwallet.response1 = {
+                                status: "success",
+                                message: "Wallet updated successfully!"
+                            }
+                            $timeout(function() {
+                                delete $scope.custReadList.custwallet.response1;
+                            }, 5000);
+                        }
+                    })
+                    .error(function(data, status, headers, config) {
+                        console.log("Failed to update the wallet transaction!");
+                        $scope.custReadList.custwallet.response = {
+                            status: "error",
+                            message: "Wallet updation failed!"
+                        }
+                        $timeout(function() {
+                            delete $scope.custReadList.custwallet.response;
+                        }, 5000);
+                    });
+                }
+                
+
             }else{
                 $scope.custReadList.custwallet.response = {
                     status: "error",
@@ -2357,7 +2661,7 @@ angular.module('myApp.controllers')
 
                     $scope.arrPromoCode.forEach(function(item) {                  
                     //console.log(item);
-                        if(item.is_promocode == false && item.city == $scope.spCity){
+                        if(item.is_promocode == false && item.city == $scope.spCity && item.active == true){
                             item.validfrom = moment(new Date(item.validfrom*1000).toString());
                             item.validtill = moment(new Date(item.validtill*1000).toString());
                             item.disctype = item.disctype.toString();
@@ -2383,7 +2687,7 @@ angular.module('myApp.controllers')
                             $scope.arrPackages.push(item);
                         }
 
-                        if(item.is_promocode == true && item.city == $scope.spCity){
+                        if(item.is_promocode == true && item.city == $scope.spCity  && item.active == true){
                             item.promocode = item.promocode;
                             var discount = item.discount;
                             var perSession = $scope.basePrice - discount;
@@ -3074,7 +3378,7 @@ angular.module('myApp.controllers')
         $scope.apptPaymentErrorMsg = "";
         $scope.aptPayment.currency = "INR";
         $scope.aptPayment.type = "Wallet";
-        $scope.aptPayment.sptype = "Cash";
+        $scope.aptPayment.sptype = "Wallet";
        // $scope.aptPayment.amnt = "0";
 
         if($scope.adminNewAppointmentCust.appointment.additionalcharge>0){
