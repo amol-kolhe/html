@@ -365,7 +365,6 @@ angular.module('myApp.controllers')
 			var arrStoreTrue = data.payload;
 			console.log("successfully received collections request.");
 			arrStoreTrue.forEach(function(item) {
-				console.log(item);
 				var today = moment(new Date()).format('YYYYMMDD');
 				var alert_date = moment(new Date(item.trans_date * 1000)).add(item.finance_alert_days, 'days').format("YYYYMMDD");
 				item.alert_to_finance = false;
@@ -376,6 +375,8 @@ angular.module('myApp.controllers')
 				item.trans_date = moment(new Date(item.trans_date * 1000)).format("DD-MM-YYYY hh:mm A");
 				$scope.financeMgmt.arrayCollection.push(item);
 			});
+
+			console.log($scope.financeMgmt.arrayCollection);
 		}).
 		error(function (data, status, headers, config) {
 			console.log("Error in receiving package cancellation request.");
@@ -497,8 +498,8 @@ angular.module('myApp.controllers')
 
 				$scope.financeMgmt.arrayCollected.push(item);
 			});
-
-			console.log($scope.financeMgmt.arrayCollected);
+			//console.log('Hiiiii');
+			//console.log($scope.financeMgmt.arrayCollected);
 			console.log(arrStoreTrue);
 		}).
 		error(function (data, status, headers, config) {
@@ -785,6 +786,7 @@ angular.module('myApp.controllers')
 			$scope.financeMgmt.trans_date = rec.trans_date;
 			$scope.financeMgmt.collected_date = rec.collected_date;
 			$scope.financeMgmt.trans_description = rec.trans_description;
+			//$scope.financeMgmt.trans_description = rec.description;
 			$scope.financeMgmt.trans_mode = rec.trans_mode;
 			$scope.financeMgmt.trans_amount = rec.trans_amount;
 			$scope.financeMgmt.collected_amount = rec.collected_amount;

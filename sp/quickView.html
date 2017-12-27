@@ -141,18 +141,79 @@
                         <label>Transact: </label>
                     </div>
                     <div class="col-xs-9">
-                        <input type="text" 
-                            placeholder="amount" 
-                            class="form-control" 
-                            style="max-width: 300px;"
-                            ng-model="custReadList.custwallet.amount"
-                            ng-pattern="/^\d+(\.\d{1,2})?$/"
-                            ng-required = "true" />
+                             <pre  class="form-control" style="max-width: 300px;">
+                                        {{custReadList.custwallet.amount}}
+                            </pre>
                     </div>
                 </div>
                 <div class="row">
                     <div style="margin-top:10px; padding:10px;">
                         <button type="submit" class="ngdialog-button ngdialog-button-primary" ng-click="submitted=true;WalletTransForm.$valid && confirm('OK')">Ok</button>
+                        <button ng-click="closeThisDialog('Cancel')" type="button" class="ngdialog-button ngdialog-button-secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </script>
+
+    <script type="text/ng-template" id="AptServiceProduct">
+        <form role="form" name="WalletTransForm" novalidate>
+            <div style="margin:10px; padding:10px">
+                <div class="middleRowContent">
+                    <div class="row">
+                        <span class="col-sm-12 col-xs-12" style = "color:red" ng-show="validateQty == true">Please Enter Correct Quantity</span>
+                    </div> 
+                    <div class="row">
+                        <span class="col-sm-2 col-xs-2"></span>
+                        <span class= "col-sm-5 col-xs-4 itemLabel2">Name</span>
+                        <span class= "col-sm-3 col-xs-3 itemLabel2">Price</span>
+                        <span class= "col-sm-2 col-xs-3 itemLabel2">Qty
+                        </span>                   
+                    </div>
+                    <div class="row" ng-repeat="rec in uniqueServices">
+                        <span class="col-sm-2 col-xs-2">
+                            <input id="serviceProductId" type="checkbox" ng-model="serviceProductChecked" ng-change="getSelectedServiceProduct(rec,serviceProductChecked,serviceProductQty)"></input>
+                        </span>
+                        <span class= "col-sm-5 col-xs-4">{{rec.name }}</span>
+                        <span class= "col-sm-3 col-xs-3">Rs.{{rec.price }}</span>
+                        <span class= "col-sm-2 col-xs-3">
+                            <input type="number"
+                                            class="form-control"
+                                            ng-model="serviceProductQty"
+                                            min='1'
+                                            max='120'
+                                            step='1'
+                                            ng-required = "true"
+                                            ng-change = "validateQty(serviceProductQty,rec)"
+                                            name="serviceProductQty"
+                                            id = "{{rec.name}}_service"
+                                            />
+                        </span>                         
+                    </div>
+                    <div class="row" ng-repeat="rec1 in uniqueProducts">
+                        <span class="col-sm-2 col-xs-2">
+                            <input id="serviceProductId" type="checkbox" ng-model="serviceProductChecked" ng-change="getSelectedServiceProduct(rec1,serviceProductChecked)"></input>
+                        </span>
+                        <span class= "col-sm-5 col-xs-4">{{rec1.name }}</span>
+                        <span class= "col-sm-3 col-xs-3">Rs.{{rec1.price }}</span>
+                        <span class= "col-sm-2 col-xs-3">
+                            <input type="number"
+                                            class="form-control"
+                                            ng-model="serviceProductQty"
+                                            min='1'
+                                            max='120'
+                                            step='1'
+                                            ng-required = "true"
+                                            ng-change = "validateQty(serviceProductQty,rec1)"
+                                            name="serviceProductQty"
+                                            id = "{{rec1.name}}_product"
+                                            />
+                        </span>                         
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="margin-top:10px; padding:10px;">
+                        <button type="submit" class="ngdialog-button ngdialog-button-primary" ng-click="submitted=true && confirm('ok')">Ok</button>
                         <button ng-click="closeThisDialog('Cancel')" type="button" class="ngdialog-button ngdialog-button-secondary">Cancel</button>
                     </div>
                 </div>

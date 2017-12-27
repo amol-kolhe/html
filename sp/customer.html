@@ -96,7 +96,7 @@
                                     <span ng-if="custReadList.custwallet.currency.toLowerCase() == 'inr'">&#8377; </span>{{custReadList.custwallet.walletbalance}}
                                 </div>
                             </div>
-                            <div class="row middleRowContent">
+                            <!--<div class="row middleRowContent">
                                 <div class="itemLabel2 col-xs-4">
                                     <label>Transact</label>
                                 </div>
@@ -132,7 +132,7 @@
                                     ng-class="{'alert-success' : custReadList.custwallet.response.status == 'success', 'alert-danger' : custReadList.custwallet.response.status == 'error'}">
                                     {{custReadList.custwallet.response.message}}
                                 </span>
-                            </div>
+                            </div>-->
                         </form>
                     </div>
                 </div>
@@ -186,6 +186,185 @@
                     </div>
                 </div>
             </div> <!-- End of Sessions Details -->
+
+
+
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="headBar">
+                         <span>Add Services And Products</span>
+                    </div>
+                    <div class="bodyContainer">
+                        <form name="sessionsServiceProductForm">
+                             <!--<div class="row" style="padding: 0px 0px 15px 0px;">
+                                <div class="col-sm-6 col-xs-6">
+                                    <div class="followup-appt-time-slot"
+                                        style="padding: 10px;">
+                                         <label style="width: 100%;">Services/Products In Account 
+                                        </label>
+                                        <div style="overflow-x:hidden;overflow-y:auto;height: 80px;">   
+                                                 <div class = "row">
+                                                                <span class= "col-sm-5"><label>Name</label></span>
+                                                                <span class= "col-sm-2"><label>Qty</label></span>
+                                                                <span class= "col-sm-5"><label>Price</label>
+                                                </div>  
+                                                <div class = "row"
+                                                    ng-repeat="rec in productServiceTrans">
+                                                                <span class= "col-sm-5">{{rec.name }}</span>
+                                                                <span class= "col-sm-2">1</span>
+                                                                <span class= "col-sm-5">Rs.{{rec.price }}</span>
+                                                            
+                                                </div>                                      
+                                        </div>
+                                    </div>                  
+                                </div>
+                            </div>-->
+
+                            <div class="row">
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="row middleRowContent" style="padding: 22px 0px 0px 0px;">
+                                        <span class="itemLabel2 col-xs-3">Services:</span>
+                                        <div class="col-xs-5">
+                                           <select class="form-control" name="service"
+                                                data-ng-model = "service"
+                                                title = "Services"
+                                                ng-options="rec.name for rec in services"
+                                                data-ng-required = "true">
+                                                <option value="">Select Service</option>
+                                              
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-2">
+                                             <input type="number"
+                                                        class="form-control"
+                                                        ng-model="serviceQty"
+                                                        min='1'
+                                                        max='120'
+                                                        step='1'
+                                                        ng-required = "true"
+                                                        style="min-width: 40px;"
+                                                        name="serviceQty" />
+
+                                        </div>
+                                        <div class="col-xs-2">
+                                             <button type="button" 
+                                                title="Add Services" 
+                                                class="btn btn-default btn-sm" 
+                                                style="margin-top: 6px;"
+                                                ng-click="AddService(service,serviceQty)">
+                                                <i class="glyphicon glyphicon-arrow-right hidden-xs"></i>
+                                                <i class="glyphicon glyphicon-arrow-down hidden-sm hidden-md hidden-lg"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row middleRowContent">
+                                        <span class="itemLabel2 col-xs-3">Products:</span>
+                                        <div class="col-xs-5">
+                                           <select class="form-control" name="product"
+                                                data-ng-model = "product"
+                                                title = "Products"
+                                                ng-options="rec.name for rec in products"
+                                                data-ng-required = "true">
+                                                <option value="">Select Product</option>
+                                              
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-2">
+                                             <input type="number"
+                                                        class="form-control"
+                                                        ng-model="productQty"
+                                                        min='1'
+                                                        max='120'
+                                                        step='1'
+                                                        ng-required = "true"
+                                                        style="min-width: 40px;"
+                                                        name="productQty" />
+
+                                        </div>
+                                        <div class="col-xs-2">
+                                              <button type="button" 
+                                                title="Add Products" 
+                                                class="btn btn-default btn-sm"
+                                                style="margin-top: 6px;"
+                                                ng-click="AddProduct(product,productQty)">
+                                                 <i class="glyphicon glyphicon-arrow-right hidden-xs"></i>
+                                                <i class="glyphicon glyphicon-arrow-down hidden-sm hidden-md hidden-lg"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class='col-sm-6 col-xs-12'>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="followup-appt-time-slot"
+                                                style="padding: 10px;">
+                                                 <label style="width: 100%;">Service/Product List 
+                                                    <span class="pull-right">Total:{{productServiceTotal}}</span>
+                                                </label>
+                                                <div style="overflow-x:hidden;overflow-y:auto;height: 80px;">   
+                                                        <div class = "row">
+                                                                        <span class= "col-sm-5"><label>Name1</label></span>
+                                                                        <span class= "col-sm-1"><label>Qty</label></span>
+                                                                        <span class= "col-sm-2"><label>Price</label></span>
+                                                                        <span class= "col-sm-4" ><label>Remove</label></span>
+                                                        </div>          
+                                                        <div class = "row"
+                                                            ng-repeat="rec in productServiceList">
+                                                                        <span class= "col-sm-5">{{rec.name }}</span>
+                                                                        <span class= "col-sm-1">{{rec.qty }}</span>
+                                                                        <span class= "col-sm-2">Rs.{{rec.totprice }}</span>
+                                                                        <span class= "col-sm-4" ng-click="removeItem(rec)" title='remove item'><i class="glyphicon glyphicon-remove" style="cursor:pointer;color:red"></i></span>
+                                                        </div> 
+                                                        <div class = "row"
+                                                            ng-repeat="rec in uniqueProductsAndServices" style="background:#fbf165;">
+                                                                        <span class= "col-sm-5">{{rec.name }}</span>
+                                                                        <span class= "col-sm-1">{{rec.qty }}</span>
+                                                                        <span class= "col-sm-2">Rs.{{rec.totprice }}</span>
+                                                                        <span class= "col-sm-4"></span>
+                                                                    
+                                                        </div>                                      
+                                                </div>
+                                            </div>                  
+                                        </div>
+                                     </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+
+                                    <span class="alert" 
+                                        ng-if="custReadList.custwallet.response"
+                                        ng-class="{'alert-success' : custReadList.custwallet.response.status == 'success', 'alert-danger' : custReadList.custwallet.response.status == 'error'}">
+                                        {{custReadList.custwallet.response.message}}
+                                    </span>
+                                    <br />
+                                    <span ng-if="productServiceList.length > 0">
+                                        <a title='Add money into wallet' class='clickable' style='margin-right: 15px; font-size: 15px;' ng-click='updateWalletForServiceProduct()'>Add Money(&#8377;) In Wallet</a>  
+                                    </span>
+                                </div>                               
+                            </div>
+
+                            <!--<div class="footerBar">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <button ng-disabled="!walletTopUp" class="btn btn-primary btn-sm" ng-click="addServicesProductsTrans()"> Save 
+                                        </button>
+                                     </div> 
+                                </div>
+                            </div>-->
+                            
+                        </form>
+                    </div>
+                </div>
+            </div> <!-- Services And Products -->
+
+
+
+
 
             <div class="row">
                 <div style="margin: 0 15px">

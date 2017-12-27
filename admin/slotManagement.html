@@ -140,6 +140,24 @@
                         </div>
                     </div>
 
+
+                    <div class="row row-align" ng-show="!slotViewTableFlag">
+                        <div class="col-xs-12 col-sm-4 appointment-label">
+                            Month Year
+                        </div>
+                        <div class="col-xs-12 col-sm-8">
+                            <span class = "colonSeparatorRight hidden-xs">:</span>
+                             <input type="text"
+                                ng-model="SpWrkHrs.spMonthYear"
+                                name = "spMonthYear"
+                                id="spMonthYear"
+                                title="Date"
+                                class="dateTimePickerYearMonth form-control input-width"
+                                ng-change="demo();"/>
+                        
+                        </div>
+                    </div>
+
                    
             </div>
             <div class= "col-xs-6" ng-show="slotViewTableFlag">

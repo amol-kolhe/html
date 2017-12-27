@@ -19,6 +19,23 @@
 	        		</div>
 		        </div>
 
+		        <div class="row">
+		        	<div class="col-xs-12 col-sm-2" style="line-height: 45px;">
+		        		<span class="clinic-label">City</span>
+		        		<span style="color: red;">*</span>
+	        		</div>
+		        	<div class="col-xs-12 col-sm-4">
+			        	<select class="form-control" name="serviceProductCity" data-ng-model="serviceProductCity"  title="Select city" data-ng-required="true" required="required" data-ng-options="city._id as city.city_name for city in arrayActiveCity">
+			        	<option value="" selected="selected">Select city</option>
+			        	</select>
+	        		</div>
+	        		<div class="col-xs-12 col-sm-6">
+		        		<div class="alert alert-danger" role="alert" ng-show="serviceProductCity_error">
+		        			{{serviceProductCity_error}}
+		        		</div>
+	        		</div>
+		        </div>
+
 
 		        <div class="row">
 		        	<div class="col-xs-12 col-sm-2" style="line-height: 45px;">
@@ -67,5 +84,75 @@
 		        </div>
 
 		    </div>
+		</div>
+
+
+		<div style="padding: 17px 35px 0px 17px;">
+		 	<div class="row">
+				<div class="panel panel-default" style="border: 1px solid #ddd">
+				<div class="panel-heading">
+						<span style="font-weight: bold;font-size: 20px">Added Services And Products</span>
+					</div>
+					<table class="table">
+						<thead style="background-color: #ECECEC;">
+							
+							<tr>
+								<th ng-click="sort('city')"><span class="1clsfleft">City</span>
+									 <span class="glyphicon sort-icon" ng-show="sortKey=='city'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+								</th>
+
+								<th ng-click="sort('name')"><span class="1clsfleft">Name</span>
+									 <span class="glyphicon sort-icon" ng-show="sortKey=='name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+								</th>
+
+								<th ng-click="sort('category')"><span class="1clsfleft">Category</span>
+									 <span class="glyphicon sort-icon" ng-show="sortKey=='category'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+								</th>
+
+								<th ng-click="sort('price')"><span class="1clsfleft">Price</span>
+									 <span class="glyphicon sort-icon" ng-show="sortKey=='price'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+								</th>
+
+					
+								
+							</tr>
+
+							<tr>
+								<td> <input type="text" ng-model="search.city" style="width: 120px;"> </td>
+								<td> <input type="text" ng-model="search.name" style="width: 120px;"> </td>
+								<td> <input type="text" ng-model="search.category" style="width: 120px;"> </td>
+								<td> <input type="text" ng-model="search.price" style="width: 120px;"> </td>
+						
+							</tr>
+						</thead>
+						<tbody>
+							<tr dir-paginate="rec in ServicesAndProducts|orderBy:sortKey:!reverse|filter:search|itemsPerPage:5"
+									pagination-id="arrPackageId">
+								<td>
+									<span style="word-break: break-word;">{{rec.city}}</span>
+								</td>
+								<td>
+									<span style="word-break: break-word;">{{rec.name}}</span>
+								</td>
+								<td>
+									<span style="word-break: break-word;">{{rec.category}}</span>
+								</td>
+								<td>
+									<span style="word-break: break-word;">Rs.{{rec.price}}</span>
+								</td>
+								
+							</tr>
+						</tbody>
+					</table>
+					<dir-pagination-controls
+						max-size="5"
+						pagination-id="arrPackageId"
+						direction-links="true"
+						boundary-links="true" 
+						style="padding-left: 10px;">
+					</dir-pagination-controls>
+				</div>
+			</div>
+
 		</div>
 </div>

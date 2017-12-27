@@ -2781,11 +2781,6 @@ angular.module('myApp.controllers')
 				$scope.services.push(item);
 			}
 			});
-			console.log('p');
-			console.log($scope.products);
-			console.log('s');
-			console.log($scope.services);
-
 
 		})
 		.error(function(data, status, headers, config) {
@@ -3392,6 +3387,9 @@ angular.module('myApp.controllers')
 		}, 300);
 
 
+		$scope.getServicesAndProducts();
+
+
 	}
 
 	$scope.loadSlotViewTable = function(dateString){
@@ -3473,10 +3471,13 @@ angular.module('myApp.controllers')
 
 		var currentMonthNo = moment().format("M");
     	var selectedMonthNO = moment($scope.SpWrkHrs.spMonth , "MMMM").format('M');
+    	var year = moment().format('YYYY');
 
-    	if(parseInt(currentMonthNo) == parseInt(selectedMonthNO)){
+
+
+    	if(parseInt(currentMonthNo) == parseInt(selectedMonthNO) && (year == $scope.spYear)){
     		dayNo = dayNo - 1;
-    	}else if (parseInt(currentMonthNo) > parseInt(selectedMonthNO)){
+    	}else if (parseInt(currentMonthNo) > parseInt(selectedMonthNO) && (year >= $scope.spYear)){
     		dayNo = $scope.slotDateList.length;
     	}else{
     		dayNo = 0;
@@ -3607,13 +3608,15 @@ angular.module('myApp.controllers')
 
 	$scope.resetGlobalSlotTick = function() {
 		
+		//alert($scope.spYear)
 		var dayNo = 0;
 		var currentMonthNo = moment().format("M");
     	var selectedMonthNO = moment($scope.SpWrkHrs.spMonth , "MMMM").format('M');
+    	var year = moment().format('YYYY');
 
-    	if(parseInt(currentMonthNo) == parseInt(selectedMonthNO)){
+    	if(parseInt(currentMonthNo) == parseInt(selectedMonthNO) && (year == $scope.spYear)){
             dayNo = moment().format('D');
-    	}else if (parseInt(currentMonthNo) > parseInt(selectedMonthNO)){
+    	}else if (parseInt(currentMonthNo) > parseInt(selectedMonthNO) && (year >= $scope.spYear)){
     		dayNo = 32;
     	}else{
     		dayNo = 1;
@@ -3724,6 +3727,8 @@ angular.module('myApp.controllers')
 		$scope.month = moment().format("MMMM");
 		//$('.dateTimePickerSlot').val(moment().format("YYYY-MMM-DD"));
 		$('.dateTimePickerSlot').val(moment().format("DD-MMM-YYYY"));
+		$('.dateTimePickerYearMonth').val(moment().format("MMMM-YYYY"));
+		
 
 		$scope.SpWrkHrs.spMonth = $scope.month;
 		$scope.slotChecked = false;
@@ -3804,8 +3809,9 @@ angular.module('myApp.controllers')
 
 			var spid = $scope.SpWrkHrs.spNamesIdSlot;
 			var month = $scope.SpWrkHrs.spMonth;
+			$scope.spYear = moment().format('YYYY');
 
-			$scope.loadSlotTickTable(spid,month);
+			$scope.loadSlotTickTable(spid,month,$scope.spYear);
 		
 
 		}, 200);		
@@ -3833,8 +3839,38 @@ angular.module('myApp.controllers')
 
     });*/
 
+	$(".dateTimePickerYearMonth").datepicker({ 
+        dateFormat: 'MM-yy',
+        changeMonth: true,
+        changeYear: true,
+        //showButtonPanel: true,
+
+        onClose: function(dateText, inst) {  
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+            $(this).val($.datepicker.formatDate('MM-yy', new Date(year, month, 1)));
+
+            $scope.SpWrkHrs.spMonth = $.datepicker.formatDate('MM', new Date(year, month, 1));
+            $scope.spYear = $.datepicker.formatDate('yy', new Date(year, month, 1));
+
+			$scope.resetSlotDate();
+
+        }
+    });
+
+    $(".dateTimePickerYearMonth").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });
+
 
 	$scope.resetSlotDate = function(){
+
+
 
 		$scope.month = $scope.SpWrkHrs.spMonth;
 		$scope.saveBtn = true;
@@ -3859,8 +3895,12 @@ angular.module('myApp.controllers')
 		}else{
 			var daysNo = moment().daysInMonth();			
 		}
-		var year = moment().format('YYYY');
+
+		//var year = moment().format('YYYY');
+		var year = $scope.spYear;
 		var month = moment($scope.SpWrkHrs.spMonth , "MMMM").format('MM');
+
+		var curYear = moment().format('YYYY');
 
 		$scope.slotDateList = [];
     	for(var i = 1 ; i <= daysNo ; i++){
@@ -3877,12 +3917,25 @@ angular.module('myApp.controllers')
 
     	var currentMonthNo = moment().format("M");
     	var selectedMonthNO = moment($scope.SpWrkHrs.spMonth , "MMMM").format('M');
-    	//console.log(currentMonthNo);
-    	//console.log(selectedMonthNO);
+    	
+
+    	console.log(year);
+		console.log($scope.month);
+		console.log(daysNo);
+
+		/*console.log($scope.slotDateList);
+
+		console.log(currentMonthNo);
+    	console.log(selectedMonthNO);*/
+    	
+    	var spid = $scope.SpWrkHrs.spNamesIdSlot;
+		var month = $scope.SpWrkHrs.spMonth;
+
+		$scope.loadSlotTickTable(spid,month,year);	
 
     	setTimeout(function() {
 
-    		if(selectedMonthNO == currentMonthNo){
+    		if(selectedMonthNO == currentMonthNo && year == curYear){
 	    		var dayNo = moment().format('D');
 				for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){
 					for(var j = 0 ; j < (dayNo-1) ; j++){
@@ -3906,7 +3959,7 @@ angular.module('myApp.controllers')
 					}
 				}
 
-	    	}else if(parseInt(selectedMonthNO) < parseInt(currentMonthNo) ){
+	    	}else if(parseInt(selectedMonthNO) < parseInt(currentMonthNo) && (year <= curYear)){
 		    	for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){	    		
 					for(var j = 0 ; j < $scope.slotDateList.length; j++){			
 							var td1 =$scope.wrkHrsSlotsForHome[i].startTime +"_"+ $scope.slotDateList[j].dateNo;
@@ -3923,6 +3976,9 @@ angular.module('myApp.controllers')
 						    document.getElementById(th2).style.backgroundColor = '#d4d4b4';
 						    document.getElementById(th2).style.pointerEvents = "none";
 
+
+						    //console.log(td1);
+
 						   // $scope.slotChecked = false;
 					}
 				}
@@ -3931,19 +3987,18 @@ angular.module('myApp.controllers')
 
 			}
 
-			var spid = $scope.SpWrkHrs.spNamesIdSlot;
-			var month = $scope.SpWrkHrs.spMonth;
-
-			$scope.loadSlotTickTable(spid,month);
-
 		}, 300);	
-		
+
+		var spid = $scope.SpWrkHrs.spNamesIdSlot;
+		var month = $scope.SpWrkHrs.spMonth;
+
+		$scope.loadSlotTickTable(spid,month,year);		
 
 	}
 
 
-	$scope.loadSlotTickTable = function(spid,month){
-		adminApi.getSpSlot(spid,month)
+	$scope.loadSlotTickTable = function(spid,month,year){
+		adminApi.getSpSlot(spid,month,year)
 			.success(function(data, status, headers, config){
 
 				$scope.spSlotList = data.payload;
@@ -4001,7 +4056,7 @@ angular.module('myApp.controllers')
 								if($scope.spUniqueSlot[k].is_blocked && $scope.spUniqueSlot[k].is_blocked == true){
 									document.getElementById(tdSlot).style.backgroundColor = '#d8d7d5';
 									document.getElementById(tdSlot).style.pointerEvents = "none";
-									//alert("Hi");
+									//console.log("Hi");
 								}
 							}else{
 								if((startTime == slotStart) && (DateNo == slotDateNO) && ($scope.SpWrkHrs.spMonth == $scope.spUniqueSlot[k].month) && ($scope.spUniqueSlot[k].is_allocated == false)){
@@ -4031,12 +4086,13 @@ angular.module('myApp.controllers')
 		var dayNo = 0;
 		var currentMonthNo = moment().format("M");
     	var selectedMonthNO = moment($scope.SpWrkHrs.spMonth , "MMMM").format('M');
+    	var year = moment().format('YYYY');
 
     	//alert($scope.SpWrkHrs.spMonth);
 
-    	if(parseInt(currentMonthNo) == parseInt(selectedMonthNO)){
+    	if(parseInt(currentMonthNo) == parseInt(selectedMonthNO) && (year == $scope.spYear)){
             dayNo = (moment().format('D')) - 1;
-    	}else if (parseInt(currentMonthNo) > parseInt(selectedMonthNO)){
+    	}else if (parseInt(currentMonthNo) > parseInt(selectedMonthNO) && (year >= $scope.spYear)){
     		dayNo = 32;
     	}else{
     		dayNo = 0;
@@ -4101,6 +4157,7 @@ angular.module('myApp.controllers')
 	}
 
 	$scope.saveSlotData = function() {
+
 		$scope.slotInfo = [];
 		$scope.serviceLocation = "";
 		
@@ -4125,7 +4182,8 @@ angular.module('myApp.controllers')
 				var tickSlot = 'subTick'+$scope.wrkHrsSlotsForHome[i].slotNo+""+$scope.slotDateList[j].dateNo;
 				//console.log("tdSlot");
 				if(document.getElementById(tdSlot).style.pointerEvents != "none" || document.getElementById(tdSlot).style.opacity != "0.2"){
-					var year1 = moment().format('YYYY');
+					//var year1 = moment().format('YYYY');
+					var year1 = $scope.spYear;
 					var month1 = moment($scope.SpWrkHrs.spMonth , "MMMM").format('MM');
 					var day1 = $scope.slotDateList[j].dateNo;
 					$scope.dateString1 = day1+"-"+month1+"-"+year1;
@@ -4151,7 +4209,8 @@ angular.module('myApp.controllers')
 						$scope.isLeave = false;
 					}
 
-					var year = moment().format('YYYY');
+					//var year = moment().format('YYYY');
+					var year = $scope.spYear;
 					var month = moment($scope.SpWrkHrs.spMonth , "MMMM").format('MM');
 					var day = $scope.slotDateList[j].dateNo;
 					$scope.dateString = day+"-"+month+"-"+year;
@@ -4236,6 +4295,7 @@ angular.module('myApp.controllers')
 
 		//alert($scope.SpWrkHrs.slotDate);
 	});
+
 
 	$scope.setSlotViewTableByZone = function() {
 		$scope.zoneid = $scope.SpWrkHrs.spZones;
@@ -4965,58 +5025,66 @@ angular.module('myApp.controllers')
 
 	$scope.addPaymentMode = function() {
 
-		if($scope.aptPayment.currency &&
-            $scope.aptPayment.type &&
-            $scope.aptPayment.amnt != undefined) {
-            
-            var modeSet = false;
-            for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
-                var mode = $scope.aptPayment.paymentModes[i];
-                if(mode.type === $scope.aptPayment.type) {
-                    mode.amount = $scope.aptPayment.amnt;
-                    modeSet = true;
-                    break;
-                }
-            }
-            
-            if(!modeSet) {
-                $scope.aptPayment.paymentModes.push({
-                    currency: $scope.aptPayment.currency,
-                    type: $scope.aptPayment.type,
-                    amount: $scope.aptPayment.amnt,
-                    description: "appointment amount",
-                });
-            }
+		//alert($scope.aptPayment.type);
 
-           // $scope.aptPayment.amnt = 0;
-        }
+		if($scope.aptPayment.type != null && $scope.aptPayment.type != undefined){
 
-       
-       if($scope.aptPayment.sptype &&
-            $scope.aptPayment.additionalSpAmnt != undefined) {
+			if($scope.aptPayment.currency &&
+	            $scope.aptPayment.type &&
+	            $scope.aptPayment.amnt != undefined) {
+	            
+	            var modeSet = false;
+	            for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
+	                var mode = $scope.aptPayment.paymentModes[i];
+	                if(mode.type === $scope.aptPayment.type) {
+	                    mode.amount = $scope.aptPayment.amnt;
+	                    modeSet = true;
+	                    break;
+	                }
+	            }
+	            
+	            if(!modeSet) {
+	                $scope.aptPayment.paymentModes.push({
+	                    currency: $scope.aptPayment.currency,
+	                    type: $scope.aptPayment.type,
+	                    amount: $scope.aptPayment.amnt,
+	                    description: "appointment amount",
+	                });
+	            }
 
-            var modeAddSpSet = false;
-            for(var i=1; i<$scope.aptPayment.paymentModes.length; i++) {
-                var modeaddsp = $scope.aptPayment.paymentModes[i];
-                if(modeaddsp.sptype === $scope.aptPayment.sptype) {
-                    modeaddsp.amount = $scope.aptPayment.additionalSpAmnt;
-                    modeAddSpSet = true;
-                    break;
-                }
-            }
+	           // $scope.aptPayment.amnt = 0;
+	        }
 
-            if(!modeAddSpSet) {
-                 $scope.aptPayment.paymentModes.push({
-                    currency: $scope.aptPayment.currency,
-                    type: $scope.aptPayment.sptype,
-                    amount: $scope.aptPayment.additionalSpAmnt,
-                    //description: "additional amount",
-                   // description:$scope.aptPayment.additionalSpAmntDesc,
-                    description:"Services/Products Additional Amount"
-                });
-            }
+	       
+	       if($scope.aptPayment.sptype &&
+	            $scope.aptPayment.additionalSpAmnt != undefined) {
 
-            //$scope.aptPayment.additionalSpAmnt = 0;
+	            var modeAddSpSet = false;
+	            for(var i=1; i<$scope.aptPayment.paymentModes.length; i++) {
+	                var modeaddsp = $scope.aptPayment.paymentModes[i];
+	                if(modeaddsp.sptype === $scope.aptPayment.sptype) {
+	                    modeaddsp.amount = $scope.aptPayment.additionalSpAmnt;
+	                    modeAddSpSet = true;
+	                    break;
+	                }
+	            }
+
+	            if(!modeAddSpSet) {
+	                 $scope.aptPayment.paymentModes.push({
+	                    currency: $scope.aptPayment.currency,
+	                    type: $scope.aptPayment.sptype,
+	                    amount: $scope.aptPayment.additionalSpAmnt,
+	                    //description: "additional amount",
+	                   // description:$scope.aptPayment.additionalSpAmntDesc,
+	                    description:"Services/Products Additional Amount"
+	                });
+	            }
+
+	            //$scope.aptPayment.additionalSpAmnt = 0;
+	        }
+
+        }else{
+            alert('Please select mode of payment.')
         }
 
 	}
@@ -5251,6 +5319,7 @@ angular.module('myApp.controllers')
 
        $scope.productServiceAddlTotal = $scope.productServiceAddlTotal + service.price;
        $scope.aptPayment.additionalSpAmnt = $scope.productServiceAddlTotal;
+       $scope.aptPayment.sptype = 'Wallet';
 
     }
 
@@ -5272,6 +5341,7 @@ angular.module('myApp.controllers')
 
        $scope.productServiceAddlTotal = $scope.productServiceAddlTotal + product.price;
        $scope.aptPayment.additionalSpAmnt = $scope.productServiceAddlTotal;
+       $scope.aptPayment.sptype = 'Wallet';
     }
 
 
@@ -5292,43 +5362,201 @@ angular.module('myApp.controllers')
              $scope.serviceInAccount.push(item);
          }
 
-         $scope.productServiceAddlTotal = $scope.productServiceAddlTotal - item.price;
+         $scope.productServiceAddlTotal = $scope.productServiceAddlTotal - (item.price * item.selectedQty);
          $scope.aptPayment.additionalSpAmnt = $scope.productServiceAddlTotal;
     }
 
     getPatientProductService = function() {
         //alert('Hi');
-        //alert($scope.adminNewAppointmentCust.appointment.patientid);
+        console.log($scope.adminNewAppointmentCust.customer);
         adminApi.getServiceProductTrans($scope.adminNewAppointmentCust.appointment.patientid)
-        .success(function(data, status, headers, config) {
-          console.log('Mark');
-          console.log(data.payload);
-          $scope.aptPayment.productServicesToBeUsed = [];
+        .success(function(data, status, headers, config) { 
+        	$scope.aptPayment.productServicesToBeUsed = [];
 
-          $scope.productsServices = [];
-          $scope.serviceInAccount = [];
-          $scope.productsInAccount = [];
-          $scope.productsServices = data.payload;
-          $scope.productServiceAddlTotal = 0;
-          $scope.aptPayment.additionalSpAmnt = $scope.productServiceAddlTotal;
+            $scope.productsServices = [];
+            $scope.serviceInAccount = [];
+            $scope.productsInAccount = [];
+            $scope.serviceName = [];
+            $scope.productName = [];
+            $scope.productsServices = data.payload;
+            $scope.productServiceAddlTotal = 0;
+            $scope.aptPayment.additionalSpAmnt = $scope.productServiceAddlTotal;
 
-          $scope.productsServices.forEach(function(item){
-            if(item.is_used == false){
-                if(item.category == 'Service'){
-                    $scope.serviceInAccount.push(item);
+            $scope.productsServices.forEach(function(item){
+                if(item.is_used == false){
+                    if(item.category == 'Service'){
+                        $scope.serviceInAccount.push(item);
+                        $scope.serviceName.push(item.name);
+                    }
+                    if(item.category == 'Product'){
+                        $scope.productsInAccount.push(item);
+                        $scope.productName.push(item.name);
+                    }
                 }
-                if(item.category == 'Product'){
-                    $scope.productsInAccount.push(item);
-                }
-            }
 
-          });
-      
+            });
+
+            var  serviceQty = [];
+            $scope.serviceName.forEach(function(i) { 
+                serviceQty[i] = (serviceQty[i]||0) + 1;            
+            }); 
+            console.log(serviceQty);   
+            $scope.servicesWithQty = [];        
+            $scope.serviceInAccount.forEach(function(item1) {
+                item1.qty = serviceQty[item1.name];
+                $scope.servicesWithQty.push(item1);
+            });
+
+            console.log('In account services');
+            console.log($scope.servicesWithQty);
+
+            $scope.uniqueServices = [];
+            var flagService = false;             
+            $scope.serviceInAccount.forEach(function(rec){             
+                if($scope.uniqueServices.length === 0){
+                    $scope.uniqueServices.push(rec);                              
+                }else{ 
+                    flagService = false;  
+                    $scope.uniqueServices.forEach(function(i){ 
+                       if( i.hasOwnProperty('name') && i['name'] === rec.name ){
+                            flagService = true;
+                        }
+                    });
+                    if(flagService == false){
+                        $scope.uniqueServices.push(rec);
+                    }
+                }
+            });
+            console.log($scope.uniqueServices);
+
+            var  productQty = [];
+            $scope.productName.forEach(function(i) { 
+                productQty[i] = (productQty[i]||0) + 1;            
+            }); 
+            console.log(productQty);   
+            $scope.productsWithQty = [];        
+            $scope.productsInAccount.forEach(function(item1) {
+                item1.qty = productQty[item1.name];
+                $scope.productsWithQty.push(item1);
+            });
+
+            console.log('In account services');
+            console.log($scope.productsWithQty);
+
+            $scope.uniqueProducts = [];
+            var flagProduct = false;             
+            $scope.productsInAccount.forEach(function(rec){             
+                if($scope.uniqueProducts.length === 0){
+                    $scope.uniqueProducts.push(rec);                              
+                }else{ 
+                    flagProduct = false;  
+                    $scope.uniqueProducts.forEach(function(i){ 
+                       if( i.hasOwnProperty('name') && i['name'] === rec.name ){
+                            flagProduct = true;
+                        }
+                    });
+                    if(flagProduct == false){
+                        $scope.uniqueProducts.push(rec);
+                    }
+                }
+            });
+            console.log($scope.uniqueProducts);
         })
         .error(function(data, status, headers, config) {
             console.log('Failed to fetch Patient services and products transactions!');
         });
 
+    }
+
+    $scope.showServiceProductPupup = function(){
+        //alert('Hi');
+        $scope.selectedItems = [];
+        $scope.serviceProductQty = 1;
+        ngDialog.openConfirm({
+            template: 'AptServiceProduct',
+            showClose:false,
+            scope: $scope 
+        }).then(function(value)
+        {
+        	$scope.selectedItems.forEach(function(item){
+                if(item.category == 'Service'){
+                	if(document.getElementById(item.name+'_service').value != '' && document.getElementById(item.name+'_service').value != undefined){
+                    	item.selectedQty =  document.getElementById(item.name+'_service').value;
+                    }else{
+                    	item.selectedQty = 1;
+                    }
+
+                }else{
+                    if(document.getElementById(item.name+'_product').value != '' && document.getElementById(item.name+'_product').value != undefined){
+                    	item.selectedQty =  document.getElementById(item.name+'_product').value;
+                    }else{
+                    	item.selectedQty = 1;
+                    }
+                }
+                $scope.productServiceAddlTotal = $scope.productServiceAddlTotal + (item.price * item.selectedQty);
+               
+            });
+
+            $scope.aptPayment.additionalSpAmnt = $scope.productServiceAddlTotal;
+        	
+            $scope.aptPayment.productServicesToBeUsed = $scope.selectedItems;
+            //alert('After confirm');
+        },
+        function(value) {
+            console.log("Fail Service Product Addition.");
+        });
+    }
+
+    $scope.getSelectedServiceProduct = function(rec,checked,seletedQty){
+        //alert(rec.name);
+        //alert(checked);
+        //console.log(document.getElementById(rec.name+'_service').value);
+
+        if(rec.category == 'Service'){
+            var sQty = document.getElementById(rec.name+'_service').value;
+        }else{
+            var sQty = document.getElementById(rec.name+'_product').value;
+        }
+    
+        var qauntity = parseInt(sQty);
+
+        if(checked == true){
+            if(sQty != undefined){
+                rec.selectedQty = qauntity;
+            }else{
+                rec.selectedQty = 1;
+            }
+            
+            $scope.selectedItems.push(rec);
+
+        }else{
+
+            for(var i = 0; i < $scope.selectedItems.length; i++) {
+               if($scope.selectedItems[i].name == rec.name) {
+                 index = i;
+               }
+            }
+            $scope.selectedItems.splice(index,1);
+
+        }
+
+        console.log($scope.selectedItems);
+    }
+
+    $scope.validateQty = function(selectedQty,rec){
+        $scope.validateQuantity = false;
+        console.log('selected:'+selectedQty);
+        console.log('availed:'+rec.qty);
+        if(selectedQty > rec.qty || selectedQty == undefined){
+            //alert('true');
+            //$scope.validateQuantity = true;
+            if(rec.category == 'Service'){
+                document.getElementById(rec.name+'_service').value = 1;
+            }else{
+                document.getElementById(rec.name+'_product').value = 1;
+            }
+            
+        }
     }
 
 
@@ -10809,13 +11037,27 @@ angular.module('myApp.controllers')
 		alert($scope.serviecProductName);
 		alert($scope.category);
 		alert($scope.serviceProductPrice);*/
+		var cityname = "";
+		$scope.arrayActiveCity.forEach( function(item){
+			if(item._id == $scope.serviceProductCity){
+				console.log(item);
+				cityname=item.city_name;
+			}
+
+		});
 
 		var Obj = {
 			"name": $scope.serviecProductName,
 			"category": $scope.category,
 			"price":$scope.serviceProductPrice,
-			"active":true
+			"active":true,
+			"cityid":$scope.serviceProductCity,
+			"city":cityname
 		};
+
+		console.log(cityname);
+
+		console.log($scope.serviceProductCity);
 
 		$scope.validateProductsServices();
 
@@ -10825,6 +11067,7 @@ angular.module('myApp.controllers')
 				if(data.error == undefined && data.payload != undefined) {
 					alert('Record Saved Successfully!');
 					$scope.cancelServiceProductData();	
+					$scope.getServicesAndProducts();
 				}
 			})
 			.error(function(data, status, headers, config) {
@@ -10844,6 +11087,7 @@ angular.module('myApp.controllers')
 		$scope.serviecProductName_error = undefined;
 		$scope.category_error = undefined;
 		$scope.serviceProductPrice_error = undefined;
+		$scope.serviceProductCity_error = undefined;
 
 	}
 
@@ -10854,6 +11098,8 @@ angular.module('myApp.controllers')
 		$scope.serviecProductName_error = null;
 		$scope.prbmContact_error = null;
 		$scope.prbmGender_error = null;
+		$scope.category_error = null;
+		$scope.serviceProductCity_error = null;
 		
 		if($scope.serviecProductName == "" || $scope.serviecProductName == undefined){
 			$scope.validServicesProducts = false;
@@ -10863,6 +11109,11 @@ angular.module('myApp.controllers')
 		if($scope.category == "" || $scope.category == undefined){
 			$scope.validServicesProducts = false;
 			$scope.category_error = "Please select category.";
+		}
+
+		if($scope.serviceProductCity == "" || $scope.serviceProductCity == undefined){
+			$scope.validServicesProducts = false;
+			$scope.serviceProductCity_error = "Please select city.";
 		}
 
 		if($scope.serviceProductPrice == "" || $scope.serviceProductPrice == undefined){

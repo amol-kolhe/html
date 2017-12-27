@@ -403,7 +403,8 @@
         </div>
         <div id="spApptPayment" style="display:none;" class="spApptPayment" ng-hide="adminNewAppointmentCust.appointment.state == 'Cancelled'">
             <div class="headBar">
-                <span>Appointment Completion Details</span>
+                <span>Appt. Completion Details</span>
+                <span style="float:right;">Current Balance:{{adminNewAppointmentCust.customer.custwallet.walletbalance}}<span>
             </div>
             <div class="bodyContainer">
                 <div ng-hide="adminNewAppointmentCust.appointment.state == 'Cancelled'">
@@ -459,34 +460,10 @@
                                     </div>
 
                                      <div class="row middleRowContent">
-                                        <span class="itemLabel2 col-xs-4 col-sm-3">Amount <span class="colonSeparator">:</span></span>
+                                        <span class="itemLabel2 col-xs-4 col-sm-3">Appt. Cost <span class="colonSeparator">:</span></span>
                                          <div class="col-xs-8 col-sm-9">
                                             <div class="row">
-                                                <!--Mode combobox here -->
-                                                <div class="col-xs-3 col-sm-4">
-                                                    <select 
-                                                        ng-model="aptPayment.type"
-                                                        ng-options="mode as mode for mode in paymentModes"
-                                                        class="form-control"
-                                                        style="width:100%;">
-                                                    </select>
-                                                </div>
-
-                                                 <div class="col-xs-8 col-sm-8" style="padding-left: 1px;">
-                                                  <!-- <input type="text"
-                                                    ng-model="aptPayment.amnt"
-                                                    class="clstxt3 form-control"
-                                                    ng-required = "true"
-                                                    ng-pattern="/(^\d*$)/"
-                                                    data-ng-blur = "visitedpaymentAmt = true"
-                                                    name="pytAmnt" 
-                                                    style="width:100%;" />
-                                                    <span 
-                                                    style = "color: red; margin-left: 5px;" 
-                                                    ng-show="apptPayment.paymentForm.pytAmnt.$invalid && visitedpaymentAmt">
-                                                    Invalid amount entered
-                                                    </span> -->
-
+                                                 <div class="col-xs-12 col-sm-12">
                                                     <span>
                                                         <pre>
                                                             {{calculatedAptAmount}}
@@ -498,78 +475,47 @@
                                     </div>
 
                                     <div class="row middleRowContent">
-                                        <span class="itemLabel2 col-xs-4 col-sm-3">Addl.Treatment Amount <span class="colonSeparator">:</span></span>
+                                        <span class="itemLabel2 col-xs-4 col-sm-3">Mode Of Payment <span class="colonSeparator">:</span></span>
                                          <div class="col-xs-8 col-sm-9">
                                             <div class="row">
-                                                <div class="col-xs-3 col-sm-4">
+                                                <!--Mode combobox here -->
+                                                <div class="col-xs-12 col-sm-12">
                                                     <select 
-                                                        ng-model="aptPayment.sptype"
-                                                        ng-options="mode as mode for mode in paymentModesSp"
+                                                        ng-model="aptPayment.type"
+                                                        ng-options="mode as mode for mode in paymentModes"
                                                         class="form-control"
                                                         style="width:100%;">
+                                                        <option value="">Mode Of Payment</option>
                                                     </select>
-                                                </div>
-
-                                                 <div class="col-xs-8 col-sm-8" style="padding-left: 1px;">
-                                                   <!-- <input type="text"
-                                                    ng-model="aptPayment.additionalSpAmnt"
-                                                    class="clstxt3 form-control"
-                                                    ng-required = "true"
-                                                    ng-pattern="/(^\d*$)/"
-                                                    data-ng-blur = "visitedaddsppaymentAmt = true"
-                                                    name="addSpPytAmnt" 
-                                                    style="width:100%;" />
-                                                    <span 
-                                                    style = "color: red; margin-left: 5px;" 
-                                                    ng-show="apptPayment.paymentForm.addSpPytAmnt.$invalid && visitedaddsppaymentAmt">
-                                                    Invalid amount entered
-                                                    </span>-->
-                                                     <span>
-                                                        <pre>
-                                                            {{aptPayment.additionalSpAmnt}}
-                                                        </pre>
-                                                    </span>
                                                 </div>
                                             </div>    
                                         </div> 
                                     </div>
 
-                                    <!-- <div class="row middleRowContent">
-                                          <span class="itemLabel2 col-xs-4 col-sm-3">Addl.Amount Decsription <span class="colonSeparator">:</span></span>
-                                           <span class="col-xs-8 col-sm-9">
-                                                <textarea 
-                                                maxlength="500" 
-                                                class="form-control" 
-                                                ng-model="aptPayment.additionalSpAmntDesc"
-                                                title="Enter Additional Treatment charges"
-                                                placeholder="Enter Additional Treatment charges"
-                                                ng-trim="false" 
-                                                rows="2" 
-                                                cols="80" 
-                                                name="additionalSpAmntDesc"
-                                                data-ng-required="true" >
-                                                </textarea>
-                                            </span>
-                                    </div>-->
-
-
-
-
-
                                     <div class="row middleRowContent">
-                                        <span class="itemLabel2 col-xs-4 col-sm-3">Services/Products<span class="colonSeparator">:</span></span>
-                                        <div class="col-xs-3">
-                                           <select class="input-width form-control" name="serviceAtMarkComplete"
+                                        <span class="itemLabel2 col-xs-4 col-sm-3"></span>
+                                        <div class="col-xs-8 col-sm-7">
+                                            <a title='Add services and products' class='clickable' style='margin-right: 15px; font-size: 15px;' ng-click='showServiceProductPupup()'>Add Services And Products</a>
+                                        </div>
+
+                                    </div>
+
+
+                                    <!--<div class="row middleRowContent">
+                                        <span class="itemLabel2 col-xs-4 col-sm-3">Products/ Services<span class="colonSeparator">:</span></span>
+                                        <div class="col-xs-2 col-sm-3">
+                                           <select class="form-control" name="serviceAtMarkComplete"
                                                 ng-model = "aptPayment.serviceModel"
                                                 title = "Select Services"
                                                 ng-options="rec.name for rec in serviceInAccount"
-                                                data-ng-required = "true">
+                                                data-ng-required = "true"
+                                                style="min-width: 55px;">
                                                 <option value="">Select Service</option>
                                               
                                             </select>
                                         </div>
 
-                                         <div class="col-xs-1">   
+                                         <div class="col-xs-2 col-sm-1">   
                                              <button type="button" 
                                                 title="Add Services" 
                                                 class="btn btn-default btn-sm" 
@@ -579,18 +525,19 @@
                                             </button>  
                                         </div>
 
-                                         <div class="col-xs-3">
-                                           <select class="input-width form-control" name="product1"
+                                         <div class="col-xs-2 col-sm-3">
+                                           <select class="form-control" name="product1"
                                                 ng-model = "aptPayment.productModel"
                                                 title = "Products"
                                                 ng-options="rec.name for rec in productsInAccount"
-                                                data-ng-required = "true">
+                                                data-ng-required = "true"
+                                                style="min-width: 55px;">
                                                 <option value="">Select Product</option>
                                               
                                             </select>
                                         </div>
 
-                                        <div class="col-xs-2">
+                                        <div class="col-xs-2 col-sm-1">
                                               <button type="button" 
                                                 title="Add Products" 
                                                 class="btn btn-default btn-sm"
@@ -600,11 +547,11 @@
                                             </button>
                                         </div>
                                                                  
-                                    </div>
+                                    </div>-->
 
-                                    <div class="row middleRowContent">
-                                        <div class="col-sm-3 col-xs-3"> </div>
-                                        <div class="col-sm-9 col-xs-9">
+                                    <div class="row middleRowContent" ng-if="selectedItems.length > 0">
+                                        <div class="col-sm-3"> </div>
+                                        <div class="col-sm-9 col-xs-12">
                                             <div class="followup-appt-time-slot"
                                                 style="padding: 10px;margin-bottom: 15px;">
                                                  <label style="width: 100%;">Service/Product List 
@@ -612,15 +559,17 @@
                                                 </label>
                                                 <div style="overflow-x:hidden;overflow-y:auto;height: 80px;">   
                                                         <div class = "row">
-                                                                        <span class= "col-sm-5"><label>Name</label></span>
+                                                                        <span class= "col-sm-4"><label>Name</label></span>
+                                                                        <span class= "col-sm-2"><label>Qty</label></span>
                                                                         <span class= "col-sm-3"><label>Price</label></span>
-                                                                        <span class= "col-sm-4" ><label>Remove</label></span>
+                                                                        <span class= "col-sm-3" ><label>Remove</label></span>
                                                         </div>          
                                                         <div class = "row"
                                                             ng-repeat="rec in aptPayment.productServicesToBeUsed">
-                                                                        <span class= "col-sm-5">{{rec.name }}</span>
-                                                                        <span class= "col-sm-3">Rs.{{rec.price }}</span>
-                                                                        <span class= "col-sm-4" ng-click="removeServiceProduct(rec)" title='remove item'><i class="glyphicon glyphicon-remove" style="cursor:pointer;color:red"></i></span>
+                                                                        <span class= "col-sm-4">{{rec.name }}</span>
+                                                                        <span class= "col-sm-2">{{rec.selectedQty }}</span>
+                                                                        <span class= "col-sm-3">Rs.{{rec.price}}</span>
+                                                                        <span class= "col-sm-3" ng-click="removeServiceProduct(rec)" title='remove item'><i class="glyphicon glyphicon-remove" style="cursor:pointer;color:red"></i></span>
                                                         </div>                                      
                                                 </div>
                                             </div>                  
@@ -630,12 +579,9 @@
 
 
 
-
-
-
-                                    <span style="color: red;" data-ng-show="apptPaymentErrorMsg">
-                                        {{apptPaymentErrorMsg}}
-                                    </span>
+                                <span style="color: red;" data-ng-show="apptPaymentErrorMsg">
+                                    {{apptPaymentErrorMsg}}
+                                </span>
                                 </div> <!-- END OF LEFT SIDE WHICH CONTAINS PAYMENT MODE SELECTION -->
                                 <div class="col-xs-12 col-sm-5">
                                     <div class="row">
@@ -685,7 +631,7 @@
                                         <div class="col-xs-12 col-sm-9">
                                             <div class="followup-appt-time-slot"
                                                 style="height: 130px;">
-                                                <label>Selected Payment Modes</label>
+                                                <label>Payment Summary</label>
                                                 <div>
                                                     <ul class="hover" style="max-height: 80px; overflow: auto;">
                                                         <li style="padding: 5px;"
@@ -913,4 +859,67 @@
                     </div>
                 </div>
             </form>
+    </script>
+
+    <script type="text/ng-template" id="AptServiceProduct">
+        <form role="form" name="WalletTransForm" novalidate>
+            <div style="margin:10px; padding:10px">
+                <div class="middleRowContent">
+                    <div class="row">
+                        <span class="col-sm-12 col-xs-12" style = "color:red" ng-show="validateQty == true">Please Enter Correct Quantity</span>
+                    </div> 
+                    <div class="row">
+                        <span class="col-sm-2 col-xs-2"></span>
+                        <span class= "col-sm-5 col-xs-4 itemLabel2">Name</span>
+                        <span class= "col-sm-3 col-xs-3 itemLabel2">Price</span>
+                        <span class= "col-sm-2 col-xs-3 itemLabel2">Qty
+                        </span>                   
+                    </div>
+                    <div class="row" ng-repeat="rec in uniqueServices">
+                        <span class="col-sm-2 col-xs-2">
+                            <input id="serviceProductId" type="checkbox" ng-model="serviceProductChecked" ng-change="getSelectedServiceProduct(rec,serviceProductChecked,serviceProductQty)"></input>
+                        </span>
+                        <span class= "col-sm-5 col-xs-4">{{rec.name }}</span>
+                        <span class= "col-sm-3 col-xs-3">Rs.{{rec.price }}</span>
+                        <span class= "col-sm-2 col-xs-3">
+                            <input type="number"
+                                            class="form-control"
+                                            ng-model="serviceProductQty"
+                                            min='1'
+                                            max='120'
+                                            step='1'
+                                            ng-required = "true"
+                                            ng-change = "validateQty(serviceProductQty,rec)"
+                                            name="serviceProductQty"
+                                            id = "{{rec.name}}_service"/>
+                        </span>                         
+                    </div>
+                    <div class="row" ng-repeat="rec1 in uniqueProducts">
+                        <span class="col-sm-2 col-xs-2">
+                            <input id="serviceProductId" type="checkbox" ng-model="serviceProductChecked" ng-change="getSelectedServiceProduct(rec1,serviceProductChecked)"></input>
+                        </span>
+                        <span class= "col-sm-5 col-xs-4">{{rec1.name }}</span>
+                        <span class= "col-sm-3 col-xs-3">Rs.{{rec1.price }}</span>
+                        <span class= "col-sm-2 col-xs-3">
+                            <input type="number"
+                                            class="form-control"
+                                            ng-model="serviceProductQty"
+                                            min='1'
+                                            max='120'
+                                            step='1'
+                                            ng-required = "true"
+                                            ng-change = "validateQty(serviceProductQty,rec1)"
+                                            name="serviceProductQty"
+                                            id = "{{rec1.name}}_product"/>
+                        </span>                         
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="margin-top:10px; padding:10px;">
+                        <button type="submit" class="ngdialog-button ngdialog-button-primary" ng-click="submitted=true && confirm('ok')">Ok</button>
+                        <button ng-click="closeThisDialog('Cancel')" type="button" class="ngdialog-button ngdialog-button-secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </script>

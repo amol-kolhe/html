@@ -411,8 +411,8 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		return $http.post(baseUrl + "/hrest/v1/slot/addSlotInfo?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&initdate=" + initdate + "&spid=" + spid + "&month=" + month +"&role=0", slotObj);
 	}
 
-	adminApi.getSpSlot = function(spid,month) {
-		return $http.get(baseUrl + "/hrest/v1/slot/getSpSlot?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&spid=" + spid + '&month=' + month);
+	adminApi.getSpSlot = function(spid,month,year) {
+		return $http.get(baseUrl + "/hrest/v1/slot/getSpSlot?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&spid=" + spid + '&month=' + month + '&year=' + year);
 	}
 
 	adminApi.getAllSlot = function(date) {
