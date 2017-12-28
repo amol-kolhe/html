@@ -3870,8 +3870,6 @@ angular.module('myApp.controllers')
 
 	$scope.resetSlotDate = function(){
 
-
-
 		$scope.month = $scope.SpWrkHrs.spMonth;
 		$scope.saveBtn = true;
 	
@@ -3936,6 +3934,7 @@ angular.module('myApp.controllers')
     	setTimeout(function() {
 
     		if(selectedMonthNO == currentMonthNo && year == curYear){
+    			console.log('equal');
 	    		var dayNo = moment().format('D');
 				for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){
 					for(var j = 0 ; j < (dayNo-1) ; j++){
@@ -3959,7 +3958,8 @@ angular.module('myApp.controllers')
 					}
 				}
 
-	    	}else if(parseInt(selectedMonthNO) < parseInt(currentMonthNo) && (year <= curYear)){
+	    	}else if(parseInt(selectedMonthNO) <= parseInt(currentMonthNo) && (year <= curYear)){
+		    	console.log('less');
 		    	for(var i = 0; i< $scope.wrkHrsSlotsForHome.length; i++){	    		
 					for(var j = 0 ; j < $scope.slotDateList.length; j++){			
 							var td1 =$scope.wrkHrsSlotsForHome[i].startTime +"_"+ $scope.slotDateList[j].dateNo;
