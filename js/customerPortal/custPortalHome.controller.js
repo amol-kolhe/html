@@ -1040,11 +1040,17 @@
 			custApi.getCity(true).
 			success(function (data, status, headers, config) {
 				var arrStoreTrue = [];
-
+				vm.arrayActiveCityList = [];
 				var arrStoreTrue = data.payload;
-				vm.arrayActiveCityList = data.payload;
+				//vm.arrayActiveCityList = data.payload;
 				console.log("successfully received cities");
 				//console.log(arrStoreTrue);
+				arrStoreTrue.forEach(function(rec){
+					if(rec.city_name != 'delhi'){
+						vm.arrayActiveCityList.push(rec);
+					}
+
+				});
 
 				arrStoreTrue.forEach(function(item) {
 					$scope.arrayActiveCity.push(item);

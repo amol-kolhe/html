@@ -557,7 +557,6 @@
                                     data-ng-model = "service"
                                     title = "Services"
                                     ng-options="rec.name for rec in services"
-                                    data-ng-required = "true"
                                     ng-disabled = "aptPackage.no_of_sessions == ''">
                                     <option value="">Select Service</option>
                                   
@@ -570,7 +569,6 @@
                                             min='1'
                                             max='120'
                                             step='1'
-                                            ng-required = "true"
                                             style="min-width: 50px;"
                                             name="serviceQty" 
                                             ng-disabled = "aptPackage.no_of_sessions == ''"/>
@@ -597,7 +595,6 @@
                                     data-ng-model = "product"
                                     title = "Products"
                                     ng-options="rec.name for rec in products"
-                                    data-ng-required = "true"
                                     ng-disabled = "aptPackage.no_of_sessions == ''">
                                     <option value="">Select Product</option>
                                   
@@ -610,7 +607,6 @@
                                             min='1'
                                             max='120'
                                             step='1'
-                                            ng-required = "true"
                                             style="min-width: 50px;"
                                             name="productQty" 
                                             ng-disabled = "aptPackage.no_of_sessions == ''"/>
@@ -644,7 +640,15 @@
                                     {{custReadList.custwallet.response1.message}}
                                 </span>
                                 <br />
+                
                                 <a ng-show="walletFlag" title='Add money into wallet' class='clickable' style='margin-right: 15px; font-size: 15px;' ng-click='requestApptWalletTrans()'>Add Money(&#8377;) In Wallet</a>
+                                <br />
+                                <span style="color: red;"
+                                    ng-show="walletFlag">
+                                    Insufficient Wallet Amount.
+                                </span>
+                                
+
                             </div>
                         </div> 
 

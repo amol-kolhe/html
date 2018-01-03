@@ -2087,8 +2087,6 @@ angular.module('myApp.controllers')
 
     $scope.addInAccountService = function(service) {
 
-
-
        if(service != undefined){
             $scope.aptPayment.productServicesToBeUsed.push(service)
        }
@@ -2369,6 +2367,9 @@ angular.module('myApp.controllers')
         $scope.models.calculator.package = 'Select Package';
         $scope.apptPackageError = "";
         $scope.showResponse = false;
+
+        $scope.serviceQty = 1;
+        $scope.productQty = 1;
 
         $scope.getServicesAndProducts($scope.adminNewAppointmentCust.appointment.patientid);
     }
