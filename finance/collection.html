@@ -41,6 +41,9 @@
 							<th ng-click="financeMgmt.sortFinance('trans_mode')"><span class="1clsfleft">Mode</span>
 								<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_mode'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 							</th>
+							<th ng-click="financeMgmt.sortFinance('checkOrTransNO')"><span class="1clsfleft">Cheque/Trans.No.</span>
+								<span class="glyphicon sort-icon" ng-show="financeSortKey=='checkOrTransNO'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
+							</th>
 							<th ng-click="financeMgmt.sortFinance('trans_amount')"><span class="1clsfleft">Amount</span>
 								<span class="glyphicon sort-icon" ng-show="financeSortKey=='trans_amount'" ng-class="{'glyphicon-chevron-up':financeReverse,'glyphicon-chevron-down':!financeReverse}"></span>
 							</th>
@@ -56,6 +59,7 @@
 							<td><input class="form-control" style="width: 100px;" ng-model="search.trans_description" /></td>
 							<!--<td><input style="width: 90px;" ng-model="search.trans_type" /></td>-->
 							<td><input class="form-control" style="width: 100px;" ng-model="search.trans_mode" /></td>
+							<td><input class="form-control" style="width: 100px;" ng-model="search.checkOrTransNO" /></td>
 							<td><input class="form-control" style="width: 100px;" ng-model="search.trans_amount" /></td>
 							<!--<td>&nbsp;</td>-->
 							<td>&nbsp;</td>
@@ -84,6 +88,9 @@
 							</td>-->
 							<td>
 								<span style="word-break: break-word;">{{rec.trans_mode}}</span>
+							</td>
+							<td>
+								<span style="word-break: break-word;">{{rec.checkOrTransNO}}</span>
 							</td>
 							<td>
 								<span style="word-break: break-word;">&#8377; {{rec.trans_amount|number}}</span>

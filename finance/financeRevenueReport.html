@@ -1,0 +1,42 @@
+<div class="mainContent2" ng-controller="FinanceCtrl">
+	<span><h3>Revenue Reports</h3></span>
+
+	<form class="form-inline" data-ng-init="financeMgmt.initReports()">
+              
+        <div class="form-group" style="position:relative;">
+            From Date: <input type="text"
+                ng-model="financeMgmt.fromDate"
+                name = "fromDate"
+                id="aptFromDateRevenue"
+                value = "{{financeMgmt.fromDate}}"
+                title="From Date"
+                class="dateTimePickerRevenue aptSelectionInput form-control"/>
+            To Date:   <input type="text"
+                ng-model="financeMgmt.tillDate"
+                name="tillDate"
+                id="aptTillDateRevenue"
+                value = "{{financeMgmt.tillDate}}"
+                title="Till Date"
+                class="dateTimePickerRevenue aptSelectionInput form-control"/>
+            <button style="cursor:pointer;"
+                    data-ng-click="financeMgmt.generateRevenueReport()"
+                    class="btn btn-primary btn-sm">
+                Find Reports
+            </button>
+        </div>
+ 	
+       
+		<div ng-hide="!financeMgmt.validDateRange || !financeMgmt.dateValid">
+			<div ui-grid="revenueGridOptions" ui-grid-selection ui-grid-exporter class="grid"></div>
+	  	</div>
+	  	<div ng-show="!financeMgmt.validDateRange">
+	  		<span style="color: red"> *Please enter correct date range... </span>
+	  	</div>
+	  	<div ng-show="!financeMgmt.dateValid">
+	  		<span style="color: red"> *From Date should not greater than To Date... </span>
+	  	</div>
+	
+	</form>
+
+
+</div>

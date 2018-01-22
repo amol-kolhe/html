@@ -146,12 +146,106 @@
                             </pre>
                     </div>
                 </div>
+
+                <div class="row middleRowContent">
+                     <div class="col-xs-3">
+                        <label>Mode: </label>
+                    </div>
+                     <div class="col-xs-9">  
+                        <select 
+                            ng-model="aptPayment.modeOfPayment"
+                            ng-options="mode as mode for mode in paymentTransModes"
+                            class="form-control"
+                            style="max-width: 300px;">
+                            <option value="">Mode Of Payment</option>
+                        </select>
+                    </div> 
+                </div>
+
+                <div class="row middleRowContent" ng-show="aptPayment.modeOfPayment != 'Cheque' && aptPayment.modeOfPayment != 'Cash' && aptPayment.modeOfPayment != undefined">
+                     <div class="col-xs-3">
+                        <label>Trans. No.: </label>
+                    </div>
+                     <div class="col-xs-9">               
+                        <input type="text"
+                            class="form-control"
+                            style="max-width: 300px;"
+                            ng-model="aptPayment.PkgChequeTransNO"
+                            name="PkgChequeTransNO"/>
+                    </div> 
+                </div>
+
+                <div class="row middleRowContent" ng-show="aptPayment.modeOfPayment == 'Cheque'">
+                     <div class="col-xs-3">
+                        <label>Cheque. No.: </label>
+                    </div>
+                     <div class="col-xs-9">               
+                        <input type="text"
+                            class="form-control"
+                            style="max-width: 300px;"
+                            ng-model="aptPayment.PkgChequeTransNO"
+                            name="PkgChequeTransNO"/>
+                    </div> 
+                </div>
+
                 <div class="row">
                     <div style="margin-top:10px; padding:10px;">
-                        <button type="submit" class="ngdialog-button ngdialog-button-primary" ng-click="submitted=true;WalletTransForm.$valid && confirm('OK')">Ok</button>
-                        <button ng-click="closeThisDialog('Cancel')" type="button" class="ngdialog-button ngdialog-button-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm" ng-disabled="aptPayment.modeOfPayment == undefined" ng-click="submitted=true;WalletTransForm.$valid && confirm('OK')">Add</button>
+                        <button ng-click="closeThisDialog('Cancel')" type="button" class="btn btn-default btn-sm">Cancel</button>
                     </div>
                 </div>
+            </div>
+        </form>
+    </script>
+
+    <script type="text/ng-template" id="AptCompleteTemplate">
+        <form role="form" name="AptCompleteTemplate" novalidate>
+            <div style="margin:10px; padding:10px">
+                <div class="row middleRowContent">
+                    <div class="col-xs-8">
+                        <label>Amount paid from wallet:</label>
+                    </div>
+                    <div class="col-xs-4">
+                        <span ng-if="custReadList.custwallet.currency.toLowerCase() == 'inr'">&#8377; </span>{{apptWalletAmnt}}
+                    </div>
+                </div> 
+
+                <div class="row middleRowContent">
+                    <div class="col-xs-8">
+                        <label>Amount paid from pay as you go:</label>
+                    </div>
+                    <div class="col-xs-4">
+                        <span ng-if="custReadList.custwallet.currency.toLowerCase() == 'inr'">&#8377; </span>{{apptPayAsGoAmnt}}
+                    </div>
+                </div>
+
+                <div class="row middleRowContent">
+                    <div class="col-xs-8">
+                        <label>Total amount paid for this appointment:</label>
+                    </div>
+                    <div class="col-xs-4">
+                        <span ng-if="custReadList.custwallet.currency.toLowerCase() == 'inr'">&#8377; </span>{{apptWalletAmnt + apptPayAsGoAmnt + productServiceAddlTotal}}
+                    </div>
+                </div>
+
+                <div class="row middleRowContent" ng-show="insufficientWallet == true">
+                    <div class="col-xs-12">
+                        <label style="color:red;">Insufficient wallet balance for completing next appointment!</label>
+                    </div>
+                </div>
+
+                <div class="row middleRowContent">
+                    <div class="col-xs-12">
+                        <label>Are you sure,you want to complete appointment?</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div style="margin-top:10px; padding:10px;">
+                        <button type="submit" class="btn btn-primary btn-sm" ng-click="confirm('OK')">Yes</button>
+                        <button ng-click="closeThisDialog('Cancel')" type="button" class="btn btn-default btn-sm">No</button>
+                    </div>
+                </div>            
             </div>
         </form>
     </script>

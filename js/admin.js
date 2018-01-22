@@ -55,7 +55,7 @@ angular.module('myApp.controllers')
 		2 : "Reschedule"
 	};
 	$scope.currencies = ["INR"];
-	$scope.paymentModes = ["Cash", "Wallet"];
+	$scope.paymentModes = ["Cash", "Cheque" , "Instamojo", "Paytm", "NEFT"];
 	$scope.customerServiceLocationArr = ["At Home"];
 	$scope.clinicBasePriceVal = 0;
 	$scope.serviceLocation = "";
@@ -2304,7 +2304,7 @@ angular.module('myApp.controllers')
 		
 		$scope.customerSource =[
 			{id: "Sancheti referral",name:"Sancheti referral"},
-			{id: "Just Dail",name:"Just Dail"},
+			{id: "Just Dial",name:"Just Dial"},
 			//{id: "Online Advertisement",name:"Online advertisement"},
 			{id:"Facebook",name:"Facebook"},
 			{id:"Urbanclap",name:"Urbanclap"},
@@ -4554,6 +4554,7 @@ angular.module('myApp.controllers')
 		$scope.custPackageTotalAppt = 0;
         $scope.applypromocost= '';
         $scope.apptClinicId = '';
+        $scope.productServiceAddlTotal = 0;
 
 		hideDiv('#aptEditable');
 		var id,ref;
@@ -4661,8 +4662,12 @@ angular.module('myApp.controllers')
                 total = $scope.adminNewAppointmentCust.appointment.finalcost + $scope.adminNewAppointmentCust.appointment.additionalcharge;
                 $scope.calculatedAptAmount = $scope.adminNewAppointmentCust.appointment.finalcost +" + "+ $scope.adminNewAppointmentCust.appointment.additionalcharge +" = "+ total;
                 //alert($scope.calculatedAptAmount);
+
+                $scope.AptAmount = $scope.adminNewAppointmentCust.appointment.finalcost + $scope.adminNewAppointmentCust.appointment.additionalcharge;
+
             }else{
                 $scope.calculatedAptAmount =  $scope.adminNewAppointmentCust.appointment.finalcost;
+                $scope.AptAmount = $scope.adminNewAppointmentCust.appointment.finalcost;
                 //alert($scope.calculatedAptAmount);
             }
 
@@ -5025,9 +5030,26 @@ angular.module('myApp.controllers')
 
 	$scope.addPaymentMode = function() {
 
-		//alert($scope.aptPayment.type);
+		if($scope.fromWallet == false && $scope.fromPayAsGo == true){
+           $scope.aptPayment.type = $scope.aptPayment.payAsGoType; 
+           $scope.aptPayment.amnt = $scope.apptPayAsGoAmnt ;
+        }
 
-		if($scope.aptPayment.type != null && $scope.aptPayment.type != undefined){
+        if($scope.fromWallet == true && $scope.productServiceAddlTotal >= 0){
+           $scope.aptPayment.amnt =   $scope.apptWalletAmnt;
+        }
+
+        if($scope.fromWallet == true && $scope.fromPayAsGo == false && $scope.productServiceAddlTotal > 0){
+           $scope.aptPayment.amnt =   $scope.apptWalletAmnt + $scope.productServiceAddlTotal;
+
+        }
+
+        $scope.checkPaymentType = $scope.aptPayment.type;
+        if($scope.fromWallet == true && $scope.fromPayAsGo == true){
+            $scope.checkPaymentType = $scope.aptPayment.payAsGoType;
+        }
+
+		if($scope.checkPaymentType != null && $scope.checkPaymentType != undefined){
 
 			if($scope.aptPayment.currency &&
 	            $scope.aptPayment.type &&
@@ -5047,6 +5069,7 @@ angular.module('myApp.controllers')
 	                $scope.aptPayment.paymentModes.push({
 	                    currency: $scope.aptPayment.currency,
 	                    type: $scope.aptPayment.type,
+	                    chequeOrTransNo: $scope.aptPayment.ChequeTransNO,
 	                    amount: $scope.aptPayment.amnt,
 	                    description: "appointment amount",
 	                });
@@ -5056,32 +5079,35 @@ angular.module('myApp.controllers')
 	        }
 
 	       
-	       if($scope.aptPayment.sptype &&
-	            $scope.aptPayment.additionalSpAmnt != undefined) {
+	      if($scope.fromWallet == true && $scope.fromPayAsGo == true && $scope.productServiceAddlTotal >= 0){
 
-	            var modeAddSpSet = false;
-	            for(var i=1; i<$scope.aptPayment.paymentModes.length; i++) {
-	                var modeaddsp = $scope.aptPayment.paymentModes[i];
-	                if(modeaddsp.sptype === $scope.aptPayment.sptype) {
-	                    modeaddsp.amount = $scope.aptPayment.additionalSpAmnt;
-	                    modeAddSpSet = true;
-	                    break;
-	                }
-	            }
+                $scope.aptPayment.sptype = $scope.aptPayment.payAsGoType;
+                $scope.aptPayment.additionalSpAmnt = $scope.apptPayAsGoAmnt;
+                var modeAddSpSet = false;
 
-	            if(!modeAddSpSet) {
-	                 $scope.aptPayment.paymentModes.push({
-	                    currency: $scope.aptPayment.currency,
-	                    type: $scope.aptPayment.sptype,
-	                    amount: $scope.aptPayment.additionalSpAmnt,
-	                    //description: "additional amount",
-	                   // description:$scope.aptPayment.additionalSpAmntDesc,
-	                    description:"Services/Products Additional Amount"
-	                });
-	            }
+                for(var i=1; i<$scope.aptPayment.paymentModes.length; i++) {
+                    var modeaddsp = $scope.aptPayment.paymentModes[i];
+                    if(modeaddsp.sptype === $scope.aptPayment.sptype) {
+                        modeaddsp.amount = $scope.aptPayment.additionalSpAmnt;
+                        modeAddSpSet = true;
+                        break;
+                    }
+                }
 
-	            //$scope.aptPayment.additionalSpAmnt = 0;
-	        }
+                if(!modeAddSpSet) {
+                    if($scope.aptPayment.additionalSpAmnt > 0){
+                        $scope.aptPayment.paymentModes.push({
+                            currency: $scope.aptPayment.currency,
+                            type: $scope.aptPayment.sptype,
+                            amount: $scope.aptPayment.additionalSpAmnt,
+                            description:"Pay as you go amount"
+                        });
+                    }
+                     
+                }
+
+            }
+
 
         }else{
             alert('Please select mode of payment.')
@@ -5126,79 +5152,202 @@ angular.module('myApp.controllers')
             $scope.aptPayment.additionalSpAmntDesc = "Services/Products Additional Amount";
         }
 
-		var data = {
-			appointmentid: $scope.aptPayment.appointmentid,
-			promocodeid: $scope.aptPayment.promocodeid,
-			promocode: $scope.aptPayment.promocode,
-			paymentmodes: $scope.aptPayment.paymentModes,
-			promocost:$scope.applypromocost,
-			additionalchargespdesc:$scope.aptPayment.additionalSpAmntDesc,
-			city:$scope.adminNewAppointmentCust.customer.city,
-            cityId:$scope.adminNewAppointmentCust.customer.cityid,
-            serviceProductList:$scope.aptPayment.productServicesToBeUsed
+        /*if($scope.fromWallet == true && $scope.fromPayAsGo == true){
+                var dataWallet = {
+                    "walletAmount": $scope.apptPayAsGoAmnt,
+                    "walletTransType": "credit",
+                    "currency":"INR",
+                    "description":"Wallet Regularization",
+                    "createdById":spApi.getSpid(),
+                    "createdByName":spApi.getSpname(),
+                    "apptId":$scope.aptPayment.appointmentid,
+                    "city":$scope.adminNewAppointmentCust.customer.city,
+                    "cityId":$scope.adminNewAppointmentCust.customer.cityid,
+                    "trans_mode":$scope.aptPayment.payAsGoType,
+                    "checkOrTransNo":$scope.aptPayment.ChequeTransNO
 
-		}
+                }
 
-		adminApi.markAppointmentComplete(data)
-		.success(function(data, status, headers, config){
-			// As this payment API do not return payment data, setting payment object from the request payment object
-			$scope.adminNewAppointmentCust.payment = {
-				curr : $scope.aptPayment.currency,
-				amnt : $scope.aptPayment.amnt,
-				type : $scope.aptPayment.type
-			};
+                spApi.walletTransact($scope.adminNewAppointmentCust.appointment.patientid, dataWallet)
+                .success(function(data, status, headers, config) {
+                    if(data.error == undefined && data.payload != undefined) {
+                       console.log("Wallet regularization done successfully!");
+                    }
 
-			alert("Appointment marked complete successfully");
+                    var data = {
+						appointmentid: $scope.aptPayment.appointmentid,
+						promocodeid: $scope.aptPayment.promocodeid,
+						promocode: $scope.aptPayment.promocode,
+						paymentmodes: $scope.aptPayment.paymentModes,
+						promocost:$scope.applypromocost,
+						additionalchargespdesc:$scope.aptPayment.additionalSpAmntDesc,
+						city:$scope.adminNewAppointmentCust.customer.city,
+			            cityId:$scope.adminNewAppointmentCust.customer.cityid,
+			            serviceProductList:$scope.aptPayment.productServicesToBeUsed
 
-			hidePaymentDialog();
+					}
 
-			try {
-                $scope.apptPayment.paymentForm.$setPristine();
-                $scope.apptPayment.paymentForm.$setUntouched();
-            } catch(err) {}
-			$scope.visitedpaymentAmt = false;
-			 //added for SP additional amount;
-            $scope.visitedaddsppaymentAmt = false;
+					adminApi.markAppointmentComplete(data)
+					.success(function(data, status, headers, config){
+						// As this payment API do not return payment data, setting payment object from the request payment object
+						$scope.adminNewAppointmentCust.payment = {
+							curr : $scope.aptPayment.currency,
+							amnt : $scope.aptPayment.amnt,
+							type : $scope.aptPayment.type
+						};
 
-			var totalCostPaid = 0;
-            for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
-                var mode = $scope.aptPayment.paymentModes[i];
-                totalCostPaid += parseInt(mode.amount);
+						alert("Appointment marked complete successfully");
+
+						hidePaymentDialog();
+
+						try {
+			                $scope.apptPayment.paymentForm.$setPristine();
+			                $scope.apptPayment.paymentForm.$setUntouched();
+			            } catch(err) {}
+						$scope.visitedpaymentAmt = false;
+						 //added for SP additional amount;
+			            $scope.visitedaddsppaymentAmt = false;
+
+						var totalCostPaid = 0;
+			            for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
+			                var mode = $scope.aptPayment.paymentModes[i];
+			                totalCostPaid += parseInt(mode.amount);
+			            }
+			            // $scope.costPaid = $scope.aptPayment.amnt;
+			            //$scope.costPaid = totalCostPaid;
+			             if(totalCostPaid!=0){
+			                $scope.costPaid = totalCostPaid;
+			            }
+
+						$scope.paymentType = $scope.aptPayment.type;
+						$scope.adminNewAppointmentCust.appointment.state = "Completed";
+						$scope.applyPromoResponsePaymentSection = {};
+						$scope.aptPayment.additionalSpAmnt = "0";
+						$scope.aptPayment.additionalSpAmntDesc = "";
+						//$scope.aptPayment.amnt = "0";
+
+					    if($scope.adminNewAppointmentCust.appointment.additionalcharge>0){
+			                $scope.aptPayment.amnt = $scope.adminNewAppointmentCust.appointment.finalcost + $scope.adminNewAppointmentCust.appointment.additionalcharge;
+			            }else{
+			                $scope.aptPayment.amnt = $scope.adminNewAppointmentCust.appointment.finalcost;
+			            }
+			         
+						$scope.aptPayment.type = "Wallet";
+			            $scope.aptPayment.sptype = "Wallet";
+						$scope.aptPayment.paymentModes = [];
+						$scope.aptPayment.selectedMode = null;
+						$scope.aptPayment.selectedModeIndex = -1;
+						$scope.applypromocost= '';
+
+						$scope.fetchAppointment($scope.adminNewAppointmentCust.appointment._id);
+
+						$scope.searchAppointments(true);
+					})
+					.error(function(data, status, headers, config){
+						$scope.apptPaymentErrorMsg = data.error.message;
+						$scope.checkSessionTimeout(data);
+					})
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("Wallet regularization failed!");
+                });
+        }else{*/
+
+
+
+        	if($scope.aptPayment.isConverted == null){
+                $scope.aptPayment.isConverted = false;
             }
-            // $scope.costPaid = $scope.aptPayment.amnt;
-            //$scope.costPaid = totalCostPaid;
-             if(totalCostPaid!=0){
-                $scope.costPaid = totalCostPaid;
-            }
 
-			$scope.paymentType = $scope.aptPayment.type;
-			$scope.adminNewAppointmentCust.appointment.state = "Completed";
-			$scope.applyPromoResponsePaymentSection = {};
-			$scope.aptPayment.additionalSpAmnt = "0";
-			$scope.aptPayment.additionalSpAmntDesc = "";
-			//$scope.aptPayment.amnt = "0";
+        	var data = {
+					appointmentid: $scope.aptPayment.appointmentid,
+					promocodeid: $scope.aptPayment.promocodeid,
+					promocode: $scope.aptPayment.promocode,
+					paymentmodes: $scope.aptPayment.paymentModes,
+					promocost:$scope.applypromocost,
+					additionalchargespdesc:$scope.aptPayment.additionalSpAmntDesc,
+					city:$scope.adminNewAppointmentCust.customer.city,
+		            cityId:$scope.adminNewAppointmentCust.customer.cityid,
+		            serviceProductList:$scope.aptPayment.productServicesToBeUsed,
+		            isconverted:$scope.aptPayment.isConverted
 
-		    if($scope.adminNewAppointmentCust.appointment.additionalcharge>0){
-                $scope.aptPayment.amnt = $scope.adminNewAppointmentCust.appointment.finalcost + $scope.adminNewAppointmentCust.appointment.additionalcharge;
-            }else{
-                $scope.aptPayment.amnt = $scope.adminNewAppointmentCust.appointment.finalcost;
-            }
-         
-			$scope.aptPayment.type = "Wallet";
-            $scope.aptPayment.sptype = "Wallet";
-			$scope.aptPayment.paymentModes = [];
-			$scope.aptPayment.selectedMode = null;
-			$scope.aptPayment.selectedModeIndex = -1;
-			$scope.applypromocost= '';
+				}
 
-			$scope.fetchAppointment($scope.adminNewAppointmentCust.appointment._id);
+			ngDialog.openConfirm({
+                template: 'AptCompleteTemplate',
+                showClose:false,
+                scope: $scope 
+            }).then(function(value)
+            {
 
-			$scope.searchAppointments(true);
-		})
-		.error(function(data, status, headers, config){
-			$scope.apptPaymentErrorMsg = data.error.message;
-			$scope.checkSessionTimeout(data);
-		})
+				adminApi.markAppointmentComplete(data)
+				.success(function(data, status, headers, config){
+					// As this payment API do not return payment data, setting payment object from the request payment object
+					$scope.adminNewAppointmentCust.payment = {
+						curr : $scope.aptPayment.currency,
+						amnt : $scope.aptPayment.amnt,
+						type : $scope.aptPayment.type
+					};
+
+					alert("Appointment marked complete successfully");
+
+					hidePaymentDialog();
+
+					try {
+		                $scope.apptPayment.paymentForm.$setPristine();
+		                $scope.apptPayment.paymentForm.$setUntouched();
+		            } catch(err) {}
+					$scope.visitedpaymentAmt = false;
+					 //added for SP additional amount;
+		            $scope.visitedaddsppaymentAmt = false;
+
+					var totalCostPaid = 0;
+		            for(var i=0; i<$scope.aptPayment.paymentModes.length; i++) {
+		                var mode = $scope.aptPayment.paymentModes[i];
+		                totalCostPaid += parseInt(mode.amount);
+		            }
+		            // $scope.costPaid = $scope.aptPayment.amnt;
+		            //$scope.costPaid = totalCostPaid;
+		             if(totalCostPaid!=0){
+		                $scope.costPaid = totalCostPaid;
+		            }
+
+					$scope.paymentType = $scope.aptPayment.type;
+					$scope.adminNewAppointmentCust.appointment.state = "Completed";
+					$scope.applyPromoResponsePaymentSection = {};
+					$scope.aptPayment.additionalSpAmnt = "0";
+					$scope.aptPayment.additionalSpAmntDesc = "";
+					//$scope.aptPayment.amnt = "0";
+
+				    if($scope.adminNewAppointmentCust.appointment.additionalcharge>0){
+		                $scope.aptPayment.amnt = $scope.adminNewAppointmentCust.appointment.finalcost + $scope.adminNewAppointmentCust.appointment.additionalcharge;
+		            }else{
+		                $scope.aptPayment.amnt = $scope.adminNewAppointmentCust.appointment.finalcost;
+		            }
+		         
+					$scope.aptPayment.type = "Wallet";
+		            $scope.aptPayment.sptype = "Wallet";
+					$scope.aptPayment.paymentModes = [];
+					$scope.aptPayment.selectedMode = null;
+					$scope.aptPayment.selectedModeIndex = -1;
+					$scope.applypromocost= '';
+
+					$scope.fetchAppointment($scope.adminNewAppointmentCust.appointment._id);
+
+					$scope.searchAppointments(true);
+				})
+				.error(function(data, status, headers, config){
+					$scope.apptPaymentErrorMsg = data.error.message;
+					$scope.checkSessionTimeout(data);
+				})
+
+			},
+            function(value) {
+                console.log("Fail To Complete Appointment!");
+            });
+
+
+        //}
 	}
 
 	$scope.cancelAptPayment = function() {
@@ -5297,6 +5446,102 @@ angular.module('myApp.controllers')
 	showPaymentDialog = function() {
 		slideDownByIndex('.spApptPayment', 0);
 		$scope.scrollDiv('spApptPayment');
+
+
+		$scope.fromWallet = false;
+        $scope.fromPayAsGo = false;
+        $scope.aptPayment.type = null;
+        $scope.aptPayment.payAsGotype = null;
+        $scope.aptPayment.ChequeTransNO = "";
+        $scope.aptPayment.isConverted = null;
+        $scope.apptPayAsGoAmnt = 0;
+        $scope.apptWalletAmnt = 0;
+
+        if($scope.adminNewAppointmentCust.customer.custwallet.walletbalance > 0){
+            $scope.fromWallet = true;
+            $scope.aptPayment.type = "Wallet";   
+            $scope.apptWalletAmnt = $scope.AptAmount; 
+
+            if($scope.adminNewAppointmentCust.customer.custwallet.walletbalance < ($scope.apptWalletAmnt + $scope.productServiceAddlTotal)){
+                $scope.apptPayAsGoAmnt = $scope.AptAmount - ($scope.adminNewAppointmentCust.customer.custwallet.walletbalance - $scope.productServiceAddlTotal);
+            }        
+        }
+
+        if($scope.adminNewAppointmentCust.customer.custwallet.walletbalance <= 0 || $scope.adminNewAppointmentCust.customer.custwallet.walletbalance < $scope.AptAmount){
+            $scope.fromPayAsGo = true;
+            $scope.apptPayAsGoAmnt = $scope.AptAmount - $scope.adminNewAppointmentCust.customer.custwallet.walletbalance + $scope.productServiceAddlTotal; 
+            $scope.apptWalletAmnt = $scope.adminNewAppointmentCust.customer.custwallet.walletbalance;
+        }
+
+        if($scope.fromWallet == true && $scope.fromPayAsGo == false && ($scope.apptWalletAmnt + $scope.productServiceAddlTotal > $scope.adminNewAppointmentCust.customer.custwallet.walletbalance)){
+            $scope.fromPayAsGo = true;
+            $scope.apptPayAsGoAmnt = ($scope.apptWalletAmnt + $scope.productServiceAddlTotal) - $scope.adminNewAppointmentCust.customer.custwallet.walletbalance; 
+        }
+
+        adminApi.getCustomerDetails($scope.adminNewAppointmentCust.appointment.patientid)
+        .success(function(data, status, headers, config){
+            $scope.custApptList = [];
+            $scope.custApptList = data.payload.appointments;
+            $scope.isConvertedFlag = false;
+            var arrayStarttime = [];
+            for(var i = 0; i< $scope.custApptList.length; i++){
+               // console.log($scope.custApptList[i].appointment);
+                if($scope.custApptList[i].appointment.state != 3){
+                    arrayStarttime.push($scope.custApptList[i].appointment.starttime)
+                }
+            }
+            //console.log(arrayStarttime);
+            var minimum = Math.min.apply( Math, arrayStarttime);
+            //console.log(minimum);
+            if($scope.adminNewAppointmentCust.appointment.starttime == minimum){
+                $scope.isConvertedFlag = true;
+            }
+            //console.log($scope.isConvertedFlag);
+
+            var arrayConfirmApptStarttime = [];
+            var nextApptAmnt = 0;
+            var package_id;
+            $scope.insufficientWallet = false;
+            if($scope.custReadList.package_id != undefined){
+                var starttime = $scope.adminNewAppointmentCust.appointment.starttime;
+                for(var i = 0; i< $scope.custApptList.length; i++){
+                    if($scope.custApptList[i].appointment.state == 2 && starttime < $scope.custApptList[i].appointment.starttime){
+                        arrayConfirmApptStarttime.push($scope.custApptList[i].appointment.starttime)
+                    }
+                }
+
+                if(arrayConfirmApptStarttime.length > 0){
+                    var nextApptStarttime = Math.min.apply( Math, arrayConfirmApptStarttime);
+                    //console.log(arrayConfirmApptStarttime);
+                    //console.log(nextApptStarttime);
+                    for(var i = 0; i< $scope.custApptList.length; i++){
+                        if($scope.custApptList[i].appointment.starttime == nextApptStarttime){
+                            //console.log($scope.custApptList[i].appointment);
+                            nextApptAmnt = $scope.custApptList[i].appointment.finalcost + $scope.custApptList[i].appointment.additionalchargesp;
+                            package_id = $scope.custApptList[i].appointment.package_id;
+                        }
+                    }
+                    var balanceRemain = $scope.adminNewAppointmentCust.customer.custwallet.walletbalance - ($scope.adminNewAppointmentCust.appointment.finalcost + $scope.adminNewAppointmentCust.appointment.additionalchargesp + $scope.productServiceAddlTotal);
+                    if(nextApptAmnt > 0 && nextApptAmnt != NaN && package_id != "" && package_id != undefined){
+                        if(nextApptAmnt > balanceRemain){
+                            $scope.insufficientWallet = true;
+                        }
+                    }
+
+                    //console.log(nextApptAmnt);
+                    //console.log(balanceRemain);
+                    //console.log($scope.insufficientWallet);
+
+                }
+
+            }
+
+        })
+        .error(function(data, status, headers, config){
+           console.log("Failed to fetch customer appointment list!");
+        })
+
+
 	}
 
 
@@ -5364,6 +5609,8 @@ angular.module('myApp.controllers')
 
          $scope.productServiceAddlTotal = $scope.productServiceAddlTotal - (item.price * item.selectedQty);
          $scope.aptPayment.additionalSpAmnt = $scope.productServiceAddlTotal;
+
+          showPaymentDialog();
     }
 
     getPatientProductService = function() {
@@ -5497,10 +5744,12 @@ angular.module('myApp.controllers')
                
             });
 
-            $scope.aptPayment.additionalSpAmnt = $scope.productServiceAddlTotal;
-        	
+            $scope.aptPayment.additionalSpAmnt = $scope.productServiceAddlTotal;       	
             $scope.aptPayment.productServicesToBeUsed = $scope.selectedItems;
+                     
+            showPaymentDialog();
             //alert('After confirm');
+
         },
         function(value) {
             console.log("Fail Service Product Addition.");
@@ -9630,6 +9879,7 @@ angular.module('myApp.controllers')
 
                 $scope.aptPayment.amnt = $scope.applypromocost;
                 $scope.calculatedAptAmount = $scope.applypromocost;
+                $scope.AptAmount = $scope.applypromocost;
                 
             }else{
                 if($scope.adminNewAppointmentCust.appointment.additionalcharge>0){
@@ -9638,12 +9888,16 @@ angular.module('myApp.controllers')
                     var tot;
                     tot = $scope.adminNewAppointmentCust.appointment.finalcost + $scope.adminNewAppointmentCust.appointment.additionalcharge;
                     $scope.calculatedAptAmount = $scope.adminNewAppointmentCust.appointment.finalcost +" + "+ $scope.adminNewAppointmentCust.appointment.additionalcharge +" = "+ tot;
-
+                    $scope.AptAmount = tot;
                 }else{
                     $scope.aptPayment.amnt = $scope.adminNewAppointmentCust.appointment.finalcost;
-                    $scope.calculatedAptAmount = $scope.adminNewAppointmentCust.appointment.finalcost
+                    $scope.calculatedAptAmount = $scope.adminNewAppointmentCust.appointment.finalcost;
+                    $scope.AptAmount = $scope.adminNewAppointmentCust.appointment.finalcost;
                 }
             }
+
+            //initilize values of wallet and payAsGo while applying promocode.
+            showPaymentDialog();
 
 		}).
 		error(function (data, status, headers, config) {

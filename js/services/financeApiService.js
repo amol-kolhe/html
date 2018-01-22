@@ -87,6 +87,10 @@ financeApiService.factory('financeApi', ['$http', '$cookies', function($http, $c
 		return $http.get(url);
 	}
 
+	financeApi.searchAppointments = function(appointmentCriteria, isAdvancedSearch) {
+		return $http.get(baseUrl + "/hrest/v1/appt?apikey=" + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + "&role=3&where=" + createSearchAppointmentsQuery(appointmentCriteria, isAdvancedSearch));
+	};
+
 	return financeApi;
 }]);
 

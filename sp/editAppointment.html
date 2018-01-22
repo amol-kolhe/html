@@ -680,12 +680,16 @@
                                 <div class="bodyContainer">
                                     <div>
                                         <div>
-                                            <div>Net Total Cost &#8377; {{models.response.netTotalCharges}}</div>
+                                            <div>Package Cost &#8377; {{aptPackage.net_amount}}</div>
+                                            <div>Service/Product Additional Cost &#8377; {{productServiceTotal}}</div >
                                         </div>
                                         <div>
+                                            <div>Total Cost &#8377; {{models.response.netTotalCharges}}</div>
+                                        </div>
+                                        <!--<div>
                                             <div>Discounted cost per appointment &#8377; {{models.response.perApptCharges}} + {{aptPackage.additional_amount}}</div>
                                             <div style="color: #989898;">Original cost per appointment &#8377; {{models.response.originalChargePerAppt}}</div >
-                                        </div>
+                                        </div>-->
                                         <div ng-if="models.response.status.statusCode == '2164391937'"
                                             style="margin-top: 15px;">
                                             <div class="alert alert-warning" role="alert">
@@ -774,7 +778,7 @@
     <div id="spApptPayment" style="display:none;" class="spApptPayment" ng-hide="adminNewAppointmentCust.appointment.state == 'Cancelled' || disablePayment">
         <div class="headBar">
             <span>Appt. Completion Details</span>
-            <span style="float:right;">Current Balance:{{custReadList.custwallet.walletbalance}}<span>
+            <span style="float:right;color:yellow;">Current Balance:{{custReadList.custwallet.walletbalance}}<span>
         </div>
         <div class="bodyContainer">
             <div ng-hide="adminNewAppointmentCust.appointment.state == 'Cancelled'">
@@ -845,11 +849,10 @@
                                         </div> 
                                     </div>
 
-                                    <div class="row middleRowContent">
+                                   <!-- <div class="row middleRowContent">
                                         <span class="itemLabel2 col-xs-4 col-sm-3">Mode Of Payment <span class="colonSeparator">:</span></span>
-                                         <div class="col-xs-8 col-sm-9">
+                                        <div class="col-xs-8 col-sm-9">
                                             <div class="row">
-                                                <!--Mode combobox here -->
                                                 <div class="col-xs-12 col-sm-12">
                                                     <select 
                                                         ng-model="aptPayment.type"
@@ -861,7 +864,98 @@
                                                 </div>
                                             </div>    
                                         </div> 
+                                    </div>-->
+
+                                    <div class="row middleRowContent">
+                                        <span class="itemLabel2 col-xs-4 col-sm-3">Mode Of Payment <span class="colonSeparator">:</span></span>
+                                         <div class="col-xs-8 col-sm-9">
+                                            <div class="row middleRowContent" ng-show="fromWallet">
+                                                <span class="col-sm-5"> Wallet</span>
+                                                <span class="col-sm-2">= </span>
+                                                <span class="col-sm-5">{{apptWalletAmnt}}<span>
+                                            </div>
+                                            <div class="middleRowContent" ng-show="fromPayAsGo">
+                                                <div class="row middleRowContent">
+                                                    <span class="col-sm-5"> PayAsGo</span>
+                                                    <span class="col-sm-2">= </span>
+                                                    <span class="col-sm-5">{{apptPayAsGoAmnt}}<span>
+                                                </div>
+                                            
+                                                <div class="row middleRowContent">
+                                                     <div class="col-xs-12 col-sm-12">
+                                                        <select 
+                                                            ng-model="aptPayment.payAsGoType"
+                                                            ng-options="mode as mode for mode in paymentModes"
+                                                            class="form-control">
+                                                            <option value="">Select Mode</option>
+                                                        </select>
+                                                    </div>                                                
+                                                </div>  
+
+                                                 <div class="row middleRowContent" ng-show="aptPayment.payAsGoType == 'Cheque'">
+                                                    <span class="itemLabel2 col-xs-4 col-sm-3">Cheque No.<span class="colonSeparator">:</span></span>
+                                                     <div class="col-xs-8 col-sm-9">
+                                                        <div class="row">
+                                                            <!--Mode combobox here -->
+                                                            <div class="col-xs-12 col-sm-12">
+                                                                <input type="text"
+                                                                    class="form-control"
+                                                                    ng-model="aptPayment.ChequeTransNO"
+                                                                    name="ChequeTransNO"/>
+                                                            </div>
+                                                        </div>    
+                                                    </div> 
+                                                </div>
+
+                                                <div class="row middleRowContent" ng-show="aptPayment.payAsGoType != 'Cheque' && aptPayment.payAsGoType != 'Cash' && aptPayment.payAsGoType != 'Wallet' && aptPayment.payAsGoType != udefined">
+                                                    <span class="itemLabel2 col-xs-4 col-sm-3">Trans. No.<span class="colonSeparator">:</span></span>
+                                                     <div class="col-xs-8 col-sm-9">
+                                                        <div class="row">
+                                                            <!--Mode combobox here -->
+                                                            <div class="col-xs-12 col-sm-12">
+                                                                <input type="text"
+                                                                    class="form-control"
+                                                                    ng-model="aptPayment.ChequeTransNO"
+                                                                    name="ChequeTransNO"/>
+                                                            </div>
+                                                        </div>    
+                                                    </div> 
+                                                </div>  
+                                            
+
+                                            </div>     
+                                        </div> 
                                     </div>
+
+
+
+                                    <!--<div class="row middleRowContent" ng-show="aptPayment.type == 'Cheque'">
+                                        <span class="itemLabel2 col-xs-4 col-sm-3">Cheque No.<span class="colonSeparator">:</span></span>
+                                         <div class="col-xs-8 col-sm-9">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12">
+                                                    <input type="text"
+                                                        class="form-control"
+                                                        ng-model="aptPayment.ChequeTransNO"
+                                                        name="ChequeTransNO"/>
+                                                </div>
+                                            </div>    
+                                        </div> 
+                                    </div>
+
+                                    <div class="row middleRowContent" ng-show="aptPayment.type != 'Cheque' && aptPayment.type != 'Cash' && aptPayment.type != 'Wallet' && aptPayment.type != udefined">
+                                        <span class="itemLabel2 col-xs-4 col-sm-3">Trans. No.<span class="colonSeparator">:</span></span>
+                                         <div class="col-xs-8 col-sm-9">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12">
+                                                    <input type="text"
+                                                        class="form-control"
+                                                        ng-model="aptPayment.ChequeTransNO"
+                                                        name="ChequeTransNO"/>
+                                                </div>
+                                            </div>    
+                                        </div> 
+                                    </div>-->
 
                                  
 
@@ -869,6 +963,28 @@
                                         <span class="itemLabel2 col-xs-4 col-sm-3"></span>
                                         <div class="col-xs-8 col-sm-7">
                                             <a title='Add services and products' class='clickable' style='margin-right: 15px; font-size: 15px;' ng-click='showServiceProductPupup()'>Add Services And Products</a>
+                                        </div>
+
+                                    </div>
+
+                                    <!--<div class="row middleRowContent" ng-show="isConvertedFlag == true">
+                                        <span class="itemLabel2 col-xs-4 col-sm-3"></span>
+                                        <div class="col-xs-8 col-sm-7">
+                                            <label>
+                                                <input type="checkbox" ng-model="aptPayment.isConverted"> Is Converted?
+                                            </label>
+                                        </div>
+
+                                    </div>-->
+
+                                    <div class="row middleRowContent" ng-show="isConvertedFlag == true">
+                                        <span class="itemLabel2 col-xs-4 col-sm-3">Is Converted?</span>
+                                        <div class="col-xs-8 col-sm-7">
+                                            <label>
+                                                <input type="radio" name="group1" ng-model="aptPayment.isConverted" value="true"> Yes
+                                                <input type="radio" name="group1" ng-model="aptPayment.isConverted" value="false"> No
+
+                                            </label>
                                         </div>
 
                                     </div>
@@ -1029,7 +1145,7 @@
 
                         <div class="footerBar">
                             <button class="btn btn-primary btn-sm" 
-                                ng-disabled="(aptPayment.paymentModes.length == 0)" 
+                                ng-disabled="(aptPayment.paymentModes.length == 0) || (aptPayment.isConverted == null && isConvertedFlag == true)" 
                                 ng-click="submitAptPayment()">Mark As Complete
                             </button>
                             <button class="btn btn-default btn-sm" ng-click="cancelAptPayment()">Cancel</button>

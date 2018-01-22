@@ -85,6 +85,22 @@ angular.module('myApp.controllers')
 
 	$scope.from_date="";
 	$scope.till_date="";
+	$scope.appointmentCriteria = {
+		fromDate : "",
+		fromEpoch : "",
+		tillDate : "",
+		tillEpoch : "",
+		zone : "",
+		zoneId : "",
+		service : "",
+		serviceId : "",
+		custemail : "",
+		custid : "",
+		custph : "",
+		spemail : "",
+		spname : "",
+		spid : ""
+	};
 
 	
 	$scope.financeMgmt.getFinance = function() {
@@ -372,8 +388,13 @@ angular.module('myApp.controllers')
 					item.alert_to_finance = true;
 				}
 				item.orignal_trans_date = item.trans_date;
+				//item.checkOrTransNO = item.checkOrTransNO;
 				item.trans_date = moment(new Date(item.trans_date * 1000)).format("DD-MM-YYYY hh:mm A");
 				$scope.financeMgmt.arrayCollection.push(item);
+
+				
+				
+				
 			});
 
 			console.log($scope.financeMgmt.arrayCollection);
@@ -397,6 +418,32 @@ angular.module('myApp.controllers')
 			$scope.financeMgmt.trans_description = rec.trans_description;
 			$scope.financeMgmt.trans_mode = rec.trans_mode;
 			$scope.financeMgmt.trans_amount = rec.trans_amount;			
+		}
+
+		if(rec.trans_mode == 'Cash'){
+			$scope.financeMgmt.is_cash = true;
+			$scope.financeMgmt.cash_amount = rec.trans_amount;
+			$scope.financeMgmt.is_cheque = null;
+			$scope.financeMgmt.is_online = null;
+			$scope.financeMgmt.is_paytm = null;
+		}
+
+		if(rec.trans_mode == 'Cheque'){
+			$scope.financeMgmt.is_cheque = true;
+			$scope.financeMgmt.cheque_number = rec.checkOrTransNO;
+			$scope.financeMgmt.cheque_amount = rec.trans_amount;
+			$scope.financeMgmt.is_cash = null;
+			$scope.financeMgmt.is_online = null;
+			$scope.financeMgmt.is_paytm = null;
+		}
+
+		if(rec.trans_mode == 'Paytm'){
+			$scope.financeMgmt.is_paytm = true;
+			$scope.financeMgmt.paytm_transaction_id = rec.checkOrTransNO;
+			$scope.financeMgmt.paytm_amount = rec.trans_amount;
+			$scope.financeMgmt.is_cash = null;
+			$scope.financeMgmt.is_online = null;
+			$scope.financeMgmt.is_cheque = null;
 		}
 	};
 
@@ -525,6 +572,8 @@ angular.module('myApp.controllers')
 		$scope.financeMgmt.tillDate = formatted_cur_date;
 		$('#aptFromDate').val($scope.financeMgmt.fromDate);
 		$('#aptTillDate').val($scope.financeMgmt.tillDate);
+		$('#aptFromDateRevenue').val($scope.financeMgmt.fromDate);
+		$('#aptTillDateRevenue').val($scope.financeMgmt.tillDate);
 
 		$scope.financeMgmt.arrayCollectedReport = [];
 
@@ -583,7 +632,10 @@ angular.module('myApp.controllers')
 			console.log("Error in receiving collection report request.");
 		});
 
-	}
+		$scope.financeMgmt.generateRevenueReport();
+		$scope.initRevenueGrigOptions(formatted_weekly_date_before,formatted_cur_date);
+	
+		}
 
 
 	$scope.financeMgmt.generateReport = function() {
@@ -670,10 +722,59 @@ angular.module('myApp.controllers')
 			
     };
 
+
+    $scope.financeMgmt.generateRevenueReport = function() {
+		
+		var fromDt = getEpochDate($('#aptFromDateRevenue').val());
+		var tillDt = getEpochDate($('#aptTillDateRevenue').val());
+	  	var from_date = moment(new Date(fromDt * 1000)).format("DD-MM-YYYY");
+		var to_date = moment(new Date(tillDt * 1000)).format("DD-MM-YYYY");
+
+		console.log(fromDt);
+		console.log(tillDt);
+
+		$scope.appointmentCriteria.fromEpoch = fromDt;
+		$scope.appointmentCriteria.tillEpoch = tillDt;
+		var isAdvancedSearch = false;
+
+    	var date1 = new Date(fromDt * 1000);
+    	var date2 = new Date(tillDt * 1000);
+    	var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds    
+    	var diffDays = Math.round(Math.abs((date1.getTime() - date2.getTime())/(oneDay)));
+    	$scope.financeMgmt.validDateRange = true;
+		$scope.financeMgmt.dateValid = true;
+    	if(date1.getTime() > date2.getTime()){
+    		$scope.financeMgmt.dateValid = false;
+    	}
+
+    	if(diffDays <= 31){
+    		$scope.appointmentsList = [];
+    		
+			$scope.financeMgmt.arrayRevenueReport = [];
+			financeApi.searchAppointments($scope.appointmentCriteria, isAdvancedSearch)
+			.success(function(data, status, headers, config){
+				$scope.appointmentsList = buildAppointmentsList(data.payload);
+
+				console.log($scope.appointmentsList);
+
+				$scope.initRevenueGrigOptions(from_date,to_date);
+				$scope.revenueGridOptions.data = $scope.appointmentsList;
+				
+			})
+			.error(function(data, status, headers, config){
+				console.log("Error in receiving revenue report request.");
+			});
+		}else{
+	
+			$scope.financeMgmt.validDateRange = false;
+		}
+			
+    };
+
     
     $scope.financeMgmt.generateWalletTransactions = function() {
 
-    	alert($scope.financeMgmt.spIdForWallet);
+    	//alert($scope.financeMgmt.spIdForWallet);
     	var arrayWalletDataTemp = [];
 
     	var fromDtWallet = getEpochDate($('#aptFromDateWallet').val());
@@ -772,6 +873,53 @@ angular.module('myApp.controllers')
 
   	}
 
+  	$scope.initRevenueGrigOptions = function(fromdate,tilldate) {
+
+		var from_date=fromdate;
+		var till_date=tilldate;
+
+		//alert(from_date);
+		//alert(till_date);
+
+	    $scope.revenueGridOptions = {
+		    columnDefs: [
+		      { field: 'city' },
+		      //{ field: 'service_provider_name', visible: false},
+		      { field: 'sdate',name:'Appt.Date',width: '18%' },
+		      { field: 'ref' ,name:'Ref.No.'},
+		      { field: 'zone' },
+		      { field: 'spname' ,name:'Service Provider',width: '15%'},
+		      { field: 'patient',width: '15%'},
+		      { field: 'state' ,name:'Appt.State'},
+		      { field: 'payment' },
+		    ],
+		    enableGridMenu: true,
+		    enableSelectAll: true,
+		    enableFiltering: true,
+		    exporterCsvFilename: 'Revenue_Report.csv',
+		    exporterPdfDefaultStyle: {fontSize: 9},
+		    exporterPdfTableStyle: {margin: [ 0, 0, 0, 0 ]},
+		    exporterPdfTableHeaderStyle: {fontSize: 10, bold: true, italics: true, color: 'red'},
+		    exporterPdfHeader: { text: "Revenue Report", style: 'headerStyle' },
+		    exporterPdfFooter: function ( currentPage, pageCount ) {
+		      return { text: currentPage.toString() + ' of ' + pageCount.toString(), style: 'footerStyle' };
+		    },
+		    exporterPdfCustomFormatter: function ( docDefinition ) {
+		      docDefinition.styles.headerStyle = { fontSize: 22, bold: true, alignment: 'center' };
+		      docDefinition.styles.footerStyle = { fontSize: 10, bold: true, alignment: 'right' };
+		      return docDefinition;
+		    },
+		    exporterPdfOrientation: 'landscape',
+		    exporterPdfPageSize: 'LETTER',
+		    exporterPdfMaxGridWidth: 600,
+		    exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
+		    onRegisterApi: function(gridApi){
+		      $scope.gridApi = gridApi;
+		    }
+	  	};
+
+  	}
+
 
 	$scope.financeMgmt.collectedForm = function(rec) {
 		$scope.financeMgmt.InitFinanceParams();
@@ -823,10 +971,14 @@ angular.module('myApp.controllers')
 		$('#datetimepicker5').datetimepicker({
 			format: 'YYYY-MM-DD'
 		});
+		$('.dateTimePickerRevenue').datetimepicker({
+			format: 'YYYY-MM-DD hh:mm A'
+		});
 	}, 200);
 
 
     $scope.initGrigOptions($scope.from_date,$scope.till_date);
+    $scope.initRevenueGrigOptions($scope.from_date,$scope.till_date);
 
 	$scope.initFinance();
 	
