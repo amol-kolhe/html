@@ -744,6 +744,7 @@
                                             <div class="followup-appt-time-slot"
                                                 style="height: 130px;">
                                                 <label>Payment Summary</label>
+                                                <span style="float:right;">Total:{{totalPayment}}</span>
                                                 <div>
                                                     <ul class="hover" style="max-height: 80px; overflow: auto;">
                                                         <li style="padding: 5px;"
@@ -981,7 +982,7 @@
                         <label>Amount paid from wallet:</label>
                     </div>
                     <div class="col-xs-4">
-                        <span ng-if="custReadList.custwallet.currency.toLowerCase() == 'inr'">&#8377; </span>{{apptWalletAmnt}}
+                        <span ng-if="custReadList.custwallet.currency.toLowerCase() == 'inr'">&#8377; </span>{{apptWalletAmnt + productServiceCost}}
                     </div>
                 </div> 
 

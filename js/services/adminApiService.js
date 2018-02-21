@@ -156,6 +156,10 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 		return $http.get(baseUrl + "/hrest/v1/appt?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0&where=timespan=ALLANDstate=7");
 	};
 
+	adminApi.getPendingApptCustList = function() {
+		return $http.get(baseUrl + "/hrest/v1/admin/getPendingApptCustList?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0");
+	};
+
 	adminApi.searchCancelActionableRecords = function() {
 		return $http.get(baseUrl + "/hrest/v1/appt/getCancelActionableRecords?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0&status=InProcess");
 	};

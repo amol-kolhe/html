@@ -193,39 +193,75 @@ angular.module('myApp.controllers')
         }
         spApi.searchAppointments(searchCriteria)
         .success(function(data, status, headers, config) {
-            var appList = [];
-            if(data.payload.length == 0) {
-                $scope.spAptNotAvailable = true;
-            }
-            else {
-                $scope.spAptNotAvailable = false;
-                angular.forEach(data.payload, function(apt) {
-                    appList.push(
-                        {
-                            "city": apt.appointment.city,
-                            "refNo": apt.appointment.refno,
-                            "id": apt.appointment._id,
-                            "scheduledon": apt.appointment.starttime,
-                            "sdate" : moment(new Date(apt.appointment.starttime * 1000)).format("YYYY-MM-DD hh:mm A"),
-                            "custid": apt.appointment.custid,
-                            "customername": apt.customer.name,
-                            "customercontact": apt.customer.phone,
-                            "status": appointmentStateMap[apt.appointment.state],
-                            "servicelocation": apt.appointment.clinic_name
-                        }
-                    );
+
+            $scope.spId = $cookies.get('u_id');
+            spApi.fetchInsufficientWalletAppts($scope.spId)
+            .success(function(dataObj, statusObj, headersObj, configObj) {
+                $scope.apptInsufficientWalletList = [];
+                $scope.apptInsufficientWalletList = dataObj.payload;
+
+                var apptInsufficientWalletList = [];
+                var appointmentList = [];
+                apptInsufficientWalletList = dataObj.payload;
+               
+                angular.forEach(data.payload, function(appt) {   
+                    var flag = false;       
+                    angular.forEach(apptInsufficientWalletList, function(rec) {
+                         if(appt.appointment.refno == rec.refno){
+                            flag = true;
+                         }
+                    });
+                    if(flag == true){
+                        appt.appointment.isInsufficientWallet = true;
+                    }else{
+                        appt.appointment.isInsufficientWallet = false;
+                    }
+
+                    appointmentList.push(appt);
                 });
-            }
-            $scope.spAppointmentList = appList;
 
-            //console.log($scope.spAppointmentList);
 
-            if($scope.spApts.time == "past") {
-                $scope.spSearch = "";
-            }
-            else {
-                $scope.spSearch = "";
-            }
+                var appList = [];
+                if(appointmentList.length == 0) {
+                    $scope.spAptNotAvailable = true;
+                }
+                else {
+                    $scope.spAptNotAvailable = false;
+                    angular.forEach(appointmentList, function(apt) {
+                        var flag = false;
+                        appList.push(
+                            {
+                                "city": apt.appointment.city,
+                                "refNo": apt.appointment.refno,
+                                "id": apt.appointment._id,
+                                "scheduledon": apt.appointment.starttime,
+                                "sdate" : moment(new Date(apt.appointment.starttime * 1000)).format("YYYY-MM-DD hh:mm A"),
+                                "custid": apt.appointment.custid,
+                                "customername": apt.customer.name,
+                                "customercontact": apt.customer.phone,
+                                "status": appointmentStateMap[apt.appointment.state],
+                                "servicelocation": apt.appointment.clinic_name,
+                                "isInsufficientWallet":apt.appointment.isInsufficientWallet
+                            }
+                        );
+                    });
+                }
+
+                $scope.spAppointmentList = appList;
+
+                console.log($scope.spAppointmentList);
+
+                if($scope.spApts.time == "past") {
+                    $scope.spSearch = "";
+                }
+                else {
+                    $scope.spSearch = "";
+                }
+
+            })
+            .error(function(data, status, headers, config) {
+                console.log("Failed to fetch insufficientWallet appts!!!");
+            });
         })
         .error(function(data, status, headers, config) {
             $scope.clscolor = "red";
@@ -854,9 +890,26 @@ angular.module('myApp.controllers')
             } else {
                 console.log("error");
             }
-            $scope.custAptHistory = appointmentHistory;
 
-            //alert($scope.apptClinicId);
+            var appointmentList = [];
+            angular.forEach(appointmentHistory, function(appt) {   
+                var flag = false;       
+                angular.forEach($scope.apptInsufficientWalletList, function(rec) {
+                     if(appt.refno == rec.refno){
+                        flag = true;
+                     }
+                });
+                if(flag == true){
+                    appt.isInsufficientWallet = true;
+                }else{
+                    appt.isInsufficientWallet = false;
+                }
+                appointmentList.push(appt);
+            });
+            appointmentHistory = appointmentList;
+
+
+            $scope.custAptHistory = appointmentHistory;
 
             var curr_session;
             if(data.payload.customer.use_sessions){
@@ -1604,6 +1657,8 @@ angular.module('myApp.controllers')
 
     $scope.addPaymentMode = function() {
 
+        $scope.totalPayment = $scope.apptWalletAmnt + $scope.apptPayAsGoAmnt + $scope.productServiceAddlTotal;
+
         if($scope.fromWallet == false && $scope.fromPayAsGo == true){
            $scope.aptPayment.type = $scope.aptPayment.payAsGoType; 
            $scope.aptPayment.amnt = $scope.apptPayAsGoAmnt ;
@@ -2028,12 +2083,12 @@ angular.module('myApp.controllers')
                 isconverted:$scope.aptPayment.isConverted
             }
 
-            ngDialog.openConfirm({
+           /* ngDialog.openConfirm({
                 template: 'AptCompleteTemplate',
                 showClose:false,
                 scope: $scope 
             }).then(function(value)
-            {  
+            {  */
                 spApi.markAppointmentComplete(data)
                 .success(function(data, status, headers, config){
                     alert("Appointment marked complete successfully");
@@ -2087,10 +2142,10 @@ angular.module('myApp.controllers')
                     $scope.checkSessionTimeout(data);
                 })
 
-            },
+           /* },
             function(value) {
                 console.log("Fail To Complete Appointment!");
-            });
+            });*/
 
 
      //   }
@@ -2230,6 +2285,7 @@ angular.module('myApp.controllers')
         $scope.aptPayment.isConverted = null;
         $scope.apptPayAsGoAmnt = 0;
         $scope.apptWalletAmnt = 0;
+        $scope.totalPayment = 0;
 
 
         if($scope.custReadList.custwallet.walletbalance > 0){
@@ -2250,6 +2306,10 @@ angular.module('myApp.controllers')
         if($scope.fromWallet == true && $scope.fromPayAsGo == false && ($scope.apptWalletAmnt + $scope.productServiceAddlTotal > $scope.custReadList.custwallet.walletbalance)){
             $scope.fromPayAsGo = true;
             $scope.apptPayAsGoAmnt = ($scope.apptWalletAmnt + $scope.productServiceAddlTotal) - $scope.custReadList.custwallet.walletbalance; 
+        }
+
+        if($scope.custReadList.custwallet.walletbalance >= ($scope.AptAmount+$scope.productServiceAddlTotal)){
+            $scope.productServiceCost = $scope.productServiceAddlTotal;
         }
 
         spApi.getCustomerDetails($scope.adminNewAppointmentCust.appointment.patientid)

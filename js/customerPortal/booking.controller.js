@@ -73,8 +73,11 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 		clinic_id: '',
 		clinicPrice: '',
 		clinicAddress: '',
-		clinicName:''
+		clinicName:'',
+		
 	};
+
+
 	
 	var localVariables = {
 		bookNowobj: {},
@@ -96,6 +99,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 		discount: ''
 	};
 	vm.problemNameVar = "";
+
+	vm.problemSelectedVar = "";
 
 	$scope.locationArray = [];
 
@@ -148,8 +153,10 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 			vm.model.selectedLocation = localVariables.bookNowobj.location;
 			vm.model.timeslotArray = localVariables.bookNowobj.timeslotArray;
 			vm.model.timeslot = localVariables.bookNowobj.timeslot;
-			vm.model.fromDate = localVariables.bookNowobj.date.format('YYYYMMDD');
+			//vm.model.fromDate = localVariables.bookNowobj.date.format('YYYYMMDD');
+			vm.model.fromDate = moment().format('YYYYMMDD');
 			localVariables.cityId = localVariables.bookNowobj.cityid;
+			//vm.model.selectedDate = localVariables.bookNowobj.date;
 			vm.model.clinic_id = localVariables.bookNowobj.clinic_id;
 
 			vm.model.clinicPrice = localVariables.bookNowobj.apptCost;
@@ -160,6 +167,12 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 			if(vm.model.clinic_id != undefined){
 				vm.custInfoFormFields.address = vm.model.clinicAddress;
 			}
+
+			
+			setTimeout(function() { // let the above script run, then replace doc.write
+	            $('#booking1-dt').val(moment().format('DD-MM-YYYY'));
+
+	        }, 100)
 
 			
 		}
@@ -184,7 +197,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 
 		/*set array of enabled dates*/
 		//vm.model.fromMonthDate = moment(new Date()).format("YYYYMM");
-		vm.model.fromMonthDate = localVariables.bookNowobj.date.format('YYYYMM');
+		//vm.model.fromMonthDate = localVariables.bookNowobj.date.format('YYYYMM');
+		vm.model.fromMonthDate = moment().format('YYYYMM');
 		$("#booking1-dt").data("DateTimePicker").enabledDates(localVariables.bookNowobj.datesEnabled);
 
 		/* Event called when month is changed */
@@ -267,7 +281,17 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 							}
 	            			var timeformat = hours + ":" + mins + " " + period;
 	            			vm.model.timeslotArray.push({starttime: timeformat});
+
 	            		});
+
+	            		var selectedDate = $('#booking1-dt').val();
+	            		var currentDate = moment().format('DD-MM-YYYY');
+	            		console.log(selectedDate);
+	            		console.log(currentDate);
+
+	            		if(selectedDate == currentDate){
+	            			console.log("in.........");
+	            		}
 	            	}).
 	            	error(function (data, status, header, config) {
 	            		console.log("Error in retrieving available slots");
@@ -359,7 +383,17 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 							}
 	            			var timeformat = hours + ":" + mins + " " + period;
 	            			vm.model.timeslotArray.push({starttime: timeformat});
+
 	            		});
+
+	            		var selectedDate = $('#booking1-dt').val();
+	            		var currentDate = moment().format('DD-MM-YYYY');
+	            		console.log(selectedDate);
+	            		console.log(currentDate);
+
+	            		if(selectedDate == currentDate){
+	            			console.log("in.........");
+	            		}
 	            	}).
 	            	error(function (data, status, header, config) {
 	            		console.log("Error in retrieving available slots");
@@ -428,7 +462,9 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 				day = p.substring(6,8);
 				date = yr + '/' + month + '/' + day;
 				enableDatesArray.push(new Date(date));
-			});				
+			});
+
+			$scope.enableDatesArray = enableDatesArray;			
 			/*$("#booking1-dt").data("DateTimePicker").enabledDates(enableDatesArray);*/
 			if(enableDatesArray.length != 0) {
 				vm.flags.datesNotAvailable = false;
@@ -451,6 +487,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
             		console.log(data);
             		vm.model.timeslotArray = [];
             		/* format time slot into hr:min am/pm */
+            		var selectedDate = $('#booking1-dt').val();
+            		var currentDate = moment().format('DD-MM-YYYY');
             		data.payload.appointmentslots.forEach(function(item) {
             			var hours = item.st.substring(0,2);
             			var mins = item.st.substring(2,4);
@@ -466,9 +504,16 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 						} else if(hours == 12) {
 							period = "PM";
 						}
+
             			var timeformat = hours + ":" + mins + " " + period;
             			vm.model.timeslotArray.push({starttime: timeformat});
             		});
+
+            		if(selectedDate == currentDate){
+            			var currentHr = moment().format('h');
+            			console.log(currentHr);
+            		}
+            		
             	}).
             	error(function (data, status, header, config) {
             		console.log("Error in retrieving available slots");
@@ -536,6 +581,21 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 		
 		localVariables.bookNowobj.problemName = "";
 
+		var obj = {
+			location: vm.model.selectedLocation,
+			date: vm.model.selectedDate,
+			datesEnabled: $scope.enableDatesArray,
+			timeslot: vm.model.timeslot,
+			timeslotArray: vm.model.timeslotArray,
+			apptCost:vm.model.apptCost,
+			cityid:localVariables.cityId
+		};
+		custportalGetSetService.setBooknowObj(obj);
+
+		vm.problemSelectedVar = vm.model.problemName;
+		$cookies.put('problem', vm.problemSelectedVar);   
+
+
 		if(vm.model.selectedLocation != 'Choose Location' && 
 		(vm.model.selectedDate != undefined || vm.model.selectedDate != "") &&
 		 (vm.model.timeslot != null)) {
@@ -548,6 +608,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 			} else {
 				custportalGetSetService.setProblem({selectedItemId: localVariables.selectedProblemId, otherProblem: vm.model.otherProblem});
 				localVariables.bookNowobj.problemName = vm.model.problemName;
+				console.log("IN:"+vm.problemSelectedVar);
 				$state.go('booking.booking2');
 			}
 		} else {
@@ -557,6 +618,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 			vm.model.bookingErrorMessageContainer = 'Please fill the Booking Details in the top panel to proceed.';
 			$timeout(function () { vm.flags.bookingErrorContainer = false; vm.flags.innerPageBookNowError = false; }, 5000);
 		}
+
 				
 	}
 
@@ -653,6 +715,11 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 	* Validating customer Information form
     */
     function bookNewAppointment() {
+    	//console.log("Model");
+    	var problem = $cookies.get('problem');
+    	//console.log(problem);
+
+
     	var google_conversion_id = "";
         var google_conversion_language = "";
         var google_conversion_format = "";
@@ -699,7 +766,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 	    		var apptstarttime = moment(fromCurrentDate).format("YYYY-MM-DD hh:mm A");
 
 	    		/* Customer information object for taking new appointment */
-
+	    		//alert(vm.model.problemName);
+	    		//alert(localVariables.bookNowobj.problemName);
 	    		if(vm.model.clinic_id == undefined){
 	    			if(vm.promoobj.promocodeid == '' || vm.promoobj.promocodeid == null) {
 		    			var apptObj = {
@@ -710,7 +778,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 								"email": vm.custInfoFormFields.email,
 								"pincode": vm.model.selectedLocation.pincodeid,
 								"address": vm.custInfoFormFields.address,
-								"problem": vm.model.problemName,
+								//"problem": vm.model.problemName,
+								"problem": problem,
 								"gender": vm.custInfoFormFields.gender,
 								"signMeUp": vm.custInfoFormFields.signup,
 								"is_package_assign":false,
@@ -736,7 +805,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 								"email": vm.custInfoFormFields.email,
 								"pincode": vm.model.selectedLocation.pincodeid,
 								"address": vm.custInfoFormFields.address,
-								"problem": vm.model.problemName,
+								//"problem": vm.model.problemName,
+								"problem": problem,
 								"gender": vm.custInfoFormFields.gender,
 								"signMeUp": vm.custInfoFormFields.signup,
 								"is_package_assign":false,
@@ -767,7 +837,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 								"email": vm.custInfoFormFields.email,
 								"pincode": vm.model.selectedLocation.pincodeid,
 								"address": vm.custInfoFormFields.address,
-								"problem": vm.model.problemName,
+								//"problem": vm.model.problemName,
+								"problem": problem,
 								"gender": vm.custInfoFormFields.gender,
 								"signMeUp": vm.custInfoFormFields.signup,
 								"is_package_assign":false,
@@ -794,7 +865,8 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 								"email": vm.custInfoFormFields.email,
 								"pincode": vm.model.selectedLocation.pincodeid,
 								"address": vm.custInfoFormFields.address,
-								"problem": vm.model.problemName,
+								//"problem": vm.model.problemName,
+								"problem": problem,
 								"gender": vm.custInfoFormFields.gender,
 								"signMeUp": vm.custInfoFormFields.signup,
 								"is_package_assign":false,

@@ -233,6 +233,10 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         return $http.post(baseUrl + "/hrest/v1/admin/addServicesProductsTrans?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2&patientid="+ patientid + "&spid="+ spid , dataObj);
     }
 
+    spApi.fetchInsufficientWalletAppts = function(spid) {
+        return $http.get(baseUrl + "/hrest/v1/appt/fetchInsufficientWalletAppts?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2&spid=" + spid);
+    };
+
 
 	return spApi;
 }]);

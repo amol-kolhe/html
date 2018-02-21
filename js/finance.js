@@ -475,6 +475,7 @@ angular.module('myApp.controllers')
 					"paytm_amount" : $scope.financeMgmt.paytm_amount,
 					"healyos_receipt_number" : $scope.financeMgmt.healyos_receipt_number,
 					"createdById":financeApi.getFinanceid(),
+					"walletTransFlag":rec.walletTransFlag
 				}
 
 				financeApi.updateCollection(rec._id, dataObj)

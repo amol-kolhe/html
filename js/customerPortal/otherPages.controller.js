@@ -402,7 +402,7 @@ function innerPageController($timeout, $http, custApi, $cookies, $scope, $state,
 			fbq('track', 'InitiateCheckout');
 		} catch(err) {}
 			
-		if(vm.model.selectedLocation != 'Choose Location' && 
+		/*if(vm.model.selectedLocation != 'Choose Location' && 
 			(vm.model.selectedDate != undefined || vm.model.selectedDate != "") &&
 			 (vm.model.timeslot != "Select Time")) {
 			var obj = {
@@ -412,14 +412,13 @@ function innerPageController($timeout, $http, custApi, $cookies, $scope, $state,
 				timeslot: vm.model.timeslot,
 				timeslotArray: vm.model.timeslotArray,
 				cityid: vm.cityId,
-				//apptCost: vm.model.apptCost
 				apptCost:vm.zonePrice
 			};
-			/* 
-			* Set the master controller flag to true
-			* It indicates the booking details are filled and navigate to the desired location.
-			* On loading the booking pages, checkHomeDataFilled() is excecuted to check this flag. 
-			*/
+			
+			//* Set the master controller flag to true
+			//* It indicates the booking details are filled and navigate to the desired location.
+			//* On loading the booking pages, checkHomeDataFilled() is excecuted to check this flag. 
+			
 			$scope.$parent.cpc.flags.booknowSectionfieldsValid = true;
 			$cookies.put('booking_session', 'in_progress', { path: "/"});
 			custportalGetSetService.setBooknowObj(obj);
@@ -429,7 +428,24 @@ function innerPageController($timeout, $http, custApi, $cookies, $scope, $state,
 			$scope.$parent.cpc.flags.bookNowError = true;
 			$timeout(function () { $scope.$parent.cpc.flags.bookNowError = false; }, 5000);
 			//alert("Please fill the Booking Details to proceed.");
-		}
+		}*/
+
+		var city = $cookies.get('selectedCity'); 
+		var obj = {
+			location: vm.model.selectedLocation,
+			date: vm.model.selectedDate,
+			datesEnabled: localVariables.enableDatesArray,
+			timeslot: vm.model.timeslot,
+			timeslotArray: vm.model.timeslotArray,
+			//cityid: vm.cityId,
+			cityid: city,
+			apptCost:vm.zonePrice
+		};
+		$scope.$parent.cpc.flags.booknowSectionfieldsValid = true;
+		$cookies.put('booking_session', 'in_progress', { path: "/"});
+		custportalGetSetService.setBooknowObj(obj);
+		//console.log(city);
+		$state.go('booking1');
 	}
 
 	/*

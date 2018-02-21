@@ -110,7 +110,9 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 			{title: 'Policy Management', url: 'policyManagement.html', clsclass: 'clsgray'},
 			{title: 'Cancel Actionables', url: 'cancel_actionables.html', clsclass: 'clsgray'},
 			{title: 'PRBM Form', url: 'prbm_form.html', clsclass: 'clsgray'},		
-			{title: 'Services/Products Management', url: 'servicesProducts.html', clsclass: 'clsgray'},	
+			{title: 'Services/Products Management', url: 'servicesProducts.html', clsclass: 'clsgray'},
+			{title: 'Appointment Pending', url: 'appointmentBookingPending.html', clsclass: 'clsgray'},
+
 			//{title: "Appt. Analysis Report", url: 'appointmentAnalysisReport.html'},
 			//{title: "Cancellation Report", url: 'cancellationReport.html'},
 			//{title: "New Patient Report", url: 'newPatientConversionReport.html'}

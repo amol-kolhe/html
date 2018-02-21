@@ -169,6 +169,13 @@
 			state('privacypolicy', {
 				url: '/privacypolicy',
 				templateUrl: './CustPortal/other_pages/privacy_policy.html'
+			}).
+			state('zumba', {
+				url: '/physiotherpay-zumba',
+				templateUrl: './CustPortal/other_pages/zumba.html',
+				controller: "innerPageController",
+				controllerAs: "innerPageCtrl"
+
 			});
 
 		$urlRouterprovider.otherwise('/');

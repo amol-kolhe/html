@@ -1,0 +1,72 @@
+<div ng-controller="AdminCtrl" data-ng-init="getPendingApptCustList();">
+    <div ng-show="actionableAppt.mode == 'listing'">
+        <div class="actionableHeader">
+            <span>Appointment Booking Pending</span>
+            <span class="pull-right clickable glyphicon glyphicon-refresh" title="Refresh the actionable items" ng-click="getPendingApptCustList()"></span>
+        </div>
+        <div class="table-responsive" style="overflow-x:auto">
+            <table class="table table-striped table-hover table-condensed">
+                <thead>
+                    <tr>
+                       
+                        <th ng-click="sort2('physioName')">Physio
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='physioName'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
+
+                        <th ng-click="sort2('customerName')">Customer
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='customerName'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
+
+                        <th ng-click="sort2('packageCode')">Package code
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='packageCode'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
+                        <th ng-click="sort2('lastApptDate')">Last Appt. Date
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='lastApptDate'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>
+                       <!-- <th ng-click="sort2('dayDiff')">Day Diff.
+                            <span class="glyphicon sort-icon" ng-show="sorting.by=='dayDiff'" ng-class="{'glyphicon-chevron-up':sorting.reverse,'glyphicon-chevron-down':!sorting.reverse}"></span>
+                        </th>  -->                   
+                    </tr>
+
+                    <tr>
+                        <td> <input type="text" ng-model="search.physioName" style="width: 120px;"> </td>
+                        <td> <input type="text" ng-model="search.customerName" style="width: 120px;"> </td>
+                        <td> <input type="text" ng-model="search.packageCode" style="width: 120px;"> </td>
+                        <td> <input type="text" ng-model="search.lastDate" style="width: 120px;"> </td>
+                        <!--<td> <input type="text" ng-model="search.dayDiff" style="width: 120px;"> </td>-->
+                
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr dir-paginate="rec in pendingApptCustList|orderBy:sorting.by:sorting.reverse|filter:search|itemsPerPage:10"
+                        pagination-id="pageId">
+                     
+                        <td>                 
+                            {{rec.physioName}}                 
+                        </td>
+                        <td>  
+                            {{rec.customerName}}                            
+                        </td>
+                        <td>                        
+                            {{rec.packageCode}}                          
+                        </td>
+                         <td>                        
+                             {{rec.lastDate}}                          
+                        </td>
+                        <!--<td>
+                            {{rec.dayDiff}}                        
+                        </td>-->
+                   
+                    </tr>
+                </tbody>
+            </table>
+            <dir-pagination-controls
+                max-size="5"
+                pagination-id="pageId"
+                direction-links="true"
+                boundary-links="true" >
+            </dir-pagination-controls>
+        </div>
+    </div>
+
+</div>

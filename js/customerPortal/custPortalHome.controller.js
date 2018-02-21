@@ -334,7 +334,7 @@
 			} catch(err) {}
 			
 			/*vm.fromDt = $('.dt1').val();*/
-			if(vm.selectedLocation != 'Choose Location' && 
+			/*if(vm.selectedLocation != 'Choose Location' && 
 				(vm.selectedDate != undefined || vm.selectedDate != "") &&
 				 (vm.timeslot != "Select Time")) {
 				var obj = {
@@ -358,7 +358,24 @@
 				vm.flags.bookNowError = true;
 				$timeout(function () { vm.flags.bookNowError = false; }, 5000);
 				//alert("Please fill the Booking Details to proceed.");
-			}
+			}*/
+
+			var obj = {
+				location: vm.selectedLocation,
+				date: vm.selectedDate,
+				datesEnabled: enableDatesArray,
+				timeslot: vm.timeslot,
+				timeslotArray: vm.timeslotArray,
+				//cityid: cache.cityToIdMap["Pune"],
+				cityid: $scope.activeCityId,
+				//apptCost: vm.apptCost
+				apptCost:vm.zonePrice
+			};
+
+			vm.flags.booknowSectionfieldsValid = true;
+			custportalGetSetService.setBooknowObj(obj);
+			$cookies.put('booking_session', 'in_progress', { path: "/"});
+			$state.go('booking1');
 		}
 
 
@@ -1056,6 +1073,7 @@
 					$scope.arrayActiveCity.push(item);
 					if(item.city_name==vm.city){
 						$scope.activeCityId = item._id;
+						$cookies.put('selectedCity', $scope.activeCityId);
 						vm.activeCity = $scope.activeCityId;
 						
 						//custApi.getZones(vm.activeCity)

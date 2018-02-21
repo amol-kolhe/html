@@ -425,10 +425,11 @@
                                 </thead>
                                 <tbody>
                                 <tr dir-paginate="apt in custAptHistory|orderBy:sortKey:!reverse|filter:search|itemsPerPage:10"
-                                    pagination-id="custAptHistoryId">
+                                    pagination-id="custAptHistoryId" ng-style="apt.isInsufficientWallet 
+                                    && {'color':'red'}">
                                     <td>{{apt.starttime * 1000 | date:'yyyy-MM-dd hh:mm a'}}</td>
                                     <td>
-                                        <code><a href="#" ng-click="showAppointment(apt, 'customer')" title="Show Appointment Details">{{apt.refno}}</a></code>
+                                        <code><a href="#" ng-click="showAppointment(apt, 'customer')" title="Show Appointment Details" ng-style="apt.isInsufficientWallet && {'color':'red'}">{{apt.refno}}</a></code>
                                     </td>
                                     <td>{{apt.zone}}</td>
                                     <td>{{apt.spname}}</td>

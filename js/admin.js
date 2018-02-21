@@ -1114,6 +1114,18 @@ angular.module('myApp.controllers')
 		}
 	}
 
+	$scope.getPendingApptCustList = function() {
+		adminApi.getPendingApptCustList()
+		.success(function(data, status, headers, config) {
+			$scope.pendingApptCustList = [];
+			$scope.pendingApptCustList = data.payload;
+			//console.log($scope.pendingApptCustList);
+		})
+		.error(function(data, status, headers, config) {
+			$scope.checkSessionTimeout(data);
+		});
+	}
+
 	$scope.fncustSearch = function() {
 		var items = $scope.custSearch;
 		$scope.custSearchList = false;
@@ -5030,6 +5042,8 @@ angular.module('myApp.controllers')
 
 	$scope.addPaymentMode = function() {
 
+		$scope.totalPayment = $scope.apptWalletAmnt + $scope.apptPayAsGoAmnt + $scope.productServiceAddlTotal;
+
 		if($scope.fromWallet == false && $scope.fromPayAsGo == true){
            $scope.aptPayment.type = $scope.aptPayment.payAsGoType; 
            $scope.aptPayment.amnt = $scope.apptPayAsGoAmnt ;
@@ -5273,12 +5287,12 @@ angular.module('myApp.controllers')
 
 				}
 
-			ngDialog.openConfirm({
+			/*ngDialog.openConfirm({
                 template: 'AptCompleteTemplate',
                 showClose:false,
                 scope: $scope 
             }).then(function(value)
-            {
+            {*/
 
 				adminApi.markAppointmentComplete(data)
 				.success(function(data, status, headers, config){
@@ -5341,10 +5355,10 @@ angular.module('myApp.controllers')
 					$scope.checkSessionTimeout(data);
 				})
 
-			},
+			/*},
             function(value) {
                 console.log("Fail To Complete Appointment!");
-            });
+            });*/
 
 
         //}
@@ -5456,6 +5470,7 @@ angular.module('myApp.controllers')
         $scope.aptPayment.isConverted = null;
         $scope.apptPayAsGoAmnt = 0;
         $scope.apptWalletAmnt = 0;
+        $scope.totalPayment = 0;
 
         if($scope.adminNewAppointmentCust.customer.custwallet.walletbalance > 0){
             $scope.fromWallet = true;
@@ -5476,6 +5491,10 @@ angular.module('myApp.controllers')
         if($scope.fromWallet == true && $scope.fromPayAsGo == false && ($scope.apptWalletAmnt + $scope.productServiceAddlTotal > $scope.adminNewAppointmentCust.customer.custwallet.walletbalance)){
             $scope.fromPayAsGo = true;
             $scope.apptPayAsGoAmnt = ($scope.apptWalletAmnt + $scope.productServiceAddlTotal) - $scope.adminNewAppointmentCust.customer.custwallet.walletbalance; 
+        }
+
+        if($scope.adminNewAppointmentCust.customer.custwallet.walletbalance >= ($scope.AptAmount+$scope.productServiceAddlTotal)){
+            $scope.productServiceCost = $scope.productServiceAddlTotal;
         }
 
         adminApi.getCustomerDetails($scope.adminNewAppointmentCust.appointment.patientid)

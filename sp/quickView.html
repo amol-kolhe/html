@@ -206,7 +206,7 @@
                         <label>Amount paid from wallet:</label>
                     </div>
                     <div class="col-xs-4">
-                        <span ng-if="custReadList.custwallet.currency.toLowerCase() == 'inr'">&#8377; </span>{{apptWalletAmnt}}
+                        <span ng-if="custReadList.custwallet.currency.toLowerCase() == 'inr'">&#8377; </span>{{apptWalletAmnt + productServiceCost}}
                     </div>
                 </div> 
 
@@ -385,18 +385,18 @@
                         <td style="display:none;"> <input style="width: 120px;" type="text" ng-model="spSearch.sdate"> </td>
                     </tr>
                         <tr dir-paginate="item in spAppointmentList|orderBy:sortKey:!reverse|filter:spSearch|itemsPerPage:10"
-                            pagination-id="spApptListId">
+                            pagination-id="spApptListId" ng-style="item.isInsufficientWallet && {'color':'red'}">
                             <td>{{item.city}}</td>
                            <!-- <td>{{item.scheduledon * 1000 | date:'yyyy-MM-dd hh:mm a'}}</td> -->
                             <td>{{item.sdate}}</td>
                             <td>
-                                <code><a href="#" ng-click="showAppointment(item, 'appointment')" title="Show Appointment Details">{{item.refNo}}</a></code>
+                                <code><a href="#" ng-click="showAppointment(item, 'appointment')" title="Show Appointment Details" ng-style="item.isInsufficientWallet && {'color':'red'}">{{item.refNo}}</a></code>
                             </td>
                             <td>
-                                <a href="#" ng-click="showCustomer(item)" title="Show Customer Details">{{item.customername}}</a>
+                                <a href="#" ng-click="showCustomer(item)" title="Show Customer Details" ng-style="item.isInsufficientWallet && {'color':'red'}">{{item.customername}}</a>
                             </td>
                             <td>{{item.servicelocation}}</td>
-                            <td><a ng-href="tel:{{item.customercontact}}">{{item.customercontact}}</a></td>
+                            <td><a ng-href="tel:{{item.customercontact}}" ng-style="item.isInsufficientWallet && {'color':'red'}">{{item.customercontact}}</a></td>
                             <td>{{item.status}}</td>
                             <td style="display:none;">{{item.sdate}}</td>
                         </tr>
