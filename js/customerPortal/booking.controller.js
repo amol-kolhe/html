@@ -266,6 +266,9 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 	            		console.log("Slots:");
 	            		console.log(data);
 	            		vm.model.timeslotArray = [];
+	            		
+	            		var selectedDate = $('#booking1-dt').val();
+	            		var currentDate = moment().format('DD-MM-YYYY');
 	            		/* format time slot into hr:min am/pm */
 	            		data.payload.appointmentslots.forEach(function(item) {
 	            			var hours = item.st.substring(0,2);
@@ -280,18 +283,21 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 								period = "PM";
 							}
 	            			var timeformat = hours + ":" + mins + " " + period;
-	            			vm.model.timeslotArray.push({starttime: timeformat});
+	            			
+	            			if(selectedDate == currentDate){
+	            				var currentHour = moment().format('h');
+	            				var tempHour =  parseInt(currentHour) + 3;
+	            				if(parseInt(hours) > parseInt(tempHour)){
+	            					vm.model.timeslotArray.push({starttime: timeformat});
+	            				}
+	            				
+	            			}else{
+	            				vm.model.timeslotArray.push({starttime: timeformat});
+	            			}
 
 	            		});
 
-	            		var selectedDate = $('#booking1-dt').val();
-	            		var currentDate = moment().format('DD-MM-YYYY');
-	            		console.log(selectedDate);
-	            		console.log(currentDate);
-
-	            		if(selectedDate == currentDate){
-	            			console.log("in.........");
-	            		}
+	            		
 	            	}).
 	            	error(function (data, status, header, config) {
 	            		console.log("Error in retrieving available slots");
@@ -368,6 +374,9 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 	            		console.log("Slots:");
 	            		console.log(data);
 	            		vm.model.timeslotArray = [];
+
+	            		var selectedDate = $('#booking1-dt').val();
+	            		var currentDate = moment().format('DD-MM-YYYY');
 	            		/* format time slot into hr:min am/pm */
 	            		data.payload.appointmentslots.forEach(function(item) {
 	            			var hours = item.st.substring(0,2);
@@ -382,18 +391,21 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 								period = "PM";
 							}
 	            			var timeformat = hours + ":" + mins + " " + period;
-	            			vm.model.timeslotArray.push({starttime: timeformat});
+	            			
+	            			if(selectedDate == currentDate){
+	            				var currentHour = moment().format('h');
+	            				var tempHour =  parseInt(currentHour) + 3;
+	            				if(parseInt(hours) > parseInt(tempHour)){
+	            					vm.model.timeslotArray.push({starttime: timeformat});
+	            				}
+	            			}else{
+	            				vm.model.timeslotArray.push({starttime: timeformat});
+	            			}
 
 	            		});
 
-	            		var selectedDate = $('#booking1-dt').val();
-	            		var currentDate = moment().format('DD-MM-YYYY');
-	            		console.log(selectedDate);
-	            		console.log(currentDate);
 
-	            		if(selectedDate == currentDate){
-	            			console.log("in.........");
-	            		}
+	            		
 	            	}).
 	            	error(function (data, status, header, config) {
 	            		console.log("Error in retrieving available slots");
@@ -489,6 +501,7 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
             		/* format time slot into hr:min am/pm */
             		var selectedDate = $('#booking1-dt').val();
             		var currentDate = moment().format('DD-MM-YYYY');
+
             		data.payload.appointmentslots.forEach(function(item) {
             			var hours = item.st.substring(0,2);
             			var mins = item.st.substring(2,4);
@@ -506,13 +519,19 @@ function bookingController($timeout, $http, custApi, $cookies, $scope, $state, c
 						}
 
             			var timeformat = hours + ":" + mins + " " + period;
-            			vm.model.timeslotArray.push({starttime: timeformat});
+
+            			if(selectedDate == currentDate){
+            				var currentHour = moment().format('h');
+            				var tempHour =  parseInt(currentHour) + 3;
+            				if(parseInt(hours) > parseInt(tempHour)){
+            					vm.model.timeslotArray.push({starttime: timeformat});
+            				}
+            				
+            			}else{
+            				vm.model.timeslotArray.push({starttime: timeformat});
+            			}
             		});
 
-            		if(selectedDate == currentDate){
-            			var currentHr = moment().format('h');
-            			console.log(currentHr);
-            		}
             		
             	}).
             	error(function (data, status, header, config) {
