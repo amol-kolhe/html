@@ -82,6 +82,8 @@ angular.module('myApp.controllers')
 	$scope.financeMgmt.validDateRange = true;
 	$scope.financeMgmt.dateValid = true;
 	$scope.financeMgmt.spIdForWallet = "";
+	$scope.financeMgmt.is_incorrect = 0;
+	$scope.financeMgmt.incorrect_description = null;
 
 	$scope.from_date="";
 	$scope.till_date="";
@@ -357,6 +359,8 @@ angular.module('myApp.controllers')
 		$scope.financeMgmt.healyos_receipt_number = null;
 
 		$scope.financeMgmt.showCollectedForm = false;
+		$scope.financeMgmt.is_incorrect = 0;
+		$scope.financeMgmt.incorrect_description = null;
 	}
 
 	$scope.financeReverse = false;
@@ -475,7 +479,9 @@ angular.module('myApp.controllers')
 					"paytm_amount" : $scope.financeMgmt.paytm_amount,
 					"healyos_receipt_number" : $scope.financeMgmt.healyos_receipt_number,
 					"createdById":financeApi.getFinanceid(),
-					"walletTransFlag":rec.walletTransFlag
+					"walletTransFlag":rec.walletTransFlag,
+					"is_incorrect" : $scope.financeMgmt.is_incorrect,
+					"incorrect_description" : $scope.financeMgmt.incorrect_description,
 				}
 
 				financeApi.updateCollection(rec._id, dataObj)
@@ -956,6 +962,8 @@ angular.module('myApp.controllers')
 			$scope.financeMgmt.outstanding_amount = rec.outstanding_amount;
 			$scope.financeMgmt.outstanding_clear_time = rec.outstanding_clear_time;
 			$scope.financeMgmt.is_outstanding_clear = rec.is_outstanding_clear;
+			$scope.financeMgmt.is_incorrect = rec.is_incorrect;
+			$scope.financeMgmt.incorrect_description = rec.incorrect_description;
 		}
 	};
 

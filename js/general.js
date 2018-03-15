@@ -102,14 +102,14 @@ angular.module('myApp.controllers', ['ngCookies', 'ngDialog', 'myApp.timeDirecti
 			{title: 'Service Provider Management', url: 'spManagement.html', clsclass: 'clsgray'},
 			{title: 'Slot Management', url: 'slotManagement.html', clsclass: 'clsgray'},
 			{title: 'Promotional Code Management', url: 'promotionalCodeMgmt.html', clsclass: 'clsgray'},
-			{title: 'Cost Calculator', url: 'costcalculator.html', clsclass: 'clsgray'},
-			{title: 'Clinics Management', url: 'clinicManagement.html', clsclass: 'clsgray'},
+			//{title: 'Cost Calculator', url: 'costcalculator.html', clsclass: 'clsgray'},
+			//{title: 'Clinics Management', url: 'clinicManagement.html', clsclass: 'clsgray'},
 
 			//{title: 'City Management', url: 'cityManagement.html', clsclass: 'clsgray'},
 
 			{title: 'Policy Management', url: 'policyManagement.html', clsclass: 'clsgray'},
 			{title: 'Cancel Actionables', url: 'cancel_actionables.html', clsclass: 'clsgray'},
-			{title: 'PRBM Form', url: 'prbm_form.html', clsclass: 'clsgray'},		
+			//{title: 'PRBM Form', url: 'prbm_form.html', clsclass: 'clsgray'},		
 			{title: 'Services/Products Management', url: 'servicesProducts.html', clsclass: 'clsgray'},
 			{title: 'Appointment Pending', url: 'appointmentBookingPending.html', clsclass: 'clsgray'},
 
