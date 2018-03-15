@@ -438,7 +438,10 @@
 								<span style="word-break: break-word;">&#8377; {{rec.collected_amount|number}}</span>
 							</td>
 							<td style="text-align: center;">
+								<span style="display: inline-flex;">
+								<i ng-if="rec.is_incorrect" title="Incorrect Payment : {{rec.incorrect_description}}" class="healyos_tooltip fa fa-times-circle fa-2x" data-toggle="tooltip" data-placement="left" data-original-title="Incorrect Payment : {{rec.incorrect_description}}" style="margin-right: 5px;"></i> 
 								<i class="clickable fa fa-search-plus fa-2x" title="Collected Details" ng-click="financeMgmt.collectedForm(rec);"></i>
+							</span>
 							</td>
 						</tr>
 					</tbody>
@@ -673,6 +676,23 @@
 								Paytm : &#8377; {{financeMgmt.paytm_amount|number}} &nbsp;&nbsp;&nbsp;</p></span>
 								<span style="font-weight: bold">Total Amount You Are Collecting Is <p style="font-weight: bold;font-size: 20px">&#8377; {{(financeMgmt.cash_amount -- financeMgmt.cheque_amount -- financeMgmt.online_amount -- financeMgmt.paytm_amount|number)}}</p></span>
 								<span style="font-weight: bold">Outstanding Amount Is <p style="font-weight: bold;font-size: 20px">&#8377; {{financeMgmt.outstanding_amount|number}}</p></span>
+							</td>
+						</tr>
+						<tr>
+							<th style="background-color: #EAFAF1">
+								<span style="word-break: break-word;">Incorrect Transaction	</span>
+							</th>
+							<td colspan="3">
+								<span style="word-break: break-word;" ng-if="financeMgmt.is_incorrect">Yes</span>
+								<span style="word-break: break-word;" ng-if="!financeMgmt.is_incorrect">No</span>
+							</td>
+						</tr>
+						<tr ng-if="financeMgmt.is_incorrect">
+							<th style="background-color: #AFAFAF;text-align: right;vertical-align: middle;">
+								<span style="word-break: break-word;font-size: 13px;">Description</span>
+							</th>
+							<td colspan="3">
+								<span>{{financeMgmt.incorrect_description}}</span>
 							</td>
 						</tr>
 					</tbody>

@@ -421,7 +421,9 @@ angular.module('myApp.controllers')
 			$scope.financeMgmt.trans_date = rec.trans_date;
 			$scope.financeMgmt.trans_description = rec.trans_description;
 			$scope.financeMgmt.trans_mode = rec.trans_mode;
-			$scope.financeMgmt.trans_amount = rec.trans_amount;			
+			$scope.financeMgmt.trans_amount = rec.trans_amount;		
+			$scope.financeMgmt.is_incorrect = rec.is_incorrect;		
+			$scope.financeMgmt.incorrect_description = rec.incorrect_description;			
 		}
 
 		if(rec.trans_mode == 'Cash'){
