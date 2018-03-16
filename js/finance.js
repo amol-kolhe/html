@@ -382,6 +382,7 @@ angular.module('myApp.controllers')
 		financeApi.getCollection().
 		success(function (data, status, headers, config) {
 			var arrStoreTrue = [];
+			$scope.financeMgmt.arrayCollection = [];//Added for Bug 4617
 			var arrStoreTrue = data.payload;
 			console.log("successfully received collections request.");
 			arrStoreTrue.forEach(function(item) {
@@ -401,7 +402,7 @@ angular.module('myApp.controllers')
 				
 			});
 
-			console.log($scope.financeMgmt.arrayCollection);
+			//console.log($scope.financeMgmt.arrayCollection);
 		}).
 		error(function (data, status, headers, config) {
 			console.log("Error in receiving package cancellation request.");
@@ -512,6 +513,7 @@ angular.module('myApp.controllers')
 		financeApi.getCollected().
 		success(function (data, status, headers, config) {
 			var arrStoreTrue = [];
+			$scope.financeMgmt.arrayCollected = [];//Added For Bug 4617
 			var arrStoreTrue = data.payload;
 			console.log("successfully received collected request.");
 			arrStoreTrue.forEach(function(item) {
@@ -764,7 +766,7 @@ angular.module('myApp.controllers')
 			.success(function(data, status, headers, config){
 				$scope.appointmentsList = buildAppointmentsList(data.payload);
 
-				console.log($scope.appointmentsList);
+				//console.log($scope.appointmentsList);
 
 				$scope.initRevenueGrigOptions(from_date,to_date);
 				$scope.revenueGridOptions.data = $scope.appointmentsList;
@@ -797,7 +799,7 @@ angular.module('myApp.controllers')
 		arrayWalletDataTemp = $scope.financeMgmt.arrayWalletDataTrans;
 		$scope.financeMgmt.currentDateWallet = toDateWallet;
 
-		console.log(arrayWalletDataTemp);
+		//console.log(arrayWalletDataTemp);
 
 		$scope.financeMgmt.arrayWalletData = [];
 
@@ -827,7 +829,7 @@ angular.module('myApp.controllers')
 			}
 		});
 
-		console.log($scope.financeMgmt.arrayWalletData);
+		//console.log($scope.financeMgmt.arrayWalletData);
 
     }
 
