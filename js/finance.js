@@ -3,7 +3,12 @@ angular.module('myApp.controllers')
 	$scope.financeInfoBarForm = {};
 	$scope.financeEmail = "";
 	$scope.financeName = "";
-	
+	/* Added for Bug 4615 : Finance collection - Auto refresh on particular time frequency.*/
+	$scope.autoRefreshTimeFrequency=1800000;;//30min	
+	$interval( function(){ $scope.financeMgmt.getCollection(); }, $scope.autoRefreshTimeFrequency);
+	$interval( function(){ $scope.financeMgmt.getFinance(); }, $scope.autoRefreshTimeFrequency);
+	$interval( function(){ $scope.financeMgmt.getCollected(); }, $scope.autoRefreshTimeFrequency);
+	$interval( function(){ $scope.financeMgmt.fetchPatientWithWallet(); }, $scope.autoRefreshTimeFrequency);
 
 	$scope.initFinanceInfo = function() {
 		if(($cookies.get('u_email') != undefined)) {
