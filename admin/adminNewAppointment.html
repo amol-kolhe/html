@@ -195,7 +195,7 @@
                     </div>
                 </div>
                 <div style="float: right;">
-                   <button ng-click="showNext('serviceProvider'); getMonthlyAppointmentAvailabilityCheck(adminNewAppointmentCust.pincode, adminNewAppointmentCust.zone);getClinicSps(adminNewAppointmentCust.serviceLocation)"
+                   <button ng-click="showNext('serviceProvider');getClinicSps(adminNewAppointmentCust.serviceLocation)"
                             class="btn btn-default"
                             type="button"
                             ng-disabled="!(!!users1.city && !!users1.name && !!users1.contactNo && !!users1.email && !!adminNewAppointmentCust.Problem && !!adminNewAppointmentCust.gender)">
@@ -209,19 +209,8 @@
 
             <div ng:show="serviceProvider" id="serviceProvider" style="padding: 10px;">
                 <div id="divSP" style="min-height: 275px; position:relative;">
-                    <table border="0" width="100%">
-                        <tr>
-                            <td>
-                                <label class="selectsp">
-                                    <input type="checkbox" 
-                                        name="selectsp" 
-                                        ng-model="adminNewAppointmentCust.selectSp"
-                                        ng-change="selectSpChanged(adminNewAppointmentCust.selectSp)">
-                                    Let me choose the physio manually
-                                </label>
-                            </td>
-                        </tr>
-                        <tr ng-if="adminNewAppointmentCust.selectSp == true">
+                    <table border="0" width="100%">                        
+                        <tr ng-init="selectSpChanged(adminNewAppointmentCust.selectSp)" >
                             <td>
                                 <div style="padding-bottom: 10px;" class="row-align">
                                     <div class="row">

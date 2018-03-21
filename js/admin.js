@@ -27,6 +27,7 @@ angular.module('myApp.controllers')
 		promocodeValid: '',
 		promocodeErrorMessage: ''
 	};
+	$scope.adminNewAppointmentCust.selectSp = true;
 
 	$scope.aptPayment = {		
 		currency : "INR",
