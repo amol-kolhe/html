@@ -59,7 +59,7 @@
                                      id = "quickAppointmentPatientCityId2"
                                      data-ng-class = "{red2: adminNewAppointmentForm.adminSignInForCust.patientCity.$invalid && adminNewAppointmentForm.adminSignInForCust.patientCity.$dirty}"
                                      title = "Select customer city"
-                                     data-ng-change="custPin(users1.city);getServiceLocation(users1.city)"
+                                     data-ng-change="custPin(users1.city)"
                                      ng-options="city._id as city.city_name for city in arrayActiveCity"
                                      data-ng-required = "true"
                                      data-ng-disabled = "users1.disableFlag">
@@ -81,8 +81,8 @@
                                 data-ng-class = "{red2: adminNewAppointmentForm.adminSignInForCust.patientServiceLocation.$invalid && adminNewAppointmentForm.adminSignInForCust.patientServiceLocation.$dirty}"
                                 title = "Select Service Location"
                                 data-ng-required = "true"
+                                data-ng-init="getServiceLocation(users1.city)"
                                 ng-options="clinic._id as clinic.clinic_name for clinic in clinicArrList">
-                                <option value="">Select Service Location</option>
                                 </select>
                                 <span style="color:red" data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientServiceLocation.$dirty && adminNewAppointmentForm.adminSignInForCust.patientServiceLocation.$invalid">
                                     <span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientServiceLocation.$error.required">Service location is required.</span>
@@ -175,8 +175,7 @@
                             </div>
                         </div>
                         <div class="row" style="margin-bottom: 5px;margin-top: 5px;">
-                            <div class="col-xs-12 col-sm-3 appointment-label" ng-show="adminNewAppointmentCust.serviceLocation == 0">Location</div>
-                            <div class="col-xs-12 col-sm-3 appointment-label" ng-hide="adminNewAppointmentCust.serviceLocation == 0">Customer Location</div>
+                            <div class="col-xs-12 col-sm-3 appointment-label">Location</div>
                             <div class="col-xs-12 col-sm-9">
                                 <span class="colonSeparatorRight hidden-xs">:</span>
                                 <select class="ac-select"

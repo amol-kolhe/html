@@ -2487,8 +2487,13 @@ angular.module('myApp.controllers')
     $scope.getServiceLocation = function(cityid){
 
         $scope.clinicArrList =[];
+        $scope.clinicArrList.push({
+			        _id : 0,
+			        clinic_name : 'Home'
+			    });
+        $scope.adminNewAppointmentCust.serviceLocation = $scope.clinicArrList[0]._id;
 
-    	adminApi.getClinics(cityid)
+    	/*adminApi.getClinics(cityid)
 		.success(function(data, status, headers, config) {
 			myJsonString = JSON.stringify(data);
 			var clinicObj = JSON.parse(myJsonString);
@@ -2518,7 +2523,7 @@ angular.module('myApp.controllers')
 		})
 		.error(function(data, status, headers, config) {
 			$scope.checkSessionTimeout(data);
-		});
+		})*/
     	
     }
 
@@ -6276,11 +6281,11 @@ angular.module('myApp.controllers')
 
 		$scope.cityBasedLocations =[];
 		$scope.cityBasedLocations.push({"_id":"0", "clinic_name":"Home"});
-		$scope.arrayAllActiveClinics.forEach(function(item) {
+		/*$scope.arrayAllActiveClinics.forEach(function(item) {
 			if(item.clinic_city == cityId){
 				$scope.cityBasedLocations.push(item);
 			}
-		});
+		});*/
 
 		$scope.getSps($scope.SpWrkHrs.spCity);
 
