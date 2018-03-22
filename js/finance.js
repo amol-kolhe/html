@@ -1,5 +1,5 @@
 angular.module('myApp.controllers')
-.controller('FinanceCtrl', function($scope, $http, $cookies, ngDialog, $animate, uiGridConstants, uiGridSelectionService, uiGridExporterService, $rootScope, financeApi, $timeout, $location, $interval){
+.controller('FinanceCtrl', function($scope, $http, $cookies, ngDialog, $animate, uiGridConstants, uiGridSelectionService, uiGridExporterService, $rootScope, financeApi, $timeout, $location, $interval,$filter){
 	$scope.financeInfoBarForm = {};
 	$scope.financeEmail = "";
 	$scope.financeName = "";
@@ -641,6 +641,7 @@ angular.module('myApp.controllers')
 			//console.log($scope.financeMgmt.arrayCollectedReport);
 			$scope.initGrigOptions(formatted_weekly_date_before,formatted_cur_date);
 			$scope.gridOptions.data = $scope.financeMgmt.arrayCollectedReport;
+			
 
 			//console.log("hi\n"+ $scope.gridOptions.data);
 		}).
@@ -684,9 +685,9 @@ angular.module('myApp.controllers')
 
 				console.log("successfully received collected request.");
 				arrStoreTrue.forEach(function(item) {
-					
-					item.trans_date = moment(new Date(item.actual_trans_date * 1000)).format("DD-MM-YYYY hh:mm A");
-					item.collected_date = moment(new Date(item.created_date * 1000)).format("DD-MM-YYYY hh:mm A");
+					//item.trans_date = item.actual_trans_date ;
+					item.trans_date = item.actual_trans_date;//moment(new Date(item.actual_trans_date * 1000)).format("YYYY-MM-DD hh:mm A");
+					item.collected_date = item.created_date;//moment(new Date(item.created_date * 1000)).format("DD-MM-YYYY hh:mm A");
 					item.trans_description = item.actual_trans_description;
 					item.trans_mode = item.actual_trans_mode;
 					item.trans_amount = item.actual_trans_amount;
@@ -725,6 +726,16 @@ angular.module('myApp.controllers')
 				//console.log($scope.financeMgmt.arrayCollectedReport);
 				$scope.initGrigOptions(from_date,to_date);
 				$scope.gridOptions.data = $scope.financeMgmt.arrayCollectedReport;
+				$scope.gridData = $scope.financeMgmt.arrayCollectedReport;		
+
+				 var postsLen = $scope.gridData.length;
+
+		        for(var i=0; i < postsLen; i++) {
+		        	$scope.gridData[i].actual_trans_date = $scope.gridData[i].trans_date;
+		        	$scope.gridData[i].trans_date = moment(new Date($scope.gridData[i].trans_date  * 1000)).format("DD-MM-YYYY hh:mm A");
+		        	$scope.gridData[i].actual_collected_date = $scope.gridData[i].collected_date;
+		        	$scope.gridData[i].collected_date = moment(new Date($scope.gridData[i].collected_date  * 1000)).format("DD-MM-YYYY hh:mm A");		     
+		        }		 
 
 				//console.log("hi\n"+ $scope.gridOptions.data);
 			}).
@@ -775,6 +786,7 @@ angular.module('myApp.controllers')
 
 				$scope.initRevenueGrigOptions(from_date,to_date);
 				$scope.revenueGridOptions.data = $scope.appointmentsList;
+				 
 				
 			})
 			.error(function(data, status, headers, config){
@@ -849,14 +861,21 @@ angular.module('myApp.controllers')
 		//alert(till_date);
 
 	    $scope.gridOptions = {
+	    	 data: 'gridData',
 		    columnDefs: [
 		      { field: 'customer_name' },
 		      //{ field: 'service_provider_name', visible: false},
 		      { field: 'service_provider_name' },
 		      { field: 'trans_description' },
 		      { field: 'trans_mode' },
-		      { field: 'trans_date' },
-		      { field: 'collected_date' },
+		      { field: 'actual_trans_date',
+		        displayName:'Trans Date',
+		        cellTemplate: "<span style='display:none'> {{row.entity.actual_trans_date}} </span> <span> {{row.entity.trans_date}}</span>"
+              },
+              { field: 'actual_collected_date',
+		        displayName:'Collected Date',
+		        cellTemplate: "<span style='display:none'> {{row.entity.actual_collected_date}} </span> <span> {{row.entity.collected_date}}</span>"
+              },
 		      { field: 'trans_amount' },
 		      { field: 'collected_amount' },
 		      { field: 'outstanding_amount' },
@@ -870,6 +889,24 @@ angular.module('myApp.controllers')
 		    exporterPdfTableStyle: {margin: [ 0, 0, 0, 0 ]},
 		    exporterPdfTableHeaderStyle: {fontSize: 10, bold: true, italics: true, color: 'red'},
 		    exporterPdfHeader: { text: "Collection Report", style: 'headerStyle' },
+		    exporterFieldCallback: function ( grid, row, col, value ){
+			              if (col.name === "actual_trans_date" || col.name === "actual_collected_date") {
+			              var wu_details = "";
+			              if(!angular.isUndefined(value)){
+            				wu_details = moment(new Date(value * 1000)).format("DD-MM-YYYY hh:mm A");
+            				value = wu_details;
+				            }
+				          else{
+					                value = value;
+				              }
+				              
+			            }
+			            else{
+			               value = value;
+			              
+			            }
+			  return value;
+			},
 		    exporterPdfFooter: function ( currentPage, pageCount ) {
 		      return { text: currentPage.toString() + ' of ' + pageCount.toString(), style: 'footerStyle' };
 		    },
