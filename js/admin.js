@@ -1979,7 +1979,7 @@ angular.module('myApp.controllers')
 			
 
 			if($scope.activeTab == "New Appointment") {
-				if($scope.adminNewAppointmentCust.selectSp == true && $scope.spNewAppointment.spNames != undefined && $scope.spNewAppointment.spNames != "") {
+				if($scope.spNewAppointment.spNames != undefined && $scope.spNewAppointment.spNames != "") {
 					url = url + "&spid=" + $scope.spNewAppointment.spNames;
 				}
 			}
@@ -2177,7 +2177,7 @@ angular.module('myApp.controllers')
 			var pincodeid = cache.pincodeToPincodeIdMap[$scope.adminNewAppointmentCust.pincode];
 			if($scope.activeTab == "New Appointment") {
 			
-				if($scope.adminNewAppointmentCust.selectSp == true && $scope.spNewAppointment.spNames != undefined && $scope.spNewAppointment.spNames != "") {
+				if($scope.spNewAppointment.spNames != undefined && $scope.spNewAppointment.spNames != "") {
 					$scope.getSpInfo($scope.adminNewAppointmentCust.zone, $scope.service, pincodeid, $scope.spNewAppointment.spNames);
 				} else {
 					$scope.getSpInfo($scope.adminNewAppointmentCust.zone, $scope.service, pincodeid);
