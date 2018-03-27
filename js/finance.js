@@ -3,12 +3,18 @@ angular.module('myApp.controllers')
 	$scope.financeInfoBarForm = {};
 	$scope.financeEmail = "";
 	$scope.financeName = "";
+	$scope.financeAutoRefresh = false;
 	/* Added for Bug 4615 : Finance collection - Auto refresh on particular time frequency.*/
-	$scope.autoRefreshTimeFrequency=1800000;;//30min	
+	$scope.autoRefreshTimeFrequency=3600000;//60min	
+	$interval( function(){ $scope.financeAutoRefreshSetting(); }, $scope.autoRefreshTimeFrequency);
 	$interval( function(){ $scope.financeMgmt.getCollection(); }, $scope.autoRefreshTimeFrequency);
 	$interval( function(){ $scope.financeMgmt.getFinance(); }, $scope.autoRefreshTimeFrequency);
 	$interval( function(){ $scope.financeMgmt.getCollected(); }, $scope.autoRefreshTimeFrequency);
 	$interval( function(){ $scope.financeMgmt.fetchPatientWithWallet(); }, $scope.autoRefreshTimeFrequency);
+
+	$scope.financeAutoRefreshSetting = function() {
+		$scope.financeAutoRefresh = true;
+	}
 
 	$scope.initFinanceInfo = function() {
 		if(($cookies.get('u_email') != undefined)) {
@@ -171,6 +177,7 @@ angular.module('myApp.controllers')
 	};
 
 	$scope.financeMgmt.showReviseRate = function(rec) {
+		$scope.financeAutoRefresh = false;
 		$scope.financeMgmt.InitFinanceParams();
 		ngDialog.openConfirm({
             template: 'ReviseRate',
@@ -236,6 +243,7 @@ angular.module('myApp.controllers')
 			                if(data.error == undefined && data.payload != undefined) {			                	
 			                    $scope.financeMgmt.custwallet = data.payload.custwallet;
 			                    $scope.financeMgmt.financeSuccessMsg = "Wallet updated successfully.";
+			                    $scope.financeAutoRefresh = false;
 			                    $scope.financeMgmt.InitFinanceParams();
 			                    $scope.financeMgmt.getFinance();
 			                }
@@ -329,43 +337,45 @@ angular.module('myApp.controllers')
      }
 
 	$scope.financeMgmt.InitFinanceParams = function(){
-		$scope.financeMgmt._id = null;
-		$scope.financeMgmt.customer_id = null;
-		$scope.financeMgmt.customer_name = null;
-		$scope.financeMgmt.service_provider_id = null;
-		$scope.financeMgmt.service_provider_name = null;
-		$scope.financeMgmt.package_code = null;
-		$scope.financeMgmt.no_of_sessions = null;
-		$scope.financeMgmt.package_rate = null;
-		$scope.financeMgmt.used_sessions = null;
-		$scope.financeMgmt.revise_amount = null;
-		$scope.financeMgmt.cost_difference = null;
-		$scope.financeMgmt.reviseRateDetails = false;
-		$scope.financeMgmt.financeErrorMsg = null;
+		if($scope.financeAutoRefresh!=true){
+			$scope.financeMgmt._id = null;
+			$scope.financeMgmt.customer_id = null;
+			$scope.financeMgmt.customer_name = null;
+			$scope.financeMgmt.service_provider_id = null;
+			$scope.financeMgmt.service_provider_name = null;
+			$scope.financeMgmt.package_code = null;
+			$scope.financeMgmt.no_of_sessions = null;
+			$scope.financeMgmt.package_rate = null;
+			$scope.financeMgmt.used_sessions = null;
+			$scope.financeMgmt.revise_amount = null;
+			$scope.financeMgmt.cost_difference = null;
+			$scope.financeMgmt.reviseRateDetails = false;
+			$scope.financeMgmt.financeErrorMsg = null;
 
-		$scope.financeMgmt.showCollectionForm = false;
-		$scope.financeMgmt.trans_date = null;
-		$scope.financeMgmt.trans_description = null;
-		$scope.financeMgmt.trans_mode = null;
-		$scope.financeMgmt.trans_amount = null;
-		$scope.financeMgmt.money_deposited_by_sp = null;
-		$scope.financeMgmt.is_cash = null;
-		$scope.financeMgmt.cash_amount = 0;
-		$scope.financeMgmt.is_cheque = null;
-		$scope.financeMgmt.cheque_number = null;
-		$scope.financeMgmt.cheque_bank_details = null;
-		$scope.financeMgmt.cheque_amount = 0;
-		$scope.financeMgmt.is_online = null;
-		$scope.financeMgmt.online_transaction_id = null;
-		$scope.financeMgmt.online_amount = 0;
-		$scope.financeMgmt.is_paytm = null;
-		$scope.financeMgmt.paytm_transaction_id = null;
-		$scope.financeMgmt.paytm_amount = 0;
-		$scope.financeMgmt.healyos_receipt_number = null;
+			$scope.financeMgmt.showCollectionForm = false;
+			$scope.financeMgmt.trans_date = null;
+			$scope.financeMgmt.trans_description = null;
+			$scope.financeMgmt.trans_mode = null;
+			$scope.financeMgmt.trans_amount = null;
+			$scope.financeMgmt.money_deposited_by_sp = null;
+			$scope.financeMgmt.is_cash = null;
+			$scope.financeMgmt.cash_amount = 0;
+			$scope.financeMgmt.is_cheque = null;
+			$scope.financeMgmt.cheque_number = null;
+			$scope.financeMgmt.cheque_bank_details = null;
+			$scope.financeMgmt.cheque_amount = 0;
+			$scope.financeMgmt.is_online = null;
+			$scope.financeMgmt.online_transaction_id = null;
+			$scope.financeMgmt.online_amount = 0;
+			$scope.financeMgmt.is_paytm = null;
+			$scope.financeMgmt.paytm_transaction_id = null;
+			$scope.financeMgmt.paytm_amount = 0;
+			$scope.financeMgmt.healyos_receipt_number = null;
 
-		$scope.financeMgmt.showCollectedForm = false;
-		$scope.financeMgmt.is_incorrect = 0;
-		$scope.financeMgmt.incorrect_description = null;
+			$scope.financeMgmt.showCollectedForm = false;
+			$scope.financeMgmt.is_incorrect = 0;
+			$scope.financeMgmt.incorrect_description = null;
+	 	}
 	}
 
 	$scope.financeReverse = false;
@@ -415,6 +425,7 @@ angular.module('myApp.controllers')
 	};
 
 	$scope.financeMgmt.collectionForm = function(rec) {
+		$scope.financeAutoRefresh = false;
 		$scope.financeMgmt.InitFinanceParams();
 		
     	if(rec != undefined){
@@ -496,8 +507,10 @@ angular.module('myApp.controllers')
 	            .success(function(data, status, headers, config) {
 	                if(data.error == undefined && data.payload != undefined) {
 	                    $scope.financeMgmt.financeSuccessMsg = "Amount collected successfully.";
+	                    $scope.financeAutoRefresh = false;
 	                    $scope.financeMgmt.InitFinanceParams();
 	                    $scope.financeMgmt.getCollection();
+	                    
 	                }
 	            })
 	            .error(function(data, status, headers, config) {
@@ -975,6 +988,7 @@ angular.module('myApp.controllers')
 
 
 	$scope.financeMgmt.collectedForm = function(rec) {
+		$scope.financeAutoRefresh = false;
 		$scope.financeMgmt.InitFinanceParams();
 		
     	if(rec != undefined){
