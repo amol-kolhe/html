@@ -2372,11 +2372,9 @@ angular.module('myApp.controllers')
 				name: ""
 			}
 		];
-		console.log('cityid');
-		console.log(cityid);
-		 //$scope.users1.city = $scope.arrayActiveCity[1]._id;
-		 //console.log('Dcityid');
-		// console.log($scope.arrayActiveCity[1]._id);
+		if(cityid == undefined || cityid == ''){
+			cityid ='6472c16b-ac1a-40c6-8a10-d05fa5bddfd5';
+		}		
 
 		adminApi.getZones(cityid)
 		.success(function(data, status, headers, config) {
@@ -3268,7 +3266,7 @@ angular.module('myApp.controllers')
 				}
 			});
 			 $scope.users1.city = $scope.arrayActiveCity[1]._id;
-			//$scope.custPin(cache.cityToIdMap["Pune"]);			 
+			 $scope.custPin('6472c16b-ac1a-40c6-8a10-d05fa5bddfd5');//Defualt Pune			 
 
 		}).
 		error(function (data, status, headers, config) {
