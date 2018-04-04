@@ -29,6 +29,14 @@ angular.module('myApp.controllers')
 	};
 	$scope.adminNewAppointmentCust.selectSp = true;
 
+	$scope.clinicArrList =[];
+        $scope.clinicArrList.push({
+			        _id : 0,
+			        clinic_name : 'Home'
+			    });
+        $scope.adminNewAppointmentCust.serviceLocation = $scope.clinicArrList[0]._id;
+
+
 	$scope.aptPayment = {		
 		currency : "INR",
 		type : "Wallet",
@@ -44,6 +52,8 @@ angular.module('myApp.controllers')
 		additionalSpAmntDesc:"",
 	};
 
+	
+			
 	$scope.cityMgmt = {};
 
 	$scope.cancelActionableCount = 0;
@@ -101,7 +111,7 @@ angular.module('myApp.controllers')
 	$scope.arrayLocalities = [];
 	$scope.customerLocality = '';
 	$scope.adminNewAppointmentCust.zone = "";
-	$scope.adminNewAppointmentCust.selectSp = false;
+	//$scope.adminNewAppointmentCust.selectSp = false;
 
 	$scope.RequestedBy = ['Physio','Customer','Patient Transfer','Appointment Swap'];
 
@@ -1040,7 +1050,7 @@ angular.module('myApp.controllers')
 			dataObjSubmitAptForm.callmeitemid = $scope.users1.uuid;
 		}
 
-		if($scope.adminNewAppointmentCust.selectSp == true && $scope.spNewAppointment.spNames && $scope.spNewAppointment.spNames != "") {
+		if($scope.spNewAppointment.spNames && $scope.spNewAppointment.spNames != "") {
 			dataObjSubmitAptForm.spid = $scope.spNewAppointment.spNames;
 		}
         if ($scope.adminNewAppointmentCust.addcharges == null || $scope.adminNewAppointmentCust.addcharges == undefined){
@@ -2316,16 +2326,20 @@ angular.module('myApp.controllers')
 		});
 		
 		$scope.customerSource =[
-			{id: "Sancheti referral",name:"Sancheti referral"},
+			{id: "Sancheti IPD",name:"Sancheti IPD"},
+			{id: "Sancheti OPD",name:"Sancheti OPD"},
 			{id: "Just Dial",name:"Just Dial"},
-			//{id: "Online Advertisement",name:"Online advertisement"},
-			{id:"Facebook",name:"Facebook"},
-			{id:"Urbanclap",name:"Urbanclap"},
-			{id:"Google",name:"Google"},
-			{id:"Website",name:"Website"},
-			{id: "Patient/physio referral",name:"Patient/physio referral"},
-			{id: "Other doctor referral",name:"Other doctor referral"},
-			{id: "Other",name:"Other"},
+			{id: "Quikr",name:"Quikr"},
+			{id: "Sulekha",name:"Sulekha"},
+			{id: "Practo",name:"Practo"},	
+			{id: "Google",name:"Google"},
+			{id: "Facebook",name:"Facebook"},
+			{id:  "Clinic To Home",name:"Clinic To Home"},
+			{id: "Management Referral",name:"Management Referral"},
+			{id: "Patient Referral",name:"Patient Referral"},
+			{id: "Physiotherapist Referral",name:"Physiotherapist Referral"},
+			{id: "Other Referral",name:"Other Referral"},
+			{id: "Other",name:"Other"}
 		];
 
 		adminApi.getCities("India")
@@ -2358,6 +2372,11 @@ angular.module('myApp.controllers')
 				name: ""
 			}
 		];
+		console.log('cityid');
+		console.log(cityid);
+		 //$scope.users1.city = $scope.arrayActiveCity[1]._id;
+		 //console.log('Dcityid');
+		// console.log($scope.arrayActiveCity[1]._id);
 
 		adminApi.getZones(cityid)
 		.success(function(data, status, headers, config) {
@@ -3248,6 +3267,9 @@ angular.module('myApp.controllers')
 
 				}
 			});
+			 $scope.users1.city = $scope.arrayActiveCity[1]._id;
+			//$scope.custPin(cache.cityToIdMap["Pune"]);			 
+
 		}).
 		error(function (data, status, headers, config) {
 			console.log("Error in receiving cities");

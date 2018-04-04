@@ -51,7 +51,7 @@
                             <div class="col-xs-12 col-sm-9">
                                 <span class="colonSeparatorRight hidden-xs">:</span>
                                 <div class="clsfleft" data-ng-if="users1.disableFlag" style="height: 30px;">
-                                    <span data-ng-init="custPin(users1.city)">{{users1.cityname}}</span>
+                                    <span data-ng-init="custPin('6472c16b-ac1a-40c6-8a10-d05fa5bddfd5')" ng-init="custPin('6472c16b-ac1a-40c6-8a10-d05fa5bddfd5')">{{users1.cityname}}</span>
                                 </div>
                                 <div class="clsfleft" data-ng-if="!users1.disableFlag">
                                     <select ng-model="users1.city" name="patientCity"
@@ -63,7 +63,7 @@
                                      ng-options="city._id as city.city_name for city in arrayActiveCity"
                                      data-ng-required = "true"
                                      data-ng-disabled = "users1.disableFlag">
-                                        <option value="">Select customer city</option>
+                                     <option value="">Select customer city</option>
                                     </select>
 									<span style="color:red" data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientCity.$dirty && adminNewAppointmentForm.adminSignInForCust.patientCity.$invalid">
 										<span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientCity.$error.required">City is required.</span>
@@ -72,7 +72,7 @@
                             </div>
                         </div>
 
-                        <div class="row row-align">
+                        <!--<div class="row row-align">
                             <div class="col-xs-12 col-sm-3 appointment-label">Service Location<span style="color: red;">*</span></div>
                             <div class="col-xs-12 col-sm-9">
                                 <span class="colonSeparatorRight hidden-xs">:</span>
@@ -88,7 +88,7 @@
                                     <span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientServiceLocation.$error.required">Service location is required.</span>
                                 </span>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="row row-align">
                             <div class="col-xs-12 col-sm-3 appointment-label">Name<span style="color: red;">*</span></div>
@@ -174,7 +174,7 @@
 								</span>
                             </div>
                         </div>
-                        <div class="row" style="margin-bottom: 5px;margin-top: 5px;">
+                        <div class="row" style="margin-bottom: 5px;margin-top: 5px;" ng-init="custPin('6472c16b-ac1a-40c6-8a10-d05fa5bddfd5')">
                             <div class="col-xs-12 col-sm-3 appointment-label">Location</div>
                             <div class="col-xs-12 col-sm-9">
                                 <span class="colonSeparatorRight hidden-xs">:</span>
