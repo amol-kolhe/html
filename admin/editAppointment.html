@@ -23,6 +23,14 @@
                 <span style="float:right;">
                     <span title="Edit Documentation" class="clickable glyphicon glyphicon-file" style="margin-right:15px;" onclick="showDocumentation()" data-ng-click="show.DocumentRO = false; editAptClicked();"></span>
                 </span>
+                <span style="float:right;" 
+                    ng-hide="adminNewAppointmentCust.appointment.state == 'Cancelled' || adminNewAppointmentCust.customer.package_code==0">
+                    <span title="Update Price" 
+                        class="clickable glyphicon glyphicon-usd" 
+                        style="margin-right: 15px; font-size: 15px;"
+                        ng-click="updatePriceAppointment(adminNewAppointmentCust.appointment._id)">
+                    </span>
+                </span>
              <!--   <span style="float:right;" ng-hide="adminNewAppointmentCust.appointment.state == 'Cancelled' || adminNewAppointmentCust.appointment.state == 'Completed'">
                     <span title="Edit Appointment" 
                         class="clickable glyphicon glyphicon-pencil" 
@@ -972,6 +980,86 @@
                     </div>
                 </div>
             </form>
+    </script>
+
+    <script type="text/ng-template" id="AptUpdatePrice">
+    <span style="margin:0; float:right"  ng-click="closeThisDialog('Cancel')" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 appointment-label">
+                                Current Package :  {{adminNewAppointmentCust.customer.package_code }}   
+                        </div>    
+                    </div>
+        <form name="adminUpdatePrice" role="form" novalidate>
+            <div style="margin:10px; padding:10px">   
+                    
+
+                    <div class="row">
+                     <div class="col-xs-12 col-sm-2">
+                        <input class="input-width form-control" type="checkbox"
+                               name="include_into_package"
+                               data-ng-model = "include_into_package"/>                   
+                    </div>  
+                    <div class="col-xs-12 col-sm-10">
+                            <label class="appointment-label">Include this appoinment in {{adminNewAppointmentCust.customer.package_code }} Package </label>
+                             <p>Note: If you check checkbox then include this appoinment in {{adminNewAppointmentCust.customer.package_code }} Package and it reduce left sessions by 1. 
+                                <br>Leave blank/unchecked for keep left session as it is.
+                             </p>
+                    </div>
+                   
+                    </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3 appointment-label">Final cost</div>
+                    <div class="col-xs-12 col-sm-9">
+                        <span class="colonSeparatorRight hidden-xs">:</span>
+                        <input class="input-width clstxt2 form-control" type="number"
+                               name="cost"
+                               data-ng-model = "updateAction.cost"
+                               data-ng-class = "{red1: adminUpdatePrice.cost.$invalid}"
+                               title = "Enter cost"
+                               placeholder = "cost"
+                               data-ng-required = "true"
+                               data-ng-show = "!users1.disableFlag"/>
+                       
+                    <span style="color:red" data-ng-show="adminUpdatePrice.updateAction.cost.$dirty && adminUpdatePrice.updateAction.cost.$invalid">
+                       <span data-ng-show="adminUpdatePrice.updateAction.cost.$error.required"> Final cost is required. </span>
+                    </span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3 appointment-label">Password</div>
+                    <div class="col-xs-12 col-sm-9">
+                        <span class="colonSeparatorRight hidden-xs">:</span>
+                        <input class="input-width clstxt2 form-control" type="password"
+                               name="password"
+                               ng-model = "updateAction.password"
+                               data-ng-class = "{red1: adminUpdatePrice.updateAction.password.$invalid}"
+                               title = "Enter password"
+                               placeholder = "password"
+                               data-ng-required = "true"
+                               data-ng-show = "!users1.disableFlag"/>
+                       
+                    <span style="color:red" data-ng-show="adminUpdatePrice.updateAction.password.$dirty && adminUpdatePrice.updateAction.password.$invalid">
+                       <span data-ng-show="adminUpdatePrice.updateAction.password.$error.required"> Password required. </span>
+                    </span>
+                    </div>
+                </div>
+
+
+                <div class="col-xs-12 col-sm-12"><span style="color:{{clscolor}};" ng-show="custRecordUpdate">{{custRecordUpdateMsg}}</span>
+                </div>
+            
+
+                 <div style="margin-top:10px; padding:10px;">
+                    <button style="margin:0; float:right" class="btn btn-primary"
+                           ng-disabled="!(!!updateAction.cost)"
+                           ng-click="aptUpdateRecordEnquiry()" />Update</button> &nbsp;&nbsp;
+                     <button ng-click="closeThisDialog('Cancel')" type="button" class="ngdialog-button ngdialog-button-secondary">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+            </div>
+        </form>
+
     </script>
 
     <script type="text/ng-template" id="AptCompleteTemplate">

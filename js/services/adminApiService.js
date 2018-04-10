@@ -68,6 +68,11 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
 	adminApi.createAptRecordEnquiry = function(data) {
 		return $http.post(baseUrl + "/hrest/v1/admin/enquiry?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid(), data);
 	};
+
+	//API to update appoinment
+	adminApi.UpdateAptRecordEnquiry = function(data) {
+	   return $http.post(baseUrl + "/hrest/v1/appt/updateAppointmentData?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid()+ "&role=0", data);
+	};
 	
 	//API to get services
 	adminApi.getServices = function() {

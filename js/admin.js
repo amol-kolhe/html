@@ -5,6 +5,10 @@ angular.module('myApp.controllers')
 	$scope.callMeform = {};
 	$scope.patientDetailsForAdmin = {};
 	$scope.isEditAptMode = false;
+	$scope.custRecordUpdate = false;
+	$scope.updateAction = {};
+	$scope.updateAction.password='';
+	$scope.updateAction.cost='';
 	$scope.actionableAppt = { mode : "listing" };
 	$scope.currentOpenView = "Listing";
 	$scope.obj = {custid: "", dt: new Date(), followupSpid : ""};
@@ -922,6 +926,40 @@ angular.module('myApp.controllers')
 			}
 		);
 	}
+
+    $scope.aptUpdateRecordEnquiry = function() {
+    	console.log($scope.updateAction.password);
+       if($scope.updateAction.password !='backend1234'){
+       	     $scope.clscolor = "red";
+       	     $scope.custRecordUpdate = true;
+	         $scope.custRecordUpdateMsg = "Please Enter Valid Password";
+       }else{
+       	console.log($scope.editAptModel.id);
+       	
+       		$scope.custRecordUpdate = false;
+       		$scope.updateAction.password='';
+		   var dataObjRecordEnquiry ={
+		      "refno": $scope.editAptId,
+		      "finalcost": $scope.updateAction.cost
+		   };
+		   console.log($scope.editAptId);
+		   console.log($scope.updateAction.cost);
+		   console.log(dataObjRecordEnquiry);
+		   adminApi.UpdateAptRecordEnquiry(dataObjRecordEnquiry)
+		      .success(function(data, status, headers, config) {
+		      	 $scope.custRecordUpdate = true;
+		         $scope.clscolor = "green";
+		         $scope.custRecordUpdateMsg = "Appoinment has been updated successfully.";
+		      })
+		      .error(function(data, status, headers, config) {
+		         $scope.clscolor = "red";
+		         $scope.custRecordUpdate = true;
+		         $scope.custRecordUpdateMsg = "error response: " + data.error.message;
+		         $scope.checkSessionTimeout(data);
+		      });
+	    }
+	}
+
 	
 	$scope.frm = {};
 	
@@ -3265,7 +3303,7 @@ angular.module('myApp.controllers')
 
 				}
 			});
-			 $scope.users1.city = $scope.arrayActiveCity[1]._id;
+			 $scope.users1.city = $scope.arrayActiveCity[0]._id;
 			 $scope.custPin('6472c16b-ac1a-40c6-8a10-d05fa5bddfd5');//Defualt Pune			 
 
 		}).
@@ -4894,6 +4932,55 @@ angular.module('myApp.controllers')
 			alert(data.error.message);
 			$scope.checkSessionTimeout(data);
 		});
+	}
+	
+
+
+	$scope.updatePriceAppointment = function(id) {
+
+		
+        ngDialog.openConfirm({
+            template: 'AptUpdatePrice',
+            showClose:false,
+			scope: $scope 
+        }).then(function(value)
+        {
+            cancelRequestInfo.reason=$scope.CancelRequest.reason;
+            cancelRequestInfo.changerequestby=$scope.CancelRequest.changerequestby;
+           // console.log(cancelRequestInfo);
+            adminApi.deleteAppointmentDetails(id ,  cancelRequestInfo.changerequestby)
+			.success(function(data, status, headers, config){
+				alert("Appointment cancelled successfully");
+				$scope.hideEditAptMode();
+				$scope.searchAppointments(true);
+			})
+			.error(function(data, status, headers, config){
+				alert(data.error.message);
+				$scope.checkSessionTimeout(data);
+			});
+
+          
+        },
+        function(value) {
+        	console.log("Fail " + $scope.CancelRequest.reason );
+        });
+
+
+        /*var res = confirm("This will cancel the appointment.\nDo you want to continue?");
+		if(res == true) {
+			adminApi.deleteAppointmentDetails(id)
+			.success(function(data, status, headers, config){
+				alert("Appointment cancelled successfully");
+				$scope.hideEditAptMode();
+				$scope.searchAppointments(true);
+			})
+			.error(function(data, status, headers, config){
+				alert(data.error.message);
+				$scope.checkSessionTimeout(data);
+			});
+		}*/
+
+
 	}
 
 	$scope.cancelAppointment = function(id) {

@@ -63,7 +63,6 @@
                                      ng-options="city._id as city.city_name for city in arrayActiveCity"
                                      data-ng-required = "true"
                                      data-ng-disabled = "users1.disableFlag">
-                                     <option value="">Select customer city</option>
                                     </select>
 									<span style="color:red" data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientCity.$dirty && adminNewAppointmentForm.adminSignInForCust.patientCity.$invalid">
 										<span data-ng-show="adminNewAppointmentForm.adminSignInForCust.patientCity.$error.required">City is required.</span>
