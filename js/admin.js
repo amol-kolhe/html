@@ -9,6 +9,7 @@ angular.module('myApp.controllers')
 	$scope.updateAction = {};
 	$scope.updateAction.password='';
 	$scope.updateAction.cost='';
+	$scope.updateAction.include_into_package='';
 	$scope.actionableAppt = { mode : "listing" };
 	$scope.currentOpenView = "Listing";
 	$scope.obj = {custid: "", dt: new Date(), followupSpid : ""};
@@ -938,9 +939,13 @@ angular.module('myApp.controllers')
        	
        		$scope.custRecordUpdate = false;
        		$scope.updateAction.password='';
+       		
 		   var dataObjRecordEnquiry ={
 		      "refno": $scope.editAptId,
-		      "finalcost": $scope.updateAction.cost
+		      "finalcost": $scope.updateAction.cost,
+		      "isretrofit": $scope.updateAction.include_into_package,
+		      "package_code": $scope.adminNewAppointmentCust.customer.package_code,
+		      "package_id": $scope.adminNewAppointmentCust.customer.package_id 
 		   };
 		   console.log($scope.editAptId);
 		   console.log($scope.updateAction.cost);
@@ -9948,6 +9953,7 @@ angular.module('myApp.controllers')
 		var zoneBasePrice;
 		if($scope.adminNewAppointmentCust.appointment.cost != 0 && $scope.adminNewAppointmentCust.appointment.cost != undefined){
 			zoneBasePrice = $scope.adminNewAppointmentCust.appointment.cost;
+			$scope.updateAction.cost=$scope.adminNewAppointmentCust.appointment.cost;
 		}else{
 			zoneBasePrice = 0;
 		}

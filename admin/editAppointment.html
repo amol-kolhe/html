@@ -24,7 +24,7 @@
                     <span title="Edit Documentation" class="clickable glyphicon glyphicon-file" style="margin-right:15px;" onclick="showDocumentation()" data-ng-click="show.DocumentRO = false; editAptClicked();"></span>
                 </span>
                 <span style="float:right;" 
-                    ng-hide="adminNewAppointmentCust.appointment.state == 'Cancelled' || adminNewAppointmentCust.customer.package_code==0">
+                    ng-hide="adminNewAppointmentCust.appointment.state == 'Cancelled' || adminNewAppointmentCust.customer.package_code==0 || adminNewAppointmentCust.customer.no_of_sessions==adminNewAppointmentCust.customer.use_sessions">
                     <span title="Update Price" 
                         class="clickable glyphicon glyphicon-usd" 
                         style="margin-right: 15px; font-size: 15px;"
@@ -993,16 +993,15 @@
             <div style="margin:10px; padding:10px">   
                     
 
-                    <div class="row">
+                    <div class="row" ng-show="adminNewAppointmentCust.appointment.package_code == ''">
                      <div class="col-xs-12 col-sm-2">
-                        <input class="input-width form-control" type="checkbox"
+                        <input class="input-width form-control" ng-true-value="1" ng-false-value="0" type="checkbox"
                                name="include_into_package"
-                               data-ng-model = "include_into_package"/>                   
+                               data-ng-model = "updateAction.include_into_package"/>                   
                     </div>  
                     <div class="col-xs-12 col-sm-10">
                             <label class="appointment-label">Include this appoinment in {{adminNewAppointmentCust.customer.package_code }} Package </label>
-                             <p>Note: If you check checkbox then include this appoinment in {{adminNewAppointmentCust.customer.package_code }} Package and it reduce left sessions by 1. 
-                                <br>Leave blank/unchecked for keep left session as it is.
+                                <br>Leave blank/unchecked for only update price.
                              </p>
                     </div>
                    
