@@ -23,15 +23,20 @@ angular.module('myApp.controllers')
     var availableDate = [];
     $scope.locationArr = [];
     $scope.arrayPolicy = [];
+    $scope.invoice=[];
     $scope.customerLocality = '';
     $scope.custProb = "";
     $scope.custResAddr = "";
     $scope.custPincode = "";
+    $scope.sendMessage='';
+    $scope.invoice_id ="";
     $scope.custEmail = "";
     $scope.custPhone = "";
     $scope.custName = "";
     $scope.custCityId = "";
     $scope.custGender = "";
+    $scope.invoiceData="";
+    $scope.invoiceReq={};
     $scope.zoneId = "";
     $scope.frm = {submit: ""};
     $scope.showDatepicker = false;
@@ -49,6 +54,7 @@ angular.module('myApp.controllers')
     $scope.apptPayment = {};
     $scope.apptPackage = {};
     $scope.apptPackage.packageForm = "";
+    $scope.customer_id='';
     $scope.aptPackage = {
         package_id : "",
         package_code : "",
@@ -3552,6 +3558,76 @@ angular.module('myApp.controllers')
 
         $scope.loadSlotView($scope.spId,dateEpoch1,dateEpoch2);
 
+    }
+
+    $scope.generateRecipt = function(rec){
+        $scope.invoice=rec;
+        console.log('invoice._id');
+        console.log($scope.invoice._id);
+
+        spApi.getCustomerDetails(rec.customer_id)
+        .success(function(data, status, headers, config){
+             $scope.invoiceData=data.payload.customer;
+
+             $scope.invoiceReq.transaction_id = $scope.invoice._id;
+             $scope.invoiceReq.service_provider_name = $scope.invoice.service_provider_name;
+             $scope.invoiceReq.service_provider_id = $scope.invoice.service_provider_id;
+             $scope.invoiceReq.customer_name = $scope.invoiceData.name;
+             $scope.invoiceReq.customer_id = $scope.invoice.customer_id;
+             $scope.invoiceReq.healyoscustid = $scope.invoiceData.healyoscustid;
+             $scope.invoiceReq.package_code = $scope.invoiceData.package_code;
+             $scope.invoiceReq.no_of_sessions = $scope.invoiceData.no_of_sessions;
+             $scope.invoiceReq.trans_date = $scope.invoice.trans_date;
+             $scope.invoiceReq.trans_mode = $scope.invoice.trans_mode;
+             $scope.invoiceReq.trans_amount = $scope.invoice.trans_amount;             
+             $scope.invoiceReq.trans_type = $scope.invoice.trans_type;
+
+              spApi.generateRecipt($scope.invoiceReq)
+                .success(function(data, status, headers, config){
+             }).error(function(data, status, headers, config){
+                console.log("Error PDF invoice generate");
+                //alert(data.error.message);
+            });
+        })
+        .error(function(data, status, headers, config){
+            console.log("Error PDF invoice generate");
+            //alert(data.error.message);
+        });
+
+       /* spApi.generateRecipt(rec.customer_id,rec._id)
+        .success(function(data, status, headers, config){
+            console.log("PDF invoice generated successfully");
+        })
+        .error(function(data, status, headers, config){
+            console.log("Error PDF invoice generate");
+            alert(data.error.message);
+        });*/
+    }
+
+  $scope.sendRecipt = function(){       
+     
+                      
+             $scope.invoice_id = 1;
+
+              spApi.sendRecipt( $scope.invoice_id)
+                .success(function(data, status, headers, config){
+                    $scope.sendMessage='Invoice successfully Send to Customer!!!!';
+             }).error(function(data, status, headers, config){
+                $scope.sendMessage='Invoice successfully Send to Customer!!!!';
+                console.log("Error PDF invoice generate");
+                //alert(data.error.message);
+            });
+   
+       
+
+       /* spApi.generateRecipt(rec.customer_id,rec._id)
+        .success(function(data, status, headers, config){
+            console.log("PDF invoice generated successfully");
+        })
+        .error(function(data, status, headers, config){
+            console.log("Error PDF invoice generate");
+            alert(data.error.message);
+        });*/
     }
 
     $scope.loadSlotView = function(spid,start,end){
