@@ -134,6 +134,10 @@
 				url: '/prbm',
 				templateUrl: './CustPortal/other_pages/prbm.html'
 			}).
+			state('homepages.spinecamp', {
+				url: '/spinecamp',
+				templateUrl: './CustPortal/other_pages/spinecamp.html'
+			}).
 			state('booking', {
 				url: '/booking',
 				templateUrl: './CustPortal/booking_partials/booking_parent.html',
