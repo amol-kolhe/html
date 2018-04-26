@@ -3564,7 +3564,7 @@ angular.module('myApp.controllers')
         $scope.invoice=rec;
         console.log('invoice._id');
         console.log($scope.invoice._id);
-
+        $scope.sendMessage='';
         spApi.getCustomerDetails(rec.customer_id)
         .success(function(data, status, headers, config){
              $scope.invoiceData=data.payload.customer;
