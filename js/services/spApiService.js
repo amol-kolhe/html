@@ -249,6 +249,10 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         return $http.get(baseUrl + '/hrest/v1/admin/cust/' + custID + "?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2");
     };
 
+    spApi.getSpDetails = function(spID) {
+        return $http.get(baseUrl + '/hrest/v1/admin/sp/' + spID + "?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2");
+    };
+
 
 
 	return spApi;

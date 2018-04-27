@@ -36,6 +36,7 @@ angular.module('myApp.controllers')
     $scope.custCityId = "";
     $scope.custGender = "";
     $scope.invoiceData="";
+    $scope.invoiceSpData= "";
     $scope.invoiceReq={};
     $scope.zoneId = "";
     $scope.frm = {submit: ""};
@@ -3561,6 +3562,7 @@ angular.module('myApp.controllers')
     }
 
     $scope.generateRecipt = function(rec){
+        console.log(rec);
         $scope.invoice=rec;
         console.log('invoice._id');
         console.log($scope.invoice._id);
@@ -3582,12 +3584,25 @@ angular.module('myApp.controllers')
              $scope.invoiceReq.trans_amount = $scope.invoice.trans_amount;             
              $scope.invoiceReq.trans_type = $scope.invoice.trans_type;
 
+             spApi.getSpDetails($scope.invoiceReq.service_provider_id)
+                .success(function(data, status, headers, config){
+                    console.log(data);
+                     console.log(data.payload);
+                      console.log(data.payload.healyosspid);
+                    $scope.invoiceSpData = data.payload;
+             }).error(function(data, status, headers, config){
+                console.log("Error invoice generate");
+                //alert(data.error.message);
+            });
+
               spApi.generateRecipt($scope.invoiceReq)
                 .success(function(data, status, headers, config){
              }).error(function(data, status, headers, config){
                 console.log("Error PDF invoice generate");
                 //alert(data.error.message);
             });
+
+
         })
         .error(function(data, status, headers, config){
             console.log("Error PDF invoice generate");
