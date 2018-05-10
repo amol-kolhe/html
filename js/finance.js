@@ -4,6 +4,13 @@ angular.module('myApp.controllers')
 	$scope.financeEmail = "";
 	$scope.financeName = "";
 	$scope.financeAutoRefresh = false;
+	 $scope.invoice=[];
+	 $scope.invoice_id ="";
+	 $scope.invoiceData="";
+	 $scope.invoiceSpData= "";
+	 $scope.invoiceReq={};
+	 $scope.sp_email="";
+	 $scope.sendMessage="";
 	/* Added for Bug 4615 : Finance collection - Auto refresh on particular time frequency.*/
 	$scope.autoRefreshTimeFrequency=3600000;//60min	
 	$interval( function(){ $scope.financeAutoRefreshSetting(); }, $scope.autoRefreshTimeFrequency);
@@ -985,6 +992,117 @@ angular.module('myApp.controllers')
 	  	};
 
   	}
+$scope.generateRecipt = function(rec){
+        console.log(rec);
+        $scope.invoice=rec;
+        $scope.sendInvoiceBtn = true;
+       // console.log('invoice._id');
+        //console.log($scope.invoice._id);
+        $scope.sendMessage='';
+        $scope.transaction_id ='';
+        financeApi.getCustomerDetails(rec.customer_id)
+        .success(function(data, status, headers, config){
+             $scope.invoiceData=data.payload.customer;
+
+             $scope.invoiceReq.transaction_id = $scope.invoice.trans_id;
+             $scope.invoiceReq.service_provider_name = $scope.invoice.service_provider_name;
+             $scope.invoiceReq.service_provider_id = $scope.invoice.service_provider_id;
+             $scope.invoiceReq.customer_name = $scope.invoiceData.name;
+             $scope.invoiceReq.customer_id = $scope.invoice.customer_id;
+             $scope.invoiceReq.customer_email = $scope.invoiceData.email;
+             $scope.invoiceReq.phone = $scope.invoiceData.phone;
+             $scope.invoiceReq.healyoscustid = $scope.invoiceData.healyoscustid;
+             $scope.invoiceReq.package_code = $scope.invoiceData.package_code;
+             $scope.invoiceReq.no_of_sessions = $scope.invoiceData.no_of_sessions;
+             $scope.invoiceReq.trans_date = $scope.invoice.actual_trans_date;
+             $scope.invoiceReq.trans_mode = $scope.invoice.actual_trans_mode;
+             $scope.invoiceReq.trans_description = $scope.invoice.actual_trans_description;
+             $scope.invoiceReq.trans_amount = $scope.invoice.actual_trans_amount;             
+             $scope.invoiceReq.trans_type = $scope.invoice.trans_mode;
+              $scope.phone = $scope.invoiceReq.phone;
+
+            //  console.log('phone');
+            //  console.log($scope.invoiceReq.phone);
+
+             financeApi.getSpDetails($scope.invoiceReq.service_provider_id)
+                .success(function(data, status, headers, config){
+                    $scope.invoiceSpData = data.payload;
+                    $scope.invoiceReq.healyosspid = $scope.invoiceSpData.healyosspid;
+                    $scope.transaction_id = $scope.invoiceReq.transaction_id;
+                    $scope.phone = $scope.invoiceReq.phone;
+                    $scope.invoiceReq.sp_email=$scope.invoiceSpData.email;
+                    $scope.sp_email = $scope.invoiceSpData.email;
+
+                     financeApi.generateRecipt($scope.invoiceReq)
+                .success(function(data, status, headers, config){
+                    $scope.sendInvoiceBtn = false;
+                    $scope.getInvoiceData = data.payload;
+             }).error(function(data, status, headers, config){
+                 $scope.sendInvoiceBtn = true;
+                console.log("Error PDF invoice generate");
+                //alert(data.error.message);
+            });
+
+             }).error(function(data, status, headers, config){
+                console.log("Error invoice generate");
+                $scope.sendInvoiceBtn = true;
+                //alert(data.error.message);
+            });
+
+             
+
+
+        })
+        .error(function(data, status, headers, config){
+            console.log("Error PDF invoice generate");
+            //alert(data.error.message);
+        });
+
+       /* spApi.generateRecipt(rec.customer_id,rec._id)
+        .success(function(data, status, headers, config){
+            console.log("PDF invoice generated successfully");
+        })
+        .error(function(data, status, headers, config){
+            console.log("Error PDF invoice generate");
+            alert(data.error.message);
+        });*/
+    }
+
+  $scope.sendRecipt = function(){       
+     
+                      
+             $scope.invoice_id = $scope.invoiceReq.transaction_id;
+             $scope.phone = $scope.invoiceReq.phone;
+             $scope.sp_email = $scope.invoiceReq.sp_email;
+
+             console.log($scope.invoice_id);
+            // console.log(angular.element(document.querySelector("#invoice")).html());
+
+        var data = {
+            "html": angular.element(document.querySelector("#invoice")).html(),
+            "transaction_id": $scope.transaction_id            
+        };
+
+              financeApi.sendRecipt( $scope.transaction_id,$scope.phone,$scope.sp_email)
+                .success(function(data, status, headers, config){
+                    $scope.sendMessage='Invoice successfully Send to Customer!!!!';
+             }).error(function(data, status, headers, config){
+                $scope.sendMessage='Error : Invoice Not Send to Customer!!!!';
+                console.log("Error PDF invoice generate");
+                //alert(data.error.message);
+            });
+   
+       
+
+       /* spApi.generateRecipt(rec.customer_id,rec._id)
+        .success(function(data, status, headers, config){
+            console.log("PDF invoice generated successfully");
+        })
+        .error(function(data, status, headers, config){
+            console.log("Error PDF invoice generate");
+            alert(data.error.message);
+        });*/
+    }
 
 
 	$scope.financeMgmt.collectedForm = function(rec) {

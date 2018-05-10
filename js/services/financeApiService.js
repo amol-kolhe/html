@@ -91,6 +91,22 @@ financeApiService.factory('financeApi', ['$http', '$cookies', function($http, $c
 		return $http.get(baseUrl + "/hrest/v1/appt?apikey=" + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + "&role=3&where=" + createSearchAppointmentsQuery(appointmentCriteria, isAdvancedSearch));
 	};
 
+	financeApi.generateRecipt = function (dataObj) {
+        return $http.put(baseUrl + "/hrest/v1/finance/generateInvoice?apikey=" + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + "&role=3", dataObj);
+    }
+
+    financeApi.sendRecipt = function (invoice_id,phonemobile,email) {
+        return $http.get(baseUrl + "/hrest/v1/finance/sendInvoice?apikey=" + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + "&role=3&invoice_id=" + invoice_id+"&phone="+phonemobile+"&email="+email);
+    }
+
+    financeApi.getCustomerDetails = function(custID) {
+        return $http.get(baseUrl + '/hrest/v1/admin/cust/' + custID + "?apikey=" + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + "&role=3");
+    };
+
+    financeApi.getSpDetails = function(spID) {
+        return $http.get(baseUrl + '/hrest/v1/admin/sp/' + spID + "?apikey=" + financeApi.getApiKey() + "&sid=" + financeApi.getSid() + "&role=3");
+    };
+
 	return financeApi;
 }]);
 

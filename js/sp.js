@@ -41,6 +41,7 @@ angular.module('myApp.controllers')
     $scope.getInvoiceData="";
     $scope.transaction_id ="";
     $scope.invoiceReq={};
+    $scope.sp_email="";
     $scope.sendInvoiceBtn = true;
     $scope.zoneId = "";
     $scope.frm = {submit: ""};
@@ -3607,6 +3608,8 @@ angular.module('myApp.controllers')
                     $scope.invoiceReq.healyosspid = $scope.invoiceSpData.healyosspid;
                     $scope.transaction_id = $scope.invoiceReq.transaction_id;
                     $scope.phone = $scope.invoiceReq.phone;
+                    $scope.invoiceReq.sp_email=$scope.invoiceSpData.email;
+                    $scope.sp_email = $scope.invoiceSpData.email;
 
                      spApi.generateRecipt($scope.invoiceReq)
                 .success(function(data, status, headers, config){
@@ -3648,6 +3651,7 @@ angular.module('myApp.controllers')
                       
              $scope.invoice_id = $scope.invoiceReq.transaction_id;
              $scope.phone = $scope.invoiceReq.phone;
+             $scope.sp_email = $scope.invoiceReq.sp_email;
 
              console.log($scope.invoice_id);
             // console.log(angular.element(document.querySelector("#invoice")).html());
@@ -3657,7 +3661,7 @@ angular.module('myApp.controllers')
             "transaction_id": $scope.transaction_id            
         };
 
-              spApi.sendRecipt( $scope.transaction_id,$scope.phone)
+              spApi.sendRecipt( $scope.transaction_id,$scope.phone,$scope.sp_email)
                 .success(function(data, status, headers, config){
                     $scope.sendMessage='Invoice successfully Send to Customer!!!!';
              }).error(function(data, status, headers, config){
