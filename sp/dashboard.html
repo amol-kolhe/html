@@ -215,7 +215,7 @@
     <div class="modal-content">
     	<div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <button type="button" ng-click="sendRecipt();" class="btn btn-default" title="Send Invoice" style="float:right;margin-right:25px"><i class="glyphicon glyphicon-send"> Send</i></button>   
+        <button ng-disabled="sendInvoiceBtn" type="button" ng-click="sendRecipt();" class="btn btn-default" title="Send Invoice" style="float:right;margin-right:25px"><i class="glyphicon glyphicon-send"> Send</i></button>   
         <h4 class="modal-title" id="myModalLabel">Invoice</h4>
         <span class="label label-success">{{sendMessage}}</span>
       </div>
@@ -249,7 +249,7 @@
   <!-- Main content -->
   <div class="row">
   <div class="col-md-12">
-  <section class="invoice">
+  <section class="invoice" id="invoice">
     <!-- title row -->
     <div class="row">
       <div class="col-xs-12">
@@ -258,9 +258,11 @@
          <img src="https://www.healyos.com/images/healyos_logo_new.png" alt="Physiotherapy Services at Home&nbsp;| Physiotherapist in Pune" title="Healyos - The Physio Experts">
           </div>        
          <div class="col-xs-6">
-             <span class="lead">+91-20-65802802</span><br>
-            <strong>Zapp Health Solutions Private Limited</strong><br>
+             <span class="lead">Zapp Health Solutions Private Limited</span><br>
+             <strong>Contact Us</strong><br>           
             A/29, Abhimanshree Society, Pashan Road, Pune- 411008<br>
+            +91 20 2564 0081</strong><br>
+            Share your feedback : care@healyos.com <br>
             www.healyos.com
              </div>
         </div>
@@ -269,28 +271,26 @@
     </div>
     <!-- info row -->
     <div class="row invoice-info">
-      <div class="col-xs-6 invoice-col">        
-          <h2>RECEIPT VOUCHER</h2>
-          Voucher No# 00001<br>
-          Date : {{invoice.trans_date}}<br>
+      <div class="col-xs-12 invoice-col">        
+          <h2>RECEIPT NO : {{getInvoiceData.invoiceid}}</h2>
+          Date : {{invoice.trans_date.split(' ')[0]}}<br>
       </div>
-      <!-- /.col -->
-       <div class="col-xs-3 invoice-col">
-        From Physio 
+       <!-- /.col -->
+      <div class="col-xs-6 invoice-col">         
         <address>
-          <strong>{{invoice.service_provider_name}}</strong><br>
-          Physio ID : {{invoiceSpData.healyosspid}}<br>
+          <strong>Patient Name : {{invoiceData.name}}</strong><br>
+          Patient ID : {{invoiceData.healyoscustid}}<br>
         </address>
       </div>
 
       <!-- /.col -->
-      <div class="col-xs-3 invoice-col">
-         To
+       <div class="col-xs-6 invoice-col">
         <address>
-          <strong>{{invoiceData.name}}</strong><br>
-          Patient ID : {{invoiceData.healyoscustid}}<br>
+          <strong>Physio Name :  {{invoice.service_provider_name}}</strong><br>
         </address>
       </div>
+
+     
       <!-- /.col -->
     </div>
     <!-- /.row -->

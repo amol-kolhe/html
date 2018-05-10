@@ -27,6 +27,7 @@ angular.module('myApp.controllers')
     $scope.customerLocality = '';
     $scope.custProb = "";
     $scope.custResAddr = "";
+     $scope.phonemobile="";
     $scope.custPincode = "";
     $scope.sendMessage='';
     $scope.invoice_id ="";
@@ -37,7 +38,10 @@ angular.module('myApp.controllers')
     $scope.custGender = "";
     $scope.invoiceData="";
     $scope.invoiceSpData= "";
+    $scope.getInvoiceData="";
+    $scope.transaction_id ="";
     $scope.invoiceReq={};
+    $scope.sendInvoiceBtn = true;
     $scope.zoneId = "";
     $scope.frm = {submit: ""};
     $scope.showDatepicker = false;
@@ -3561,12 +3565,19 @@ angular.module('myApp.controllers')
 
     }
 
+
+  $scope.getDateFormat = function(timestamp) {
+    return new Date(timestamp);
+  }
+
     $scope.generateRecipt = function(rec){
-        console.log(rec);
+        //console.log(rec);
         $scope.invoice=rec;
-        console.log('invoice._id');
-        console.log($scope.invoice._id);
+        $scope.sendInvoiceBtn = true;
+       // console.log('invoice._id');
+        //console.log($scope.invoice._id);
         $scope.sendMessage='';
+        $scope.transaction_id ='';
         spApi.getCustomerDetails(rec.customer_id)
         .success(function(data, status, headers, config){
              $scope.invoiceData=data.payload.customer;
@@ -3576,6 +3587,8 @@ angular.module('myApp.controllers')
              $scope.invoiceReq.service_provider_id = $scope.invoice.service_provider_id;
              $scope.invoiceReq.customer_name = $scope.invoiceData.name;
              $scope.invoiceReq.customer_id = $scope.invoice.customer_id;
+             $scope.invoiceReq.customer_email = $scope.invoice.email;
+             $scope.invoiceReq.phone = $scope.invoiceData.phone;
              $scope.invoiceReq.healyoscustid = $scope.invoiceData.healyoscustid;
              $scope.invoiceReq.package_code = $scope.invoiceData.package_code;
              $scope.invoiceReq.no_of_sessions = $scope.invoiceData.no_of_sessions;
@@ -3583,24 +3596,34 @@ angular.module('myApp.controllers')
              $scope.invoiceReq.trans_mode = $scope.invoice.trans_mode;
              $scope.invoiceReq.trans_amount = $scope.invoice.trans_amount;             
              $scope.invoiceReq.trans_type = $scope.invoice.trans_type;
+              $scope.phone = $scope.invoiceReq.phone;
+            //  console.log('phone');
+            //  console.log($scope.invoiceReq.phone);
 
              spApi.getSpDetails($scope.invoiceReq.service_provider_id)
                 .success(function(data, status, headers, config){
-                    console.log(data);
-                     console.log(data.payload);
-                      console.log(data.payload.healyosspid);
                     $scope.invoiceSpData = data.payload;
-             }).error(function(data, status, headers, config){
-                console.log("Error invoice generate");
-                //alert(data.error.message);
-            });
+                    $scope.invoiceReq.healyosspid = $scope.invoiceSpData.healyosspid;
+                    $scope.transaction_id = $scope.invoiceReq.transaction_id;
+                    $scope.phone = $scope.invoiceReq.phone;
 
-              spApi.generateRecipt($scope.invoiceReq)
+                     spApi.generateRecipt($scope.invoiceReq)
                 .success(function(data, status, headers, config){
+                    $scope.sendInvoiceBtn = false;
+                    $scope.getInvoiceData = data.payload;
              }).error(function(data, status, headers, config){
+                 $scope.sendInvoiceBtn = true;
                 console.log("Error PDF invoice generate");
                 //alert(data.error.message);
             });
+
+             }).error(function(data, status, headers, config){
+                console.log("Error invoice generate");
+                $scope.sendInvoiceBtn = true;
+                //alert(data.error.message);
+            });
+
+             
 
 
         })
@@ -3622,13 +3645,22 @@ angular.module('myApp.controllers')
   $scope.sendRecipt = function(){       
      
                       
-             $scope.invoice_id = 1;
+             $scope.invoice_id = $scope.invoiceReq.transaction_id;
+             $scope.phone = $scope.invoiceReq.phone;
 
-              spApi.sendRecipt( $scope.invoice_id)
+             console.log($scope.invoice_id);
+            // console.log(angular.element(document.querySelector("#invoice")).html());
+
+        var data = {
+            "html": angular.element(document.querySelector("#invoice")).html(),
+            "transaction_id": $scope.transaction_id            
+        };
+
+              spApi.sendRecipt( $scope.transaction_id,$scope.phone)
                 .success(function(data, status, headers, config){
                     $scope.sendMessage='Invoice successfully Send to Customer!!!!';
              }).error(function(data, status, headers, config){
-                $scope.sendMessage='Invoice successfully Send to Customer!!!!';
+                $scope.sendMessage='Error : Invoice Not Send to Customer!!!!';
                 console.log("Error PDF invoice generate");
                 //alert(data.error.message);
             });

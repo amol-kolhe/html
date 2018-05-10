@@ -241,8 +241,8 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         return $http.put(baseUrl + "/hrest/v1/finance/generateInvoice?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2", dataObj);
     }
 
-    spApi.sendRecipt = function (invoice_id) {
-        return $http.get(baseUrl + "/hrest/v1/finance/sendInvoice?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2&invoice_id=" + invoice_id);
+    spApi.sendRecipt = function (invoice_id,phonemobile) {
+        return $http.get(baseUrl + "/hrest/v1/finance/sendInvoice?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2&invoice_id=" + invoice_id+"&phone="+phonemobile);
     }
 
     spApi.getCustomerDetails = function(custID) {
