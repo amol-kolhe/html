@@ -3594,6 +3594,7 @@ angular.module('myApp.controllers')
              $scope.invoiceReq.no_of_sessions = $scope.invoiceData.no_of_sessions;
              $scope.invoiceReq.trans_date = $scope.invoice.trans_date;
              $scope.invoiceReq.trans_mode = $scope.invoice.trans_mode;
+             $scope.invoiceReq.trans_description = $scope.invoice.trans_description;
              $scope.invoiceReq.trans_amount = $scope.invoice.trans_amount;             
              $scope.invoiceReq.trans_type = $scope.invoice.trans_type;
               $scope.phone = $scope.invoiceReq.phone;
