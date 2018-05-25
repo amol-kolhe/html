@@ -43,6 +43,9 @@
 									<td>
 										<span style="word-break: break-word;">{{rec.trans_amount}}/-</span>
 									</td>
+									<td>
+                                          <i class="glyphicon glyphicon-file" data-toggle="modal" data-target="#myModalShower" ng-click="generateRecipt(rec);" title="Generate Recipt"></i>
+									</td>
 									
 								</tr>
 							</tbody>
@@ -205,8 +208,168 @@
 				</div>
 		    </div>
 		</div>
-	</div>
 
+
+<div class="modal fade bs-example-modal-lg" id="myModalShower" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	    	<div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <button ng-disabled="sendInvoiceBtn" type="button" ng-click="sendRecipt();" class="btn btn-default" title="Send Invoice" style="float:right;margin-right:25px"><i class="glyphicon glyphicon-send"> Send</i></button>   
+	        <h4 class="modal-title" id="myModalLabel">Invoice</h4>
+	        <span class="label label-success">{{sendMessage}}</span>
+	      </div>
+	      <div class="wrapper">
+	  <style type="text/css">
+	.wrapper .page-header {
+	    background-color: #f6f6f6;
+	}
+	.wrapper .page-header {   
+	    margin: 0px 0 20px !important;
+	    padding-top: 0px;
+	}
+	.invoice-info {
+	    margin-bottom: 20px;
+	}
+	.wrapper thead {
+	    background-color: rgba(88,188,179,.9);
+	}
+
+	.total {
+	    background-color: rgb(210, 209, 39);
+	  }
+	.invoice {
+	    border: 1px solid;
+	    padding: 10px;
+	}
+	.wrapper .table-responsive {
+	    overflow: hidden;
+	}
+	  </style>
+	  <!-- Main content -->
+	  <div class="row">
+	  <div class="col-md-12">
+	  <section class="invoice" id="invoice">
+	    <!-- title row -->
+	    <div class="row">
+	      <div class="col-xs-12">
+	        <div class="page-header row">
+	           <div class="col-xs-6">
+	         <img src="https://www.healyos.com/images/healyos_logo_new.png" alt="Physiotherapy Services at Home&nbsp;| Physiotherapist in Pune" title="Healyos - The Physio Experts">
+	          </div>        
+	         <div class="col-xs-6">
+	             <span class="lead">Zapp Health Solutions Private Limited</span><br>
+	             <strong>Contact Us</strong><br>           
+	            A/29, Abhimanshree Society, Pashan Road, Pune- 411008<br>
+	            +91 20 2564 0081</strong><br>
+	            Share your feedback : care@healyos.com <br>
+	            www.healyos.com
+	             </div>
+	        </div>
+	      </div>
+	      <!-- /.col -->
+	    </div>
+	    <!-- info row -->
+	    <div class="row invoice-info">
+	      <div class="col-xs-12 invoice-col">        
+	          <h2>RECEIPT NO : {{getInvoiceData.invoiceid}}</h2>
+	          Date : {{invoice.trans_date.split(' ')[0]}}<br>
+	      </div>
+	       <!-- /.col -->
+	      <div class="col-xs-6 invoice-col">         
+	        <address>
+	          <strong>Patient Name : {{invoiceData.name}}</strong><br>
+	          Patient ID : {{invoiceData.healyoscustid}}<br>
+	        </address>
+	      </div>
+
+	      <!-- /.col -->
+	       <div class="col-xs-6 invoice-col">
+	        <address>
+	          <strong>Physio Name :  {{invoice.service_provider_name}}</strong><br>
+	        </address>
+	      </div>
+
+	     
+	      <!-- /.col -->
+	    </div>
+	    <!-- /.row -->
+
+	    <!-- Table row -->
+	    <div class="row">
+	      <div class="col-xs-12">
+	        <table class="table table-striped">
+	          <thead>
+	          <tr>
+	            <th>Particulars</th>           
+	            <th>Description</th>
+	            <th>Subtotal</th>
+	          </tr>
+	          </thead>
+	          <tbody>
+	          <tr>
+	            <td>{{invoice.trans_description}}</td>
+	            <td>
+	              <span ng-if="invoiceData.package_code">{{invoiceData.package_code}}<span><br>
+	              <span ng-if="invoiceData.no_of_sessions">{{invoiceData.no_of_sessions}} Sessions<span>
+	            </td>
+	            <td>{{invoice.trans_amount}}</td>
+	          </tr>
+	         
+	          </tbody>
+	        </table>
+	      </div>
+	      <!-- /.col -->
+	    </div>
+	    <!-- /.row -->
+
+	    <div class="row">
+	      <!-- accepted payments column -->
+	      <div class="col-xs-6">
+	        <p class="lead">Payment Methods: {{invoice.trans_mode}}</p>       
+
+	        <p class="well well-sm no-shadow" style="margin-top: 10px;color: #999;">
+	          Cancellation Fees :The fastest way to reschedule or cancel your HealYos appointment is to call your Physiotherapist and request them to move/cancel your appointment.
+	        </p>
+	      </div>
+	      <!-- /.col -->
+	      <div class="col-xs-6">
+	        <p class="lead">Amount</p>
+
+	        <div class="table-responsive">
+	          <table class="table">
+	            <tr>
+	              <th style="width:50%">Subtotal:</th>
+	              <td>{{invoice.trans_amount}}</td>
+	            </tr>
+	            <tr class="total">
+	              <th>Total:</th>
+	              <td>{{invoice.trans_amount}}</td>
+	            </tr>            
+	          </table>
+	        </div>      
+	      </div>
+
+	      <!-- /.col -->
+	    </div>
+
+	     <div class="row">
+	      <div class="col-xs-6">
+	         <img height=70 style="margin-left: 70px;" src="/images/sign.png">
+	         <p class="lead">Authorized signatory</p>
+	      </div>
+	     </div>
+	    <!-- /.row -->
+	  </section>
+	  <!-- /.content -->
+	</div>
+	</div>
+	</div>
+	<!-- ./wrapper -->
+	    </div>
+	  </div>
+</div>
 
 
 </div>
+

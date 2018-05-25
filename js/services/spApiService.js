@@ -237,6 +237,23 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         return $http.get(baseUrl + "/hrest/v1/appt/fetchInsufficientWalletAppts?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2&spid=" + spid);
     };
 
+    spApi.generateRecipt = function (dataObj) {
+        return $http.put(baseUrl + "/hrest/v1/finance/generateInvoice?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2", dataObj);
+    }
+
+    spApi.sendRecipt = function (invoice_id,phonemobile,email) {
+        return $http.get(baseUrl + "/hrest/v1/finance/sendInvoice?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2&invoice_id=" + invoice_id+"&phone="+phonemobile+"&email="+email);
+    }
+
+    spApi.getCustomerDetails = function(custID) {
+        return $http.get(baseUrl + '/hrest/v1/admin/cust/' + custID + "?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2");
+    };
+
+    spApi.getSpDetails = function(spID) {
+        return $http.get(baseUrl + '/hrest/v1/admin/sp/' + spID + "?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2");
+    };
+
+
 
 	return spApi;
 }]);
