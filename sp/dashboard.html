@@ -41,10 +41,12 @@
 										<span style="word-break: break-word;">{{rec.customer_name}}</span>
 									</td>
 									<td>
-										<span style="word-break: break-word;">{{rec.trans_amount}}/-</span>
+										<span style="word-break: break-word;">{{rec.trans_amount}}/-</span>	
 									</td>
 									<td>
+										<span ng-if="rec.orignal_trans_date > 1525687130">
                                           <i class="glyphicon glyphicon-file" data-toggle="modal" data-target="#myModalShower" ng-click="generateRecipt(rec);" title="Generate Recipt"></i>
+                                        <span>
 									</td>
 									
 								</tr>

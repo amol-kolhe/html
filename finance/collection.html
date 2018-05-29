@@ -440,7 +440,9 @@
 							</td>
 							<td style="text-align: center;">
 								<span style="display: inline-flex;">
-									<i class="generateRecipt glyphicon glyphicon-file" data-toggle="modal" data-target="#myModalShower" ng-click="generateRecipt(rec);" title="Generate Recipt"></i>
+									<span ng-if="rec.actual_trans_date > 1525687130">
+										<i class="generateRecipt glyphicon glyphicon-file" data-toggle="modal" data-target="#myModalShower" ng-click="generateRecipt(rec);" title="Generate Recipt"></i>
+									</span>
 
 								<i ng-if="rec.is_incorrect" title="Incorrect Payment : {{rec.incorrect_description}}" class="healyos_tooltip fa fa-times-circle fa-2x" data-toggle="tooltip" data-placement="left" data-original-title="Incorrect Payment : {{rec.incorrect_description}}" style="margin-right: 5px;"></i> 
 								<i class="clickable fa fa-search-plus fa-2x" title="Collected Details" ng-click="financeMgmt.collectedForm(rec);"></i>

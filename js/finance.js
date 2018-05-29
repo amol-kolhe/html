@@ -326,7 +326,7 @@ angular.module('myApp.controllers')
 						$scope.asOfBalance = $scope.asOfBalance - item.wallettransamount;
 						$scope.debitAmnt = item.wallettransamount;
 					}
-
+					item.orignal_trans_date = item.transactiontime;
 					item.trans_date = moment(new Date(item.transactiontime * 1000)).format("DD-MM-YYYY hh:mm A");				
 					item.asOfBalance = $scope.asOfBalance;
 					item.creditAmnt = $scope.creditAmnt;
@@ -548,6 +548,7 @@ angular.module('myApp.controllers')
 				}else{
 					item.outstanding_clear_time = moment(new Date(item.outstanding_clear_time * 1000)).format("DD-MM-YYYY hh:mm A");
 				}
+				item.actual_trans_date = item.actual_trans_date;
 				item.trans_date = moment(new Date(item.actual_trans_date * 1000)).format("DD-MM-YYYY hh:mm A");
 				item.collected_date = moment(new Date(item.created_date * 1000)).format("DD-MM-YYYY hh:mm A");
 				item.trans_description = item.actual_trans_description;
@@ -706,7 +707,8 @@ angular.module('myApp.controllers')
 				console.log("successfully received collected request.");
 				arrStoreTrue.forEach(function(item) {
 					//item.trans_date = item.actual_trans_date ;
-					item.trans_date = item.actual_trans_date;//moment(new Date(item.actual_trans_date * 1000)).format("YYYY-MM-DD hh:mm A");
+					item.trans_date = item.actual_trans_date;
+					item.orignal_trans_date = item.trans_date;//moment(new Date(item.actual_trans_date * 1000)).format("YYYY-MM-DD hh:mm A");
 					item.collected_date = item.created_date;//moment(new Date(item.created_date * 1000)).format("DD-MM-YYYY hh:mm A");
 					item.trans_description = item.actual_trans_description;
 					item.trans_mode = item.actual_trans_mode;
@@ -754,6 +756,7 @@ angular.module('myApp.controllers')
 		        	$scope.gridData[i].actual_trans_date = $scope.gridData[i].trans_date;
 		        	$scope.gridData[i].trans_date = moment(new Date($scope.gridData[i].trans_date  * 1000)).format("DD-MM-YYYY hh:mm A");
 		        	$scope.gridData[i].actual_collected_date = $scope.gridData[i].collected_date;
+		        	$scope.gridData[i].orignal_trans_date = $scope.gridData[i].orignal_trans_date;
 		        	$scope.gridData[i].collected_date = moment(new Date($scope.gridData[i].collected_date  * 1000)).format("DD-MM-YYYY hh:mm A");		     
 		        }		 
 
@@ -857,7 +860,7 @@ angular.module('myApp.controllers')
 					$scope.asOfBalance = $scope.asOfBalance - item.wallettransamount;
 					$scope.debitAmnt = item.wallettransamount;
 				}
-
+				item.orignal_trans_date =item.transactiontime;
 				item.trans_date = moment(new Date(item.transactiontime * 1000)).format("DD-MM-YYYY hh:mm A");				
 				item.asOfBalance = $scope.asOfBalance;
 				item.creditAmnt = $scope.creditAmnt;
@@ -1117,6 +1120,7 @@ $scope.generateRecipt = function(rec){
 			$scope.financeMgmt.service_provider_id = rec.service_provider_id;
 			$scope.financeMgmt.service_provider_name = rec.service_provider_name;
 			$scope.financeMgmt.trans_date = rec.trans_date;
+			$scope.financeMgmt.orignal_trans_date = rec.orignal_trans_date;
 			$scope.financeMgmt.collected_date = rec.collected_date;
 			$scope.financeMgmt.trans_description = rec.trans_description;
 			//$scope.financeMgmt.trans_description = rec.description;
