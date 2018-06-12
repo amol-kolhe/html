@@ -6,6 +6,15 @@ angular.module('myApp.controllers')
 	$scope.patientDetailsForAdmin = {};
 	$scope.isEditAptMode = false;
 	$scope.custRecordUpdate = false;
+	$scope.addNewDoc =false;
+    $scope.newDoc=false;
+    $scope.is_disable = false;
+    $scope.updateDoc = false;
+    $scope.document_id = '';
+    $scope.saveDoc = true;
+    $scope.docAppoinment ='';
+    $scope.custDocumentationList=[];
+    $scope.adminNewAppointmentCust.appointment=[];
 	$scope.updateAction = {};
 	$scope.updateAction.password='';
 	$scope.updateAction.cost='';
@@ -1311,6 +1320,8 @@ angular.module('myApp.controllers')
 				console.log("error");
 			}
 			$scope.custAptHistory = appointmentHistory;
+			$scope.listDocumentation(appointment.custid);
+         	$scope.custAptDoc = '';
 
 			var curr_session;
             if(data.payload.customer.use_sessions){
@@ -1726,6 +1737,7 @@ angular.module('myApp.controllers')
 
 				adminApi.getCustomerDetails($scope.custAptHistory[index].custid)
         .success(function(data, status, headers, config){
+        	$scope.listDocumentation($scope.custAptHistory[index].custid);
         			if(data.payload.customer.package_created_on && data.payload.customer.approved_valid_days){
                 var packageCreatedOn = data.payload.customer.package_created_on;
                 var approvedValidDays = data.payload.customer.approved_valid_days;
@@ -1859,6 +1871,23 @@ angular.module('myApp.controllers')
 			$scope.checkSessionTimeout(data);
 		});
 	}
+
+	 $scope.listDocumentation = function(cust_id) {
+        console.log('in list cust_document');       
+        console.log(cust_id);
+        var data = {                       
+            "patient_id": cust_id,
+        };
+        adminApi.documentationList(data)
+        .success(function(data, status, headers, config){           
+            $scope.custDocumentationList = data.payload;
+        })
+        .error(function(data, status, headers, config){
+            console.log("Error (get dDocumentation)-");
+            alert(data.error.message);
+        });
+    }
+
 	
 	$scope.fnEditCust = function() {
 		$scope.custReadListview = false;
@@ -2381,6 +2410,7 @@ angular.module('myApp.controllers')
 			{id: "Management Referral",name:"Management Referral"},
 			{id: "Patient Referral",name:"Patient Referral"},
 			{id: "Physiotherapist Referral",name:"Physiotherapist Referral"},
+			{id: "Urban clap",name:"Urban clap"},
 			{id: "Other Referral",name:"Other Referral"},
 			{id: "Other",name:"Other"}
 		];
@@ -5617,6 +5647,7 @@ angular.module('myApp.controllers')
 
         adminApi.getCustomerDetails($scope.adminNewAppointmentCust.appointment.patientid)
         .success(function(data, status, headers, config){
+        	$scope.listDocumentation($scope.adminNewAppointmentCust.appointment.patientid);
             $scope.custApptList = [];
             $scope.custApptList = data.payload.appointments;
             $scope.isConvertedFlag = false;

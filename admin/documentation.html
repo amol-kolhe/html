@@ -709,16 +709,7 @@
         <div class="headBar">
             <span>Appointment Documentation</span>
         </div>
-        <div class="bodyContainer">
-            <div class="documentationType" ng-init="initDocumentation()">
-                <div class="row">
-                    <span class="col-xs-12 col-sm-6 col-md-5 col-lg-4">Please select the Appointment type: </span>
-                        <span class="col-xs-12 col-sm-6 col-md-7 col-lg-8">
-                            <label class="radio-inline"><input type="radio"  value="first" ng-model="adminNewAppointmentCust.appointment.document.type"> First</label>
-                            <label class="radio-inline"><input type="radio"  value="followup" ng-model="adminNewAppointmentCust.appointment.document.type"> Followup</label>
-                        </span>
-                </div>
-            </div>
+        <div class="bodyContainer">           
             <div class="firstTimeDoc" ng-show="adminNewAppointmentCust.appointment.document.type == 'first'">
                 <div class="subHeadBar">
                     <span>History</span>

@@ -20,9 +20,17 @@ angular.module('myApp.controllers')
     $scope.currentOpenView = "LISTING";
     $scope.serviceIdInst;
     $scope.spInfo = false;
+    $scope.addNewDoc =false;
+    $scope.newDoc=false;
+    $scope.is_disable = false;
+    $scope.updateDoc = false;
+    $scope.document_id = '';
+    $scope.saveDoc = true;
+    $scope.docAppoinment ='';
     var availableDate = [];
     $scope.locationArr = [];
     $scope.arrayPolicy = [];
+    $scope.custDocumentationList=[];
     $scope.invoice=[];
     $scope.customerLocality = '';
     $scope.custProb = "";
@@ -53,6 +61,7 @@ angular.module('myApp.controllers')
     $scope.obj = {custid: "", dt: new Date()};
     $scope.spNewAppointment.aptstarttime = "";
     $scope.spNewAppointment.selectedTimeSlots = [];
+    $scope.adminNewAppointmentCust.appointment=[];
     $scope.paymentModes = ["Cash", "Cheque" , "Instamojo", "Paytm", "NEFT"];
     $scope.paymentTransModes = ["Cash", "Cheque" , "Instamojo", "Paytm", "NEFT"];
     $scope.serviceLocation = "";
@@ -380,7 +389,8 @@ angular.module('myApp.controllers')
                 console.log("error");
             }
             $scope.custAptHistory = appointmentHistory;
-
+             $scope.listDocumentation(appointment.custid);
+            $scope.custAptDoc = '';
             var curr_session;
             if(data.payload.customer.use_sessions){
                 curr_session = parseInt(data.payload.customer.use_sessions);
@@ -663,6 +673,8 @@ angular.module('myApp.controllers')
 
     }
 
+    
+
     $scope.AddService = function(service,qty){
         var flag = false;
         if(qty == undefined || qty == NaN){
@@ -828,6 +840,7 @@ angular.module('myApp.controllers')
         spApi.getCustomerDetails(appointment.custid)
         .success(function(data, status, headers, config){
             //console.log(data);
+            $scope.listDocumentation(appointment.custid);
             $scope.custOldPackage = {
                 package_id : data.payload.customer.package_id,
                 package_code : data.payload.customer.package_code,
@@ -922,6 +935,7 @@ angular.module('myApp.controllers')
 
 
             $scope.custAptHistory = appointmentHistory;
+            $scope.custAptDoc = '';
 
             var curr_session;
             if(data.payload.customer.use_sessions){
@@ -2224,6 +2238,96 @@ angular.module('myApp.controllers')
             $scope.checkSessionTimeout(data);
         });
     }
+    
+    
+    $scope.showAddNewDoc = function() {
+        $scope.newDoc=true;
+        $scope.updateDoc = false;
+        $scope.saveDoc = true;
+    }
+
+     $scope.hideAddNewDoc = function() {
+        $scope.newDoc=false;
+    }
+
+    $scope.saveNewDocumentation = function() {
+        //var apptstarttime = moment(new Date($scope.adminNewAppointmentCust.appointment.starttime * 1000)).format("YYYY-MM-DD hh:mm A");
+        console.log('cust_document');
+        console.log($scope.adminNewAppointmentCust.appointment.document);
+        console.log('patient_id');
+        console.log($scope.custReadList._id);
+        $scope.document_id ='';
+        
+        var data = {                       
+            "document": $scope.adminNewAppointmentCust.appointment.document,
+            "sp_id": spApi.getSpid(),
+            "sp_name": spApi.getSpname(),
+            "createdById": spApi.getSpid(),
+            "createdByName": spApi.getSpname(),
+            "patient_id": $scope.custReadList._id,
+        };
+        spApi.addDocumentationDetails(data)
+        .success(function(data, status, headers, config){
+            alert("Documentation saved successfully");
+            $scope.listDocumentation($scope.custReadList._id);
+            $scope.newDoc = false;
+            $scope.updateDoc = false;
+            $scope.saveDoc = true;
+        })
+        .error(function(data, status, headers, config){
+            console.log("Error (saveEditedDocumentation)-");
+            alert(data.error.message);
+            $scope.checkSessionTimeout(data);
+        });
+    }
+
+    $scope.updateNewDocumentation = function() {
+        //var apptstarttime = moment(new Date($scope.adminNewAppointmentCust.appointment.starttime * 1000)).format("YYYY-MM-DD hh:mm A");
+        console.log('cust_document');
+        console.log('doc_id');
+        console.log($scope.document_id);
+        
+        var data = {                       
+            "document": $scope.adminNewAppointmentCust.appointment.document,
+            "doc_id": $scope.document_id,
+            "sp_id": spApi.getSpid(),
+            "sp_name": spApi.getSpname(),
+            "createdById": spApi.getSpid(),
+            "createdByName": spApi.getSpname(),
+            "patient_id": $scope.custReadList._id,
+        };
+        spApi.updateNewDocumentation(data)
+        .success(function(data, status, headers, config){
+            alert("Documentation Updated successfully");
+            $scope.listDocumentation($scope.custReadList._id);
+            $scope.newDoc = false;
+            $scope.updateDoc = false;
+            $scope.saveDoc = true;
+            $scope.document_id ='';
+        })
+        .error(function(data, status, headers, config){
+            console.log("Error (updateeEditedDocumentation)-");
+            alert(data.error.message);
+            $scope.checkSessionTimeout(data);
+        });
+    }
+
+    $scope.listDocumentation = function(cust_id) {
+        console.log('in list cust_document');       
+        console.log(cust_id);
+        var data = {                       
+            "patient_id": cust_id,
+        };
+        spApi.documentationList(data)
+        .success(function(data, status, headers, config){           
+            $scope.custDocumentationList = data.payload;
+        })
+        .error(function(data, status, headers, config){
+            console.log("Error (get dDocumentation)-");
+            alert(data.error.message);
+            $scope.checkSessionTimeout(data);
+        });
+    }
 
     $scope.imagesSelected = function(files) {
         var filesList = files.files;
@@ -2255,7 +2359,7 @@ angular.module('myApp.controllers')
 
     $scope.editAptClicked = function() {
         if(!$scope.adminNewAppointmentCust.appointment.hasOwnProperty("document")) {
-            $scope.adminNewAppointmentCust.appointment.document = {type : ""};
+            $scope.adminNewAppointmentCust.appointment.document = {type : "followup"};
         }
         $scope.scrollDiv("aptDocumentation");
     }
@@ -2326,6 +2430,7 @@ angular.module('myApp.controllers')
 
         spApi.getCustomerDetails($scope.adminNewAppointmentCust.appointment.patientid)
         .success(function(data, status, headers, config){
+            $scope.listDocumentation($scope.adminNewAppointmentCust.appointment.patientid);
             $scope.custApptList = [];
             $scope.custApptList = data.payload.appointments;
             $scope.isConvertedFlag = false;
@@ -2707,12 +2812,38 @@ angular.module('myApp.controllers')
         }
     }
 
+    $scope.showDocument = function(doc){
+        console.log("doc");
+        console.log(doc);
+        $scope.adminNewAppointmentCust.appointment.document = doc.document;
+        $scope.document_id = doc.doc_id;
+        $scope.newDoc = true;
+        $scope.updateDoc = true;
+        $scope.saveDoc = false;
+        console.log(doc.sp_name);
+        if(doc.sp_name==spApi.getSpname()){
+            $scope.is_disable = false;
+        }else{
+            $scope.is_disable = true;
+            $scope.updateDoc = false;
+            $scope.saveDoc = false;
+        }
+    }
+
+    addDocumentation = function(){
+        $scope.addNewDoc =true;
+    }
+
     hideDocumentation = function() {
         if($scope.currentOpenView == 'APPOINTMENT') {
             slideUpByIndex('.aptDocumentation', 0);
         }else if($scope.currentOpenView == 'CUSTOMER_APPOINTMENT') {
             slideUpByIndex('.aptDocumentation', 1);
         }
+    }
+
+    hideNewDocumentation= function(){
+        $scope.addNewDoc = false;
     }
 
     showApptReschedule = function() {

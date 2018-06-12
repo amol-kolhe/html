@@ -242,5 +242,387 @@
             </div>
         </div>
     </div>
+     <div class="row">
+                <div style="margin: 0 15px">
+                    <div class="headBar">
+                        <span>Customer Documentation </span>
+                        <span class="pull-right">
+                            <span title="Schedule new appointment"
+                                  class="clickable glyphicon glyphicon-plus"
+                                  style="margin-right:5px;"
+                                  ng-click="showAddNewDoc();"
+                                  ></span>
+                        </span>
+                    </div>
+                    <div class="bodyContainer">
+                        <div class="appointmentsTable table-responsive">
+                            <table class="table table-striped table-condensed" ng-init="sortKey = 'starttime';">
+                                <thead>
+                                <tr>
+                                    <th ng-click="sort('starttime')">Date
+                                        <span class="glyphicon sort-icon" ng-show="sortKey=='starttime'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                    </th>                                    
+                                                                      
+                                    <th ng-click="sort('rating')">Doc No
+                                        <span class="glyphicon sort-icon" ng-show="sortKey=='rating'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                    </th>
+                                     <th ng-click="sort('spname')" nowrap>Service Provider
+                                        <span class="glyphicon sort-icon" ng-show="sortKey=='sp_name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                    </th> 
+                                   
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr dir-paginate="doc in custDocumentationList|orderBy:sortKey:!reverse|filter:search|itemsPerPage:10"
+                                    pagination-id="custDocId">
+                                    <td>{{doc.createdOn}}</td>
+                                    <td>
+                                        <span style="color:#428bca;cursor: pointer;" ng-click="showDocument(doc)" title="Show Details">{{doc.doc_id}}</span>
+                                    </td>
+                                    <td>{{doc.sp_name}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <dir-pagination-controls
+                                max-size="5"
+                                pagination-id="custDocId"
+                                direction-links="true"
+                                boundary-links="true" >
+                            </dir-pagination-controls>
+                        </div>
+                        <div style = "color: green; margin-top: 10px;" data-ng-if = "!aptErrorMsg && !custAptHistory">
+                            No Document.
+                        </div>
+                        <div class="alert alert-danger" data-ng-if = "aptErrorMsg">
+                            {{aptErrorMsg}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <div id="aptDocumentation" ng-show="newDoc" class="aptDocumentation">
+            <div class="headBar">
+                <span>Appointment Documentation</span>
+            </div>
+            <div class="bodyContainer">                
+                <div class="firstTimeDoc">
+                    <div class="subHeadBar">
+                        <span>History</span>
+                    </div>
+                    <div class="subBodyContainer">
+                        <div class="table table-striped">
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Patient History</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <textarea ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.history"></textarea>
+                                     <input type="hidden" class="form-control" ng-model="document_id " />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subHeadBar">
+                        <span>Pain Evaluation</span>
+                    </div>
+                    <div class="subBodyContainer">
+                        <div class="table table-striped">
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Type and nature of pain</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text" ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.type" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Area</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text" ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.area" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>VAS</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <select  ng-disabled="is_disable"  class="form-control"  ng-model="adminNewAppointmentCust.appointment.document.painevaluation.vas" style="width: 174px;"
+                                            ng-options="val for val in [0,1,2,3,4,5,6,7,8,9,10]"></select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Aggravating factors</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text"  ng-disabled="is_disable"  class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.aggrevatingfactors" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Relieving factors</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text"  ng-disabled="is_disable"  class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.relievingfactors" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Any diurnal variation</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text"  ng-disabled="is_disable"  class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.diurnalvariation" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subHeadBar">
+                        <span>Assessment</span>
+                    </div>
+                    <div class="subBodyContainer">
+                        <div class="table table-striped">
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Vitals (normal), GCS (if needed)</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text"  ng-disabled="is_disable"  class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.vitals" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Posture</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text" ng-disabled="is_disable"  class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.posture" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Gait</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.gait" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Local observation</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.localobservation" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Passive ROM</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.passiveorm" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Active ROM</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text" ng-disabled="is_disable"  class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.activeorm" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>MMT</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.mmt" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Palpation</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.palpation" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Tightness</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.tightness" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Special Tests</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.specialtests" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Walking or other aid, Spasticity, Tone</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text" ng-disabled="is_disable"  class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.spasticity" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Investigations</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="file" accept="image/*" multiple onchange="angular.element(this).scope().imagesSelected(this)"/>
+                                    <div class="imgContainer">
+                                        <div class="" ng-repeat="img in adminNewAppointmentCust.appointment.document.assessment.investigations  track by $index">
+                                            <span class="glyphicon glyphicon-file"></span>
+                                            <span ng-class="{imgRemoved : img.action=='delete'}">{{img.fname}}</span>
+                                            <span ng-hide="img.action=='delete'" class="glyphicon glyphicon-trash clickable" title="Remove this file" ng-click="img.action='delete'"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Diagnosis</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.diagnosis" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subHeadBar">
+                        <span>Outcome Measures</span>
+                    </div>
+                    <div class="subBodyContainer">
+                        <div class="table table-striped">
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Outcome Measures</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.outcomemeasures" ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subHeadBar">
+                        <span>Goal Setting and patient education</span>
+                    </div>
+                    <div class="subBodyContainer">
+                        <div class="table table-striped">
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Short-term Goals</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.goalsettings.shorttermgoals" ></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Long-term Goals</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.goalsettings.longtermgoals" ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subHeadBar">
+                        <span>Treatment</span>
+                    </div>
+                    <div class="subBodyContainer">
+                        <div class="table table-striped">
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Dosages for all exercises/modalities</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.treatment.dosages" ></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Progression proposed</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.treatment.proposedprogression" ></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>HEP and lifestyle modifications</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.treatment.lifestylechanges" ></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="lbl3 col-xs-12 col-sm-4 col-lg-3">
+                                    <span>Number of sessions recommended with frequency</span>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <span class="colonSeparatorRight hidden-xs">:</span>
+                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.treatment.nosessionswithfrequency" ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footerBar" style="text-align: right; padding: 5px;">
+                    <button  ng-click="hideAddNewDoc()" class="btn btn-default btn-sm">Cancel</button>
+                    <button  ng-show="saveDoc" ng-click="saveNewDocumentation();" class="btn btn-primary btn-sm"
+                            >Save</button>
+                    <button  ng-show="updateDoc" ng-click="updateNewDocumentation();" class="btn btn-primary btn-sm"
+                            >Update</button>
+                    <button  ng-click="emailLifeStyleInfo()" class="btn btn-default btn-sm" data-ng-show="adminNewAppointmentCust.appointment.document.type == 'first'"
+                             data-ng-disabled="(adminNewAppointmentCust.appointment.document.type != 'first') ||
+                                      (!adminNewAppointmentCust.appointment.document.goalsettings.shorttermgoals &&
+                                      !adminNewAppointmentCust.appointment.document.goalsettings.longtermgoals &&
+                                      !adminNewAppointmentCust.appointment.document.treatment.dosages &&
+                                      !adminNewAppointmentCust.appointment.document.treatment.proposedprogression &&
+                                      !adminNewAppointmentCust.appointment.document.treatment.lifestylechanges &&
+                                      !adminNewAppointmentCust.appointment.document.treatment.nosessionswithfrequency)">Email Lifestyle Info</button>
+                </div>
+            </div>
+        </div>
+
 
 </div>

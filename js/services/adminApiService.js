@@ -189,6 +189,11 @@ adminApiService.factory('adminApi', ['$http', '$cookies', function($http, $cooki
         return $http.post(baseUrl + '/hrest/v1/admin/approve/' + id + "?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0", data);
     };
 
+    adminApi.documentationList = function(data) {
+        return $http.post(baseUrl + "/hrest/v1/appt/listDocumentation?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=2", data);
+    };
+
+
     adminApi.setCancelActionable = function(data) {
         return $http.post(baseUrl + "/hrest/v1/admin/updateActionable?apikey=" + adminApi.getApiKey() + "&sid=" + adminApi.getSid() + "&role=0", data);
     };

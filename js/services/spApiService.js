@@ -115,6 +115,18 @@ spApiService.factory('spApi', ['$http', '$cookies', function($http, $cookies){
         return $http.put(baseUrl + '/hrest/v1/appt/' + id + "?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2", data);
     };
 
+    spApi.addDocumentationDetails = function(data) {
+        return $http.put(baseUrl + "/hrest/v1/appt/addDocumentation?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2", data);
+    };
+
+    spApi.updateNewDocumentation = function(data) {
+        return $http.put(baseUrl + "/hrest/v1/appt/updateDocumentation?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2", data);
+    };
+
+     spApi.documentationList = function(data) {
+        return $http.post(baseUrl + "/hrest/v1/appt/listDocumentation?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid() + "&role=2", data);
+    };
+
     spApi.requestAppointmentChange = function(apptid, reqType, data) {
         return $http.post(baseUrl + "/hrest/v1/sp/req/" + apptid + "/" + reqType + "?apikey=" + spApi.getApiKey() + "&sid=" + spApi.getSid(), data);
     };
