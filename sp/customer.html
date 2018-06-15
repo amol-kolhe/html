@@ -421,6 +421,7 @@
                                     <th ng-click="sort('service')" style="display:none;">Service
                                         <span class="glyphicon sort-icon" ng-show="sortKey=='service'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
                                     </th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -451,6 +452,7 @@
                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{apt.amnt}}</td>
                                     <td style="display:none;">{{apt.gender}}</td>
                                     <td style="display:none;">{{apt.service}}</td>
+                                    <td><span ng-if = "apt.document.type" class="label label-success" ><span title="{{apt.document.type}}" class="glyphicon glyphicon-file"> </span></span></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -505,7 +507,7 @@
                                 <tbody>
                                 <tr dir-paginate="doc in custDocumentationList|orderBy:sortKey:!reverse|filter:search|itemsPerPage:10"
                                     pagination-id="custDocId">
-                                    <td>{{doc.createdOn}}</td>
+                                    <td> {{doc.createdOn.split('T')[0]}}</td>
                                     <td>
                                         <span style="color:#428bca;cursor: pointer;" ng-click="showDocument(doc)" title="Show Details">{{doc.doc_id}}</span>
                                     </td>

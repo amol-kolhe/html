@@ -192,6 +192,7 @@
                             <th ng-click="sort('service')" style="display:none;">Service
                                 <span class="glyphicon sort-icon" ng-show="sortKey=='service'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
                             </th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -223,6 +224,7 @@
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{apt.amnt}}</td>
                             <td style="display:none;">{{apt.gender}}</td>
                             <td style="display:none;">{{apt.service}}</td>
+                            <td><span ng-if = "apt.document.type" class="label label-success" ><span title="{{apt.document.type}}" class="glyphicon glyphicon-file"> </span></span></td>
                         </tr>
                         </tbody>
                     </table>
@@ -246,12 +248,7 @@
                 <div style="margin: 0 15px">
                     <div class="headBar">
                         <span>Customer Documentation </span>
-                        <span class="pull-right">
-                            <span title="Schedule new appointment"
-                                  class="clickable glyphicon glyphicon-plus"
-                                  style="margin-right:5px;"
-                                  ng-click="showAddNewDoc();"
-                                  ></span>
+                        <span class="pull-right">                            
                         </span>
                     </div>
                     <div class="bodyContainer">
@@ -317,7 +314,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <textarea ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.history"></textarea>
+                                    <textarea ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="viewdocument.history"></textarea>
                                      <input type="hidden" class="form-control" ng-model="document_id " />
                                 </div>
                             </div>
@@ -335,7 +332,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text" ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.type" />
+                                    <input type="text" ng-disabled="is_disable" class="form-control" ng-model="viewdocument.painevaluation.type" />
                                 </div>
                             </div>
                             <div class="row">
@@ -344,7 +341,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text" ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.area" />
+                                    <input type="text" ng-disabled="is_disable" class="form-control" ng-model="viewdocument.painevaluation.area" />
                                 </div>
                             </div>
                             <div class="row">
@@ -353,7 +350,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <select  ng-disabled="is_disable"  class="form-control"  ng-model="adminNewAppointmentCust.appointment.document.painevaluation.vas" style="width: 174px;"
+                                    <select  ng-disabled="is_disable"  class="form-control"  ng-model="viewdocument.painevaluation.vas" style="width: 174px;"
                                             ng-options="val for val in [0,1,2,3,4,5,6,7,8,9,10]"></select>
                                 </div>
                             </div>
@@ -363,7 +360,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text"  ng-disabled="is_disable"  class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.aggrevatingfactors" />
+                                    <input type="text"  ng-disabled="is_disable"  class="form-control" ng-model="viewdocument.painevaluation.aggrevatingfactors" />
                                 </div>
                             </div>
                             <div class="row">
@@ -372,7 +369,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text"  ng-disabled="is_disable"  class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.relievingfactors" />
+                                    <input type="text"  ng-disabled="is_disable"  class="form-control" ng-model="viewdocument.painevaluation.relievingfactors" />
                                 </div>
                             </div>
                             <div class="row">
@@ -381,7 +378,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text"  ng-disabled="is_disable"  class="form-control" ng-model="adminNewAppointmentCust.appointment.document.painevaluation.diurnalvariation" />
+                                    <input type="text"  ng-disabled="is_disable"  class="form-control" ng-model="viewdocument.painevaluation.diurnalvariation" />
                                 </div>
                             </div>
                         </div>
@@ -398,7 +395,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text"  ng-disabled="is_disable"  class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.vitals" />
+                                    <input type="text"  ng-disabled="is_disable"  class="form-control" ng-model="viewdocument.assessment.vitals" />
                                 </div>
                             </div>
                             <div class="row">
@@ -407,7 +404,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text" ng-disabled="is_disable"  class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.posture" />
+                                    <input type="text" ng-disabled="is_disable"  class="form-control" ng-model="viewdocument.assessment.posture" />
                                 </div>
                             </div>
                             <div class="row">
@@ -416,7 +413,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.gait" />
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="viewdocument.assessment.gait" />
                                 </div>
                             </div>
                             <div class="row">
@@ -425,7 +422,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.localobservation" />
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="viewdocument.assessment.localobservation" />
                                 </div>
                             </div>
                             <div class="row">
@@ -434,7 +431,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.passiveorm" />
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="viewdocument.assessment.passiveorm" />
                                 </div>
                             </div>
                             <div class="row">
@@ -443,7 +440,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text" ng-disabled="is_disable"  class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.activeorm" />
+                                    <input type="text" ng-disabled="is_disable"  class="form-control" ng-model="viewdocument.assessment.activeorm" />
                                 </div>
                             </div>
                             <div class="row">
@@ -452,7 +449,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.mmt" />
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="viewdocument.assessment.mmt" />
                                 </div>
                             </div>
                             <div class="row">
@@ -461,7 +458,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.palpation" />
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="viewdocument.assessment.palpation" />
                                 </div>
                             </div>
                             <div class="row">
@@ -470,7 +467,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.tightness" />
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="viewdocument.assessment.tightness" />
                                 </div>
                             </div>
                             <div class="row">
@@ -479,7 +476,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.specialtests" />
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="viewdocument.assessment.specialtests" />
                                 </div>
                             </div>
                             <div class="row">
@@ -488,7 +485,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text" ng-disabled="is_disable"  class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.spasticity" />
+                                    <input type="text" ng-disabled="is_disable"  class="form-control" ng-model="viewdocument.assessment.spasticity" />
                                 </div>
                             </div>
                             <div class="row">
@@ -499,7 +496,7 @@
                                     <span class="colonSeparatorRight hidden-xs">:</span>
                                     <input type="file" accept="image/*" multiple onchange="angular.element(this).scope().imagesSelected(this)"/>
                                     <div class="imgContainer">
-                                        <div class="" ng-repeat="img in adminNewAppointmentCust.appointment.document.assessment.investigations  track by $index">
+                                        <div class="" ng-repeat="img in viewdocument.assessment.investigations  track by $index">
                                             <span class="glyphicon glyphicon-file"></span>
                                             <span ng-class="{imgRemoved : img.action=='delete'}">{{img.fname}}</span>
                                             <span ng-hide="img.action=='delete'" class="glyphicon glyphicon-trash clickable" title="Remove this file" ng-click="img.action='delete'"></span>
@@ -513,7 +510,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="adminNewAppointmentCust.appointment.document.assessment.diagnosis" />
+                                    <input type="text"  ng-disabled="is_disable" class="form-control" ng-model="viewdocument.assessment.diagnosis" />
                                 </div>
                             </div>
                         </div>
@@ -530,7 +527,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.outcomemeasures" ></textarea>
+                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="viewdocument.outcomemeasures" ></textarea>
                                 </div>
                             </div>
                         </div>
@@ -547,7 +544,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.goalsettings.shorttermgoals" ></textarea>
+                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="viewdocument.goalsettings.shorttermgoals" ></textarea>
                                 </div>
                             </div>
                             <div class="row">
@@ -556,7 +553,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.goalsettings.longtermgoals" ></textarea>
+                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="viewdocument.goalsettings.longtermgoals" ></textarea>
                                 </div>
                             </div>
                         </div>
@@ -573,7 +570,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.treatment.dosages" ></textarea>
+                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="viewdocument.treatment.dosages" ></textarea>
                                 </div>
                             </div>
                             <div class="row">
@@ -582,7 +579,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.treatment.proposedprogression" ></textarea>
+                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="viewdocument.treatment.proposedprogression" ></textarea>
                                 </div>
                             </div>
                             <div class="row">
@@ -591,7 +588,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.treatment.lifestylechanges" ></textarea>
+                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="viewdocument.treatment.lifestylechanges" ></textarea>
                                 </div>
                             </div>
                             <div class="row">
@@ -600,7 +597,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-8 col-lg-9">
                                     <span class="colonSeparatorRight hidden-xs">:</span>
-                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="adminNewAppointmentCust.appointment.document.treatment.nosessionswithfrequency" ></textarea>
+                                    <textarea  ng-disabled="is_disable" class="form-control" rows="4" cols="100" ng-model="viewdocument.treatment.nosessionswithfrequency" ></textarea>
                                 </div>
                             </div>
                         </div>
@@ -612,14 +609,14 @@
                             >Save</button>
                     <button  ng-show="updateDoc" ng-click="updateNewDocumentation();" class="btn btn-primary btn-sm"
                             >Update</button>
-                    <button  ng-click="emailLifeStyleInfo()" class="btn btn-default btn-sm" data-ng-show="adminNewAppointmentCust.appointment.document.type == 'first'"
-                             data-ng-disabled="(adminNewAppointmentCust.appointment.document.type != 'first') ||
-                                      (!adminNewAppointmentCust.appointment.document.goalsettings.shorttermgoals &&
-                                      !adminNewAppointmentCust.appointment.document.goalsettings.longtermgoals &&
-                                      !adminNewAppointmentCust.appointment.document.treatment.dosages &&
-                                      !adminNewAppointmentCust.appointment.document.treatment.proposedprogression &&
-                                      !adminNewAppointmentCust.appointment.document.treatment.lifestylechanges &&
-                                      !adminNewAppointmentCust.appointment.document.treatment.nosessionswithfrequency)">Email Lifestyle Info</button>
+                    <button  ng-click="emailLifeStyleInfo()" class="btn btn-default btn-sm" data-ng-show="viewdocument.type == 'first'"
+                             data-ng-disabled="(viewdocument.type != 'first') ||
+                                      (!viewdocument.goalsettings.shorttermgoals &&
+                                      !viewdocument.goalsettings.longtermgoals &&
+                                      !viewdocument.treatment.dosages &&
+                                      !viewdocument.treatment.proposedprogression &&
+                                      !viewdocument.treatment.lifestylechanges &&
+                                      !viewdocument.treatment.nosessionswithfrequency)">Email Lifestyle Info</button>
                 </div>
             </div>
         </div>

@@ -1320,7 +1320,7 @@ angular.module('myApp.controllers')
 				console.log("error");
 			}
 			$scope.custAptHistory = appointmentHistory;
-			$scope.listDocumentation(appointment.custid);
+			$scope.listDocumentation(custID);
          	$scope.custAptDoc = '';
 
 			var curr_session;
@@ -5601,9 +5601,25 @@ angular.module('myApp.controllers')
 		slideDownByIndex('.aptDocumentation', 0);
 	}
 
+	 $scope.showDocument = function(doc){
+        console.log("doc");
+        console.log(doc);
+        $scope.viewdocument = doc.document;
+        $scope.document_id = doc.doc_id;
+        $scope.newDoc = true;
+        $scope.is_disable = true;
+        $scope.updateDoc = false;
+        $scope.saveDoc = false;
+    }
+
 	hideDocumentation = function() {
 		slideUpByIndex('.aptDocumentation', 0);
 	}
+
+	$scope.hideAddNewDoc = function() {
+        $scope.newDoc=false;
+    }
+
 
 	showPaymentDialog = function() {
 		slideDownByIndex('.spApptPayment', 0);

@@ -178,6 +178,7 @@ function buildAppointmentsList(payload) {
 			"state" : appointmentStateMap[data.appointment.state],
 			"rating" : data.appointment.rating,
 			"payment" : payment,
+			"document" : data.appointment.document,
 			"sdate" : moment(new Date(data.appointment.starttime * 1000)).format("YYYY-MM-DD hh:mm A"),
 			"custid" : data.appointment.custid,
 			"servicelocation" : data.appointment.clinic_name
